@@ -1,0 +1,42 @@
+{
+  "space": {
+    "0": { "$value": "0px", "$type": "dimension", "$description": "Reset." },
+    "1": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "Hairline gaps: Kbd padding-block, Badge sm padding-block."
+    },
+    "2": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Icon-to-label gap in sm controls; Badge padding-block."
+    },
+    "3": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$description": "Icon-to-label gap; Inline default gap; Badge padding-inline."
+    },
+    "4": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Stack default gap; Button sm padding-inline; Card sm padding."
+    },
+    "5": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$description": "Button md padding-inline; Card md padding; Dialog gutter on small screens."
+    },
+    "6": { "$value": "20px", "$type": "dimension", "$description": "Button lg padding-inline." },
+    "7": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Card lg padding; Dialog padding; section gaps."
+    },
+    "8": { "$value": "32px", "$type": "dimension", "$description": "Gaps between groups of content." },
+    "9": { "$value": "40px", "$type": "dimension", "$description": "Page gutters on desktop." },
+    "10": { "$value": "48px", "$type": "dimension", "$description": "Section padding." },
+    "11": { "$value": "64px", "$type": "dimension", "$description": "Large section padding." },
+    "12": { "$value": "80px", "$type": "dimension", "$description": "Hero padding." },
+    "13": { "$value": "96px", "$type": "dimension", "$description": "Max vertical rhythm step." }
+  }
+}

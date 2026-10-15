@@ -1,0 +1,77 @@
+{
+  "font": {
+    "family": {
+      "sans": {
+        "$value": "\"IBM Plex Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "$type": "fontFamily",
+        "$description": "Everything."
+      },
+      "mono": {
+        "$value": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+        "$type": "fontFamily",
+        "$description": "Code and Kbd."
+      }
+    },
+    "size": {
+      "xs": { "$value": "12px", "$type": "dimension", "$description": "Fixed. Captions, Badge sm, Kbd." },
+      "sm": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "Fixed. UI text: controls, table cells, metadata."
+      },
+      "md": {
+        "$value": "clamp(1rem, 0.9792rem + 0.1042vw, 1.0625rem)",
+        "$type": "dimension",
+        "$description": "Fluid 16px to 17px. Body copy."
+      },
+      "lg": {
+        "$value": "clamp(1.15rem, 1.1083rem + 0.2083vw, 1.275rem)",
+        "$type": "dimension",
+        "$description": "Fluid 18.4px to 20.4px. Dialog title, card title."
+      },
+      "xl": {
+        "$value": "clamp(1.3225rem, 1.2533rem + 0.3458vw, 1.53rem)",
+        "$type": "dimension",
+        "$description": "Fluid 21.2px to 24.5px."
+      },
+      "2xl": {
+        "$value": "clamp(1.5209rem, 1.4158rem + 0.5252vw, 1.836rem)",
+        "$type": "dimension",
+        "$description": "Fluid 24.3px to 29.4px."
+      },
+      "3xl": {
+        "$value": "clamp(1.749rem, 1.5976rem + 0.757vw, 2.2032rem)",
+        "$type": "dimension",
+        "$description": "Fluid 28px to 35.3px."
+      },
+      "4xl": {
+        "$value": "clamp(2.0114rem, 1.8005rem + 1.0541vw, 2.6438rem)",
+        "$type": "dimension",
+        "$description": "Fluid 32.2px to 42.3px."
+      },
+      "5xl": {
+        "$value": "clamp(2.3131rem, 2.0265rem + 1.4326vw, 3.1726rem)",
+        "$type": "dimension",
+        "$description": "Fluid 37px to 50.8px. Display."
+      }
+    },
+    "weight": {
+      "regular": { "$value": 400, "$type": "fontWeight", "$description": "Text." },
+      "medium": { "$value": 500, "$type": "fontWeight", "$description": "Controls and badges." },
+      "semibold": { "$value": 600, "$type": "fontWeight", "$description": "Headings and display." }
+    },
+    "line-height": {
+      "tight": { "$value": 1.1, "$type": "number", "$description": "Display sizes." },
+      "snug": { "$value": 1.25, "$type": "number", "$description": "Headings." },
+      "normal": { "$value": 1.5, "$type": "number", "$description": "Body." },
+      "ui": { "$value": 1.45, "$type": "number", "$description": "UI text at 14px." }
+    },
+    "tracking": {
+      "tight": { "$value": "-0.02em", "$type": "dimension", "$description": "Display sizes." },
+      "snug": { "$value": "-0.01em", "$type": "dimension", "$description": "Headings from 2xl up." },
+      "normal": { "$value": "0em", "$type": "dimension", "$description": "Text." },
+      "wide": { "$value": "0.04em", "$type": "dimension", "$description": "Uppercase labels." }
+    },
+    "measure": { "$value": "65ch", "$type": "dimension", "$description": "Max line length for running text." }
+  }
+}

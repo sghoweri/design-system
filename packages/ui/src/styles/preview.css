@@ -1,0 +1,10 @@
+/* Storybook only: imports the built-from-source component CSS in order, and sets the canvas. */
+@import './base.css';
+html {
+  background: var(--sc-color-surface-canvas);
+  color: var(--sc-color-text-default);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  -webkit-font-smoothing: antialiased;
+}

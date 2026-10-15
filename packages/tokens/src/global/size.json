@@ -1,0 +1,54 @@
+{
+  "size": {
+    "control": {
+      "sm": { "$value": "32px", "$type": "dimension", "$description": "Button sm height." },
+      "md": { "$value": "40px", "$type": "dimension", "$description": "Button md height, default." },
+      "lg": { "$value": "48px", "$type": "dimension", "$description": "Button lg height." }
+    },
+    "control-compact": {
+      "sm": {
+        "$value": "28px",
+        "$type": "dimension",
+        "$description": "Button sm height under data-density=compact."
+      },
+      "md": {
+        "$value": "32px",
+        "$type": "dimension",
+        "$description": "Button md height under data-density=compact."
+      },
+      "lg": {
+        "$value": "40px",
+        "$type": "dimension",
+        "$description": "Button lg height under data-density=compact."
+      }
+    },
+    "touch-target": {
+      "$value": "44px",
+      "$type": "dimension",
+      "$description": "Minimum hit area on pointer: coarse."
+    },
+    "badge": {
+      "sm": { "$value": "20px", "$type": "dimension", "$description": "Badge sm height." },
+      "md": { "$value": "24px", "$type": "dimension", "$description": "Badge md height." }
+    },
+    "dialog": {
+      "sm": {
+        "$value": "400px",
+        "$type": "dimension",
+        "$description": "Dialog max inline size, confirmations."
+      },
+      "md": { "$value": "560px", "$type": "dimension", "$description": "Dialog max inline size, default." },
+      "lg": {
+        "$value": "720px",
+        "$type": "dimension",
+        "$description": "Dialog max inline size, rich content."
+      }
+    }
+  },
+  "border": {
+    "width": {
+      "hairline": { "$value": "1px", "$type": "dimension", "$description": "Every border." },
+      "focus": { "$value": "2px", "$type": "dimension", "$description": "Focus ring stroke and offset." }
+    }
+  }
+}

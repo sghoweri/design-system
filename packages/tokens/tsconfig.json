@@ -1,0 +1,5 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": { "noEmit": true, "allowJs": true, "checkJs": false, "lib": ["ES2022"] },
+  "include": ["dist/js/tokens.d.ts", "test/**/*.ts"]
+}

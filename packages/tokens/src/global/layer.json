@@ -1,0 +1,12 @@
+{
+  "z": {
+    "base": { "$value": 0, "$type": "number", "$description": "Normal flow." },
+    "raised": { "$value": 1, "$type": "number", "$description": "Hover and focus rings over siblings." },
+    "sticky": { "$value": 100, "$type": "number", "$description": "Sticky headers and table heads." },
+    "dropdown": { "$value": 1000, "$type": "number", "$description": "Menus, selects, popovers." },
+    "backdrop": { "$value": 1100, "$type": "number", "$description": "Dialog scrim." },
+    "dialog": { "$value": 1200, "$type": "number", "$description": "Dialog popup." },
+    "toast": { "$value": 1300, "$type": "number", "$description": "Toasts." },
+    "tooltip": { "$value": 1400, "$type": "number", "$description": "Tooltips, above everything." }
+  }
+}

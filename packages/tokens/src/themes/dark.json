@@ -1,0 +1,195 @@
+{
+  "color": {
+    "surface": {
+      "canvas": {
+        "$value": "{color.neutral.1000}",
+        "$type": "color",
+        "$description": "App background behind everything."
+      },
+      "default": {
+        "$value": "{color.neutral.950}",
+        "$type": "color",
+        "$description": "Default content surface: Card, panels."
+      },
+      "raised": {
+        "$value": "{color.neutral.900}",
+        "$type": "color",
+        "$description": "Floating surfaces: Dialog, menus. Pair with elevation 2 or 3."
+      },
+      "sunken": {
+        "$value": "{color.black}",
+        "$type": "color",
+        "$description": "Inset wells and code blocks."
+      },
+      "hover": {
+        "$value": "{color.neutral.900}",
+        "$type": "color",
+        "$description": "Hover wash on rows and ghost controls."
+      },
+      "active": {
+        "$value": "{color.neutral.800}",
+        "$type": "color",
+        "$description": "Pressed wash on rows and ghost controls."
+      },
+      "backdrop": {
+        "$value": "#00000099",
+        "$type": "color",
+        "$description": "Dialog scrim, 60% alpha."
+      }
+    },
+    "text": {
+      "default": {
+        "$value": "{color.neutral.50}",
+        "$type": "color",
+        "$description": "Body and headings on every surface token."
+      },
+      "muted": {
+        "$value": "{color.neutral.400}",
+        "$type": "color",
+        "$description": "Secondary text and metadata on every surface token."
+      },
+      "subtle": {
+        "$value": "{color.neutral.500}",
+        "$type": "color",
+        "$description": "Placeholders and disabled labels; 4.5:1 on surface.default only."
+      },
+      "on-accent": {
+        "$value": "{color.neutral.1000}",
+        "$type": "color",
+        "$description": "Text on accent.default and accent.hover."
+      },
+      "on-status": {
+        "$value": "{color.neutral.1000}",
+        "$type": "color",
+        "$description": "Text on success.solid, warning.solid and danger.solid."
+      },
+      "link": {
+        "$value": "{color.cobalt.300}",
+        "$type": "color",
+        "$description": "Inline links on surface.canvas and surface.default."
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "{color.neutral.800}",
+        "$type": "color",
+        "$description": "Structural borders: Card, Kbd, dividers, Dialog edge."
+      },
+      "strong": {
+        "$value": "{color.neutral.600}",
+        "$type": "color",
+        "$description": "Borders that carry meaning (secondary Button); 3:1 on every surface."
+      },
+      "focus": {
+        "$value": "{color.cobalt.400}",
+        "$type": "color",
+        "$description": "Focus ring: 2px solid, offset 2px."
+      }
+    },
+    "accent": {
+      "default": {
+        "$value": "{color.cobalt.400}",
+        "$type": "color",
+        "$description": "Primary Button fill, selection, active indicators."
+      },
+      "hover": {
+        "$value": "{color.cobalt.300}",
+        "$type": "color",
+        "$description": "Primary Button hover."
+      },
+      "active": {
+        "$value": "{color.cobalt.200}",
+        "$type": "color",
+        "$description": "Primary Button pressed."
+      },
+      "subtle": {
+        "$value": "{color.cobalt.950}",
+        "$type": "color",
+        "$description": "Soft accent Badge fill, selected row wash."
+      },
+      "text": {
+        "$value": "{color.cobalt.300}",
+        "$type": "color",
+        "$description": "Text on accent.subtle and surface.default."
+      }
+    },
+    "success": {
+      "subtle": {
+        "$value": "{color.green.950}",
+        "$type": "color",
+        "$description": "Soft success Badge fill."
+      },
+      "text": {
+        "$value": "{color.green.300}",
+        "$type": "color",
+        "$description": "Text on success.subtle and surface.default."
+      },
+      "solid": {
+        "$value": "{color.green.400}",
+        "$type": "color",
+        "$description": "Solid success Badge fill."
+      }
+    },
+    "warning": {
+      "subtle": {
+        "$value": "{color.amber.950}",
+        "$type": "color",
+        "$description": "Soft warning Badge fill."
+      },
+      "text": {
+        "$value": "{color.amber.300}",
+        "$type": "color",
+        "$description": "Text on warning.subtle and surface.default."
+      },
+      "solid": {
+        "$value": "{color.amber.400}",
+        "$type": "color",
+        "$description": "Solid warning Badge fill."
+      }
+    },
+    "danger": {
+      "subtle": {
+        "$value": "{color.red.950}",
+        "$type": "color",
+        "$description": "Soft danger Badge fill."
+      },
+      "text": {
+        "$value": "{color.red.300}",
+        "$type": "color",
+        "$description": "Text on danger.subtle and surface.default."
+      },
+      "solid": {
+        "$value": "{color.red.400}",
+        "$type": "color",
+        "$description": "Danger Button fill and solid danger Badge."
+      },
+      "hover": {
+        "$value": "{color.red.300}",
+        "$type": "color",
+        "$description": "Danger Button hover."
+      }
+    }
+  },
+  "elevation": {
+    "0": {
+      "$value": "none",
+      "$type": "shadow",
+      "$description": "Flat. Card default, Badge, Button."
+    },
+    "1": {
+      "$value": "0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.5)",
+      "$type": "shadow",
+      "$description": "Elevated Card and interactive Card hover."
+    },
+    "2": {
+      "$value": "0 2px 4px rgba(0, 0, 0, 0.5), 0 8px 20px -4px rgba(0, 0, 0, 0.6)",
+      "$type": "shadow",
+      "$description": "Menus, popovers, toasts."
+    },
+    "3": {
+      "$value": "0 4px 8px rgba(0, 0, 0, 0.5), 0 24px 56px -12px rgba(0, 0, 0, 0.7)",
+      "$type": "shadow",
+      "$description": "Dialog."
+    }
+  }
+}

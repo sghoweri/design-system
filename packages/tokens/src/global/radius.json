@@ -1,0 +1,12 @@
+{
+  "radius": {
+    "none": { "$value": "0px", "$type": "dimension", "$description": "Flush edges, table cells." },
+    "xs": { "$value": "2px", "$type": "dimension", "$description": "Focus ring corners on square elements." },
+    "sm": { "$value": "4px", "$type": "dimension", "$description": "Badge, Kbd, Button sm." },
+    "md": { "$value": "6px", "$type": "dimension", "$description": "Button md and lg, inputs." },
+    "lg": { "$value": "8px", "$type": "dimension", "$description": "Menus and popovers; Card sm." },
+    "xl": { "$value": "12px", "$type": "dimension", "$description": "Card and Dialog." },
+    "2xl": { "$value": "16px", "$type": "dimension", "$description": "Large media and hero containers." },
+    "full": { "$value": "9999px", "$type": "dimension", "$description": "Avatars and circular icon buttons." }
+  }
+}
