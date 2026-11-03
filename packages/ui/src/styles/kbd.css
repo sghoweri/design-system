@@ -1,0 +1,33 @@
+/* ---- Kbd ------------------------------------------------------------------- */
+.sc-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: var(--sc-size-badge-sm);
+  block-size: var(--sc-size-badge-sm);
+  padding-inline: var(--sc-spacing-2xs);
+  font-family: var(--sc-font-family-mono);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--sc-color-text-default);
+  background: var(--sc-color-surface-sunken);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-sm);
+  box-shadow: inset 0 -1px 0 var(--sc-color-border-default);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.sc-kbd-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-3xs);
+  color: var(--sc-color-text-muted);
+  font-size: var(--sc-font-size-xs);
+  vertical-align: middle;
+}
+.sc-kbd-group__sep {
+  padding-inline: 1px;
+}

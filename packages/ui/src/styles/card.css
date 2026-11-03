@@ -1,0 +1,71 @@
+/* ---- Card ------------------------------------------------------------------ */
+.sc-card {
+  --_p: var(--sc-spacing-md);
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  margin: 0;
+  padding: var(--_p);
+  border-radius: var(--sc-radius-xl);
+  background: var(--sc-color-surface-default);
+  color: var(--sc-color-text-default);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  box-shadow: var(--sc-elevation-0);
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+  transition:
+    border-color var(--sc-duration-fast) var(--sc-ease-standard),
+    box-shadow var(--sc-duration-fast) var(--sc-ease-standard),
+    background-color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-card[data-padding='none'] {
+  --_p: 0;
+}
+.sc-card[data-padding='sm'] {
+  --_p: var(--sc-spacing-sm);
+  border-radius: var(--sc-radius-lg);
+}
+.sc-card[data-padding='lg'] {
+  --_p: var(--sc-spacing-lg);
+}
+.sc-card[data-variant='elevated'] {
+  box-shadow: var(--sc-elevation-1);
+  border-color: transparent;
+}
+[data-theme='dark'] .sc-card[data-variant='elevated'] {
+  border-color: var(--sc-color-border-default);
+  background: var(--sc-color-surface-raised);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .sc-card[data-variant='elevated'] {
+    border-color: var(--sc-color-border-default);
+    background: var(--sc-color-surface-raised);
+  }
+}
+.sc-card[data-variant='filled'] {
+  background: var(--sc-color-surface-sunken);
+  border-color: transparent;
+}
+.sc-card[data-interactive] {
+  cursor: pointer;
+}
+.sc-card[data-interactive]:hover {
+  border-color: var(--sc-color-border-strong);
+  box-shadow: var(--sc-elevation-1);
+}
+.sc-card[data-interactive][data-variant='filled']:hover {
+  background: var(--sc-color-surface-active);
+}
+.sc-card[data-interactive]:active {
+  box-shadow: var(--sc-elevation-0);
+}
+.sc-card[data-selected] {
+  border-color: var(--sc-color-accent-default);
+  box-shadow: inset 0 0 0 1px var(--sc-color-accent-default);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-card {
+    transition: none;
+  }
+}

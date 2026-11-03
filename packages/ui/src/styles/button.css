@@ -1,0 +1,147 @@
+/* ---- Button ---------------------------------------------------------------- */
+.sc-button {
+  --_h: var(--sc-size-control-md);
+  --_px: var(--sc-spacing-md);
+  --_gap: var(--sc-spacing-xs);
+  --_radius: var(--sc-radius-md);
+  --_fs: var(--sc-font-size-sm);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--_gap);
+  box-sizing: border-box;
+  block-size: var(--_h);
+  min-inline-size: var(--_h);
+  padding-inline: var(--_px);
+  border-radius: var(--_radius);
+  font: inherit;
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--_fs);
+  font-weight: var(--sc-font-weight-medium);
+  line-height: 1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  border: var(--sc-border-width-hairline) solid transparent;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-ease-standard),
+    border-color var(--sc-duration-fast) var(--sc-ease-standard),
+    color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-button[data-size='sm'] {
+  --_h: var(--sc-size-control-sm);
+  --_px: var(--sc-spacing-sm);
+  --_gap: var(--sc-spacing-2xs);
+  --_radius: var(--sc-radius-sm);
+}
+.sc-button[data-size='lg'] {
+  --_h: var(--sc-size-control-lg);
+  --_px: var(--sc-spacing-lg);
+  --_fs: var(--sc-font-size-md);
+}
+.sc-button[data-full-width] {
+  inline-size: 100%;
+}
+/* 44px hit area on touch without changing layout. */
+@media (pointer: coarse) {
+  .sc-button::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    inline-size: max(100%, var(--sc-size-touch-target));
+    block-size: max(100%, var(--sc-size-touch-target));
+  }
+}
+.sc-button[data-variant='primary'] {
+  background: var(--sc-color-accent-default);
+  color: var(--sc-color-text-on-accent);
+}
+.sc-button[data-variant='primary']:hover {
+  background: var(--sc-color-accent-hover);
+}
+.sc-button[data-variant='primary']:active {
+  background: var(--sc-color-accent-active);
+}
+.sc-button[data-variant='secondary'] {
+  background: transparent;
+  color: var(--sc-color-text-default);
+  border-color: var(--sc-color-border-strong);
+}
+.sc-button[data-variant='secondary']:hover {
+  background: var(--sc-color-surface-hover);
+}
+.sc-button[data-variant='secondary']:active {
+  background: var(--sc-color-surface-active);
+}
+.sc-button[data-variant='ghost'] {
+  background: transparent;
+  color: var(--sc-color-text-default);
+}
+.sc-button[data-variant='ghost']:hover {
+  background: var(--sc-color-surface-hover);
+}
+.sc-button[data-variant='ghost']:active {
+  background: var(--sc-color-surface-active);
+}
+.sc-button[data-variant='danger'] {
+  background: var(--sc-color-danger-solid);
+  color: var(--sc-color-text-on-status);
+}
+.sc-button[data-variant='danger']:hover {
+  background: var(--sc-color-danger-hover);
+}
+.sc-button[data-variant='danger']:active {
+  background: var(--sc-color-danger-hover);
+  filter: brightness(0.95);
+}
+.sc-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.sc-button:disabled:hover,
+.sc-button:disabled:active {
+  background: revert-layer;
+  filter: none;
+}
+.sc-button[data-loading] {
+  cursor: progress;
+}
+.sc-button[data-loading] > .sc-button__label {
+  opacity: 0;
+}
+.sc-button__icon {
+  display: inline-flex;
+  inline-size: 1.125em;
+  block-size: 1.125em;
+  flex: none;
+}
+.sc-button__icon > svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.sc-button__spinner {
+  position: absolute;
+  inline-size: 1em;
+  block-size: 1em;
+  border-radius: 50%;
+  border: var(--sc-border-width-focus) solid currentColor;
+  border-inline-end-color: transparent;
+  animation: sc-spin 0.8s linear infinite;
+}
+@keyframes sc-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-button {
+    transition: none;
+  }
+  .sc-button__spinner {
+    animation-duration: 1.6s;
+  }
+}

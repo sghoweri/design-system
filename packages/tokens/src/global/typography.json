@@ -2,9 +2,9 @@
   "font": {
     "family": {
       "sans": {
-        "$value": "\"IBM Plex Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
+        "$value": "\"IBM Plex Sans Variable\", \"IBM Plex Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "$type": "fontFamily",
-        "$description": "Everything."
+        "$description": "Everything. The variable face is the self-hosted one (@salemcobalt/ui/fonts); the static name covers a system install."
       },
       "mono": {
         "$value": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
@@ -13,7 +13,11 @@
       }
     },
     "size": {
-      "xs": { "$value": "12px", "$type": "dimension", "$description": "Fixed. Captions, Badge sm, Kbd." },
+      "xs": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "Fixed. Captions, Badge sm, Kbd."
+      },
       "sm": {
         "$value": "14px",
         "$type": "dimension",
@@ -56,22 +60,70 @@
       }
     },
     "weight": {
-      "regular": { "$value": 400, "$type": "fontWeight", "$description": "Text." },
-      "medium": { "$value": 500, "$type": "fontWeight", "$description": "Controls and badges." },
-      "semibold": { "$value": 600, "$type": "fontWeight", "$description": "Headings and display." }
+      "regular": {
+        "$value": 400,
+        "$type": "fontWeight",
+        "$description": "Text."
+      },
+      "medium": {
+        "$value": 500,
+        "$type": "fontWeight",
+        "$description": "Controls and badges."
+      },
+      "semibold": {
+        "$value": 600,
+        "$type": "fontWeight",
+        "$description": "Headings and display."
+      }
     },
     "line-height": {
-      "tight": { "$value": 1.1, "$type": "number", "$description": "Display sizes." },
-      "snug": { "$value": 1.25, "$type": "number", "$description": "Headings." },
-      "normal": { "$value": 1.5, "$type": "number", "$description": "Body." },
-      "ui": { "$value": 1.45, "$type": "number", "$description": "UI text at 14px." }
+      "tight": {
+        "$value": 1.1,
+        "$type": "number",
+        "$description": "Display sizes."
+      },
+      "snug": {
+        "$value": 1.25,
+        "$type": "number",
+        "$description": "Headings."
+      },
+      "normal": {
+        "$value": 1.5,
+        "$type": "number",
+        "$description": "Body."
+      },
+      "ui": {
+        "$value": 1.45,
+        "$type": "number",
+        "$description": "UI text at 14px."
+      }
     },
     "tracking": {
-      "tight": { "$value": "-0.02em", "$type": "dimension", "$description": "Display sizes." },
-      "snug": { "$value": "-0.01em", "$type": "dimension", "$description": "Headings from 2xl up." },
-      "normal": { "$value": "0em", "$type": "dimension", "$description": "Text." },
-      "wide": { "$value": "0.04em", "$type": "dimension", "$description": "Uppercase labels." }
+      "tight": {
+        "$value": "-0.02em",
+        "$type": "dimension",
+        "$description": "Display sizes."
+      },
+      "snug": {
+        "$value": "-0.01em",
+        "$type": "dimension",
+        "$description": "Headings from 2xl up."
+      },
+      "normal": {
+        "$value": "0em",
+        "$type": "dimension",
+        "$description": "Text."
+      },
+      "wide": {
+        "$value": "0.04em",
+        "$type": "dimension",
+        "$description": "Uppercase labels."
+      }
     },
-    "measure": { "$value": "65ch", "$type": "dimension", "$description": "Max line length for running text." }
+    "measure": {
+      "$value": "65ch",
+      "$type": "dimension",
+      "$description": "Max line length for running text."
+    }
   }
 }

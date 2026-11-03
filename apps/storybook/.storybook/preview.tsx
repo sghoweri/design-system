@@ -2,6 +2,7 @@ import type { Decorator, Preview } from '@storybook/react-vite';
 import { useEffect } from 'react';
 import type React from 'react';
 import '@salemcobalt/tokens/css';
+import '../../../packages/ui/src/fonts';
 import '../../../packages/ui/src/styles/preview.css';
 
 function ThemeSync({
