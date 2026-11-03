@@ -1,7 +1,7 @@
 # ADR 0001: Headless primitives for interactive components
 
 Date: 2026-10-15
-Status: proposed (confirm with Salem before 0.1.0)
+Status: accepted (Salem, 2026-11-03)
 
 ## Context
 
