@@ -1,6 +1,10 @@
 {
   "spacing": {
-    "none": { "$value": "0px", "$type": "dimension", "$description": "Reset; Stack and Inline gap=\"none\"." },
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$description": "Reset; Stack and Inline gap=\"none\"."
+    },
     "3xs": {
       "$value": "2px",
       "$type": "dimension",
