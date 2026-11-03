@@ -17,7 +17,7 @@ const isThemed = (token) =>
   (token.path[0] === 'color' &&
     token.path[1] !== 'white' &&
     token.path[1] !== 'black' &&
-    !['neutral', 'brand', 'green', 'amber', 'red'].includes(token.path[1])) ||
+    !['neutral', 'brand', 'green', 'amber', 'red', 'teal'].includes(token.path[1])) ||
   token.path[0] === 'elevation';
 const isPrimitiveColor = (token) => token.path[0] === 'color' && !isThemed(token);
 

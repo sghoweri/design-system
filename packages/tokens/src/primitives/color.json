@@ -304,6 +304,63 @@
         "$type": "color",
         "$description": "Primitive. OKLCH hue 24."
       }
+    },
+    "teal": {
+      "50": {
+        "$value": "#ecfaf9",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "100": {
+        "$value": "#d5f4f2",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "200": {
+        "$value": "#aee8e5",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "300": {
+        "$value": "#74d4d0",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "400": {
+        "$value": "#22bab6",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "500": {
+        "$value": "#039a97",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "600": {
+        "$value": "#057c79",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "700": {
+        "$value": "#056563",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "800": {
+        "$value": "#03504e",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "900": {
+        "$value": "#013937",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      },
+      "950": {
+        "$value": "#002524",
+        "$type": "color",
+        "$description": "Primitive. OKLCH hue 192."
+      }
     }
   }
 }

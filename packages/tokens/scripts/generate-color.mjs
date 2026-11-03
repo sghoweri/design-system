@@ -96,6 +96,8 @@ const hues = {
   green: { h: 152, peak: 0.17 },
   amber: { h: 72, peak: 0.165 },
   red: { h: 24, peak: 0.205 },
+  // teal: a cool green-blue, added 2026-11-03 as a primitive with no semantic role yet.
+  teal: { h: 192, peak: 0.13 },
 };
 const neutralLadder = {
   0: 1.0,
