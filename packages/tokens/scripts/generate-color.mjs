@@ -73,7 +73,26 @@ const envelope = {
   950: 0.5,
 };
 const hues = {
-  cobalt: { h: 263, peak: 0.215 },
+  // brand is the violet hue. Its own ladder puts the two given hexes on exact steps:
+  // 500 = #8250fe (the vivid brand), 800 = #4700ab (the deep brand).
+  brand: {
+    h: 289,
+    peak: 0.242,
+    ladder: {
+      50: 0.975,
+      100: 0.945,
+      200: 0.89,
+      300: 0.81,
+      400: 0.715,
+      500: 0.587,
+      600: 0.5,
+      700: 0.44,
+      800: 0.379,
+      900: 0.3,
+      950: 0.23,
+    },
+    snap: { 500: '#8250fe', 800: '#4700ab' },
+  },
   green: { h: 152, peak: 0.17 },
   amber: { h: 72, peak: 0.165 },
   red: { h: 24, peak: 0.205 },
@@ -111,14 +130,16 @@ for (const [step, L] of Object.entries(neutralLadder)) {
     $description: 'Primitive. Cool neutral, OKLCH hue 263.',
   };
 }
-for (const [name, { h, peak }] of Object.entries(hues)) {
+for (const [name, { h, peak, ladder: own, snap }] of Object.entries(hues)) {
   color[name] = {};
-  for (const [step, L] of Object.entries(ladder))
+  for (const [step, L] of Object.entries(own ?? ladder)) {
+    const exact = snap?.[step];
     color[name][step] = {
-      $value: oklch(L, peak * envelope[step], h),
+      $value: exact ?? oklch(L, peak * envelope[step], h),
       $type: 'color',
-      $description: `Primitive. OKLCH hue ${h}.`,
+      $description: exact ? `Primitive. The brand color ${exact}, exact.` : `Primitive. OKLCH hue ${h}.`,
     };
+  }
 }
 writeFileSync(join(src, 'primitives', 'color.json'), JSON.stringify({ color }, null, 2) + '\n');
 
@@ -144,7 +165,7 @@ const semantic = {
     ],
     'on-accent': ['white', 'neutral.1000', 'Text on accent.default and accent.hover.'],
     'on-status': ['white', 'neutral.1000', 'Text on success.solid, warning.solid and danger.solid.'],
-    link: ['cobalt.700', 'cobalt.300', 'Inline links on surface.canvas and surface.default.'],
+    link: ['brand.700', 'brand.300', 'Inline links on surface.canvas and surface.default.'],
   },
   border: {
     default: ['neutral.300', 'neutral.800', 'Structural borders: Card, Kbd, dividers, Dialog edge.'],
@@ -153,14 +174,18 @@ const semantic = {
       'neutral.600',
       'Borders that carry meaning (secondary Button); 3:1 on every surface.',
     ],
-    focus: ['cobalt.600', 'cobalt.400', 'Focus ring: 2px solid, offset 2px.'],
+    focus: ['brand.500', 'brand.400', 'Focus ring: 2px solid, offset 2px.'],
   },
   accent: {
-    default: ['cobalt.600', 'cobalt.400', 'Primary Button fill, selection, active indicators.'],
-    hover: ['cobalt.700', 'cobalt.300', 'Primary Button hover.'],
-    active: ['cobalt.800', 'cobalt.200', 'Primary Button pressed.'],
-    subtle: ['cobalt.50', 'cobalt.950', 'Soft accent Badge fill, selected row wash.'],
-    text: ['cobalt.700', 'cobalt.300', 'Text on accent.subtle and surface.default.'],
+    default: [
+      'brand.500',
+      'brand.400',
+      'Primary Button fill, selection, active indicators. Light is #8250fe exactly.',
+    ],
+    hover: ['brand.600', 'brand.300', 'Primary Button hover.'],
+    active: ['brand.800', 'brand.200', 'Primary Button pressed. Light is #4700ab exactly.'],
+    subtle: ['brand.50', 'brand.950', 'Soft accent Badge fill, selected row wash.'],
+    text: ['brand.700', 'brand.300', 'Text on accent.subtle and surface.default.'],
   },
   success: {
     subtle: ['green.50', 'green.950', 'Soft success Badge fill.'],

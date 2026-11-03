@@ -64,7 +64,7 @@
         "$description": "Text on success.solid, warning.solid and danger.solid."
       },
       "link": {
-        "$value": "{color.cobalt.300}",
+        "$value": "{color.brand.300}",
         "$type": "color",
         "$description": "Inline links on surface.canvas and surface.default."
       }
@@ -81,34 +81,34 @@
         "$description": "Borders that carry meaning (secondary Button); 3:1 on every surface."
       },
       "focus": {
-        "$value": "{color.cobalt.400}",
+        "$value": "{color.brand.400}",
         "$type": "color",
         "$description": "Focus ring: 2px solid, offset 2px."
       }
     },
     "accent": {
       "default": {
-        "$value": "{color.cobalt.400}",
+        "$value": "{color.brand.400}",
         "$type": "color",
-        "$description": "Primary Button fill, selection, active indicators."
+        "$description": "Primary Button fill, selection, active indicators. Light is #8250fe exactly."
       },
       "hover": {
-        "$value": "{color.cobalt.300}",
+        "$value": "{color.brand.300}",
         "$type": "color",
         "$description": "Primary Button hover."
       },
       "active": {
-        "$value": "{color.cobalt.200}",
+        "$value": "{color.brand.200}",
         "$type": "color",
-        "$description": "Primary Button pressed."
+        "$description": "Primary Button pressed. Light is #4700ab exactly."
       },
       "subtle": {
-        "$value": "{color.cobalt.950}",
+        "$value": "{color.brand.950}",
         "$type": "color",
         "$description": "Soft accent Badge fill, selected row wash."
       },
       "text": {
-        "$value": "{color.cobalt.300}",
+        "$value": "{color.brand.300}",
         "$type": "color",
         "$description": "Text on accent.subtle and surface.default."
       }

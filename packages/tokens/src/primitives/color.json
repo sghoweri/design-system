@@ -77,61 +77,61 @@
         "$description": "Primitive. Cool neutral, OKLCH hue 263."
       }
     },
-    "cobalt": {
+    "brand": {
       "50": {
-        "$value": "#f3f7fe",
+        "$value": "#f6f6fe",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "100": {
-        "$value": "#e4edff",
+        "$value": "#eceafe",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "200": {
-        "$value": "#c9dbff",
+        "$value": "#d9d5ff",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "300": {
-        "$value": "#a1c1ff",
+        "$value": "#beb6ff",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "400": {
-        "$value": "#71a0ff",
+        "$value": "#a190fe",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "500": {
-        "$value": "#407dfe",
+        "$value": "#8250fe",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. The brand color #8250fe, exact."
       },
       "600": {
-        "$value": "#215ee5",
+        "$value": "#6930e0",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "700": {
-        "$value": "#144ac4",
+        "$value": "#5821c2",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "800": {
-        "$value": "#0c399f",
+        "$value": "#4700ab",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. The brand color #4700ab, exact."
       },
       "900": {
-        "$value": "#072872",
+        "$value": "#311072",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       },
       "950": {
-        "$value": "#021851",
+        "$value": "#200550",
         "$type": "color",
-        "$description": "Primitive. OKLCH hue 263."
+        "$description": "Primitive. OKLCH hue 289."
       }
     },
     "green": {
