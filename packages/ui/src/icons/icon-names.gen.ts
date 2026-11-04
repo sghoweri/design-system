@@ -2,8 +2,10 @@
 /** Every icon shipped by this package, as `<Name>Icon` components. */
 export const iconNames = [
   'archive',
+  'arrow-down',
   'arrow-left',
   'arrow-right',
+  'arrow-up',
   'bell',
   'briefcase',
   'calendar',

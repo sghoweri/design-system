@@ -14,6 +14,8 @@
 @import './tabs.css';
 @import './toolbar.css';
 @import './banner.css';
+@import './table.css';
+@import './stat.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);

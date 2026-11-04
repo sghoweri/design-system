@@ -1,7 +1,7 @@
 {
   "name": "@salemcobalt/ui",
   "version": "0.1.1",
-  "description": "React components for the Salem Cobalt design system: Button, IconButton, Icon set, Badge, Card, Stack, Inline, Kbd, Dialog, Tooltip, Menu, Toolbar, Banner, Tabs, Input, Textarea, Select, Checkbox, Switch, Heading, Text.",
+  "description": "React components for the Salem Cobalt design system: Button, IconButton, Icon set, Badge, Card, Stack, Inline, Kbd, Dialog, Tooltip, Menu, Toolbar, Banner, Tabs, Input, Textarea, Select, Checkbox, Switch, Heading, Text, Table, Stat.",
   "license": "MIT",
   "repository": {
     "type": "git",

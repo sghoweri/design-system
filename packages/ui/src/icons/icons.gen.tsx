@@ -11,6 +11,15 @@ export function ArchiveIcon(props: IconGlyphProps) {
   );
 }
 
+/** `arrow-down` */
+export function ArrowDownIcon(props: IconGlyphProps) {
+  return (
+    <Icon {...props}>
+      <path d="M8 3v10M4 9l4 4 4-4" />
+    </Icon>
+  );
+}
+
 /** `arrow-left` */
 export function ArrowLeftIcon(props: IconGlyphProps) {
   return (
@@ -25,6 +34,15 @@ export function ArrowRightIcon(props: IconGlyphProps) {
   return (
     <Icon {...props}>
       <path d="M3 8h10M9 4l4 4-4 4" />
+    </Icon>
+  );
+}
+
+/** `arrow-up` */
+export function ArrowUpIcon(props: IconGlyphProps) {
+  return (
+    <Icon {...props}>
+      <path d="M8 13V3M4 7l4-4 4 4" />
     </Icon>
   );
 }

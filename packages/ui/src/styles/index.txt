@@ -13,3 +13,5 @@ field.css
 tabs.css
 toolbar.css
 banner.css
+table.css
+stat.css
