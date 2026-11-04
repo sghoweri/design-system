@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Publish one workspace package to npm unless its version is already there.
-# Usage: publish-if-new.sh <package dir>   (DRY_RUN=1 runs `pnpm publish --dry-run`)
+# Usage: publish-if-new.sh <package dir>
+#   DIST_TAG=<tag>  npm dist-tag (default: `next` for a prerelease version, `latest` otherwise)
+#   DRY_RUN=1       run `pnpm publish --dry-run` instead of uploading
 set -euo pipefail
 
 dir="$1"
@@ -16,13 +18,18 @@ if [ -n "$published" ]; then
 fi
 
 flags=(--access public --provenance --no-git-checks)
-case "$version" in
-  *-*) flags+=(--tag next) ;; # prereleases (1.2.0-beta.1) must not become `latest`
-esac
+tag="${DIST_TAG:-}"
+if [ -z "$tag" ]; then
+  case "$version" in
+    *-*) tag=next ;; # a prerelease must never become `latest`
+    *) tag=latest ;;
+  esac
+fi
+flags+=(--tag "$tag")
 if [ -n "${DRY_RUN:-}" ]; then
   flags+=(--dry-run)
   echo "Dry run: would publish $name@$version"
 fi
 
-echo "Publishing $name@$version"
+echo "Publishing $name@$version to dist-tag $tag"
 (cd "$dir" && pnpm publish "${flags[@]}")

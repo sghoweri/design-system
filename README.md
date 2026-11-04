@@ -47,4 +47,6 @@ There is no deploy step in GitHub Actions; CI only lints, builds and tests.
 
 ## Release
 
-Pushing a `vX.Y.Z` tag publishes both packages to npm with provenance through npm Trusted Publishing; no token is stored anywhere. Steps and the one-time npm setup: [docs/releasing.md](docs/releasing.md).
+Every merge to `main` publishes a release candidate (`X.Y.Z-rc.N`, npm dist-tag `next`); merging `main` into `release` publishes the stable version to `latest`, writes `CHANGELOG.md` and tags it. Versions come from nx release and conventional commits, npm auth is Trusted Publishing with provenance, no token is stored. A PR labeled `canary` publishes `0.0.0-canary.<sha>`. Setup and details: [docs/releasing.md](docs/releasing.md).
+
+The Storybook keeps building on Vercel's Git integration for now; [ADR 0002](docs/adr/0002-storybook-builds-on-vercel.md) records why and when that ends.

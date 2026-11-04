@@ -1,37 +1,93 @@
-# Publishes @salemcobalt/tokens and @salemcobalt/ui to npm with provenance.
+# Versions, tags and publishes @salemcobalt/tokens and @salemcobalt/ui.
 #
-# Auth is npm Trusted Publishing (OIDC): the job's id-token lets npm verify the
-# workflow instead of a long-lived NPM_TOKEN. There is no secret anywhere in
-# this repo. One-time setup and per-release steps: docs/releasing.md.
+#   push to main      -> rc prerelease  (vX.Y.Z-rc.N, npm dist-tag `next`, GitHub prerelease, no commit)
+#   push to release   -> stable release (vX.Y.Z, dist-tag `latest`, GitHub release, version commit, merge back to main)
+#   PR labeled canary -> canary          (0.0.0-canary.<sha7>, dist-tag `canary`, one PR comment, no tag)
+#   workflow_dispatch -> dry run of the rc or stable path for the chosen branch
+#
+# Versions come from nx release (fixed mode, conventional commits; nx.json). npm auth is
+# Trusted Publishing (OIDC), so there is no NPM_TOKEN. The stable path pushes commits past
+# branch protection with a GitHub App token (vars.RELEASE_APP_ID + secrets.RELEASE_APP_PRIVATE_KEY).
+# Setup and the release steps: docs/releasing.md.
 name: release
 on:
   push:
-    tags: ['v*']
+    branches: [main, release]
+  pull_request:
+    types: [labeled, synchronize]
   workflow_dispatch:
     inputs:
       dry-run:
-        description: 'Run every check and `pnpm publish --dry-run`; upload nothing'
+        description: 'Compute the version, build, test and `pnpm publish --dry-run`; push nothing'
         type: boolean
-        default: false
-permissions: {} # nothing by default; each job asks for what it needs
+        default: true
+permissions: {} # nothing by default; the job asks for what it needs
 concurrency:
-  group: release-${{ github.ref }}
-  cancel-in-progress: false
+  group: release-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref }}
+  cancel-in-progress: false # never cancel a publish half-way
 jobs:
-  publish:
+  release:
+    # A PR only gets here with the `canary` label; pushes and dispatches always do.
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'canary')
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     permissions:
-      contents: read
+      contents: write # tags and GitHub (pre)releases for rc and canary; stable uses the App token
       id-token: write # mint the OIDC token npm exchanges for a publish credential
+      pull-requests: write # the canary comment
+    env:
+      NX_DAEMON: 'false'
+      NX_TUI: 'false'
     steps:
+      - name: Decide what this run does
+        id: mode
+        env:
+          EVENT: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          DISPATCH_DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          case "$EVENT" in
+            pull_request) mode=canary ;;
+            push|workflow_dispatch)
+              case "$REF_NAME" in
+                main) mode=rc ;;
+                release) mode=stable ;;
+                *) echo "::error::release.yml runs for main (rc) or release (stable), not $REF_NAME"; exit 1 ;;
+              esac ;;
+          esac
+          dry=""
+          [ "$EVENT" = workflow_dispatch ] && [ "$DISPATCH_DRY_RUN" = true ] && dry=1
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "dry=$dry" >> "$GITHUB_OUTPUT"
+          echo "mode=$mode dry=${dry:-0}"
+
+      - name: Stable releases need the release App
+        if: steps.mode.outputs.mode == 'stable' && !steps.mode.outputs.dry
+        env:
+          HAS_APP: ${{ vars.RELEASE_APP_ID != '' && secrets.RELEASE_APP_PRIVATE_KEY != '' }}
+        run: |
+          if [ "$HAS_APP" != true ]; then
+            echo "::error::Set the RELEASE_APP_ID variable and RELEASE_APP_PRIVATE_KEY secret (docs/releasing.md, one-time setup)"
+            exit 1
+          fi
+      - name: Mint the release App token
+        if: steps.mode.outputs.mode == 'stable' && !steps.mode.outputs.dry
+        id: app
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # nx release reads tags and the commits since them
+          token: ${{ steps.app.outputs.token || github.token }}
       - uses: pnpm/action-setup@v4 # version comes from packageManager in package.json
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
-
       - name: Make sure npm supports Trusted Publishing (>= 11.5.1)
         run: |
           have="$(npm --version)"
@@ -41,42 +97,106 @@ jobs:
             npm install -g npm@latest
           fi
           echo "npm $(npm --version)"
-
-      - name: Check the tag matches the package versions
-        env:
-          REF_TYPE: ${{ github.ref_type }}
-          REF_NAME: ${{ github.ref_name }}
-        run: |
-          tokens="$(node -p "require('./packages/tokens/package.json').version")"
-          ui="$(node -p "require('./packages/ui/package.json').version")"
-          if [ "$tokens" != "$ui" ]; then
-            echo "::error::@salemcobalt/tokens is $tokens but @salemcobalt/ui is $ui; both packages share one version"
-            exit 1
-          fi
-          if [ "$REF_TYPE" != "tag" ]; then
-            echo "::error::Run this workflow from a tag (v$ui), not from the $REF_TYPE $REF_NAME"
-            exit 1
-          fi
-          if [ "$REF_NAME" != "v$ui" ]; then
-            echo "::error::Tag $REF_NAME does not match package version $ui (expected v$ui)"
-            exit 1
-          fi
-          echo "Releasing v$ui"
-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm build
-      - run: pnpm typecheck
-      - run: pnpm test
 
-      # Dependency order: ui has a peer dependency on tokens. Each package is
-      # skipped when its version is already on the registry, so re-running a
-      # tag after a partial failure is safe.
+      - name: Git identity for commits and tags
+        env:
+          APP_SLUG: ${{ steps.app.outputs.app-slug }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -n "$APP_SLUG" ]; then
+            id="$(gh api "/users/${APP_SLUG}[bot]" --jq .id)"
+            git config user.name "${APP_SLUG}[bot]"
+            git config user.email "${id}+${APP_SLUG}[bot]@users.noreply.github.com"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          fi
+
+      - name: Compute the next version
+        id: version
+        env:
+          MODE: ${{ steps.mode.outputs.mode }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: .github/scripts/next-version.sh
+
+      - run: pnpm build
+        if: steps.version.outputs.version != ''
+      - run: pnpm test
+        if: steps.version.outputs.version != ''
+
+      - name: Changelog, tag and GitHub prerelease (rc)
+        if: steps.version.outputs.version != '' && steps.mode.outputs.mode == 'rc'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          DRY: ${{ steps.mode.outputs.dry }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          # Tag the commit as it is: rc versions live in tags, never in a commit on main.
+          pnpm exec nx release changelog "$VERSION" --git-commit=false --git-tag=true --git-push=true \
+            ${DRY:+--dry-run}
+      - name: Changelog, version commit, tag and GitHub release (stable)
+        if: steps.version.outputs.version != '' && steps.mode.outputs.mode == 'stable'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          FROM: ${{ steps.version.outputs.last-stable }}
+          DRY: ${{ steps.mode.outputs.dry }}
+          GITHUB_TOKEN: ${{ steps.app.outputs.token || github.token }}
+        run: |
+          # Notes cover everything since the previous stable tag, not just the last rc.
+          pnpm exec nx release changelog "$VERSION" ${FROM:+--from "$FROM"} ${DRY:+--dry-run}
+
+      # Dependency order: ui has a peer dependency on tokens. A version already on the
+      # registry is skipped, so re-running after a partial failure publishes what is missing.
       - name: Publish @salemcobalt/tokens
+        if: steps.version.outputs.version != ''
         run: .github/scripts/publish-if-new.sh packages/tokens
         env:
-          DRY_RUN: ${{ inputs.dry-run && '1' || '' }}
+          DIST_TAG: ${{ steps.version.outputs.dist-tag }}
+          DRY_RUN: ${{ steps.mode.outputs.dry }}
       - name: Publish @salemcobalt/ui
+        if: steps.version.outputs.version != ''
         run: .github/scripts/publish-if-new.sh packages/ui
         env:
-          DRY_RUN: ${{ inputs.dry-run && '1' || '' }}
+          DIST_TAG: ${{ steps.version.outputs.dist-tag }}
+          DRY_RUN: ${{ steps.mode.outputs.dry }}
+
+      - name: Merge release back into main
+        if: steps.version.outputs.version != '' && steps.mode.outputs.mode == 'stable' && !steps.mode.outputs.dry
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git fetch origin main
+          git switch -c merge-back origin/main
+          if ! git merge --no-ff release -m "chore(release): merge v$VERSION back into main [skip ci]"; then
+            echo "::error::release does not merge cleanly into main; merge it by hand (git merge release) and push"
+            exit 1
+          fi
+          git push origin HEAD:main
+
+      - name: Comment the canary install line on the PR
+        if: steps.version.outputs.version != '' && steps.mode.outputs.mode == 'canary'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ github.token }}
+        run: .github/scripts/canary-comment.sh
+
+      - name: Summary
+        if: always()
+        env:
+          MODE: ${{ steps.mode.outputs.mode }}
+          VERSION: ${{ steps.version.outputs.version }}
+          DIST_TAG: ${{ steps.version.outputs.dist-tag }}
+          DRY: ${{ steps.mode.outputs.dry }}
+        run: |
+          {
+            echo "## release: $MODE${DRY:+ (dry run)}"
+            if [ -n "$VERSION" ]; then
+              echo "- version: \`$VERSION\` (npm dist-tag \`$DIST_TAG\`)"
+            else
+              echo "- nothing to release"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
