@@ -1,6 +1,10 @@
 # @salemcobalt/ui
 
+<<<<<<< HEAD
 React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, `Icon` and a shipped icon set, `Badge`, `Card`, `Stack`, `Inline`, `Heading`, `Text`, `Kbd`, `Dialog`, `Tooltip`, `Menu`, `Toolbar`, `Banner`, `Tabs`, `Input`, `Textarea`, `Select`, `Checkbox`, `Switch`, `Table`, `Stat`. Requires `@salemcobalt/tokens`.
+=======
+React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, `Icon` and a shipped icon set, `Badge`, `Card`, `Stack`, `Inline`, `Heading`, `Text`, `Kbd`, `Dialog`, `Tooltip`, `Menu`, `Toolbar`, `Banner`, `Spinner`, `Progress`, `Tabs`, `Input`, `Textarea`, `Select`, `Checkbox`, `Switch`. Requires `@salemcobalt/tokens`.
+>>>>>>> claude/ds-0-2-forms-layout
 
 ```ts
 import '@salemcobalt/tokens/css'; // custom properties, light + dark
@@ -97,6 +101,9 @@ Styles ship as one stylesheet inside `@layer sc`, so an app's unlayered CSS alwa
 </Toolbar.Root>
 
 <Banner tone="warning" action={<Button variant="ghost" size="sm">Resume</Button>}>Your sweeps are paused.</Banner>
+
+<Progress label="Verifying" value={460} max={859} valueText="460 of 859 · 3 min elapsed" />
+<Progress variant="inline" label="Queued" />
 
 <Tabs.Root defaultValue="inbox">
   <Tabs.List aria-label="Inbox sections">
