@@ -59,6 +59,62 @@
   background: var(--sc-color-surface-canvas);
   border-block-end: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
 }
+/* Sortable column headers: the whole label is the button. */
+.sc-table__header[data-sortable] {
+  padding: 0;
+}
+.sc-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-2xs);
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--_h);
+  margin: 0;
+  padding: var(--_py) var(--_px);
+  border: 0;
+  border-radius: var(--sc-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: inherit;
+  white-space: inherit;
+  cursor: pointer;
+  user-select: none;
+}
+.sc-table__header[data-align='end'] > .sc-table__sort {
+  justify-content: flex-end;
+}
+.sc-table__header[data-align='center'] > .sc-table__sort {
+  justify-content: center;
+}
+.sc-table__sort:hover {
+  background: var(--sc-color-surface-hover);
+  color: var(--sc-color-text-default);
+}
+.sc-table__sort:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: calc(-1 * var(--sc-border-width-focus));
+}
+.sc-table__sort-icon {
+  display: inline-flex;
+  flex: none;
+  opacity: 0;
+  transition: opacity var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-table__sort:hover > .sc-table__sort-icon,
+.sc-table__sort:focus-visible > .sc-table__sort-icon {
+  opacity: 0.6;
+}
+.sc-table__header[data-sorted] {
+  color: var(--sc-color-text-default);
+}
+.sc-table__header[data-sorted] .sc-table__sort-icon {
+  opacity: 1;
+  color: var(--sc-color-accent-text);
+}
 .sc-table__body .sc-table__header {
   color: var(--sc-color-text-default);
   font-size: inherit;
