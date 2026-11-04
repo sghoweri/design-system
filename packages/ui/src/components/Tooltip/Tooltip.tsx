@@ -14,7 +14,7 @@ export interface TooltipProps {
   side?: TooltipSide | undefined;
   /** Alignment along that side. Default `center`. */
   align?: TooltipAlign | undefined;
-  /** Hover delay in ms before opening. Default 600; inside `Tooltip.Provider` sibling tooltips open instantly once one is open. */
+  /** Hover delay in ms before opening. Default 300; inside `Tooltip.Provider` sibling tooltips open instantly once one is open. */
   delay?: number | undefined;
   /** Delay in ms before closing. Default 0. */
   closeDelay?: number | undefined;
@@ -38,7 +38,7 @@ function TooltipBase({
   children,
   side = 'top',
   align = 'center',
-  delay,
+  delay = 300,
   closeDelay,
   open,
   defaultOpen,
@@ -57,6 +57,7 @@ function TooltipBase({
       <BaseTooltip.Portal>
         <BaseTooltip.Positioner side={side} align={align} sideOffset={6} className="sc-tooltip__positioner">
           <BaseTooltip.Popup role="tooltip" className={cx('sc-tooltip', className)}>
+            <BaseTooltip.Arrow className="sc-tooltip__arrow" />
             {content}
           </BaseTooltip.Popup>
         </BaseTooltip.Positioner>
