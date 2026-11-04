@@ -34,3 +34,13 @@ import { Button } from '@salemcobalt/ui';
 ```
 
 Set `data-theme="light"` or `"dark"` on `<html>`; with no attribute the system follows `prefers-color-scheme`.
+
+## Storybook
+
+The Storybook is hosted on Vercel at <https://designsystem.salemcobalt.com>. `vercel.json` at the repo root builds it with `pnpm build && pnpm build-storybook` on Node 24 and serves `apps/storybook/storybook-static`.
+
+- Every push to `main` deploys production.
+- Every pull request gets its own preview URL, posted by the Vercel bot on the PR.
+- A deploy is skipped when nothing under `packages/`, `apps/storybook/`, `pnpm-lock.yaml` or `vercel.json` changed.
+
+There is no deploy step in GitHub Actions; CI only lints, builds and tests.
