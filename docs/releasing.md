@@ -5,7 +5,9 @@
 [nx release](https://nx.dev/docs/guides/nx-release) in fixed mode, driven by conventional commits
 (configuration in [`nx.json`](../nx.json)); npm authentication is
 [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) (OpenID Connect), so there is no
-`NPM_TOKEN`, and every version ships with a provenance attestation.
+`NPM_TOKEN`, and every version ships with a provenance attestation. Every action in the workflow is
+pinned to a commit SHA, and Dependabot (`.github/dependabot.yml`) opens a weekly PR when a pin falls
+behind; `ci.yml` runs actionlint and zizmor over the workflows on every PR.
 
 ## The model
 
