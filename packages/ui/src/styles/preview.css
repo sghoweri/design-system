@@ -14,6 +14,7 @@
 @import './tabs.css';
 @import './toolbar.css';
 @import './banner.css';
+@import './progress.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);

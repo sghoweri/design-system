@@ -13,3 +13,4 @@ field.css
 tabs.css
 toolbar.css
 banner.css
+progress.css

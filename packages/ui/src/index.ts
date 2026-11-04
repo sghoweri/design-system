@@ -87,6 +87,14 @@ export {
   type ToolbarSpacerProps,
 } from './components/Toolbar/Toolbar';
 export { Banner, type BannerProps, type BannerTone } from './components/Banner/Banner';
+export { Spinner, type SpinnerProps } from './components/Spinner/Spinner';
+export {
+  Progress,
+  type ProgressProps,
+  type ProgressSize,
+  type ProgressTone,
+  type ProgressVariant,
+} from './components/Progress/Progress';
 export {
   Heading,
   type HeadingElement,
