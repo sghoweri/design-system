@@ -13,8 +13,7 @@ on:
         description: 'Run every check and `pnpm publish --dry-run`; upload nothing'
         type: boolean
         default: false
-permissions:
-  contents: read
+permissions: {} # nothing by default; each job asks for what it needs
 concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
