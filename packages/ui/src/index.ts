@@ -111,5 +111,27 @@ export {
   type TextSize,
   type TextWeight,
 } from './components/Text/Text';
+export {
+  Table,
+  type TableAlign,
+  type TableBodyProps,
+  type TableCaptionProps,
+  type TableCellProps,
+  type TableDensity,
+  type TableFootProps,
+  type TableHeadProps,
+  type TableHeaderProps,
+  type TableRootProps,
+  type TableRowProps,
+} from './components/Table/Table';
+export {
+  Stat,
+  type StatDeltaTone,
+  type StatElement,
+  type StatProps,
+  type StatSize,
+  type StatTrend,
+  type StatVariant,
+} from './components/Stat/Stat';
 export type { SpacingSize } from './types';
 export const version = '0.1.1';

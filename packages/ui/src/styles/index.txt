@@ -14,3 +14,5 @@ tabs.css
 toolbar.css
 banner.css
 progress.css
+table.css
+stat.css

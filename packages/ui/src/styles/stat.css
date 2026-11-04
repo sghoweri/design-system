@@ -1,0 +1,89 @@
+/* ---- Stat ------------------------------------------------------------------ */
+.sc-stat {
+  --_p: var(--sc-spacing-md);
+  --_value: var(--sc-font-size-2xl);
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'label icon'
+    'value value'
+    'delta delta'
+    'hint hint';
+  align-content: start;
+  row-gap: var(--sc-spacing-3xs);
+  box-sizing: border-box;
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--_p);
+  border-radius: var(--sc-radius-xl);
+  background: var(--sc-color-surface-default);
+  color: var(--sc-color-text-default);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  list-style: none;
+}
+.sc-stat[data-variant='filled'] {
+  background: var(--sc-color-surface-sunken);
+  border-color: transparent;
+}
+.sc-stat[data-variant='plain'] {
+  --_p: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+}
+.sc-stat[data-size='sm'] {
+  --_p: var(--sc-spacing-sm);
+  --_value: var(--sc-font-size-xl);
+  border-radius: var(--sc-radius-lg);
+}
+.sc-stat__label {
+  grid-area: label;
+  color: var(--sc-color-text-muted);
+  font-weight: var(--sc-font-weight-medium);
+}
+.sc-stat__icon {
+  grid-area: icon;
+  display: inline-flex;
+  color: var(--sc-color-text-subtle);
+}
+.sc-stat__icon > svg {
+  inline-size: var(--sc-size-icon-lg);
+  block-size: var(--sc-size-icon-lg);
+}
+.sc-stat__value {
+  grid-area: value;
+  font-size: var(--_value);
+  font-weight: var(--sc-font-weight-semibold);
+  line-height: var(--sc-font-line-height-tight);
+  letter-spacing: var(--sc-font-tracking-snug);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.sc-stat__delta {
+  grid-area: delta;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-3xs);
+  color: var(--sc-color-text-muted);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  font-variant-numeric: tabular-nums;
+}
+.sc-stat__delta[data-tone='positive'] {
+  color: var(--sc-color-success-text);
+}
+.sc-stat__delta[data-tone='negative'] {
+  color: var(--sc-color-danger-text);
+}
+.sc-stat__trend {
+  display: inline-flex;
+}
+.sc-stat__hint {
+  grid-area: hint;
+  color: var(--sc-color-text-muted);
+  font-size: var(--sc-font-size-xs);
+}
