@@ -1,0 +1,28 @@
+# Merge gate: every pull request carries exactly one release label, so the merge to main
+# knows its bump (release.yml, docs/releasing.md). The `main` ruleset requires this check.
+name: release-label
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+permissions: {} # reads only the event payload
+jobs:
+  release-label:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Exactly one of major, minor, patch, skip-release
+        env:
+          LABELS: ${{ join(github.event.pull_request.labels.*.name, ' ') }}
+        run: |
+          read -r -a labels <<<"$LABELS"
+          found=()
+          for l in "${labels[@]}"; do
+            case "$l" in
+              major|minor|patch|skip-release) found+=("$l") ;;
+            esac
+          done
+          case "${#found[@]}" in
+            1) echo "release label: ${found[0]}" ;;
+            0) echo "::error::Add exactly one release label to this PR: major, minor, patch or skip-release. It decides the version bump when the PR merges (docs/releasing.md)."; exit 1 ;;
+            *) echo "::error::This PR carries several release labels (${found[*]}); keep exactly one of major, minor, patch, skip-release."; exit 1 ;;
+          esac

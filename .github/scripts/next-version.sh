@@ -29,7 +29,8 @@ case "$MODE" in
   rc)
     current="${current_tag#v}"
     # Release intent comes from the merged PR's label, Auto style: exactly one of
-    # major | minor | patch | skip-release. Conventional commits only shape the changelog.
+    # major | minor | patch | skip-release (release-label.yml gates merges on it).
+    # Conventional commits only shape the changelog.
     # RELEASE_LABELS (space-separated) stands in for the lookup in local tests.
     labels="${RELEASE_LABELS-$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}/pulls" \
       --jq '[.[] | select(.merged_at != null)][0].labels[].name' 2>/dev/null | tr '\n' ' ' || true)}"
@@ -52,10 +53,13 @@ case "$MODE" in
     if [[ "$current" == *-* ]]; then
       # Already on an rc line: only the prerelease number moves; the label cannot re-bump it.
       pnpm exec nx release version prerelease --preid rc
-    elif [ -z "$intent" ]; then
-      echo "::error::No release label on the PR merged as ${SHA:0:7}. Label the PR major, minor, patch or skip-release (docs/releasing.md); nothing was published."
-      exit 1
     else
+      if [ -z "$intent" ]; then
+        # The release-label check keeps this from happening on a PR merge; a direct push or
+        # a bypassed gate lands here. Smallest bump rather than a red release.
+        echo "::warning::No release label on the PR merged as ${SHA:0:7} (major, minor, patch or skip-release); defaulting to patch"
+        intent=patch
+      fi
       pnpm exec nx release version "pre${intent}" --preid rc
     fi
     after="$(disk_version)"

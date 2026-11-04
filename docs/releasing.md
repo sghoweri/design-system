@@ -32,14 +32,17 @@ feature branch ──PR──▶ main ──PR──▶ release
   the run and is resolved by hand; nothing is ever force-pushed.
 - **A PR labeled `canary` publishes `0.0.0-canary.<sha7>`** under the dist-tag `canary` on every push,
   and keeps one comment on the PR with the install line. No tag, no release. Remove the label to stop.
-- **The label is the only source of the bump.** Every PR merged into `main` carries exactly one of
-  `major`, `minor`, `patch` or `skip-release` (the names Intuit's Auto uses). `skip-release` publishes
-  nothing for that merge. A merge with no label, or with two, fails the `release` run at the "Compute the
-  next version" step with an error naming the labels, and nothing is published; add the label and re-run
-  the job. Conventional commits are not read for the bump; they still shape the changelog and the
-  release notes. Limitation: while an rc line is open the label is ignored and only the rc number moves,
-  so a `major` merged on top of an open `0.2.0-rc.N` line still lands in `0.2.0-rc.N+1`; cut the stable
-  first when a bigger bump is intended.
+- **The label is the only source of the bump.** Every PR into `main` carries exactly one of `major`,
+  `minor`, `patch` or `skip-release` (the names Intuit's Auto uses). The `release-label` check
+  ([`release-label.yml`](../.github/workflows/release-label.yml)) fails while a PR has none or several,
+  and the `main` ruleset requires it, so an unlabeled PR cannot merge. `skip-release` publishes nothing
+  for that merge. Should a commit reach `main` without a label anyway (a direct push, a bypassed gate),
+  the release run warns and treats it as `patch`; two or more labels still fail the run. Conventional
+  commits are not read for the bump; they still shape the changelog and the release notes. Limitation:
+  while an rc line is open the label is ignored and only the rc number moves, so a `major` merged on
+  top of an open `0.2.0-rc.N` line still lands in `0.2.0-rc.N+1`; cut the stable first when a bigger
+  bump is intended. The `release` ruleset requires only `check`: a `main` → `release` PR merges work
+  that was already labeled on its way into `main`.
 - **Zero-major note.** The label means what it says on `0.x` too: `minor` on `0.1.1` gives `0.2.0-rc.0`
   and `major` gives `1.0.0-rc.0`. Nx's default demotion for zero-major versions is switched off in
   `nx.json` (`adjustSemverBumpsForZeroMajorVersion: false`) because the intent is explicit.
@@ -96,8 +99,8 @@ canary runs need none.
 4. In the repository: **Settings → Secrets and variables → Actions**: variable `RELEASE_APP_ID` = the App
    ID, secret `RELEASE_APP_PRIVATE_KEY` = the full contents of the `.pem` file.
 5. **Settings → Rules → Rulesets**: on the `main` ruleset add the App under **Bypass list**
-   (_Always allow_), and create the same ruleset for `release` (required status check `check`, or `ci-ok`
-   once that lands; block force pushes and deletion; the App in the bypass list).
+   (_Always allow_) and require the status checks `check` and `release-label`; the `release` ruleset
+   requires `check` only (block force pushes and deletion on both; the App in both bypass lists).
 
 Until the App exists, a push to `release` fails at the first step with a message naming the missing
 variable; nothing is published half-way.
@@ -106,8 +109,7 @@ variable; nothing is published half-way.
 
 1. Open PRs against `main` with conventional-commit titles or commits (`feat(ui): …`, `fix(tokens): …`)
    for the changelog, and put exactly one label on each: `major`, `minor`, `patch` or `skip-release`.
-   Without one, the merge fails the release run and publishes nothing until the label is added and the
-   job re-run.
+   The `release-label` check stays red, and the PR cannot merge, until exactly one is there.
 2. Merge. The `release` run under **Actions** publishes `X.Y.Z-rc.N` to `next` within a few minutes:
 
    ```sh
