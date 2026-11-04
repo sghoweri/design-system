@@ -21,4 +21,15 @@ describe('Inline', () => {
     expect(nav).toHaveAttribute('data-nowrap');
     expect(nav).toHaveAttribute('data-justify', 'end');
   });
+
+  it('renders ordered lists and list items', () => {
+    render(
+      <Inline as="ol">
+        <Inline as="li">a</Inline>
+      </Inline>,
+    );
+    const list = screen.getByRole('list');
+    expect(list.tagName).toBe('OL');
+    expect(screen.getByRole('listitem')).toHaveClass('sc-inline');
+  });
 });

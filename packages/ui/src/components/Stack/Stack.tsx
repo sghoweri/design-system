@@ -4,7 +4,21 @@ import { cx } from '../../utils/cx';
 
 export type StackAlign = 'stretch' | 'start' | 'center' | 'end';
 export type StackJustify = 'start' | 'center' | 'end' | 'between';
-export type StackElement = 'div' | 'section' | 'ul' | 'ol' | 'nav' | 'form';
+export type StackElement =
+  | 'div'
+  | 'section'
+  | 'article'
+  | 'ul'
+  | 'ol'
+  | 'li'
+  | 'nav'
+  | 'form'
+  | 'fieldset'
+  | 'header'
+  | 'footer'
+  | 'main'
+  | 'aside'
+  | 'dl';
 
 export interface StackProps extends ComponentPropsWithRef<'div'> {
   /** Gap from the spacing scale. Default `sm` (12px). */
@@ -13,7 +27,7 @@ export interface StackProps extends ComponentPropsWithRef<'div'> {
   align?: StackAlign | undefined;
   /** Main-axis distribution. Default `start`. */
   justify?: StackJustify | undefined;
-  /** Element to render. Use `ul`/`ol` for lists so semantics survive the layout. */
+  /** Element to render. Use `ul`/`ol` for lists and `li` for an item that stacks its own content, so semantics survive the layout. */
   as?: StackElement | undefined;
   /** Lays out as `inline-flex`. */
   inline?: boolean | undefined;

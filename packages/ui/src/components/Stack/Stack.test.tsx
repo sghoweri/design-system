@@ -24,4 +24,16 @@ describe('Stack', () => {
     expect(list).toHaveAttribute('data-justify', 'between');
     expect(list).toHaveAttribute('data-inline');
   });
+
+  it('renders as a list item and a definition list', () => {
+    render(
+      <Stack as="dl" data-testid="dl">
+        <Stack as="li" data-testid="li">
+          x
+        </Stack>
+      </Stack>,
+    );
+    expect(screen.getByTestId('dl').tagName).toBe('DL');
+    expect(screen.getByTestId('li').tagName).toBe('LI');
+  });
 });

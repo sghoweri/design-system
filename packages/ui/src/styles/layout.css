@@ -28,10 +28,24 @@
 }
 ul.sc-stack,
 ol.sc-stack,
-ul.sc-inline {
+ul.sc-inline,
+ol.sc-inline {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+li.sc-stack,
+li.sc-inline {
+  list-style: none;
+}
+fieldset.sc-stack {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+dl.sc-stack {
+  margin: 0;
 }
 .sc-stack[data-gap='none'],
 .sc-inline[data-gap='none'] {
