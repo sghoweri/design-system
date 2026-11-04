@@ -46,8 +46,11 @@ The Storybook is hosted on Vercel at <https://designsystem.salemcobalt.com>. `ve
 There is no deploy step in GitHub Actions. `ci.yml` lints the workflows themselves (actionlint, zizmor),
 then installs, lints, builds, checks that the build left the tree clean, typechecks, tests and builds the
 Storybook, all in one job named `check`. The `main` ruleset in the repo settings requires that status
-before a merge.
+before a merge. Every action in the workflows is pinned to a commit SHA; Dependabot keeps the pins and
+the npm dependencies current.
 
 ## Release
 
-Pushing a `vX.Y.Z` tag publishes both packages to npm with provenance through npm Trusted Publishing and creates a GitHub Release for the tag; no token is stored anywhere. The release reuses the `ci` verdict for the tagged commit instead of running the checks again. Steps and the one-time npm setup: [docs/releasing.md](docs/releasing.md).
+Every merge to `main` publishes a release candidate (`X.Y.Z-rc.N`, npm dist-tag `next`); merging `main` into `release` publishes the stable version to `latest`, writes `CHANGELOG.md` and tags it. Versions come from nx release and conventional commits, npm auth is Trusted Publishing with provenance, no token is stored. A PR labeled `canary` publishes `0.0.0-canary.<sha>`. Setup and details: [docs/releasing.md](docs/releasing.md).
+
+The Storybook keeps building on Vercel's Git integration for now; [ADR 0002](docs/adr/0002-storybook-builds-on-vercel.md) records why and when that ends.
