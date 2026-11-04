@@ -43,8 +43,11 @@ The Storybook is hosted on Vercel at <https://designsystem.salemcobalt.com>. `ve
 - Every pull request gets its own preview URL, posted by the Vercel bot on the PR.
 - A deploy is skipped when nothing under `packages/`, `apps/storybook/`, `pnpm-lock.yaml` or `vercel.json` changed.
 
-There is no deploy step in GitHub Actions; CI only lints, builds and tests.
+There is no deploy step in GitHub Actions. `ci.yml` lints the workflows themselves (actionlint, zizmor),
+then installs, lints, builds, checks that the build left the tree clean, typechecks, tests and builds the
+Storybook, all in one job named `check`. The `main` ruleset in the repo settings requires that status
+before a merge.
 
 ## Release
 
-Pushing a `vX.Y.Z` tag publishes both packages to npm with provenance through npm Trusted Publishing; no token is stored anywhere. Steps and the one-time npm setup: [docs/releasing.md](docs/releasing.md).
+Pushing a `vX.Y.Z` tag publishes both packages to npm with provenance through npm Trusted Publishing and creates a GitHub Release for the tag; no token is stored anywhere. The release reuses the `ci` verdict for the tagged commit instead of running the checks again. Steps and the one-time npm setup: [docs/releasing.md](docs/releasing.md).

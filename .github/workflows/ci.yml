@@ -3,21 +3,58 @@ on:
   push:
     branches: [main]
   pull_request:
-permissions:
-  contents: read
+permissions: {} # nothing by default; each job asks for what it needs
+concurrency:
+  # One run per pull request (or per ref on push); a newer push cancels the superseded run.
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
+  # `check` is the status the `main` ruleset requires; keep the job id.
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4 # version comes from packageManager in package.json
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 24
+          persist-credentials: false
+
+      # Workflow lint and audit first: they need no install and fail fast.
+      - name: actionlint (workflow syntax, expressions, shellcheck on run steps)
+        uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+        with:
+          args: -color
+      - name: zizmor (workflow security audit)
+        uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
+        with:
+          advanced-security: false # print findings and fail the step instead of uploading SARIF
+
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        # version comes from packageManager in package.json
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm build
+      - name: Build must leave the tree clean
+        run: |
+          # Generated output is either committed with its source or ignored. A dirty
+          # tree here means a stale generated file was committed, or a new output
+          # path is missing from .gitignore.
+          git diff --exit-code || dirty=1
+          untracked="$(git ls-files --others --exclude-standard)"
+          if [ -n "$untracked" ]; then
+            echo "Untracked files after pnpm build:"
+            echo "$untracked"
+            dirty=1
+          fi
+          if [ -n "${dirty:-}" ]; then
+            echo "::error::pnpm build changed or added files that are not committed (see above). Commit the regenerated files or add the output path to .gitignore."
+            exit 1
+          fi
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build-storybook

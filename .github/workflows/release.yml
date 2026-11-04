@@ -1,4 +1,5 @@
-# Publishes @salemcobalt/tokens and @salemcobalt/ui to npm with provenance.
+# Publishes @salemcobalt/tokens and @salemcobalt/ui to npm with provenance, then
+# creates the GitHub Release for the tag.
 #
 # Auth is npm Trusted Publishing (OIDC): the job's id-token lets npm verify the
 # workflow instead of a long-lived NPM_TOKEN. There is no secret anywhere in
@@ -22,14 +23,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      checks: read # read the ci workflow's result for the tagged commit
       id-token: write # mint the OIDC token npm exchanges for a publish credential
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4 # version comes from packageManager in package.json
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 24
-          cache: pnpm
+          persist-credentials: false
+      - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+        # version comes from packageManager in package.json
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          # No dependency cache in a publishing job: a restored cache is an input to
+          # what gets published, and the install is small (zizmor: cache-poisoning).
+          package-manager-cache: false
           registry-url: https://registry.npmjs.org
 
       - name: Make sure npm supports Trusted Publishing (>= 11.5.1)
@@ -37,10 +44,10 @@ jobs:
           have="$(npm --version)"
           need="11.5.1"
           if [ "$(printf '%s\n%s\n' "$need" "$have" | sort -V | head -n1)" != "$need" ]; then
-            echo "npm $have is older than $need; upgrading"
-            npm install -g npm@latest
+            echo "::error::npm $have is older than $need. Node $(node --version) from .nvmrc should bundle a newer npm; bump .nvmrc rather than installing npm ad hoc in the publish job."
+            exit 1
           fi
-          echo "npm $(npm --version)"
+          echo "npm $have"
 
       - name: Check the tag matches the package versions
         env:
@@ -63,11 +70,25 @@ jobs:
           fi
           echo "Releasing v$ui"
 
+      - name: Make sure the ci workflow passed on this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Lint, typecheck, tests and the Storybook build already ran in ci.yml for
+          # this commit (on the PR and again on the push to main). Reuse that verdict
+          # instead of running them a second time; only the build is repeated below,
+          # because the publish needs a fresh dist/.
+          sha="$(git rev-parse 'HEAD^{commit}')"
+          conclusions="$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/check-runs?per_page=100" \
+            -q '.check_runs[] | select(.app.slug == "github-actions" and .name == "check") | .conclusion')"
+          if ! grep -qx success <<<"$conclusions"; then
+            echo "::error::No successful \`check\` run of the ci workflow for $sha (found: ${conclusions:-none}). Wait for ci to pass on main before tagging, or fix main and tag the fixed commit. Run from a tag, not a branch."
+            exit 1
+          fi
+          echo "ci passed on $sha"
+
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
       - run: pnpm build
-      - run: pnpm typecheck
-      - run: pnpm test
 
       # Dependency order: ui has a peer dependency on tokens. Each package is
       # skipped when its version is already on the registry, so re-running a
@@ -80,3 +101,27 @@ jobs:
         run: .github/scripts/publish-if-new.sh packages/ui
         env:
           DRY_RUN: ${{ inputs.dry-run && '1' || '' }}
+
+  github-release:
+    # A dry run uploads nothing, so it creates no release either.
+    if: github.ref_type == 'tag' && !inputs.dry-run
+    needs: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write # create the release
+    steps:
+      - name: Create the GitHub Release for the tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists; leaving it alone"
+            exit 0
+          fi
+          flags=(--verify-tag --generate-notes --title "$TAG")
+          case "$TAG" in
+            *-*) flags+=(--prerelease) ;; # v1.2.0-beta.1 must not become the latest release
+          esac
+          gh release create "$TAG" -R "$GITHUB_REPOSITORY" "${flags[@]}"
