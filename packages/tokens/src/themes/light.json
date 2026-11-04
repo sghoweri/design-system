@@ -61,7 +61,7 @@
       "on-status": {
         "$value": "{color.white}",
         "$type": "color",
-        "$description": "Text on success.solid, warning.solid and danger.solid."
+        "$description": "Text on success.solid, warning.solid, danger.solid and info.solid."
       },
       "link": {
         "$value": "{color.brand.700}",
@@ -145,6 +145,23 @@
         "$value": "{color.amber.700}",
         "$type": "color",
         "$description": "Solid warning Badge fill."
+      }
+    },
+    "info": {
+      "subtle": {
+        "$value": "{color.teal.50}",
+        "$type": "color",
+        "$description": "Soft info Badge fill."
+      },
+      "text": {
+        "$value": "{color.teal.700}",
+        "$type": "color",
+        "$description": "Text on info.subtle and surface.default."
+      },
+      "solid": {
+        "$value": "{color.teal.600}",
+        "$type": "color",
+        "$description": "Solid info Badge fill."
       }
     },
     "danger": {

@@ -49,6 +49,10 @@
   --_bg: var(--sc-color-danger-subtle);
   --_fg: var(--sc-color-danger-text);
 }
+.sc-badge[data-tone='info'] {
+  --_bg: var(--sc-color-info-subtle);
+  --_fg: var(--sc-color-info-text);
+}
 /* solid */
 .sc-badge[data-variant='solid'][data-tone='neutral'] {
   --_bg: var(--sc-color-text-default);
@@ -68,6 +72,10 @@
 }
 .sc-badge[data-variant='solid'][data-tone='danger'] {
   --_bg: var(--sc-color-danger-solid);
+  --_fg: var(--sc-color-text-on-status);
+}
+.sc-badge[data-variant='solid'][data-tone='info'] {
+  --_bg: var(--sc-color-info-solid);
   --_fg: var(--sc-color-text-on-status);
 }
 /* outline */
@@ -93,4 +101,8 @@
 .sc-badge[data-variant='outline'][data-tone='danger'] {
   --_fg: var(--sc-color-danger-text);
   --_bd: var(--sc-color-danger-text);
+}
+.sc-badge[data-variant='outline'][data-tone='info'] {
+  --_fg: var(--sc-color-info-text);
+  --_bd: var(--sc-color-info-text);
 }

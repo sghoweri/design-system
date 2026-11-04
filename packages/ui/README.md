@@ -14,7 +14,7 @@ Styles ship as one stylesheet inside `@layer sc`, so an app's unlayered CSS alwa
 | Component         | Notes                                                                                                                                                          |
 | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Button`          | `variant` primary · secondary · ghost · danger; `size` sm · md · lg; `iconStart`/`iconEnd`; `loading` (keeps width, `aria-busy`); `fullWidth`.                 |
-| `Badge`           | `tone` neutral · accent · success · warning · danger; `variant` soft · solid · outline; `size` sm · md; `dot`. Text only.                                      |
+| `Badge`           | `tone` neutral · accent · success · warning · danger · info; `variant` soft · solid · outline; `size` sm · md; `dot`. Text only.                               |
 | `Card`            | `variant` outlined · elevated · filled; `padding` none · sm · md · lg; `interactive`; `selected`; `as` or `render` to make it an `a`/`button`/`li`.            |
 | `Stack`, `Inline` | `gap` from the spacing scale (`none` … `4xl`); `align`; `justify`; `as`. `Inline` wraps unless `wrap={false}`.                                                 |
 | `Kbd`             | One key per `Kbd`; `Kbd.Group label="Command K"` groups a shortcut with a `+` (or `separator="space"`).                                                        |

@@ -24,3 +24,10 @@ describe('Badge', () => {
     expect(badge.querySelector('.sc-badge__dot')).toHaveAttribute('aria-hidden', 'true');
   });
 });
+
+describe('Badge info tone', () => {
+  it('accepts the info tone', () => {
+    render(<Badge tone="info">Screening</Badge>);
+    expect(screen.getByText('Screening')).toHaveAttribute('data-tone', 'info');
+  });
+});

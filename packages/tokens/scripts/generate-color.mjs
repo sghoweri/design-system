@@ -166,7 +166,11 @@ const semantic = {
       'Placeholders and disabled labels; 4.5:1 on surface.default only.',
     ],
     'on-accent': ['white', 'neutral.1000', 'Text on accent.default and accent.hover.'],
-    'on-status': ['white', 'neutral.1000', 'Text on success.solid, warning.solid and danger.solid.'],
+    'on-status': [
+      'white',
+      'neutral.1000',
+      'Text on success.solid, warning.solid, danger.solid and info.solid.',
+    ],
     link: ['brand.700', 'brand.300', 'Inline links on surface.canvas and surface.default.'],
   },
   border: {
@@ -198,6 +202,11 @@ const semantic = {
     subtle: ['amber.50', 'amber.950', 'Soft warning Badge fill.'],
     text: ['amber.900', 'amber.300', 'Text on warning.subtle and surface.default.'],
     solid: ['amber.700', 'amber.400', 'Solid warning Badge fill.'],
+  },
+  info: {
+    subtle: ['teal.50', 'teal.950', 'Soft info Badge fill.'],
+    text: ['teal.700', 'teal.300', 'Text on info.subtle and surface.default.'],
+    solid: ['teal.600', 'teal.400', 'Solid info Badge fill.'],
   },
   danger: {
     subtle: ['red.50', 'red.950', 'Soft danger Badge fill.'],

@@ -3,13 +3,14 @@ import { Badge } from './Badge';
 import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
 
-const tones = ['neutral', 'accent', 'success', 'warning', 'danger'] as const;
+const tones = ['neutral', 'accent', 'success', 'warning', 'danger', 'info'] as const;
 const labels = {
   neutral: 'Draft',
   accent: 'New',
   success: 'Interview',
   warning: 'Follow up',
   danger: 'Rejected',
+  info: 'Screening',
 };
 
 const meta = {
