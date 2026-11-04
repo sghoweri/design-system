@@ -5,7 +5,9 @@
 [nx release](https://nx.dev/docs/guides/nx-release) in fixed mode, driven by conventional commits
 (configuration in [`nx.json`](../nx.json)); npm authentication is
 [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) (OpenID Connect), so there is no
-`NPM_TOKEN`, and every version ships with a provenance attestation.
+`NPM_TOKEN`, and every version ships with a provenance attestation. Every action in the workflow is
+pinned to a commit SHA, and Dependabot (`.github/dependabot.yml`) opens a weekly PR when a pin falls
+behind; `ci.yml` runs actionlint and zizmor over the workflows on every PR.
 
 ## The model
 
@@ -58,16 +60,20 @@ rc and stable all live in `release.yml`.
 ### 2. git: baseline tag and the `release` branch
 
 nx release reads the current version from the latest `v*` tag, so the version already on npm needs a
-tag once. `a7d1aa0` is the `main` commit whose package contents match the published `0.1.0`:
+tag once, on the `main` commit whose package contents match it. Use the newest version published by
+hand (`0.1.0` at `a7d1aa0`; `0.1.1` at the merge commit of the `'use client'` fix, PR #6, if that was
+published by hand too), and start `release` from the same commit:
 
 ```sh
-git tag v0.1.0 a7d1aa0
-git push origin v0.1.0
-git branch release a7d1aa0
+git tag v0.1.1 <merge commit of PR #6>   # or: git tag v0.1.0 a7d1aa0
+git push origin v0.1.1
+git branch release <the same commit>
 git push -u origin release
 ```
 
-The workflow refuses to run until a `v*` tag exists. (The stray `0.0.0-stage` on npm can be hidden with
+The workflow refuses to run until a `v*` tag exists. From then on both packages move together: the next
+rc after `v0.1.1` is `0.1.2-rc.0` for `tokens` as well as `ui`, even though `tokens` never shipped a
+`0.1.1`. (The stray `0.0.0-stage` on npm can be hidden with
 `npm deprecate @salemcobalt/tokens@0.0.0-stage "staging artefact"`, same for `ui`.)
 
 ### 3. GitHub App for the stable path
