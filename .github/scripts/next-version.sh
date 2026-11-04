@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Decide the next version for release.yml and write it to the package manifests with nx release.
-# Env: MODE (canary|rc|stable), SHA, PR_NUMBER (canary), GH_TOKEN. Writes GITHUB_OUTPUT:
+# Env: MODE (canary|rc|stable), SHA, PR_NUMBER (canary), GH_TOKEN, RELEASE_LABELS (tests only).
+# Writes GITHUB_OUTPUT:
 #   version   the new version, or empty when there is nothing to release
 #   dist-tag  npm dist-tag for the publish (canary | next | latest)
 #   last-stable  latest stable tag reachable from HEAD (stable only; changelog --from)
@@ -27,26 +28,39 @@ case "$MODE" in
 
   rc)
     current="${current_tag#v}"
-    # Release intent from the merged PR's labels (release:major|minor|patch|none) overrides
-    # conventional commits; this is the Auto behaviour we keep.
-    label="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}/pulls" \
-      --jq '[.[] | select(.merged_at != null)][0].labels[].name | select(startswith("release:"))' 2>/dev/null | head -n1 || true)"
-    if [ "$label" = "release:none" ]; then
-      echo "release:none on the merged PR; not cutting an rc"
+    # Release intent comes from the merged PR's label, Auto style: exactly one of
+    # major | minor | patch | skip-release. Conventional commits only shape the changelog.
+    # RELEASE_LABELS (space-separated) stands in for the lookup in local tests.
+    labels="${RELEASE_LABELS-$(gh api "repos/${GITHUB_REPOSITORY}/commits/${SHA}/pulls" \
+      --jq '[.[] | select(.merged_at != null)][0].labels[].name' 2>/dev/null | tr '\n' ' ' || true)}"
+    intent=""
+    for l in $labels; do
+      case "$l" in
+        major|minor|patch|skip-release)
+          if [ -n "$intent" ]; then
+            echo "::error::The merged PR carries both '$intent' and '$l'; keep exactly one of major, minor, patch, skip-release"
+            exit 1
+          fi
+          intent="$l" ;;
+      esac
+    done
+    if [ "$intent" = skip-release ]; then
+      echo "skip-release on the merged PR; not cutting an rc"
       out version ""; exit 0
     fi
     before="$(disk_version)"
     if [[ "$current" == *-* ]]; then
-      # Already on an rc line: only the prerelease number moves (a label cannot re-bump it).
+      # Already on an rc line: only the prerelease number moves; the label cannot re-bump it.
       pnpm exec nx release version prerelease --preid rc
-    elif [ -n "$label" ]; then
-      pnpm exec nx release version "pre${label#release:}" --preid rc
+    elif [ -z "$intent" ]; then
+      echo "::error::No release label on the PR merged as ${SHA:0:7}. Label the PR major, minor, patch or skip-release (docs/releasing.md); nothing was published."
+      exit 1
     else
-      pnpm exec nx release version --preid rc # bump from conventional commits since $current_tag
+      pnpm exec nx release version "pre${intent}" --preid rc
     fi
     after="$(disk_version)"
     if [ "$after" = "$before" ]; then
-      echo "No releasable commits since $current_tag; nothing to publish"
+      echo "Version unchanged after nx release version; nothing to publish"
       out version ""; exit 0
     fi
     out version "$after"
