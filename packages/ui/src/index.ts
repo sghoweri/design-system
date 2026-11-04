@@ -40,4 +40,4 @@ export {
   type DialogTitleProps,
 } from './components/Dialog/Dialog';
 export type { SpacingSize } from './types';
-export const version = '0.1.0';
+export const version = '0.1.1';
