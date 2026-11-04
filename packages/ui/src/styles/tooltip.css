@@ -1,0 +1,50 @@
+/* ---- Tooltip --------------------------------------------------------------- */
+.sc-tooltip__positioner {
+  z-index: var(--sc-z-tooltip);
+  outline: 0;
+}
+.sc-tooltip {
+  box-sizing: border-box;
+  max-inline-size: 280px;
+  padding: var(--sc-spacing-2xs) var(--sc-spacing-xs);
+  border-radius: var(--sc-radius-md);
+  background: var(--sc-color-text-default);
+  color: var(--sc-color-surface-default);
+  box-shadow: var(--sc-elevation-2);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  line-height: var(--sc-font-line-height-ui);
+  text-wrap: pretty;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity var(--sc-duration-fast) var(--sc-ease-enter),
+    scale var(--sc-duration-fast) var(--sc-ease-enter);
+}
+.sc-tooltip[data-starting-style],
+.sc-tooltip[data-ending-style] {
+  opacity: 0;
+  scale: 0.96;
+}
+.sc-tooltip[data-ending-style] {
+  transition-timing-function: var(--sc-ease-exit);
+}
+.sc-tooltip[data-instant] {
+  transition: none;
+}
+.sc-tooltip .sc-kbd {
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+  box-shadow: none;
+  opacity: 0.8;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-tooltip {
+    transition-duration: 0ms;
+  }
+  .sc-tooltip[data-starting-style],
+  .sc-tooltip[data-ending-style] {
+    scale: none;
+  }
+}

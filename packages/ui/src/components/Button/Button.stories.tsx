@@ -2,12 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from './Button';
 import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
-
-const PlusIcon = (
-  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75">
-    <path d="M8 3v10M3 8h10" />
-  </svg>
-);
+import { PlusIcon } from '../../icons/icons.gen';
 
 const meta = {
   title: 'Components/Button',
@@ -50,10 +45,10 @@ export const States: Story = {
       <Inline gap="sm">
         <Button disabled>Disabled</Button>
         <Button loading>Sending</Button>
-        <Button variant="secondary" iconStart={PlusIcon}>
+        <Button variant="secondary" iconStart={<PlusIcon />}>
           With icon
         </Button>
-        <Button variant="ghost" iconEnd={PlusIcon}>
+        <Button variant="ghost" iconEnd={<PlusIcon />}>
           Icon after
         </Button>
       </Inline>

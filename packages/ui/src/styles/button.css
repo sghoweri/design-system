@@ -145,3 +145,35 @@
     animation-duration: 1.6s;
   }
 }
+/* ---- IconButton ------------------------------------------------------------ */
+.sc-icon-button {
+  --_icon: var(--sc-size-icon-md);
+  padding-inline: 0;
+  inline-size: var(--_h);
+  flex: none;
+}
+.sc-icon-button[data-size='sm'] {
+  --_icon: var(--sc-size-icon-sm);
+}
+.sc-icon-button[data-size='lg'] {
+  --_icon: var(--sc-size-icon-lg);
+}
+.sc-icon-button[data-round] {
+  border-radius: var(--sc-radius-full);
+}
+.sc-icon-button > .sc-button__icon {
+  inline-size: var(--_icon);
+  block-size: var(--_icon);
+}
+.sc-icon-button[data-loading] > .sc-button__icon {
+  opacity: 0;
+}
+.sc-button[data-popup-open] {
+  background: var(--sc-color-surface-active);
+}
+.sc-button[data-variant='primary'][data-popup-open] {
+  background: var(--sc-color-accent-active);
+}
+.sc-button[data-variant='danger'][data-popup-open] {
+  background: var(--sc-color-danger-hover);
+}

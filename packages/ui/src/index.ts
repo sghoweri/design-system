@@ -39,5 +39,31 @@ export {
   type DialogSize,
   type DialogTitleProps,
 } from './components/Dialog/Dialog';
+export { Icon, type IconGlyphProps, type IconProps, type IconSize } from './components/Icon/Icon';
+export * from './icons/icons.gen';
+export { iconNames, type IconName } from './icons/icon-names.gen';
+export { IconButton, type IconButtonProps } from './components/IconButton/IconButton';
+export {
+  Tooltip,
+  type TooltipAlign,
+  type TooltipProps,
+  type TooltipSide,
+} from './components/Tooltip/Tooltip';
+export {
+  Menu,
+  type MenuAlign,
+  type MenuCheckboxItemProps,
+  type MenuContentProps,
+  type MenuGroupProps,
+  type MenuItemProps,
+  type MenuItemTone,
+  type MenuLinkItemProps,
+  type MenuRadioGroupProps,
+  type MenuRadioItemProps,
+  type MenuRootProps,
+  type MenuSeparatorProps,
+  type MenuSide,
+  type MenuTriggerProps,
+} from './components/Menu/Menu';
 export type { SpacingSize } from './types';
 export const version = '0.1.1';

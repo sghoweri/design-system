@@ -1,11 +1,14 @@
 /* Storybook only: imports the component CSS from source in the order of index.txt, and sets the canvas. */
 @import './base.css';
+@import './icon.css';
 @import './button.css';
 @import './badge.css';
 @import './card.css';
 @import './layout.css';
 @import './kbd.css';
 @import './dialog.css';
+@import './tooltip.css';
+@import './menu.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);
