@@ -1,0 +1,25 @@
+{
+  "duration": {
+    "fast": { "$value": "100ms", "$type": "duration", "$description": "Hover and press color changes." },
+    "base": { "$value": "200ms", "$type": "duration", "$description": "Dialog enter, backdrop fade." },
+    "slow": { "$value": "300ms", "$type": "duration", "$description": "Layout shifts, panels sliding." },
+    "slower": { "$value": "500ms", "$type": "duration", "$description": "Page-level transitions only." }
+  },
+  "ease": {
+    "standard": {
+      "$value": "cubic-bezier(0.2, 0, 0, 1)",
+      "$type": "cubicBezier",
+      "$description": "Color and size changes."
+    },
+    "enter": {
+      "$value": "cubic-bezier(0, 0, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "Elements appearing."
+    },
+    "exit": {
+      "$value": "cubic-bezier(0.4, 0, 1, 1)",
+      "$type": "cubicBezier",
+      "$description": "Elements leaving, at 75% of the enter duration."
+    }
+  }
+}

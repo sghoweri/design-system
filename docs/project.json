@@ -1,0 +1,34 @@
+{
+  "name": "design-system",
+  "oneLiner": "A personal design system: tokens and React components every side project consumes, starting with job-radar.",
+  "status": "active",
+  "started": "2026-10-15",
+  "updated": "2026-10-15",
+  "stack": [
+    "TypeScript",
+    "React 19",
+    "Style Dictionary",
+    "Base UI",
+    "Storybook",
+    "Vitest",
+    "pnpm workspaces",
+    "GitHub Actions"
+  ],
+  "links": {
+    "repo": "https://github.com/sghoweri/design-system",
+    "live": null,
+    "storybook": null,
+    "npm": [
+      "https://www.npmjs.com/package/@salemcobalt/tokens",
+      "https://www.npmjs.com/package/@salemcobalt/ui"
+    ]
+  },
+  "highlights": [
+    "Token pipeline from one Style Dictionary source to CSS custom properties, Sass, typed TypeScript and JSON, with light and dark themes and a density switch.",
+    "Every text and surface pair is verified against WCAG AA in both themes by a unit test, not by eye.",
+    "Seven accessible React components on headless primitives: visible focus rings, 44px touch targets, reduced-motion support and logical properties for RTL.",
+    "Visual language specified first in a Claude Design artifact, then coded; the repo's token source is the source of truth after the first publish."
+  ],
+  "screenshots": [],
+  "public": true
+}

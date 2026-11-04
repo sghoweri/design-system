@@ -1,0 +1,51 @@
+{
+  "spacing": {
+    "none": {
+      "$value": "0px",
+      "$type": "dimension",
+      "$description": "Reset; Stack and Inline gap=\"none\"."
+    },
+    "3xs": {
+      "$value": "2px",
+      "$type": "dimension",
+      "$description": "Hairline gaps: Kbd group gap, Badge sm padding-block."
+    },
+    "2xs": {
+      "$value": "4px",
+      "$type": "dimension",
+      "$description": "Icon-to-label gap in sm controls; Badge padding-block; Kbd padding-inline."
+    },
+    "xs": {
+      "$value": "8px",
+      "$type": "dimension",
+      "$description": "Icon-to-label gap; Inline default gap; Badge padding-inline; Dialog action gap."
+    },
+    "sm": {
+      "$value": "12px",
+      "$type": "dimension",
+      "$description": "Stack default gap; Button sm padding-inline; Card sm padding; Dialog close inset."
+    },
+    "md": {
+      "$value": "16px",
+      "$type": "dimension",
+      "$description": "The base step (1rem). Button md padding-inline; Card md padding; Dialog gutter on small screens."
+    },
+    "lg": {
+      "$value": "24px",
+      "$type": "dimension",
+      "$description": "Button lg padding-inline; Card lg padding; Dialog padding; section gaps."
+    },
+    "xl": {
+      "$value": "32px",
+      "$type": "dimension",
+      "$description": "Gaps between groups of content; page gutters on desktop."
+    },
+    "2xl": { "$value": "48px", "$type": "dimension", "$description": "Section padding." },
+    "3xl": { "$value": "64px", "$type": "dimension", "$description": "Large section padding." },
+    "4xl": {
+      "$value": "96px",
+      "$type": "dimension",
+      "$description": "Hero padding; the largest vertical rhythm step."
+    }
+  }
+}

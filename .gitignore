@@ -2,3 +2,5 @@ node_modules/
 dist/
 storybook-static/
 .DS_Store
+*.log
+.claude/launch.json

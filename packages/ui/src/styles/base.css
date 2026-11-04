@@ -1,0 +1,8 @@
+/* Shared: focus ring, reduced motion. Component files follow. */
+.sc-focus-ring:focus-visible,
+.sc-button:focus-visible,
+.sc-card[data-interactive]:focus-visible,
+.sc-dialog__close:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: var(--sc-border-width-focus);
+}

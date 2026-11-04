@@ -1,0 +1,110 @@
+/* ---- Stack & Inline -------------------------------------------------------- */
+.sc-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-spacing-sm);
+  align-items: stretch;
+  justify-content: flex-start;
+  min-inline-size: 0;
+}
+.sc-stack[data-inline] {
+  display: inline-flex;
+}
+.sc-inline {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--sc-spacing-xs);
+  align-items: center;
+  justify-content: flex-start;
+  min-inline-size: 0;
+}
+.sc-inline[data-nowrap] {
+  flex-wrap: nowrap;
+}
+.sc-stack > *,
+.sc-inline > * {
+  min-inline-size: 0;
+}
+ul.sc-stack,
+ol.sc-stack,
+ul.sc-inline {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sc-stack[data-gap='none'],
+.sc-inline[data-gap='none'] {
+  gap: var(--sc-spacing-none);
+}
+.sc-stack[data-gap='3xs'],
+.sc-inline[data-gap='3xs'] {
+  gap: var(--sc-spacing-3xs);
+}
+.sc-stack[data-gap='2xs'],
+.sc-inline[data-gap='2xs'] {
+  gap: var(--sc-spacing-2xs);
+}
+.sc-stack[data-gap='xs'],
+.sc-inline[data-gap='xs'] {
+  gap: var(--sc-spacing-xs);
+}
+.sc-stack[data-gap='sm'],
+.sc-inline[data-gap='sm'] {
+  gap: var(--sc-spacing-sm);
+}
+.sc-stack[data-gap='md'],
+.sc-inline[data-gap='md'] {
+  gap: var(--sc-spacing-md);
+}
+.sc-stack[data-gap='lg'],
+.sc-inline[data-gap='lg'] {
+  gap: var(--sc-spacing-lg);
+}
+.sc-stack[data-gap='xl'],
+.sc-inline[data-gap='xl'] {
+  gap: var(--sc-spacing-xl);
+}
+.sc-stack[data-gap='2xl'],
+.sc-inline[data-gap='2xl'] {
+  gap: var(--sc-spacing-2xl);
+}
+.sc-stack[data-gap='3xl'],
+.sc-inline[data-gap='3xl'] {
+  gap: var(--sc-spacing-3xl);
+}
+.sc-stack[data-gap='4xl'],
+.sc-inline[data-gap='4xl'] {
+  gap: var(--sc-spacing-4xl);
+}
+.sc-stack[data-align='start'],
+.sc-inline[data-align='start'] {
+  align-items: flex-start;
+}
+.sc-stack[data-align='center'],
+.sc-inline[data-align='center'] {
+  align-items: center;
+}
+.sc-stack[data-align='end'],
+.sc-inline[data-align='end'] {
+  align-items: flex-end;
+}
+.sc-stack[data-align='stretch'],
+.sc-inline[data-align='stretch'] {
+  align-items: stretch;
+}
+.sc-inline[data-align='baseline'] {
+  align-items: baseline;
+}
+.sc-stack[data-justify='center'],
+.sc-inline[data-justify='center'] {
+  justify-content: center;
+}
+.sc-stack[data-justify='end'],
+.sc-inline[data-justify='end'] {
+  justify-content: flex-end;
+}
+.sc-stack[data-justify='between'],
+.sc-inline[data-justify='between'] {
+  justify-content: space-between;
+}
