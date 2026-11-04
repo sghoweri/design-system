@@ -8,6 +8,8 @@
 # Versions come from nx release (fixed mode, conventional commits; nx.json). npm auth is
 # Trusted Publishing (OIDC), so there is no NPM_TOKEN. The stable path pushes commits past
 # branch protection with a GitHub App token (vars.RELEASE_APP_ID + secrets.RELEASE_APP_PRIVATE_KEY).
+# Lint, typecheck, tests and the Storybook build are not repeated here: the job waits for the
+# ci workflow's `check` run on the same commit and reuses its verdict (build once).
 # Setup and the release steps: docs/releasing.md.
 name: release
 on:
@@ -30,14 +32,16 @@ jobs:
     # A PR only gets here with the `canary` label; pushes and dispatches always do.
     if: github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'canary')
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 40 # includes waiting for the ci run on the same commit
     permissions:
       contents: write # tags and GitHub (pre)releases for rc and canary; stable uses the App token
+      checks: read # read the ci workflow's verdict for this commit
       id-token: write # mint the OIDC token npm exchanges for a publish credential
       pull-requests: write # the canary comment
     env:
       NX_DAEMON: 'false'
       NX_TUI: 'false'
+      CI_CHECK_NAME: check # the ci.yml job the main ruleset requires; rename here when it becomes ci-ok
     steps:
       - name: Decide what this run does
         id: mode
@@ -77,24 +81,19 @@ jobs:
         with:
           app-id: ${{ vars.RELEASE_APP_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
-          # Scope the token to what the stable path does: push the version commit, the
-          # tag and the merge-back, and create the release (zizmor: github-app).
-          permission-contents: write
+          permission-contents: write # version commit, tag, merge-back; nothing else from the installation
 
-      # Credentials stay in the checkout on purpose: the rc path pushes tags and the
-      # stable path pushes the version commit and the merge-back (zizmor: artipacked).
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0 # nx release reads tags and the commits since them
-          token: ${{ steps.app.outputs.token || github.token }}
-          persist-credentials: true # zizmor: ignore[artipacked]
+          persist-credentials: false # push credentials are added only for the steps that push
       - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         # version comes from packageManager in package.json
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
-          # No dependency cache in a publishing job: a restored cache is an input to
-          # what gets published, and the install is small (zizmor: cache-poisoning).
+          # No dependency cache in a publishing job: a restored cache is an input to what
+          # gets published, and the install is small (zizmor: cache-poisoning).
           package-manager-cache: false
           registry-url: https://registry.npmjs.org
       - name: Make sure npm supports Trusted Publishing (>= 11.5.1)
@@ -108,9 +107,33 @@ jobs:
           echo "npm $have"
       - run: pnpm install --frozen-lockfile
 
-      - name: Git identity for commits and tags
+      - name: Wait for the ci workflow to pass on this commit
+        env:
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # ci.yml runs on the same push (or on the PR head for a canary); reuse its verdict
+          # instead of running lint, typecheck, tests and the Storybook build a second time.
+          deadline=$((SECONDS + 25 * 60))
+          while :; do
+            conclusion="$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$SHA/check-runs?per_page=100"               -q "[.check_runs[] | select(.app.slug == \"github-actions\" and .name == \"$CI_CHECK_NAME\")] | sort_by(.started_at) | last | .conclusion // \"pending\"")"
+            case "$conclusion" in
+              success) echo "ci passed on $SHA"; exit 0 ;;
+              pending|"") ;;
+              *) echo "::error::ci \`$CI_CHECK_NAME\` concluded '$conclusion' on $SHA; fix that first"; exit 1 ;;
+            esac
+            if [ "$SECONDS" -ge "$deadline" ]; then
+              echo "::error::ci \`$CI_CHECK_NAME\` did not finish on $SHA within 25 minutes"
+              exit 1
+            fi
+            echo "ci still running on $SHA; waiting"
+            sleep 30
+          done
+
+      - name: Git identity and push credentials
         env:
           APP_SLUG: ${{ steps.app.outputs.app-slug }}
+          PUSH_TOKEN: ${{ steps.app.outputs.token || github.token }}
           GH_TOKEN: ${{ github.token }}
         run: |
           if [ -n "$APP_SLUG" ]; then
@@ -121,6 +144,10 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           fi
+          # Same header actions/checkout would have persisted, but with the token this run
+          # needs (the App's for stable) and removed again in the last step.
+          git config "http.https://github.com/.extraheader" \
+            "AUTHORIZATION: basic $(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 -w0)"
 
       - name: Compute the next version
         id: version
@@ -131,9 +158,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: .github/scripts/next-version.sh
 
-      - run: pnpm build
-        if: steps.version.outputs.version != ''
-      - run: pnpm test
+      - run: pnpm build # the only repeated step: the publish needs a fresh dist/
         if: steps.version.outputs.version != ''
 
       - name: Changelog, tag and GitHub prerelease (rc)
@@ -192,6 +217,10 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GH_TOKEN: ${{ github.token }}
         run: .github/scripts/canary-comment.sh
+
+      - name: Remove push credentials
+        if: always()
+        run: git config --unset-all "http.https://github.com/.extraheader" || true
 
       - name: Summary
         if: always()
