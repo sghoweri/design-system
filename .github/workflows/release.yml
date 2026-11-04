@@ -1,0 +1,83 @@
+# Publishes @salemcobalt/tokens and @salemcobalt/ui to npm with provenance.
+#
+# Auth is npm Trusted Publishing (OIDC): the job's id-token lets npm verify the
+# workflow instead of a long-lived NPM_TOKEN. There is no secret anywhere in
+# this repo. One-time setup and per-release steps: docs/releasing.md.
+name: release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Run every check and `pnpm publish --dry-run`; upload nothing'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # mint the OIDC token npm exchanges for a publish credential
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4 # version comes from packageManager in package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Make sure npm supports Trusted Publishing (>= 11.5.1)
+        run: |
+          have="$(npm --version)"
+          need="11.5.1"
+          if [ "$(printf '%s\n%s\n' "$need" "$have" | sort -V | head -n1)" != "$need" ]; then
+            echo "npm $have is older than $need; upgrading"
+            npm install -g npm@latest
+          fi
+          echo "npm $(npm --version)"
+
+      - name: Check the tag matches the package versions
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          tokens="$(node -p "require('./packages/tokens/package.json').version")"
+          ui="$(node -p "require('./packages/ui/package.json').version")"
+          if [ "$tokens" != "$ui" ]; then
+            echo "::error::@salemcobalt/tokens is $tokens but @salemcobalt/ui is $ui; both packages share one version"
+            exit 1
+          fi
+          if [ "$REF_TYPE" != "tag" ]; then
+            echo "::error::Run this workflow from a tag (v$ui), not from the $REF_TYPE $REF_NAME"
+            exit 1
+          fi
+          if [ "$REF_NAME" != "v$ui" ]; then
+            echo "::error::Tag $REF_NAME does not match package version $ui (expected v$ui)"
+            exit 1
+          fi
+          echo "Releasing v$ui"
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      # Dependency order: ui has a peer dependency on tokens. Each package is
+      # skipped when its version is already on the registry, so re-running a
+      # tag after a partial failure is safe.
+      - name: Publish @salemcobalt/tokens
+        run: .github/scripts/publish-if-new.sh packages/tokens
+        env:
+          DRY_RUN: ${{ inputs.dry-run && '1' || '' }}
+      - name: Publish @salemcobalt/ui
+        run: .github/scripts/publish-if-new.sh packages/ui
+        env:
+          DRY_RUN: ${{ inputs.dry-run && '1' || '' }}

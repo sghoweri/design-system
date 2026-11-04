@@ -6,7 +6,7 @@ Salem Cobalt: a personal design system. Publishes `@salemcobalt/tokens` and `@sa
 packages/tokens   @salemcobalt/tokens   Style Dictionary source → CSS custom properties, Sass, TypeScript, JSON
 packages/ui       @salemcobalt/ui       React 19 components on Base UI, CSS shipped as one stylesheet
 apps/storybook    Storybook with the a11y addon on every story
-docs/             project.json (portfolio contract), ADRs
+docs/             project.json (portfolio contract), ADRs, releasing.md
 ```
 
 ## Develop
@@ -44,3 +44,7 @@ The Storybook is hosted on Vercel at <https://designsystem.salemcobalt.com>. `ve
 - A deploy is skipped when nothing under `packages/`, `apps/storybook/`, `pnpm-lock.yaml` or `vercel.json` changed.
 
 There is no deploy step in GitHub Actions; CI only lints, builds and tests.
+
+## Release
+
+Pushing a `vX.Y.Z` tag publishes both packages to npm with provenance through npm Trusted Publishing; no token is stored anywhere. Steps and the one-time npm setup: [docs/releasing.md](docs/releasing.md).
