@@ -13,9 +13,6 @@ field.css
 tabs.css
 toolbar.css
 banner.css
-<<<<<<< HEAD
+progress.css
 table.css
 stat.css
-=======
-progress.css
->>>>>>> claude/ds-0-2-forms-layout

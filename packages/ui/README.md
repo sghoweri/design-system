@@ -1,10 +1,6 @@
 # @salemcobalt/ui
 
-<<<<<<< HEAD
-React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, `Icon` and a shipped icon set, `Badge`, `Card`, `Stack`, `Inline`, `Heading`, `Text`, `Kbd`, `Dialog`, `Tooltip`, `Menu`, `Toolbar`, `Banner`, `Tabs`, `Input`, `Textarea`, `Select`, `Checkbox`, `Switch`, `Table`, `Stat`. Requires `@salemcobalt/tokens`.
-=======
-React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, `Icon` and a shipped icon set, `Badge`, `Card`, `Stack`, `Inline`, `Heading`, `Text`, `Kbd`, `Dialog`, `Tooltip`, `Menu`, `Toolbar`, `Banner`, `Spinner`, `Progress`, `Tabs`, `Input`, `Textarea`, `Select`, `Checkbox`, `Switch`. Requires `@salemcobalt/tokens`.
->>>>>>> claude/ds-0-2-forms-layout
+React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, `Icon` and a shipped icon set, `Badge`, `Card`, `Stack`, `Inline`, `Heading`, `Text`, `Kbd`, `Dialog`, `Tooltip`, `Menu`, `Toolbar`, `Banner`, `Spinner`, `Progress`, `Tabs`, `Input`, `Textarea`, `Select`, `Checkbox`, `Switch`, `Table`, `Stat`. Requires `@salemcobalt/tokens`.
 
 ```ts
 import '@salemcobalt/tokens/css'; // custom properties, light + dark
