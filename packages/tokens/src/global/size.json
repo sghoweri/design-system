@@ -1,9 +1,21 @@
 {
   "size": {
     "control": {
-      "sm": { "$value": "32px", "$type": "dimension", "$description": "Button sm height." },
-      "md": { "$value": "40px", "$type": "dimension", "$description": "Button md height, default." },
-      "lg": { "$value": "48px", "$type": "dimension", "$description": "Button lg height." }
+      "sm": {
+        "$value": "32px",
+        "$type": "dimension",
+        "$description": "Button sm height."
+      },
+      "md": {
+        "$value": "40px",
+        "$type": "dimension",
+        "$description": "Button md height, default."
+      },
+      "lg": {
+        "$value": "48px",
+        "$type": "dimension",
+        "$description": "Button lg height."
+      }
     },
     "control-compact": {
       "sm": {
@@ -28,8 +40,43 @@
       "$description": "Minimum hit area on pointer: coarse."
     },
     "badge": {
-      "sm": { "$value": "20px", "$type": "dimension", "$description": "Badge sm height." },
-      "md": { "$value": "24px", "$type": "dimension", "$description": "Badge md height." }
+      "sm": {
+        "$value": "20px",
+        "$type": "dimension",
+        "$description": "Badge sm height."
+      },
+      "md": {
+        "$value": "24px",
+        "$type": "dimension",
+        "$description": "Badge md height."
+      }
+    },
+    "icon": {
+      "xs": {
+        "$value": "12px",
+        "$type": "dimension",
+        "$description": "Icon inside Badge sm and captions."
+      },
+      "sm": {
+        "$value": "14px",
+        "$type": "dimension",
+        "$description": "Icon inside sm controls."
+      },
+      "md": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "Default icon: md controls, menu items, 14px UI text."
+      },
+      "lg": {
+        "$value": "20px",
+        "$type": "dimension",
+        "$description": "Icon inside lg controls, headings, Stat."
+      },
+      "xl": {
+        "$value": "24px",
+        "$type": "dimension",
+        "$description": "Empty states and feature callouts."
+      }
     },
     "dialog": {
       "sm": {
@@ -37,7 +84,11 @@
         "$type": "dimension",
         "$description": "Dialog max inline size, confirmations."
       },
-      "md": { "$value": "560px", "$type": "dimension", "$description": "Dialog max inline size, default." },
+      "md": {
+        "$value": "560px",
+        "$type": "dimension",
+        "$description": "Dialog max inline size, default."
+      },
       "lg": {
         "$value": "720px",
         "$type": "dimension",
@@ -47,8 +98,16 @@
   },
   "border": {
     "width": {
-      "hairline": { "$value": "1px", "$type": "dimension", "$description": "Every border." },
-      "focus": { "$value": "2px", "$type": "dimension", "$description": "Focus ring stroke and offset." }
+      "hairline": {
+        "$value": "1px",
+        "$type": "dimension",
+        "$description": "Every border."
+      },
+      "focus": {
+        "$value": "2px",
+        "$type": "dimension",
+        "$description": "Focus ring stroke and offset."
+      }
     }
   }
 }

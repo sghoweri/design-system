@@ -1,6 +1,7 @@
 import { Dialog as BaseDialog } from '@base-ui/react/dialog';
 import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { Inline, type InlineProps } from '../Inline/Inline';
+import { XIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
 
 export type DialogSize = 'sm' | 'md' | 'lg';
@@ -108,17 +109,7 @@ function Close({ className, children, render, ...rest }: DialogCloseProps) {
   if (children === undefined && render === undefined) {
     return (
       <BaseDialog.Close className={cx('sc-dialog__close', className)} aria-label="Close" {...rest}>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          aria-hidden="true"
-        >
-          <path d="M4 4l8 8M12 4l-8 8" />
-        </svg>
+        <XIcon />
       </BaseDialog.Close>
     );
   }
