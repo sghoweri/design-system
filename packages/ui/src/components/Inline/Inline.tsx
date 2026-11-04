@@ -4,7 +4,8 @@ import { cx } from '../../utils/cx';
 
 export type InlineAlign = 'center' | 'start' | 'end' | 'baseline' | 'stretch';
 export type InlineJustify = 'start' | 'center' | 'end' | 'between';
-export type InlineElement = 'div' | 'span' | 'ul' | 'nav';
+export type InlineElement =
+  'div' | 'span' | 'ul' | 'ol' | 'li' | 'nav' | 'header' | 'footer' | 'p' | 'label' | 'dd';
 
 export interface InlineProps extends ComponentPropsWithRef<'div'> {
   /** Gap from the spacing scale. Default `xs` (8px). */
@@ -15,7 +16,7 @@ export interface InlineProps extends ComponentPropsWithRef<'div'> {
   justify?: InlineJustify | undefined;
   /** Wraps by default; `false` for toolbars that scroll. */
   wrap?: boolean | undefined;
-  /** Element to render. */
+  /** Element to render. Use `ul`/`ol` for a row of items and `li` for an item laid out as a row. */
   as?: InlineElement | undefined;
   children?: ReactNode | undefined;
 }

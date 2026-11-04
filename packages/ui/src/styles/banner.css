@@ -1,0 +1,57 @@
+/* ---- Banner ---------------------------------------------------------------- */
+.sc-banner {
+  --_bg: var(--sc-color-info-subtle);
+  --_fg: var(--sc-color-info-text);
+  display: flex;
+  align-items: center;
+  gap: var(--sc-spacing-xs);
+  box-sizing: border-box;
+  min-block-size: var(--sc-size-control-md);
+  padding-block: var(--sc-spacing-2xs);
+  padding-inline: var(--sc-spacing-sm) var(--sc-spacing-2xs);
+  border-radius: var(--sc-radius-md);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+}
+.sc-banner[data-tone='success'] {
+  --_bg: var(--sc-color-success-subtle);
+  --_fg: var(--sc-color-success-text);
+}
+.sc-banner[data-tone='warning'] {
+  --_bg: var(--sc-color-warning-subtle);
+  --_fg: var(--sc-color-warning-text);
+}
+.sc-banner[data-tone='danger'] {
+  --_bg: var(--sc-color-danger-subtle);
+  --_fg: var(--sc-color-danger-text);
+}
+.sc-banner[data-tone='neutral'] {
+  --_bg: var(--sc-color-surface-sunken);
+  --_fg: var(--sc-color-text-default);
+}
+.sc-banner__icon {
+  display: inline-flex;
+  flex: none;
+}
+.sc-banner__body {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  text-wrap: pretty;
+}
+.sc-banner__action {
+  flex: none;
+}
+.sc-banner__dismiss {
+  flex: none;
+  color: inherit;
+}
+.sc-banner > .sc-button[data-variant='ghost'] {
+  color: inherit;
+}
+.sc-banner > .sc-button[data-variant='ghost']:hover,
+.sc-banner > .sc-button[data-variant='ghost']:active {
+  background: rgb(from var(--_fg) r g b / 0.1);
+}

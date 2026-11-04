@@ -1,0 +1,85 @@
+/* ---- Toolbar --------------------------------------------------------------- */
+.sc-toolbar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--sc-spacing-xs);
+  min-inline-size: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sc-toolbar[data-wrap] {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+.sc-toolbar__group {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--sc-spacing-2xs);
+}
+.sc-toolbar__separator {
+  flex: none;
+  inline-size: var(--sc-border-width-hairline);
+  block-size: var(--sc-size-icon-lg);
+  margin-inline: var(--sc-spacing-2xs);
+  background: var(--sc-color-border-default);
+}
+.sc-toolbar[data-orientation='vertical'] {
+  flex-direction: column;
+  align-items: stretch;
+}
+.sc-toolbar[data-orientation='vertical'] > .sc-toolbar__separator {
+  inline-size: auto;
+  block-size: var(--sc-border-width-hairline);
+  margin-inline: 0;
+  margin-block: var(--sc-spacing-2xs);
+}
+.sc-toolbar__spacer {
+  flex: 1 1 0;
+  min-inline-size: var(--sc-spacing-xs);
+}
+.sc-toolbar[data-gap='none'],
+.sc-toolbar__group[data-gap='none'] {
+  gap: var(--sc-spacing-none);
+}
+.sc-toolbar[data-gap='3xs'],
+.sc-toolbar__group[data-gap='3xs'] {
+  gap: var(--sc-spacing-3xs);
+}
+.sc-toolbar[data-gap='2xs'],
+.sc-toolbar__group[data-gap='2xs'] {
+  gap: var(--sc-spacing-2xs);
+}
+.sc-toolbar[data-gap='xs'],
+.sc-toolbar__group[data-gap='xs'] {
+  gap: var(--sc-spacing-xs);
+}
+.sc-toolbar[data-gap='sm'],
+.sc-toolbar__group[data-gap='sm'] {
+  gap: var(--sc-spacing-sm);
+}
+.sc-toolbar[data-gap='md'],
+.sc-toolbar__group[data-gap='md'] {
+  gap: var(--sc-spacing-md);
+}
+.sc-toolbar[data-gap='lg'],
+.sc-toolbar__group[data-gap='lg'] {
+  gap: var(--sc-spacing-lg);
+}
+.sc-toolbar[data-gap='xl'],
+.sc-toolbar__group[data-gap='xl'] {
+  gap: var(--sc-spacing-xl);
+}
+.sc-toolbar[data-gap='2xl'],
+.sc-toolbar__group[data-gap='2xl'] {
+  gap: var(--sc-spacing-2xl);
+}
+.sc-toolbar[data-gap='3xl'],
+.sc-toolbar__group[data-gap='3xl'] {
+  gap: var(--sc-spacing-3xl);
+}
+.sc-toolbar[data-gap='4xl'],
+.sc-toolbar__group[data-gap='4xl'] {
+  gap: var(--sc-spacing-4xl);
+}
