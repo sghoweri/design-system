@@ -5,9 +5,11 @@
 #   PR labeled canary -> canary          (0.0.0-canary.<sha7>, dist-tag `canary`, one PR comment, no tag)
 #   workflow_dispatch -> dry run of the rc or stable path for the chosen branch
 #
-# Versions come from nx release (fixed mode, conventional commits; nx.json). npm auth is
-# Trusted Publishing (OIDC), so there is no NPM_TOKEN. The stable path pushes commits past
-# branch protection with a GitHub App token (vars.RELEASE_APP_ID + secrets.RELEASE_APP_PRIVATE_KEY).
+# Versions come from nx release (fixed mode; nx.json). The merged PR's label (major | minor |
+# patch | skip-release) decides the bump when an rc line starts; conventional commits shape the
+# changelog. npm auth is Trusted Publishing (OIDC), so there is no NPM_TOKEN. The stable path
+# pushes commits past branch protection with a GitHub App token (vars.RELEASE_APP_ID +
+# secrets.RELEASE_APP_PRIVATE_KEY).
 # Lint, typecheck, tests and the Storybook build are not repeated here: the job waits for the
 # ci workflow's `check` run on the same commit and reuses its verdict (build once).
 # Setup and the release steps: docs/releasing.md.

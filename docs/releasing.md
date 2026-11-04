@@ -2,8 +2,8 @@
 
 `@salemcobalt/tokens` and `@salemcobalt/ui` share one version and are released by
 [`.github/workflows/release.yml`](../.github/workflows/release.yml). Versions come from
-[nx release](https://nx.dev/docs/guides/nx-release) in fixed mode, driven by conventional commits
-(configuration in [`nx.json`](../nx.json)); npm authentication is
+[nx release](https://nx.dev/docs/guides/nx-release) in fixed mode (configuration in
+[`nx.json`](../nx.json)); the bump is decided by a label on the merged PR, Auto style; npm authentication is
 [Trusted Publishing](https://docs.npmjs.com/trusted-publishers) (OpenID Connect), so there is no
 `NPM_TOKEN`, and every version ships with a provenance attestation. Every action in the workflow is
 pinned to a commit SHA, and Dependabot (`.github/dependabot.yml`) opens a weekly PR when a pin falls
@@ -20,11 +20,11 @@ feature branch ──PR──▶ main ──PR──▶ release
                  GitHub prerelease  GitHub release + CHANGELOG.md entry
 ```
 
-- **Every merge to `main` cuts a release candidate.** The version is computed from the conventional
-  commits since the last tag (`feat:` → minor, `fix:` → patch, `feat!:` → major), tagged on the merge
-  commit itself, published under the npm dist-tag `next`, and given a GitHub prerelease. `main` carries
-  no version commits: rc versions live in tags. Merging again while an rc line is open only bumps the
-  rc number (`0.2.0-rc.0` → `0.2.0-rc.1`), whatever the commits say.
+- **Every merge to `main` cuts a release candidate.** The merged PR's label picks the bump (`major`,
+  `minor` or `patch`), the new version is tagged on the merge commit itself, published under the npm
+  dist-tag `next`, and given a GitHub prerelease. `main` carries no version commits: rc versions live in
+  tags. Merging again while an rc line is open only bumps the rc number (`0.2.0-rc.0` → `0.2.0-rc.1`),
+  whatever the label says.
 - **Merging `main` into `release` cuts the stable version.** The rc suffix is dropped (`0.2.0-rc.3` →
   `0.2.0`), `CHANGELOG.md` gets an entry covering everything since the previous stable tag, the version
   commit is tagged and pushed to `release`, both packages are published under `latest`, a GitHub release
@@ -32,11 +32,17 @@ feature branch ──PR──▶ main ──PR──▶ release
   the run and is resolved by hand; nothing is ever force-pushed.
 - **A PR labeled `canary` publishes `0.0.0-canary.<sha7>`** under the dist-tag `canary` on every push,
   and keeps one comment on the PR with the install line. No tag, no release. Remove the label to stop.
-- **Labels override the bump.** `release:major`, `release:minor` or `release:patch` on the merged PR
-  replaces the conventional-commit bump when a new rc line starts; `release:none` skips the rc.
-- **Zero-major rule.** While the version is `0.x`, nx treats `feat:` as a patch bump and a breaking
-  change as a minor bump (`adjustSemverBumpsForZeroMajorVersion`, the default). Put `release:minor` on
-  the PR when a feature should move the minor.
+- **The label is the only source of the bump.** Every PR merged into `main` carries exactly one of
+  `major`, `minor`, `patch` or `skip-release` (the names Intuit's Auto uses). `skip-release` publishes
+  nothing for that merge. A merge with no label, or with two, fails the `release` run at the "Compute the
+  next version" step with an error naming the labels, and nothing is published; add the label and re-run
+  the job. Conventional commits are not read for the bump; they still shape the changelog and the
+  release notes. Limitation: while an rc line is open the label is ignored and only the rc number moves,
+  so a `major` merged on top of an open `0.2.0-rc.N` line still lands in `0.2.0-rc.N+1`; cut the stable
+  first when a bigger bump is intended.
+- **Zero-major note.** The label means what it says on `0.x` too: `minor` on `0.1.1` gives `0.2.0-rc.0`
+  and `major` gives `1.0.0-rc.0`. Nx's default demotion for zero-major versions is switched off in
+  `nx.json` (`adjustSemverBumpsForZeroMajorVersion: false`) because the intent is explicit.
 - A version that is already on the registry is skipped, so re-running a job after a partial failure
   publishes only what is missing. Prereleases never become `latest`.
 
@@ -98,8 +104,10 @@ variable; nothing is published half-way.
 
 ## Each release
 
-1. Open PRs against `main` with conventional-commit titles or commits (`feat(ui): …`, `fix(tokens): …`).
-   Add `release:minor` when a feature should move the minor while the version is `0.x`.
+1. Open PRs against `main` with conventional-commit titles or commits (`feat(ui): …`, `fix(tokens): …`)
+   for the changelog, and put exactly one label on each: `major`, `minor`, `patch` or `skip-release`.
+   Without one, the merge fails the release run and publishes nothing until the label is added and the
+   job re-run.
 2. Merge. The `release` run under **Actions** publishes `X.Y.Z-rc.N` to `next` within a few minutes:
 
    ```sh

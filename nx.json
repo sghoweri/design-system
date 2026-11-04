@@ -18,7 +18,8 @@
         "commit": false,
         "tag": false,
         "stageChanges": true
-      }
+      },
+      "adjustSemverBumpsForZeroMajorVersion": false
     },
     "changelog": {
       "workspaceChangelog": {
