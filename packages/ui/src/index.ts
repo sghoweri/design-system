@@ -123,6 +123,7 @@ export {
   type TableHeaderProps,
   type TableRootProps,
   type TableRowProps,
+  type TableSortDirection,
 } from './components/Table/Table';
 export {
   Stat,

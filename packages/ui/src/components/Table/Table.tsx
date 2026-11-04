@@ -1,8 +1,10 @@
 import type { ComponentPropsWithRef, CSSProperties, ReactNode } from 'react';
+import { ArrowDownIcon, ArrowUpIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
 
 export type TableAlign = 'start' | 'center' | 'end';
 export type TableDensity = 'comfortable' | 'compact';
+export type TableSortDirection = 'ascending' | 'descending' | 'none';
 
 export interface TableRootProps extends Omit<ComponentPropsWithRef<'table'>, 'style'> {
   /** Column headers stay visible while the table scrolls. Give `maxHeight` to scroll inside the table; otherwise they stick to the page. */
@@ -111,20 +113,32 @@ interface CellSlots {
   width?: string | undefined;
 }
 
-export interface TableHeaderProps extends Omit<ComponentPropsWithRef<'th'>, 'align' | 'width'>, CellSlots {}
+export interface TableHeaderProps extends Omit<ComponentPropsWithRef<'th'>, 'align' | 'width'>, CellSlots {
+  /** Renders the label as a button that sorts the column. The table stays controlled: sort the rows yourself in `onSort`. */
+  sortable?: boolean | undefined;
+  /** The column's current sort, reflected as `aria-sort`. `none` (default) for every column but the sorted one. */
+  sortDirection?: TableSortDirection | undefined;
+  /** Called with the direction to apply: `ascending` first, then it toggles. */
+  onSort?: ((direction: Exclude<TableSortDirection, 'none'>) => void) | undefined;
+}
 
-/** A `<th>`; `scope` defaults to `col` inside `Table.Head` usage and `row` when you say so. */
+/** A `<th>`; `scope` defaults to `col`, pass `row` for the first cell of a row. */
 function Header({
   align,
   numeric = false,
   nowrap = false,
   truncate = false,
   width,
+  sortable = false,
+  sortDirection = 'none',
+  onSort,
   scope = 'col',
   className,
   style,
+  children,
   ...rest
 }: TableHeaderProps) {
+  const sorted = sortable && sortDirection !== 'none';
   return (
     <th
       scope={scope}
@@ -133,9 +147,27 @@ function Header({
       data-numeric={numeric || undefined}
       data-nowrap={nowrap || undefined}
       data-truncate={truncate || undefined}
+      data-sortable={sortable || undefined}
+      data-sorted={sorted ? sortDirection : undefined}
+      aria-sort={sorted ? sortDirection : undefined}
       style={width ? { ...style, inlineSize: width } : style}
       {...rest}
-    />
+    >
+      {sortable ? (
+        <button
+          type="button"
+          className="sc-table__sort"
+          onClick={() => onSort?.(sortDirection === 'ascending' ? 'descending' : 'ascending')}
+        >
+          <span className="sc-table__sort-label">{children}</span>
+          <span className="sc-table__sort-icon" aria-hidden="true">
+            {sortDirection === 'descending' ? <ArrowDownIcon size="xs" /> : <ArrowUpIcon size="xs" />}
+          </span>
+        </button>
+      ) : (
+        children
+      )}
+    </th>
   );
 }
 
