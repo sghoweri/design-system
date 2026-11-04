@@ -1,3 +1,7 @@
+## 0.1.1 (2026-11-03)
+
+- `@salemcobalt/ui`: the built entry now starts with `'use client'`, so Button, Card and the rest can be imported straight from a Next.js Server Component (0.1.0 needed a client barrel in the app). Tokens are unchanged and stay at 0.1.0.
+
 ## 0.1.0 (2026-11-03)
 
 - `@salemcobalt/tokens`: color primitives and semantic tokens (light and dark), fluid type scale, spacing, radius, elevation, motion, z-index, size and density. Built with Style Dictionary into CSS custom properties, Sass, TypeScript and JSON.
