@@ -43,7 +43,11 @@ The Storybook is hosted on Vercel at <https://designsystem.salemcobalt.com>. `ve
 - Every pull request gets its own preview URL, posted by the Vercel bot on the PR.
 - A deploy is skipped when nothing under `packages/`, `apps/storybook/`, `pnpm-lock.yaml` or `vercel.json` changed.
 
-There is no deploy step in GitHub Actions; CI only lints, builds and tests.
+There is no deploy step in GitHub Actions. `ci.yml` lints the workflows themselves (actionlint, zizmor),
+then installs, lints, builds, checks that the build left the tree clean, typechecks, tests and builds the
+Storybook, all in one job named `check`. The `main` ruleset in the repo settings requires that status
+before a merge. Every action in the workflows is pinned to a commit SHA; Dependabot keeps the pins and
+the npm dependencies current.
 
 ## Release
 
