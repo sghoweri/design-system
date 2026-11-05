@@ -17,6 +17,8 @@
 @import './progress.css';
 @import './table.css';
 @import './stat.css';
+@import './chip.css';
+@import './disclosure.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);

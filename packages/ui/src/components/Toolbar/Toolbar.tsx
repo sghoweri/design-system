@@ -60,6 +60,17 @@ export interface ToolbarButtonProps extends Omit<BaseToolbar.Button.Props, 'clas
  */
 const Button = BaseToolbar.Button;
 
+export interface ToolbarLinkProps extends Omit<BaseToolbar.Link.Props, 'className'> {
+  className?: string | undefined;
+}
+
+/**
+ * A link that joins the toolbar's keyboard navigation. With no `render` it is a plain `<a>`; for an
+ * icon link pass an IconButton that itself renders the anchor (or a Next.js `Link`):
+ * `<Toolbar.Link render={<IconButton label="Settings" tooltip render={<a href="/settings" />} />}><SettingsIcon /></Toolbar.Link>`.
+ */
+const Link = BaseToolbar.Link;
+
 export interface ToolbarSpacerProps {
   className?: string | undefined;
 }
@@ -70,4 +81,4 @@ function Spacer({ className }: ToolbarSpacerProps) {
 }
 
 /** A horizontal container of controls. Built on Base UI's Toolbar. */
-export const Toolbar = { Root, Group, Separator, Button, Spacer };
+export const Toolbar = { Root, Group, Separator, Button, Link, Spacer };

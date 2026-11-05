@@ -39,6 +39,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Playground: Story = {};
 
+// The anchors get their name and icon from IconButton through `render`; in an app this is a Next.js `Link`.
+/* eslint-disable jsx-a11y/anchor-has-content */
+const settingsLink = <a href="#settings" />;
+const postingLink = <a href="#posting" target="_blank" rel="noreferrer" />;
+/* eslint-enable jsx-a11y/anchor-has-content */
+
 export const Variants: Story = {
   render: () => (
     <Inline gap="sm">
@@ -156,5 +162,22 @@ export const Dark: Story = {
         </Inline>
       </Stack>
     </DarkTheme>
+  ),
+};
+
+/** `render` swaps the element: an `<a>` here, a Next.js `Link` in an app. Name and look stay. */
+export const AsLink: Story = {
+  name: 'As a link (render)',
+  render: () => (
+    <Tooltip.Provider>
+      <Inline gap="2xs">
+        <IconButton label="Settings" tooltip render={settingsLink}>
+          <SettingsIcon />
+        </IconButton>
+        <IconButton label="Open posting" tooltip variant="secondary" render={postingLink}>
+          <PlusIcon />
+        </IconButton>
+      </Inline>
+    </Tooltip.Provider>
   ),
 };

@@ -23,6 +23,10 @@ const meta: Meta<typeof Toolbar.Root> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+// The anchor gets its name and icon from IconButton through `render`; in an app this is a Next.js `Link`.
+// eslint-disable-next-line jsx-a11y/anchor-has-content
+const settingsLink = <a href="#settings" />;
+
 function InboxToolbar({ wrap = true }: { wrap?: boolean }) {
   return (
     <Tooltip.Provider>
@@ -111,5 +115,29 @@ export const Dark: Story = {
     <DarkTheme>
       <InboxToolbar />
     </DarkTheme>
+  ),
+};
+
+/** `Toolbar.Link` joins the arrow-key navigation as a real anchor. The IconButton renders the `<a>` (or a Next.js `Link`). */
+export const WithLink: Story = {
+  name: 'With a link',
+  render: () => (
+    <Tooltip.Provider>
+      <Toolbar.Root aria-label="Inbox actions">
+        <Toolbar.Button render={<IconButton label="Sweep now" tooltip />}>
+          <RefreshIcon />
+        </Toolbar.Button>
+        <Toolbar.Button render={<IconButton label="Filter" tooltip />}>
+          <FilterIcon />
+        </Toolbar.Button>
+        <Toolbar.Spacer />
+        <Toolbar.Link render={<IconButton label="Settings" tooltip render={settingsLink} />}>
+          <SettingsIcon />
+        </Toolbar.Link>
+        <Toolbar.Link href="#help" className="sc-button" data-variant="ghost" data-size="sm">
+          Help
+        </Toolbar.Link>
+      </Toolbar.Root>
+    </Tooltip.Provider>
   ),
 };

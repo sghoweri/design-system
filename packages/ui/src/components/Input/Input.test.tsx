@@ -49,4 +49,23 @@ describe('Input', () => {
     render(<Input label="Off" disabled />);
     expect(screen.getByLabelText('Off')).toBeDisabled();
   });
+
+  it('passes list, type="date" and type="number" through to the native input', async () => {
+    const { container } = render(
+      <>
+        <Input label="Company" list="companies" />
+        <datalist id="companies">
+          <option value="Linear" />
+        </datalist>
+        <Input label="Applied on" type="date" />
+        <Input label="Base salary" type="number" min={0} step={1000} />
+      </>,
+    );
+    expect(screen.getByLabelText('Company')).toHaveAttribute('list', 'companies');
+    expect(screen.getByLabelText('Applied on')).toHaveAttribute('type', 'date');
+    const salary = screen.getByLabelText('Base salary');
+    expect(salary).toHaveAttribute('type', 'number');
+    expect(salary).toHaveAttribute('step', '1000');
+    await expectNoA11yViolations(container);
+  });
 });

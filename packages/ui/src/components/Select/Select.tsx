@@ -1,7 +1,7 @@
 import { Select as BaseSelect } from '@base-ui/react/select';
-import type { ReactNode } from 'react';
+import { useState, type KeyboardEvent, type ReactNode } from 'react';
 import { FieldShell, type FieldProps } from '../Field/FieldShell';
-import { CheckIcon, ChevronDownIcon } from '../../icons/icons.gen';
+import { CheckIcon, ChevronDownIcon, XIcon } from '../../icons/icons.gen';
 
 export interface SelectOption<Value extends string = string> {
   value: Value;
@@ -18,14 +18,21 @@ export interface SelectGroup<Value extends string = string> {
 export interface SelectProps<Value extends string = string> extends FieldProps {
   /** Flat options, or groups of options with a heading. */
   options: Array<SelectOption<Value> | SelectGroup<Value>>;
-  /** Controlled value; `null` for none. */
+  /** Controlled value; `null` for none, which shows `placeholder`. No sentinel option needed. */
   value?: Value | null | undefined;
-  /** Initial value when uncontrolled. */
+  /** Initial value when uncontrolled; `null` (default) for none. */
   defaultValue?: Value | null | undefined;
-  /** Called with the chosen value. */
+  /** Called with the chosen value, or `null` when the field is cleared. */
   onValueChange?: ((value: Value | null) => void) | undefined;
   /** Shown in the trigger while nothing is chosen. */
   placeholder?: ReactNode | undefined;
+  /**
+   * Shows an × beside the chevron while a value is chosen; pressing it, or Backspace/Delete on the
+   * focused trigger, sets the value to `null` and calls `onValueChange(null)`.
+   */
+  clearable?: boolean | undefined;
+  /** Accessible name of the clear button. Default "Clear". */
+  clearLabel?: string | undefined;
   /** Prevents choosing a different option. */
   readOnly?: boolean | undefined;
   /** Stretches the trigger to the container. */
@@ -68,11 +75,27 @@ export function Select<Value extends string = string>({
   defaultValue,
   onValueChange,
   placeholder = 'Choose…',
+  clearable = false,
+  clearLabel = 'Clear',
   readOnly,
   fullWidth = false,
   id,
 }: SelectProps<Value>) {
   const items = options.flatMap((entry) => (isGroup(entry) ? entry.options : [entry]));
+  const [internal, setInternal] = useState<Value | null>(defaultValue ?? null);
+  const controlled = value !== undefined;
+  const current = controlled ? value : internal;
+  const setValue = (next: Value | null) => {
+    if (!controlled) setInternal(next);
+    onValueChange?.(next);
+  };
+  const canClear = clearable && current != null && !disabled && !readOnly;
+  const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (canClear && (event.key === 'Backspace' || event.key === 'Delete')) {
+      event.preventDefault();
+      setValue(null);
+    }
+  };
   return (
     <FieldShell
       label={label}
@@ -88,24 +111,37 @@ export function Select<Value extends string = string>({
     >
       <BaseSelect.Root<Value | null>
         items={items}
-        value={value}
-        defaultValue={defaultValue}
-        onValueChange={onValueChange ? (next) => onValueChange(next) : undefined}
+        value={current}
+        onValueChange={(next) => setValue(next)}
         disabled={disabled}
         required={required}
         readOnly={readOnly}
       >
-        <BaseSelect.Trigger
-          id={id}
-          className="sc-select"
-          data-size={size}
-          data-full-width={fullWidth || undefined}
-        >
-          <BaseSelect.Value className="sc-select__value" placeholder={placeholder} />
-          <BaseSelect.Icon className="sc-select__icon">
-            <ChevronDownIcon />
-          </BaseSelect.Icon>
-        </BaseSelect.Trigger>
+        <span className="sc-select__wrap" data-full-width={fullWidth || undefined}>
+          <BaseSelect.Trigger
+            id={id}
+            className="sc-select"
+            data-size={size}
+            data-full-width={fullWidth || undefined}
+            data-clearable={canClear || undefined}
+            onKeyDown={onTriggerKeyDown}
+          >
+            <BaseSelect.Value className="sc-select__value" placeholder={placeholder} />
+            <BaseSelect.Icon className="sc-select__icon">
+              <ChevronDownIcon />
+            </BaseSelect.Icon>
+          </BaseSelect.Trigger>
+          {canClear ? (
+            <button
+              type="button"
+              className="sc-select__clear"
+              aria-label={clearLabel}
+              onClick={() => setValue(null)}
+            >
+              <XIcon size="sm" />
+            </button>
+          ) : null}
+        </span>
         <BaseSelect.Portal>
           <BaseSelect.Positioner
             className="sc-select__positioner"

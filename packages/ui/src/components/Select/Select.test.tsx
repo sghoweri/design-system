@@ -65,4 +65,42 @@ describe('Select', () => {
     expect(trigger).toHaveAttribute('data-invalid');
     expect(trigger).toHaveAttribute('data-disabled');
   });
+
+  it('shows the placeholder again when the controlled value goes back to null', () => {
+    const { rerender } = render(
+      <Select label="Sort by" options={options} value="date" placeholder="Pick one" />,
+    );
+    expect(screen.getByRole('combobox', { name: 'Sort by' })).toHaveTextContent('Date posted');
+    rerender(<Select label="Sort by" options={options} value={null} placeholder="Pick one" />);
+    expect(screen.getByRole('combobox', { name: 'Sort by' })).toHaveTextContent('Pick one');
+  });
+
+  it('clears from the × and from Backspace on the trigger when clearable', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    const { container } = render(
+      <Select
+        label="Sort by"
+        options={options}
+        defaultValue="date"
+        clearable
+        onValueChange={onValueChange}
+      />,
+    );
+    const trigger = screen.getByRole('combobox', { name: 'Sort by' });
+    expect(trigger).toHaveTextContent('Date posted');
+    await expectNoA11yViolations(container);
+    await user.click(screen.getByRole('button', { name: 'Clear' }));
+    expect(onValueChange).toHaveBeenLastCalledWith(null);
+    expect(trigger).toHaveTextContent('Choose…');
+    expect(screen.queryByRole('button', { name: 'Clear' })).toBeNull();
+
+    await user.click(trigger);
+    await user.click(await screen.findByRole('option', { name: 'Score' }));
+    expect(onValueChange).toHaveBeenLastCalledWith('score');
+    trigger.focus();
+    await user.keyboard('{Backspace}');
+    expect(onValueChange).toHaveBeenLastCalledWith(null);
+    expect(trigger).toHaveTextContent('Choose…');
+  });
 });
