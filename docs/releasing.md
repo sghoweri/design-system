@@ -117,7 +117,7 @@ variable; nothing is published half-way.
    ```
 
    **Stacked PRs: merge one at a time and wait for GitHub to retarget the next.** A PR whose base is
-   another PR's branch is retargeted to `main` only after that branch is merged *and deleted*, and the
+   another PR's branch is retargeted to `main` only after that branch is merged _and deleted_, and the
    retarget takes a moment. Merging the second PR before its base line reads `into main` lands its
    commits on the first PR's branch, not on `main`: no release runs, and the branch deletion then
    auto-closes every PR further up the stack. If that happens, open a fresh PR against `main` from the
