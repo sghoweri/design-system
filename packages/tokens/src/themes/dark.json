@@ -31,6 +31,16 @@
         "$type": "color",
         "$description": "Pressed wash on rows and ghost controls."
       },
+      "raised-hover": {
+        "$value": "{color.neutral.850}",
+        "$type": "color",
+        "$description": "Hover wash inside raised surfaces (menus, select popups, dialogs, elevated cards). A step off surface.raised so the highlight shows."
+      },
+      "raised-active": {
+        "$value": "{color.neutral.800}",
+        "$type": "color",
+        "$description": "Pressed wash and neutral fills inside raised surfaces."
+      },
       "backdrop": {
         "$value": "#00000099",
         "$type": "color",

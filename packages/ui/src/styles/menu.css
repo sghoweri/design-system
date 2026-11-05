@@ -13,6 +13,9 @@
   padding: var(--sc-spacing-2xs);
   border-radius: var(--sc-radius-lg);
   background: var(--sc-color-surface-raised);
+  /* Hover and pressed washes inside a raised surface use the raised tokens, so they show against it (docs/adr/0003). */
+  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
+  --sc-color-surface-active: var(--sc-color-surface-raised-active);
   color: var(--sc-color-text-default);
   border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
   box-shadow: var(--sc-elevation-2);
@@ -48,7 +51,7 @@
   border-radius: var(--sc-radius-sm);
   color: var(--sc-color-text-default);
   text-decoration: none;
-  cursor: default;
+  cursor: pointer;
   user-select: none;
   outline: 0;
 }

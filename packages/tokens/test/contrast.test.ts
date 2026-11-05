@@ -28,6 +28,8 @@ const surfaces = [
   'surface-sunken',
   'surface-hover',
   'surface-active',
+  'surface-raised-hover',
+  'surface-raised-active',
 ];
 const pairs: Array<[string, string[], number]> = [
   ['text-default', surfaces, 4.5],
@@ -59,6 +61,23 @@ describe.each(['light', 'dark'] as const)('%s theme contrast', (theme) => {
         expect(contrast(get(fg), get(bg))).toBeGreaterThanOrEqual(min);
       });
     }
+  }
+});
+
+// A hover or pressed wash has to be visible against the surface it sits on. Dark surface.hover once equalled
+// surface.raised, so menu items in dark mode showed no hover at all (docs/adr/0003).
+const washes: Array<[string, string]> = [
+  ['surface-default', 'surface-hover'],
+  ['surface-hover', 'surface-active'],
+  ['surface-raised', 'surface-raised-hover'],
+  ['surface-raised-hover', 'surface-raised-active'],
+];
+describe.each(['light', 'dark'] as const)('%s theme state washes', (theme) => {
+  const t = json[theme];
+  for (const [base, wash] of washes) {
+    it(`${wash} is distinguishable from ${base}`, () => {
+      expect(contrast(t[`sc-color-${base}`]!, t[`sc-color-${wash}`]!)).toBeGreaterThanOrEqual(1.08);
+    });
   }
 });
 

@@ -61,6 +61,11 @@
         "$type": "color",
         "$description": "Primitive. Cool neutral, OKLCH hue 263."
       },
+      "850": {
+        "$value": "#32353b",
+        "$type": "color",
+        "$description": "Primitive. Cool neutral, OKLCH hue 263. Between 800 and 900: the dark hover wash on raised surfaces."
+      },
       "900": {
         "$value": "#282b31",
         "$type": "color",

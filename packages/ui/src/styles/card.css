@@ -30,6 +30,9 @@
   --_p: var(--sc-spacing-lg);
 }
 .sc-card[data-variant='elevated'] {
+  /* Hover and pressed washes inside a raised surface use the raised tokens, so they show against it (docs/adr/0003). */
+  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
+  --sc-color-surface-active: var(--sc-color-surface-raised-active);
   box-shadow: var(--sc-elevation-1);
   border-color: transparent;
 }
