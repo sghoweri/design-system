@@ -14,14 +14,19 @@
   transition-duration: calc(var(--sc-duration-base) * 0.75);
   transition-timing-function: var(--sc-ease-exit);
 }
+/* The popup never exceeds the viewport minus a gutter each side, whatever `size` says. 100dvw rather than
+   100% so the clamp holds inside a transformed or narrow portal container too. */
 .sc-dialog__popup {
+  --_gutter: var(--sc-spacing-md);
+  --_max: calc(100dvw - 2 * var(--_gutter));
   position: fixed;
   inset: 0;
   margin: auto;
   z-index: var(--sc-z-dialog);
   box-sizing: border-box;
-  inline-size: min(100% - 2 * var(--sc-spacing-md), var(--sc-size-dialog-md));
-  max-block-size: min(100% - 2 * var(--sc-spacing-md), 85dvh);
+  inline-size: min(var(--_max), var(--sc-size-dialog-md));
+  max-inline-size: var(--_max);
+  max-block-size: min(100dvh - 2 * var(--_gutter), 85dvh);
   block-size: fit-content;
   overflow: auto;
   padding: var(--sc-spacing-lg);
@@ -47,10 +52,10 @@
   transition-timing-function: var(--sc-ease-exit);
 }
 .sc-dialog__popup[data-size='sm'] {
-  inline-size: min(100% - 2 * var(--sc-spacing-md), var(--sc-size-dialog-sm));
+  inline-size: min(var(--_max), var(--sc-size-dialog-sm));
 }
 .sc-dialog__popup[data-size='lg'] {
-  inline-size: min(100% - 2 * var(--sc-spacing-md), var(--sc-size-dialog-lg));
+  inline-size: min(var(--_max), var(--sc-size-dialog-lg));
 }
 .sc-dialog__title {
   margin: 0;
@@ -70,6 +75,20 @@
   margin-block-start: var(--sc-spacing-md);
   font-size: var(--sc-font-size-sm);
   line-height: var(--sc-font-line-height-normal);
+}
+/* Content wraps instead of widening the popup: long URLs break, fields and media stay inside the box. */
+.sc-dialog__title,
+.sc-dialog__description,
+.sc-dialog__body {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.sc-dialog__body > *,
+.sc-dialog__body :where(img, video, table, pre, .sc-select) {
+  max-inline-size: 100%;
+}
+.sc-dialog__body :where(pre) {
+  overflow: auto;
 }
 .sc-dialog__actions {
   margin-block-start: var(--sc-spacing-lg);
@@ -92,6 +111,65 @@
 .sc-dialog__close:hover {
   background: var(--sc-color-surface-hover);
   color: var(--sc-color-text-default);
+}
+/* Sheet: title and actions stay put, the body scrolls. Same centred box as `dialog` on wide viewports. */
+.sc-dialog__popup[data-variant='sheet'] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__title,
+.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__description,
+.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__actions {
+  flex: none;
+}
+.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+/* Below 640px the sheet docks to the bottom edge, full width, and slides up. The breakpoint is fixed
+   here because custom properties cannot drive a media query. */
+@media (width < 640px) {
+  .sc-dialog__popup[data-variant='sheet'] {
+    inset: auto 0 0 0;
+    margin: 0;
+    inline-size: 100%;
+    max-inline-size: none;
+    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - var(--sc-spacing-xl));
+    padding-block-end: calc(var(--sc-spacing-lg) + env(safe-area-inset-bottom, 0px));
+    padding-inline: calc(var(--sc-spacing-lg) + env(safe-area-inset-left, 0px))
+      calc(var(--sc-spacing-lg) + env(safe-area-inset-right, 0px));
+    border-block-end: 0;
+    border-radius: var(--sc-radius-xl) var(--sc-radius-xl) 0 0;
+    transition:
+      opacity var(--sc-duration-base) var(--sc-ease-enter),
+      translate var(--sc-duration-base) var(--sc-ease-enter);
+  }
+  .sc-dialog__popup[data-variant='sheet']::before {
+    content: '';
+    flex: none;
+    align-self: center;
+    inline-size: 36px;
+    block-size: 4px;
+    margin-block: calc(-1 * var(--sc-spacing-sm)) var(--sc-spacing-md);
+    border-radius: var(--sc-radius-full);
+    background: var(--sc-color-border-strong);
+  }
+  .sc-dialog__popup[data-variant='sheet'][data-starting-style],
+  .sc-dialog__popup[data-variant='sheet'][data-ending-style] {
+    opacity: 1;
+    translate: 0 100%;
+    scale: none;
+  }
+  /* Actions stack full width, confirming action on top, in thumb reach. */
+  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__actions {
+    flex-wrap: wrap-reverse;
+  }
+  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__actions > * {
+    flex: 1 1 100%;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .sc-dialog__backdrop,

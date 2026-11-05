@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from '@storybook/react-vite';
+import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 import { useEffect } from 'react';
 import type React from 'react';
 import '@salemcobalt/tokens/css';
@@ -47,6 +48,12 @@ const preview: Preview = {
     a11y: { test: 'error' },
     controls: { matchers: { color: /(background|color)$/i } },
     backgrounds: { disable: true },
+    viewport: {
+      options: {
+        phone390: { name: 'Phone 390', styles: { width: '390px', height: '844px' }, type: 'mobile' },
+        ...MINIMAL_VIEWPORTS,
+      },
+    },
     layout: 'padded',
     options: { storySort: { order: ['Foundations', 'Layout', 'Components'] } },
   },
