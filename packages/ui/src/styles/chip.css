@@ -1,0 +1,195 @@
+/* ---- Chip ------------------------------------------------------------------ */
+.sc-chip {
+  --_h: var(--sc-size-control-sm);
+  --_px: var(--sc-spacing-sm);
+  --_fs: var(--sc-font-size-sm);
+  --_icon: var(--sc-size-icon-sm);
+  --_bg: transparent;
+  --_fg: var(--sc-color-text-default);
+  --_bd: var(--sc-color-border-strong);
+  --_bg-hover: var(--sc-color-surface-hover);
+  --_bg-on: var(--sc-color-surface-active);
+  --_fg-on: var(--sc-color-text-default);
+  --_bd-on: var(--sc-color-text-muted);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  max-inline-size: 100%;
+  block-size: var(--_h);
+  border-radius: var(--sc-radius-full);
+  border: var(--sc-border-width-hairline) solid var(--_bd);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--_fs);
+  font-weight: var(--sc-font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-ease-standard),
+    border-color var(--sc-duration-fast) var(--sc-ease-standard),
+    color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-chip[data-size='sm'] {
+  --_h: var(--sc-size-badge-md);
+  --_px: var(--sc-spacing-xs);
+  --_fs: var(--sc-font-size-xs);
+  --_icon: var(--sc-size-icon-xs);
+}
+.sc-chip[data-selected] {
+  --_bg: var(--_bg-on);
+  --_fg: var(--_fg-on);
+  --_bd: var(--_bd-on);
+}
+.sc-chip[data-disabled] {
+  opacity: 0.5;
+}
+/* The text, or the toggle button that holds it. */
+.sc-chip__action,
+.sc-chip > .sc-chip__icon,
+.sc-chip > .sc-chip__label {
+  display: inline-flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+.sc-chip > .sc-chip__icon {
+  margin-inline-start: var(--_px);
+}
+.sc-chip > .sc-chip__label {
+  padding-inline: var(--_px);
+}
+.sc-chip > .sc-chip__icon + .sc-chip__label {
+  padding-inline-start: var(--sc-spacing-2xs);
+}
+.sc-chip__action {
+  gap: var(--sc-spacing-2xs);
+  box-sizing: border-box;
+  block-size: 100%;
+  margin: 0;
+  padding-inline: var(--_px);
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+.sc-chip__action:hover:not(:disabled) {
+  background: var(--_bg-hover);
+}
+.sc-chip[data-selected] > .sc-chip__action:hover:not(:disabled) {
+  background: transparent;
+  filter: brightness(0.97);
+}
+.sc-chip__action:disabled {
+  cursor: not-allowed;
+}
+.sc-chip__icon {
+  flex: none;
+  inline-size: var(--_icon);
+  block-size: var(--_icon);
+}
+.sc-chip__icon > svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.sc-chip__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sc-chip[data-removable] > .sc-chip__action,
+.sc-chip[data-removable] > .sc-chip__label {
+  padding-inline-end: var(--sc-spacing-2xs);
+}
+.sc-chip__remove {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  inline-size: calc(var(--_h) - 2 * var(--sc-spacing-2xs) - 2px);
+  block-size: calc(var(--_h) - 2 * var(--sc-spacing-2xs) - 2px);
+  margin-inline-end: var(--sc-spacing-2xs);
+  padding: 0;
+  border: 0;
+  border-radius: var(--sc-radius-full);
+  background: transparent;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.sc-chip__remove:hover:not(:disabled) {
+  opacity: 1;
+  background: var(--_bg-hover);
+}
+.sc-chip__remove:disabled {
+  cursor: not-allowed;
+}
+.sc-chip__action:focus-visible,
+.sc-chip__remove:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: 0;
+}
+/* 44px hit area on touch without changing layout. */
+@media (pointer: coarse) {
+  .sc-chip__action::after,
+  .sc-chip__remove::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    inline-size: max(100%, var(--sc-size-touch-target));
+    block-size: max(100%, var(--sc-size-touch-target));
+  }
+  .sc-chip__action,
+  .sc-chip__remove {
+    position: relative;
+  }
+}
+/* Tones: soft fill when selected, tinted outline otherwise. */
+.sc-chip[data-tone='accent'] {
+  --_fg: var(--sc-color-accent-text);
+  --_bd: var(--sc-color-accent-text);
+  --_bg-hover: var(--sc-color-accent-subtle);
+  --_bg-on: var(--sc-color-accent-subtle);
+  --_fg-on: var(--sc-color-accent-text);
+  --_bd-on: var(--sc-color-accent-default);
+}
+.sc-chip[data-tone='success'] {
+  --_fg: var(--sc-color-success-text);
+  --_bd: var(--sc-color-success-text);
+  --_bg-hover: var(--sc-color-success-subtle);
+  --_bg-on: var(--sc-color-success-subtle);
+  --_fg-on: var(--sc-color-success-text);
+  --_bd-on: var(--sc-color-success-solid);
+}
+.sc-chip[data-tone='warning'] {
+  --_fg: var(--sc-color-warning-text);
+  --_bd: var(--sc-color-warning-text);
+  --_bg-hover: var(--sc-color-warning-subtle);
+  --_bg-on: var(--sc-color-warning-subtle);
+  --_fg-on: var(--sc-color-warning-text);
+  --_bd-on: var(--sc-color-warning-solid);
+}
+.sc-chip[data-tone='danger'] {
+  --_fg: var(--sc-color-danger-text);
+  --_bd: var(--sc-color-danger-text);
+  --_bg-hover: var(--sc-color-danger-subtle);
+  --_bg-on: var(--sc-color-danger-subtle);
+  --_fg-on: var(--sc-color-danger-text);
+  --_bd-on: var(--sc-color-danger-solid);
+}
+.sc-chip[data-tone='info'] {
+  --_fg: var(--sc-color-info-text);
+  --_bd: var(--sc-color-info-text);
+  --_bg-hover: var(--sc-color-info-subtle);
+  --_bg-on: var(--sc-color-info-subtle);
+  --_fg-on: var(--sc-color-info-text);
+  --_bd-on: var(--sc-color-info-solid);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-chip {
+    transition: none;
+  }
+}

@@ -7,7 +7,10 @@ const meta: Meta<typeof Textarea> = {
   title: 'Forms/Textarea',
   component: Textarea,
   args: { label: 'Notes', placeholder: 'What stood out?', rows: 3, resize: 'vertical' },
-  argTypes: { resize: { control: 'radio', options: ['vertical', 'none'] } },
+  argTypes: {
+    resize: { control: 'radio', options: ['vertical', 'none'] },
+    variant: { control: 'radio', options: ['default', 'code'] },
+  },
   decorators: [(Story) => <div style={{ maxWidth: 420 }}>{Story()}</div>],
 };
 export default meta;
@@ -43,5 +46,42 @@ export const Dark: Story = {
         />
       </Stack>
     </DarkTheme>
+  ),
+};
+
+const markdown = `# Staff Frontend Engineer
+
+- **Team:** design systems, 6 engineers
+- **Stack:** React 19, TypeScript, Storybook
+	- nested with a tab
+
+| Stage | Date |
+| ----- | ---- |
+| Applied | 2026-11-02 |
+`;
+
+/** `variant="code"` for Markdown and JSON: monospace, tab-size 2, no spellcheck or autocorrect. Add native `wrap="off"` to scroll long lines instead of wrapping. */
+export const Code: Story = {
+  name: 'Code (Markdown)',
+  render: () => (
+    <Stack gap="md">
+      <Textarea label="Notes (Markdown)" variant="code" rows={8} defaultValue={markdown} />
+      <Textarea
+        label="Raw posting JSON"
+        variant="code"
+        rows={4}
+        wrap="off"
+        defaultValue={JSON.stringify(
+          {
+            title: 'Staff Frontend Engineer',
+            company: 'Northwind',
+            url: 'https://northwind.example/careers/staff-frontend-engineer-remote-us-2026',
+          },
+          null,
+          2,
+        )}
+        description='wrap="off": long lines scroll sideways.'
+      />
+    </Stack>
   ),
 };

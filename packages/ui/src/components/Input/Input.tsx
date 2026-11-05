@@ -14,7 +14,12 @@ export interface InputProps
   onValueChange?: ((value: string) => void) | undefined;
 }
 
-/** A labelled single-line text field. Renders a native `<input>` inside Base UI's Field. */
+/**
+ * A labelled single-line text field. Renders a native `<input>` inside Base UI's Field, so every native
+ * attribute passes through: `type="date" | "time" | "number" | "url" | …` keep the same height and
+ * `iconStart` slot; `list="id"` with a `<datalist>` beside it gives native suggestions. Date and time
+ * fields show the browser's picker at the end edge, so leave `iconEnd` off those.
+ */
 export function Input({
   label,
   hideLabel,

@@ -1,9 +1,10 @@
-import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
+import { useRender } from '@base-ui/react/use-render';
+import type { MouseEvent, ReactNode } from 'react';
 import { Tooltip, type TooltipSide } from '../Tooltip/Tooltip';
 import type { ButtonSize, ButtonVariant } from '../Button/Button';
 import { cx } from '../../utils/cx';
 
-export interface IconButtonProps extends Omit<ComponentPropsWithRef<'button'>, 'children' | 'aria-label'> {
+export interface IconButtonProps extends Omit<useRender.ComponentProps<'button'>, 'children' | 'aria-label'> {
   /** Required. The accessible name, and the tooltip text when `tooltip` is `true`. */
   label: string;
   /** The icon, usually a shipped `<Name>Icon`. It is decorative; `label` names the button. Optional only so a popup trigger can supply it through `render`. */
@@ -22,7 +23,11 @@ export interface IconButtonProps extends Omit<ComponentPropsWithRef<'button'>, '
   loading?: boolean | undefined;
 }
 
-/** A square Button for one icon. Always named by `label`; use `tooltip` to show that name on hover. */
+/**
+ * A square Button for one icon. Always named by `label`; use `tooltip` to show that name on hover.
+ * Renders a `<button>` unless `render` gives another element: `render={<a href="/settings" />}` or a
+ * Next.js `<Link href="/settings" />` makes it a link with the same look and name.
+ */
 export function IconButton({
   label,
   children,
@@ -32,9 +37,11 @@ export function IconButton({
   tooltipSide = 'top',
   round = false,
   loading = false,
-  type = 'button',
+  type,
   className,
   onClick,
+  render,
+  ref,
   ...rest
 }: IconButtonProps) {
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -44,25 +51,32 @@ export function IconButton({
     }
     onClick?.(event);
   };
-  const button = (
-    <button
-      type={type}
-      className={cx('sc-button', 'sc-icon-button', className)}
-      data-variant={variant}
-      data-size={size}
-      data-round={round || undefined}
-      data-loading={loading || undefined}
-      aria-busy={loading || undefined}
-      aria-label={label}
-      onClick={handleClick}
-      {...rest}
-    >
-      <span className="sc-button__icon" aria-hidden="true">
-        {children}
-      </span>
-      {loading ? <span className="sc-button__spinner" aria-hidden="true" /> : null}
-    </button>
-  );
+  const button = useRender({
+    render,
+    ref,
+    defaultTagName: 'button',
+    props: {
+      // `type` only means something on a real button; a rendered link keeps its own attributes.
+      type: render ? type : (type ?? 'button'),
+      className: cx('sc-button', 'sc-icon-button', className),
+      'data-variant': variant,
+      'data-size': size,
+      'data-round': round || undefined,
+      'data-loading': loading || undefined,
+      'aria-busy': loading || undefined,
+      'aria-label': label,
+      onClick: handleClick,
+      ...rest,
+      children: (
+        <>
+          <span className="sc-button__icon" aria-hidden="true">
+            {children}
+          </span>
+          {loading ? <span className="sc-button__spinner" aria-hidden="true" /> : null}
+        </>
+      ),
+    },
+  });
   if (!tooltip) return button;
   return (
     <Tooltip content={tooltip === true ? label : tooltip} side={tooltipSide}>

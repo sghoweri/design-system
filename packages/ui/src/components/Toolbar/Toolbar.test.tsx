@@ -7,6 +7,10 @@ import { Menu } from '../Menu/Menu';
 import { MoreHorizontalIcon, PauseIcon, RefreshIcon } from '../../icons/icons.gen';
 import { expectNoA11yViolations } from '../../../test/axe';
 
+// The anchor gets its name and icon from IconButton through `render`.
+// eslint-disable-next-line jsx-a11y/anchor-has-content
+const settingsLink = <a href="/settings" />;
+
 function Example() {
   return (
     <Toolbar.Root aria-label="Inbox actions">
@@ -73,5 +77,27 @@ describe('Toolbar', () => {
     const toolbar = screen.getByRole('toolbar');
     expect(toolbar).not.toHaveAttribute('data-wrap');
     expect(toolbar).toHaveAttribute('data-gap', 'sm');
+  });
+
+  it('Toolbar.Link joins the roving focus as an anchor, through an IconButton that renders the link', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <Toolbar.Root aria-label="Nav">
+        <Toolbar.Button render={<IconButton label="Pause" />}>
+          <PauseIcon />
+        </Toolbar.Button>
+        <Toolbar.Link render={<IconButton label="Settings" render={settingsLink} />}>
+          <RefreshIcon />
+        </Toolbar.Link>
+      </Toolbar.Root>,
+    );
+    const link = screen.getByRole('link', { name: 'Settings' });
+    expect(link).toHaveAttribute('href', '/settings');
+    expect(link).toHaveClass('sc-icon-button');
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Pause' })).toHaveFocus();
+    await user.keyboard('{ArrowRight}');
+    expect(link).toHaveFocus();
+    await expectNoA11yViolations(container);
   });
 });

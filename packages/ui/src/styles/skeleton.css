@@ -1,0 +1,60 @@
+/* ---- Skeleton -------------------------------------------------------------- */
+.sc-skeleton {
+  --_base: var(--sc-color-surface-active);
+  --_sheen: var(--sc-color-surface-hover);
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: 1em;
+  border-radius: var(--sc-radius-sm);
+  background: var(--_base);
+  background-image: linear-gradient(90deg, var(--_base) 0%, var(--_sheen) 50%, var(--_base) 100%);
+  background-size: 200% 100%;
+  animation: sc-shimmer 1.6s ease-in-out infinite;
+}
+.sc-skeleton[data-variant='text'] {
+  display: inline-block;
+  vertical-align: middle;
+  block-size: 1em;
+  border-radius: var(--sc-radius-sm);
+}
+.sc-skeleton[data-variant='rect'] {
+  block-size: 80px;
+  border-radius: var(--sc-radius-md);
+}
+.sc-skeleton[data-variant='circle'] {
+  inline-size: 40px;
+  aspect-ratio: 1;
+  block-size: auto;
+  border-radius: var(--sc-radius-full);
+}
+.sc-skeleton[data-still] {
+  animation: none;
+  background-image: none;
+}
+.sc-skeleton-lines {
+  display: flex;
+  flex-direction: column;
+  gap: calc(1lh - 1em);
+  inline-size: 100%;
+}
+.sc-skeleton-lines > .sc-skeleton {
+  display: block;
+}
+.sc-skeleton-lines > .sc-skeleton[data-last] {
+  inline-size: 60%;
+}
+@keyframes sc-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-skeleton {
+    animation: none;
+    background-image: none;
+  }
+}

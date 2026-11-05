@@ -53,6 +53,7 @@
   min-inline-size: 0;
 }
 .sc-input {
+  appearance: none;
   box-sizing: border-box;
   inline-size: 100%;
   min-inline-size: 0;
@@ -89,6 +90,30 @@
   background: var(--sc-color-surface-sunken);
   color: var(--sc-color-text-subtle);
   cursor: not-allowed;
+}
+/* Native date, time and number fields: same box, tabular digits, the picker indicator at the end edge. */
+.sc-input:is(
+  [type='date'],
+  [type='time'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='week'],
+  [type='number']
+) {
+  font-variant-numeric: tabular-nums;
+}
+.sc-input::-webkit-date-and-time-value {
+  min-block-size: 1lh;
+  text-align: start;
+}
+.sc-input::-webkit-calendar-picker-indicator {
+  margin-inline-start: var(--sc-spacing-xs);
+  padding: 0;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.sc-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
 }
 .sc-input-wrap[data-icon-start] > .sc-input {
   padding-inline-start: calc(var(--_px) + var(--sc-size-icon-md) + var(--sc-spacing-xs));
@@ -127,7 +152,29 @@
 .sc-textarea[data-resize='none'] {
   resize: none;
 }
+.sc-textarea[data-variant='code'] {
+  font-family: var(--sc-font-family-mono);
+  font-size: calc(var(--_fs) * 0.95);
+  line-height: var(--sc-font-line-height-normal);
+  tab-size: 2;
+  hyphens: none;
+  overflow-wrap: normal;
+}
+.sc-textarea[wrap='off'] {
+  white-space: pre;
+  overflow-x: auto;
+}
 /* Select */
+.sc-select__wrap {
+  position: relative;
+  display: inline-flex;
+  max-inline-size: 100%;
+  align-self: flex-start;
+}
+.sc-select__wrap[data-full-width] {
+  display: flex;
+  align-self: stretch;
+}
 .sc-select {
   box-sizing: border-box;
   display: inline-flex;
@@ -158,6 +205,30 @@
 .sc-select[data-full-width] {
   inline-size: 100%;
   align-self: stretch;
+}
+/* Room for the × between the value and the chevron. The clear button is a sibling, never nested in the trigger. */
+.sc-select[data-clearable] > .sc-select__icon {
+  margin-inline-start: calc(var(--sc-size-icon-lg) + var(--sc-spacing-2xs));
+}
+.sc-select__clear {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: calc(var(--sc-spacing-xs) + var(--sc-size-icon-md) + var(--sc-spacing-2xs));
+  translate: 0 -50%;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--sc-size-icon-lg);
+  block-size: var(--sc-size-icon-lg);
+  padding: 0;
+  border: 0;
+  border-radius: var(--sc-radius-sm);
+  background: transparent;
+  color: var(--sc-color-text-muted);
+  cursor: pointer;
+}
+.sc-select__clear:hover {
+  background: var(--sc-color-surface-hover);
+  color: var(--sc-color-text-default);
 }
 .sc-select:hover:not([data-disabled]) {
   border-color: var(--sc-color-text-muted);
