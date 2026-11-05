@@ -38,6 +38,7 @@ export {
   type DialogRootProps,
   type DialogSize,
   type DialogTitleProps,
+  type DialogVariant,
 } from './components/Dialog/Dialog';
 export { Icon, type IconGlyphProps, type IconProps, type IconSize } from './components/Icon/Icon';
 export * from './icons/icons.gen';

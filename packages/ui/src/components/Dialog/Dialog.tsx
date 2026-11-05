@@ -5,6 +5,7 @@ import { XIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
 
 export type DialogSize = 'sm' | 'md' | 'lg';
+export type DialogVariant = 'dialog' | 'sheet';
 
 export interface DialogRootProps {
   /** Controlled open state. */
@@ -46,19 +47,32 @@ function Root({ dismissible = true, onOpenChange, open, defaultOpen, children }:
 const Trigger = BaseDialog.Trigger;
 
 export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'className'> {
-  /** `sm` 400px for yes/no, `md` 560px (default) for a short form, `lg` 720px rarely. */
+  /**
+   * Maximum width: `sm` 400px for yes/no, `md` 560px (default) for a short form, `lg` 720px rarely.
+   * Every size clamps to the viewport minus a 16px gutter, so a 390px phone gets a 358px dialog.
+   */
   size?: DialogSize | undefined;
+  /**
+   * `dialog` (default) centres the popup. `sheet` is the same on wide viewports but below 640px it
+   * becomes a bottom sheet: full width, rounded top, title and actions pinned while `Dialog.Body`
+   * scrolls, padding that clears the home indicator. Use it for forms and pickers opened from a list.
+   */
+  variant?: DialogVariant | undefined;
   className?: string | undefined;
 }
 
-/** Portal, backdrop and the popup. Focus moves inside on open and returns to the trigger on close. */
-function Content({ size = 'md', className, children, ...rest }: DialogContentProps) {
+/**
+ * Portal, backdrop and the popup. Focus moves inside on open and returns to the trigger on close.
+ * Menus, selects and tooltips opened from inside render above it (`--sc-z-dropdown` > `--sc-z-dialog`).
+ */
+function Content({ size = 'md', variant = 'dialog', className, children, ...rest }: DialogContentProps) {
   return (
     <BaseDialog.Portal>
       <BaseDialog.Backdrop className="sc-dialog__backdrop" />
       <BaseDialog.Popup
         className={cx('sc-dialog__popup', className)}
         data-size={size}
+        data-variant={variant}
         aria-modal="true"
         {...rest}
       >
@@ -88,7 +102,7 @@ function Description({ className, ...rest }: DialogDescriptionProps) {
 
 export type DialogBodyProps = ComponentPropsWithRef<'div'>;
 
-/** Free content between the description and the actions. */
+/** Free content between the description and the actions. In a `sheet` it is the part that scrolls. */
 function Body({ className, ...rest }: DialogBodyProps) {
   return <div className={cx('sc-dialog__body', className)} {...rest} />;
 }
