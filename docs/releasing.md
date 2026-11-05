@@ -116,6 +116,14 @@ variable; nothing is published half-way.
    pnpm add @salemcobalt/tokens@next @salemcobalt/ui@next
    ```
 
+   **Stacked PRs: merge one at a time and wait for GitHub to retarget the next.** A PR whose base is
+   another PR's branch is retargeted to `main` only after that branch is merged _and deleted_, and the
+   retarget takes a moment. Merging the second PR before its base line reads `into main` lands its
+   commits on the first PR's branch, not on `main`: no release runs, and the branch deletion then
+   auto-closes every PR further up the stack. If that happens, open a fresh PR against `main` from the
+   topmost branch (it carries the whole stack) and label it once; nothing needs reverting. Only the
+   release run reads `main`, so squash and merge commits both work, but the base must be `main`.
+
 3. When `main` is ready, open a PR from `main` into `release` and merge it **with a merge commit** (not
    squash), so `release` keeps `main`'s history and the merge-back only adds the version commit.
 4. The `release` run tags `vX.Y.Z`, publishes to `latest`, writes `CHANGELOG.md`, creates the GitHub
