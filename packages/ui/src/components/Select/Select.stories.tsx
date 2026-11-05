@@ -4,6 +4,7 @@ import { Select } from './Select';
 import { Stack } from '../Stack/Stack';
 import { Inline } from '../Inline/Inline';
 import { Text } from '../Text/Text';
+import { Button } from '../Button/Button';
 import { Compact, DarkTheme } from '../../stories/helpers';
 
 const sortOptions = [
@@ -101,4 +102,32 @@ export const Dark: Story = {
       </Stack>
     </DarkTheme>
   ),
+};
+
+function Clearable() {
+  const [value, setValue] = useState<string | null>('date');
+  return (
+    <Stack gap="xs">
+      <Select
+        label="Sort by"
+        options={sortOptions}
+        value={value}
+        onValueChange={setValue}
+        clearable
+        fullWidth
+      />
+      <Inline gap="xs">
+        <Text tone="muted">Value: {String(value)}</Text>
+        <Button size="sm" variant="ghost" onClick={() => setValue(null)}>
+          Set null from outside
+        </Button>
+      </Inline>
+    </Stack>
+  );
+}
+
+/** `value={null}` shows the placeholder; `clearable` adds an × (and Backspace/Delete on the trigger) that calls `onValueChange(null)`. */
+export const ClearableStory: Story = {
+  name: 'Nullable and clearable',
+  render: () => <Clearable />,
 };

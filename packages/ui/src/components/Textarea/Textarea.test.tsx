@@ -33,4 +33,15 @@ describe('Textarea', () => {
     await userEvent.type(el, 'hi');
     expect(onValueChange).toHaveBeenLastCalledWith('hi');
   });
+
+  it('variant="code" turns off spellcheck, autocorrect and autocapitalize and keeps native wrap', async () => {
+    const { container } = render(<Textarea label="Markdown" variant="code" wrap="off" />);
+    const textarea = screen.getByLabelText('Markdown');
+    expect(textarea).toHaveAttribute('data-variant', 'code');
+    expect(textarea).toHaveAttribute('spellcheck', 'false');
+    expect(textarea).toHaveAttribute('autocorrect', 'off');
+    expect(textarea).toHaveAttribute('autocapitalize', 'off');
+    expect(textarea).toHaveAttribute('wrap', 'off');
+    await expectNoA11yViolations(container);
+  });
 });

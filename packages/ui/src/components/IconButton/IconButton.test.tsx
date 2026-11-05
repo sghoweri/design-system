@@ -4,6 +4,10 @@ import { IconButton } from './IconButton';
 import { PauseIcon } from '../../icons/icons.gen';
 import { expectNoA11yViolations } from '../../../test/axe';
 
+// The anchor gets its name and icon from IconButton through `render`.
+// eslint-disable-next-line jsx-a11y/anchor-has-content
+const settingsLink = <a href="/settings" />;
+
 describe('IconButton', () => {
   it('is a native button named by label, ghost and md by default, with a hidden icon', async () => {
     const { container } = render(
@@ -72,5 +76,19 @@ describe('IconButton', () => {
     );
     await user.tab();
     expect(await screen.findByRole('tooltip')).toHaveTextContent('Pause my sweeps (P)');
+  });
+
+  it('renders a link through render, keeping the name, look and no type attribute', async () => {
+    const { container } = render(
+      <IconButton label="Settings" render={settingsLink} variant="secondary">
+        <PauseIcon />
+      </IconButton>,
+    );
+    const link = screen.getByRole('link', { name: 'Settings' });
+    expect(link).toHaveAttribute('href', '/settings');
+    expect(link).toHaveClass('sc-button', 'sc-icon-button');
+    expect(link).toHaveAttribute('data-variant', 'secondary');
+    expect(link).not.toHaveAttribute('type');
+    await expectNoA11yViolations(container);
   });
 });

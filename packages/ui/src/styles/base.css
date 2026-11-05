@@ -7,6 +7,7 @@
 .sc-input:focus-visible,
 .sc-select:focus-visible,
 .sc-select__item:focus-visible,
+.sc-select__clear:focus-visible,
 .sc-checkbox:focus-visible,
 .sc-switch:focus-visible,
 .sc-tabs__tab:focus-visible,

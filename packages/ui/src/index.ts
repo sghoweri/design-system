@@ -68,7 +68,7 @@ export {
 } from './components/Menu/Menu';
 export type { ControlSize, FieldProps } from './components/Field/FieldShell';
 export { Input, type InputProps } from './components/Input/Input';
-export { Textarea, type TextareaProps } from './components/Textarea/Textarea';
+export { Textarea, type TextareaProps, type TextareaVariant } from './components/Textarea/Textarea';
 export { Select, type SelectGroup, type SelectOption, type SelectProps } from './components/Select/Select';
 export { Checkbox, type CheckboxProps } from './components/Checkbox/Checkbox';
 export { Switch, type SwitchProps } from './components/Switch/Switch';
@@ -83,6 +83,7 @@ export {
   Toolbar,
   type ToolbarButtonProps,
   type ToolbarGroupProps,
+  type ToolbarLinkProps,
   type ToolbarRootProps,
   type ToolbarSeparatorProps,
   type ToolbarSpacerProps,
@@ -134,5 +135,7 @@ export {
   type StatTrend,
   type StatVariant,
 } from './components/Stat/Stat';
+export { Chip, type ChipProps, type ChipSize, type ChipTone } from './components/Chip/Chip';
+export { Disclosure, type DisclosureProps } from './components/Disclosure/Disclosure';
 export type { SpacingSize } from './types';
 export const version = '0.1.1';
