@@ -4,6 +4,8 @@ import { Tooltip, type TooltipSide } from '../Tooltip/Tooltip';
 import type { ButtonSize, ButtonVariant } from '../Button/Button';
 import { cx } from '../../utils/cx';
 
+export type IconButtonDotTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
+
 export interface IconButtonProps extends Omit<useRender.ComponentProps<'button'>, 'children' | 'aria-label'> {
   /** Required. The accessible name, and the tooltip text when `tooltip` is `true`. */
   label: string;
@@ -21,6 +23,8 @@ export interface IconButtonProps extends Omit<useRender.ComponentProps<'button'>
   round?: boolean | undefined;
   /** Shows a spinner, sets `aria-busy` and ignores clicks. */
   loading?: boolean | undefined;
+  /** A status dot in the top-left corner, ringed in `--sc-icon-button-dot-ring` (default `surface-default`). Decorative: put the status in `label` too ("Sweeps: paused"). */
+  dot?: IconButtonDotTone | undefined;
 }
 
 /**
@@ -37,6 +41,7 @@ export function IconButton({
   tooltipSide = 'top',
   round = false,
   loading = false,
+  dot,
   type,
   className,
   onClick,
@@ -73,6 +78,7 @@ export function IconButton({
             {children}
           </span>
           {loading ? <span className="sc-button__spinner" aria-hidden="true" /> : null}
+          {dot ? <span className="sc-icon-button__dot" data-tone={dot} aria-hidden="true" /> : null}
         </>
       ),
     },

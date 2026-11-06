@@ -43,7 +43,7 @@ export {
 export { Icon, type IconGlyphProps, type IconProps, type IconSize } from './components/Icon/Icon';
 export * from './icons/icons.gen';
 export { iconNames, type IconName } from './icons/icon-names.gen';
-export { IconButton, type IconButtonProps } from './components/IconButton/IconButton';
+export { IconButton, type IconButtonDotTone, type IconButtonProps } from './components/IconButton/IconButton';
 export {
   Tooltip,
   type TooltipAlign,
@@ -75,6 +75,7 @@ export { Switch, type SwitchProps } from './components/Switch/Switch';
 export {
   Tabs,
   type TabsListProps,
+  type TabsListVariant,
   type TabsPanelProps,
   type TabsRootProps,
   type TabsTabProps,
@@ -148,3 +149,21 @@ export { Skeleton, type SkeletonProps, type SkeletonVariant } from './components
 export type { SpacingSize } from './types';
 export const version = '0.1.1';
 export { FileInput, type FileInputProps } from './components/FileInput/FileInput';
+export {
+  PriorityNav,
+  type PriorityNavItem,
+  type PriorityNavLinkProps,
+  type PriorityNavProps,
+} from './components/PriorityNav/PriorityNav';
+export {
+  Popover,
+  type PopoverAlign,
+  type PopoverCloseProps,
+  type PopoverContentProps,
+  type PopoverDescriptionProps,
+  type PopoverRootProps,
+  type PopoverSide,
+  type PopoverTitleProps,
+  type PopoverTriggerProps,
+} from './components/Popover/Popover';
+export { BroomIcon, type BroomIconProps } from './components/BroomIcon/BroomIcon';

@@ -11,6 +11,9 @@ tooltip.css
 menu.css
 field.css
 tabs.css
+priority-nav.css
+popover.css
+broom-icon.css
 toolbar.css
 banner.css
 progress.css

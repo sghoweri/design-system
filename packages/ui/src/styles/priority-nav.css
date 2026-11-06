@@ -1,0 +1,164 @@
+/* ---- PriorityNav ----------------------------------------------------------- */
+/* Takes the free space in a flex header (brand · nav · actions) without sizing to its own links, so the
+   row can grow back after collapsing. In a grid, give it a `minmax(0, 1fr)` track. */
+.sc-priority-nav {
+  position: relative;
+  flex: 1 1 0%;
+  min-inline-size: 0;
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+}
+.sc-priority-nav__list {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--sc-spacing-2xs);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sc-priority-nav__item,
+.sc-priority-nav__more {
+  flex: none;
+  display: flex;
+}
+.sc-priority-nav__more[hidden] {
+  display: none;
+}
+/* Once measured, the current link is the one item that may shrink (ellipsis) when the row cannot hold it
+   and "More". While measuring it keeps its full width like the others. */
+.sc-priority-nav:not([data-measuring]) .sc-priority-nav__item[data-current] {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+}
+/* Before measurement (server HTML, pre-hydration, no JS): one line that never wraps. With JS the line
+   clips for the few frames before hydration measures it; without JS it scrolls sideways (below). */
+.sc-priority-nav[data-measuring] > .sc-priority-nav__list {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.sc-priority-nav[data-measuring] .sc-priority-nav__more[hidden] {
+  display: flex;
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+@media (scripting: none) {
+  .sc-priority-nav[data-measuring] > .sc-priority-nav__list {
+    scrollbar-width: thin;
+  }
+}
+.sc-priority-nav__link,
+.sc-priority-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-2xs);
+  box-sizing: border-box;
+  block-size: var(--sc-size-control-sm);
+  margin: 0;
+  padding-inline: var(--sc-spacing-sm);
+  border: 0;
+  border-radius: var(--sc-radius-sm);
+  background: transparent;
+  color: var(--sc-color-text-muted);
+  font: inherit;
+  font-weight: var(--sc-font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-ease-standard),
+    color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-priority-nav__link {
+  min-inline-size: 0;
+}
+.sc-priority-nav__label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sc-priority-nav__link:hover,
+.sc-priority-nav__toggle:hover {
+  background: var(--sc-color-surface-hover);
+  color: var(--sc-color-text-default);
+}
+.sc-priority-nav__link:active,
+.sc-priority-nav__toggle:active {
+  background: var(--sc-color-surface-active);
+}
+.sc-priority-nav__link[aria-current='page'] {
+  color: var(--sc-color-text-default);
+  box-shadow: inset 0 calc(-1 * var(--sc-border-width-focus)) 0 var(--sc-color-accent-default);
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+.sc-priority-nav__link:focus-visible,
+.sc-priority-nav__toggle:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: calc(-1 * var(--sc-border-width-focus));
+}
+.sc-priority-nav__toggle[aria-expanded='true'] {
+  background: var(--sc-color-surface-active);
+  color: var(--sc-color-text-default);
+}
+.sc-priority-nav__chevron {
+  transition: rotate var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-priority-nav__toggle[aria-expanded='true'] > .sc-priority-nav__chevron {
+  rotate: 180deg;
+}
+/* The panel: Menu's surface, a list of the collapsed links under the toggle, aligned to its end edge. */
+.sc-priority-nav__more {
+  position: relative;
+}
+.sc-priority-nav__panel {
+  position: absolute;
+  z-index: var(--sc-z-dropdown);
+  inset-block-start: calc(100% + var(--sc-spacing-2xs));
+  inset-inline-end: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-inline-size: 180px;
+  max-inline-size: min(100vw - 2 * var(--sc-spacing-md), 320px);
+  margin: 0;
+  padding: var(--sc-spacing-2xs);
+  list-style: none;
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-surface-raised);
+  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
+  --sc-color-surface-active: var(--sc-color-surface-raised-active);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  box-shadow: var(--sc-elevation-2);
+  transition:
+    opacity var(--sc-duration-fast) var(--sc-ease-enter),
+    translate var(--sc-duration-fast) var(--sc-ease-enter);
+}
+@starting-style {
+  .sc-priority-nav__panel {
+    opacity: 0;
+    translate: 0 calc(-1 * var(--sc-spacing-2xs));
+  }
+}
+.sc-priority-nav__panel[hidden] {
+  display: none;
+}
+.sc-priority-nav__panel .sc-priority-nav__link {
+  display: flex;
+  inline-size: 100%;
+  padding-inline: var(--sc-spacing-xs);
+  color: var(--sc-color-text-default);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-priority-nav__link,
+  .sc-priority-nav__toggle,
+  .sc-priority-nav__chevron,
+  .sc-priority-nav__panel {
+    transition: none;
+  }
+}

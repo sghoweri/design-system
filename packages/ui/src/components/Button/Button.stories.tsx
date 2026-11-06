@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from './Button';
 import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
+import { Kbd } from '../Kbd/Kbd';
 import { PlusIcon } from '../../icons/icons.gen';
+import { DarkTheme } from '../../stories/helpers';
 
 const meta = {
   title: 'Components/Button',
@@ -55,6 +57,47 @@ export const States: Story = {
       <Button fullWidth variant="secondary">
         Full width
       </Button>
+    </Stack>
+  ),
+};
+
+function ShortcutRow() {
+  return (
+    <Inline gap="sm">
+      <Button iconStart={<PlusIcon />} shortcut={<Kbd>N</Kbd>} aria-keyshortcuts="n">
+        Add a job
+      </Button>
+      <Button variant="secondary" shortcut={<Kbd>R</Kbd>} aria-keyshortcuts="r">
+        Refresh
+      </Button>
+      <Button variant="ghost" size="sm" shortcut={<Kbd>E</Kbd>} aria-keyshortcuts="e">
+        Archive
+      </Button>
+      <Button
+        variant="secondary"
+        shortcut={
+          <Kbd.Group label="Command K">
+            <Kbd>⌘</Kbd>
+            <Kbd>K</Kbd>
+          </Kbd.Group>
+        }
+        aria-keyshortcuts="Meta+K"
+      >
+        Search
+      </Button>
+    </Inline>
+  );
+}
+
+/** `shortcut` shows a Kbd hint after the label, tinted to the button. It is hidden from the accessible name; announce the key with `aria-keyshortcuts`. */
+export const Shortcut: Story = {
+  name: 'Shortcut hint',
+  render: () => (
+    <Stack gap="md">
+      <ShortcutRow />
+      <DarkTheme>
+        <ShortcutRow />
+      </DarkTheme>
     </Stack>
   ),
 };

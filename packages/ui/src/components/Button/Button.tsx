@@ -17,6 +17,8 @@ export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   loading?: boolean | undefined;
   /** Stretches to the container. */
   fullWidth?: boolean | undefined;
+  /** A keyboard hint after the label: `shortcut={<Kbd>N</Kbd>}`. Hidden from assistive tech; announce the key with `aria-keyshortcuts="n"`. */
+  shortcut?: ReactNode | undefined;
 }
 
 /** The one way to trigger an action. Renders a native `<button>`; `type` defaults to `button`. */
@@ -27,6 +29,7 @@ export function Button({
   iconEnd,
   loading = false,
   fullWidth = false,
+  shortcut,
   type = 'button',
   className,
   children,
@@ -61,6 +64,11 @@ export function Button({
       {iconEnd ? (
         <span className="sc-button__icon" aria-hidden="true">
           {iconEnd}
+        </span>
+      ) : null}
+      {shortcut ? (
+        <span className="sc-button__shortcut" aria-hidden="true">
+          {shortcut}
         </span>
       ) : null}
       {loading ? <span className="sc-button__spinner" aria-hidden="true" /> : null}
