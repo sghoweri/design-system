@@ -199,6 +199,47 @@
   cursor: not-allowed;
 }
 
+/* The file's name as a preview button (FileInput `preview`): a foreign node placed before FilePond's info,
+   which keeps its size line; FilePond's own name span hides while the button is there. FilePond turns
+   pointer events off inside rows, so the button turns them back on. */
+.sc-file-input .filepond--file:has(> .sc-file-input__preview) .filepond--file-info-main {
+  display: none;
+}
+/* With the name in the button, the info holds only the size: it keeps its width (and its margin clear of
+   the ×) and the button's name truncates instead. */
+.sc-file-input .filepond--file:has(> .sc-file-input__preview) .filepond--file-info {
+  flex: none;
+}
+.sc-file-input .sc-file-input__preview {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  margin: 0 var(--sc-spacing-xs) 0 calc(-1 * var(--sc-spacing-3xs));
+  padding: 0 var(--sc-spacing-3xs);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--sc-radius-sm);
+  background: transparent;
+  color: var(--sc-color-text-link);
+  font: inherit;
+  font-weight: var(--sc-font-weight-medium);
+  line-height: var(--sc-font-line-height-ui);
+  text-align: start;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-underline-offset: 0.2em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.sc-file-input .sc-file-input__preview:hover {
+  text-decoration-color: currentColor;
+}
+.sc-file-input .sc-file-input__preview:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: 0;
+}
+
 /* The message slot stays in the tree (it is the live region); out of the flow while empty. */
 .sc-file-input__messages {
   display: flex;

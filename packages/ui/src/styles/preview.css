@@ -28,6 +28,7 @@
 @import './skeleton.css';
 @import 'filepond/dist/filepond.css';
 @import './file-input.css';
+@import './file-preview-dialog.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);

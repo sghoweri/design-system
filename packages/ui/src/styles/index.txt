@@ -27,3 +27,4 @@ empty-state.css
 skeleton.css
 filepond/dist/filepond.css
 file-input.css
+file-preview-dialog.css

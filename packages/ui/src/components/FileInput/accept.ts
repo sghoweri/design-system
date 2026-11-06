@@ -33,12 +33,25 @@ export function parseSize(size: number | string | undefined): number | undefined
   return Math.round(Number(match[1]) * UNITS[match[2]!.toLowerCase()]!);
 }
 
-/** `1500000` → `1.5 MB`. Base 1000, at most one decimal, matching FilePond's own size line. */
+/** `1500000` → `1.5 MB`. Base 1000, at most one decimal; precise enough for a size limit message. */
 export function formatSize(bytes: number): string {
   const [unit, base] =
     bytes >= 1e9 ? ['GB', 1e9] : bytes >= 1e6 ? ['MB', 1e6] : bytes >= 1e3 ? ['KB', 1e3] : ['bytes', 1];
   const value = bytes / base;
   return `${Number.isInteger(value) ? value : Number(value.toFixed(1))} ${unit}`;
+}
+
+/**
+ * A file's size exactly as FilePond writes it in the list (whole KB rounded down, MB to one decimal, GB to
+ * two), so the preview dialog agrees with the row it was opened from.
+ */
+export function formatListSize(bytes: number): string {
+  const n = Math.round(Math.abs(bytes));
+  const trim = (value: number, decimals: number) => value.toFixed(decimals).replace(/\.0+$/, '');
+  if (n < 1e3) return `${n} bytes`;
+  if (n < 1e6) return `${Math.floor(n / 1e3)} KB`;
+  if (n < 1e9) return `${trim(n / 1e6, 1)} MB`;
+  return `${trim(n / 1e9, 2)} GB`;
 }
 
 const MIME_NAMES: Record<string, string> = {
@@ -95,4 +108,39 @@ export function escapeHtml(text: string): string {
     /[&<>"']/g,
     (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]!,
   );
+}
+
+/** What a file can be previewed as before upload, or `null` when it cannot. */
+export type FilePreviewKind = 'pdf' | 'text' | 'image';
+
+const extensionOf = (name: string) => {
+  const dot = name.lastIndexOf('.');
+  return dot > 0 ? name.slice(dot + 1).toLowerCase() : '';
+};
+const TEXT_EXTENSIONS = new Set(['txt', 'text', 'md', 'markdown']);
+const TEXT_TYPES = new Set(['text/plain', 'text/markdown', 'text/x-markdown']);
+const IMAGE_EXTENSIONS = new Set(['png', 'jpg', 'jpeg', 'gif', 'webp', 'avif', 'svg', 'bmp']);
+// Image types most browsers cannot draw in an <img>.
+const UNDRAWABLE_IMAGE_TYPES = new Set(['image/heic', 'image/heif', 'image/tiff']);
+
+/**
+ * Classifies a file by extension or MIME type, as `accept` does. Only these three are previewed: a PDF in
+ * the browser's viewer, plain text and Markdown as text, images in an `<img>`. Everything else (DOCX, HTML,
+ * unknown types) is `null`: a blob URL runs with the page's origin, so nothing else is ever framed.
+ */
+export function previewKind(file: { name: string; type: string }): FilePreviewKind | null {
+  const ext = extensionOf(file.name);
+  const type = file.type.toLowerCase();
+  if (ext === 'pdf' || type === 'application/pdf') return 'pdf';
+  if (TEXT_EXTENSIONS.has(ext) || TEXT_TYPES.has(type)) return 'text';
+  if (UNDRAWABLE_IMAGE_TYPES.has(type)) return null;
+  if (IMAGE_EXTENSIONS.has(ext) || type.startsWith('image/')) return 'image';
+  return null;
+}
+
+/** A short type name for a file: `PDF`, `MD`, or the MIME subtype when there is no extension. */
+export function fileTypeLabel(file: { name: string; type: string }): string {
+  const ext = extensionOf(file.name);
+  if (ext) return ext.toUpperCase();
+  return MIME_NAMES[file.type.toLowerCase()] ?? (file.type.split('/').pop()?.toUpperCase() || 'File');
 }
