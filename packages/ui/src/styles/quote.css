@@ -1,0 +1,29 @@
+/* ---- Quote ----------------------------------------------------------------- */
+/* Label and words on one line, on the accent wash with the accent border (both from the plain Card selected
+   state), so an echoed instruction reads as "yours" next to what changed. */
+.sc-quote {
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--sc-spacing-xs) var(--sc-spacing-sm);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-accent-border);
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-accent-wash);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  color: var(--sc-color-text-muted);
+}
+.sc-quote__label {
+  display: inline;
+  margin-inline-end: var(--sc-spacing-xs);
+  font-family: var(--sc-font-family-mono);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-font-tracking-wider);
+  text-transform: uppercase;
+  color: var(--sc-color-accent-text);
+}
+.sc-quote__text {
+  display: inline;
+  margin: 0;
+}

@@ -17,7 +17,7 @@ export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   loading?: boolean | undefined;
   /** Stretches to the container. */
   fullWidth?: boolean | undefined;
-  /** A keyboard hint after the label: `shortcut={<Kbd>N</Kbd>}`. Hidden from assistive tech; announce the key with `aria-keyshortcuts="n"`. */
+  /** A keyboard hint after the label: `shortcut={<Kbd>N</Kbd>}`. Hidden from assistive tech; announce the key with `aria-keyshortcuts="n"`. Not shown on devices with no fine pointer (touch only). */
   shortcut?: ReactNode | undefined;
   /** Shows only `iconStart` (or `iconEnd`) in a square button; the label stays the accessible name and the shortcut hides. Toggles without remounting, e.g. when a header runs out of room. Pair with a Tooltip carrying the label. */
   iconOnly?: boolean | undefined;

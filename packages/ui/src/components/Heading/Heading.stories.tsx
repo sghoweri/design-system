@@ -10,7 +10,10 @@ const meta = {
   args: { level: 2, children: 'Senior Design Systems Engineer', tone: 'default', truncate: false },
   argTypes: {
     level: { control: 'radio', options: [1, 2, 3, 4, 5, 6] },
-    size: { control: 'select', options: [undefined, 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'] },
+    size: {
+      control: 'select',
+      options: [undefined, 'overline', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl'],
+    },
     tone: {
       control: 'select',
       options: ['default', 'muted', 'subtle', 'accent', 'success', 'warning', 'danger', 'info'],
@@ -47,6 +50,18 @@ export const Sizes: Story = {
       <Heading level={3} size="sm" tone="muted">
         An h3 at sm, muted: a section label
       </Heading>
+    </Stack>
+  ),
+};
+
+/** `overline`: a 12px uppercase mono section label with wide tracking, muted unless a tone is set. Keep the level real. */
+export const Overline: Story = {
+  render: () => (
+    <Stack gap="2xs" style={{ maxWidth: 360 }}>
+      <Heading level={3} size="overline">
+        Why it fits
+      </Heading>
+      <Text tone="muted">The design system is the product here, with a platform team behind it.</Text>
     </Stack>
   ),
 };

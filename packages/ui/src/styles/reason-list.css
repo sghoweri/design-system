@@ -1,0 +1,63 @@
+/* ---- ReasonList ------------------------------------------------------------ */
+/* Marker shape per tone: for = filled square, against = bar, gap = hollow circle. Markers use the tone's solid,
+   3:1 on every surface; the shape carries the meaning on its own (WCAG 1.4.1). */
+.sc-reason-list {
+  --_m: 9px;
+  --_marker: var(--sc-color-success-solid);
+  display: grid;
+  gap: var(--sc-spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  color: var(--sc-color-text-muted);
+}
+.sc-reason-list[data-size='sm'] {
+  --_m: 7px;
+  gap: var(--sc-spacing-2xs);
+  font-size: var(--sc-font-size-xs);
+}
+.sc-reason-list[data-divider] {
+  padding-block-start: var(--sc-spacing-xs);
+  border-block-start: var(--sc-border-width-hairline) dashed var(--sc-color-border-default);
+}
+.sc-reason-list[data-tone='against'] {
+  --_marker: var(--sc-color-danger-solid);
+}
+.sc-reason-list[data-tone='gap'] {
+  --_marker: var(--sc-color-warning-solid);
+}
+.sc-reason-list__item {
+  position: relative;
+  padding-inline-start: calc(var(--_m) + var(--sc-spacing-xs));
+}
+/* Centred on the first line: half the line box less half the marker. */
+.sc-reason-list__item::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0.45em;
+  inset-block-start: calc((1lh - var(--_m)) / 2);
+  box-sizing: border-box;
+  inline-size: var(--_m);
+  block-size: var(--_m);
+  border-radius: var(--sc-radius-xs);
+  background: var(--_marker);
+}
+.sc-reason-list[data-tone='against'] > .sc-reason-list__item::before {
+  inset-block-start: 0.6em;
+  inset-block-start: calc((1lh - var(--_m) / 3) / 2);
+  block-size: calc(var(--_m) / 3);
+  border-radius: var(--sc-radius-full);
+}
+.sc-reason-list[data-tone='gap'] > .sc-reason-list__item::before {
+  background: transparent;
+  border: var(--sc-border-width-focus) solid var(--_marker);
+  border-radius: var(--sc-radius-full);
+}
+.sc-reason-list__item :where(strong, b) {
+  font-weight: var(--sc-font-weight-semibold);
+  color: var(--sc-color-text-default);
+}

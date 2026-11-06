@@ -118,6 +118,11 @@
         "$value": "0.04em",
         "$type": "dimension",
         "$description": "Uppercase labels."
+      },
+      "wider": {
+        "$value": "0.07em",
+        "$type": "dimension",
+        "$description": "Uppercase mono overlines (Heading size overline)."
       }
     },
     "measure": {

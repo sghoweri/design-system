@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 import { Card } from './Card';
 import { Badge } from '../Badge/Badge';
 import { Inline } from '../Inline/Inline';
@@ -19,7 +20,7 @@ const meta: Meta<typeof Card> = {
   component: Card,
   args: { variant: 'outlined', padding: 'md', interactive: false, selected: false },
   argTypes: {
-    variant: { control: 'radio', options: ['outlined', 'elevated', 'filled'] },
+    variant: { control: 'radio', options: ['outlined', 'elevated', 'filled', 'plain'] },
     padding: { control: 'radio', options: ['none', 'sm', 'md', 'lg'] },
   },
   decorators: [(Story) => <div style={{ maxWidth: 360 }}>{Story()}</div>],
@@ -81,6 +82,40 @@ export const Interactive: Story = {
       </Card>
     </Stack>
   ),
+};
+
+/**
+ * `plain` is a quiet list row: no surface, a hover wash with no border or shadow (so a long list does not flicker),
+ * and when selected the accent wash with a 1px accent border. Render it as a real `button` with `aria-pressed`.
+ */
+export const Plain: Story = {
+  render: function PlainRows() {
+    const [selected, setSelected] = useState('b');
+    const rows = [
+      { id: 'a', title: 'Design Engineer' },
+      { id: 'b', title: 'Senior DS Engineer' },
+      { id: 'c', title: 'Frontend Platform Lead' },
+    ];
+    return (
+      <Stack gap="3xs" as="ul" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+        {rows.map((row) => (
+          <li key={row.id}>
+            <Card
+              render={<button type="button" />}
+              variant="plain"
+              padding="sm"
+              interactive
+              selected={row.id === selected}
+              aria-pressed={row.id === selected}
+              onClick={() => setSelected(row.id)}
+            >
+              <Job title={row.title} />
+            </Card>
+          </li>
+        ))}
+      </Stack>
+    );
+  },
 };
 
 export const Padding: Story = {

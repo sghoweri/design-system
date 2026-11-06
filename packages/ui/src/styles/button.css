@@ -174,6 +174,13 @@
 .sc-button[data-loading] > .sc-button__shortcut {
   opacity: 0;
 }
+/* No hint where there is no fine pointer (phones, tablets without a trackpad): touch users rarely have the keys,
+   and the hint costs width. A tablet with a trackpad (any-pointer: fine) keeps it. `aria-keyshortcuts` stays. */
+@media not all and (any-pointer: fine) {
+  .sc-button__shortcut {
+    display: none;
+  }
+}
 @keyframes sc-spin {
   to {
     rotate: 1turn;

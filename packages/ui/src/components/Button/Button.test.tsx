@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from './Button';
@@ -89,5 +91,13 @@ describe('Button', () => {
     expect(screen.getByRole('button', { name: 'Add item' })).toBe(button);
     expect(button).toHaveAttribute('data-icon-only', 'true');
     expect(button).toHaveAttribute('aria-keyshortcuts', 'n');
+  });
+
+  it('hides the shortcut hint where there is no fine pointer, in the stylesheet', () => {
+    // jsdom loads no CSS and cannot emulate pointers, so check the rule itself.
+    const css = readFileSync(join(__dirname, '../../styles/button.css'), 'utf8');
+    expect(css).toMatch(
+      /@media not all and \(any-pointer: fine\) \{\s*\.sc-button__shortcut \{\s*display: none;/,
+    );
   });
 });

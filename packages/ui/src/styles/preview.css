@@ -30,6 +30,10 @@
 @import './file-input.css';
 @import './file-preview-dialog.css';
 @import './full-screen-flow.css';
+@import './score.css';
+@import './reason-list.css';
+@import './word-diff.css';
+@import './quote.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);

@@ -39,6 +39,16 @@
   line-height: var(--sc-font-line-height-tight);
   letter-spacing: var(--sc-font-tracking-tight);
 }
+/* Overline: a section label. 12px uppercase mono with wide tracking; muted unless a tone is set. */
+.sc-heading[data-size='overline'] {
+  font-family: var(--sc-font-family-mono);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  line-height: var(--sc-font-line-height-snug);
+  letter-spacing: var(--sc-font-tracking-wider);
+  text-transform: uppercase;
+  text-wrap: wrap;
+}
 .sc-heading[data-truncate] {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -82,6 +92,9 @@
 }
 .sc-text[data-numeric] {
   font-variant-numeric: tabular-nums;
+}
+.sc-text[data-family='mono'] {
+  font-family: var(--sc-font-family-mono);
 }
 .sc-text[data-truncate=''] {
   overflow: hidden;

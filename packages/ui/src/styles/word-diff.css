@@ -1,0 +1,40 @@
+/* ---- WordDiff -------------------------------------------------------------- */
+/* Strike-through and underline carry the meaning; the tint only groups the words. Both lines are 3:1 on their tint
+   (diff.*-stroke on diff.*-wash) in light and dark. */
+.sc-word-diff {
+  margin: 0;
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-normal);
+  color: var(--sc-color-text-default);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sc-word-diff[data-size='md'] {
+  font-size: var(--sc-font-size-md);
+}
+p.sc-word-diff,
+div.sc-word-diff {
+  max-inline-size: var(--sc-font-measure);
+}
+.sc-word-diff__added,
+.sc-word-diff__removed {
+  padding-inline: var(--sc-spacing-3xs);
+  border-radius: var(--sc-radius-xs);
+  text-decoration-thickness: var(--sc-border-width-focus);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.sc-word-diff__added {
+  background: var(--sc-color-diff-added-wash);
+  color: var(--sc-color-text-default);
+  text-decoration-line: underline;
+  text-decoration-color: var(--sc-color-diff-added-stroke);
+  text-underline-offset: 0.2em;
+}
+.sc-word-diff__removed {
+  background: var(--sc-color-diff-removed-wash);
+  color: var(--sc-color-text-muted);
+  text-decoration-line: line-through;
+  text-decoration-color: var(--sc-color-diff-removed-stroke);
+}
