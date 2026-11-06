@@ -113,6 +113,10 @@
 .sc-button[data-loading] > .sc-button__label {
   opacity: 0;
 }
+/* Its own line box, so descenders sit inside the label (the button sets line-height: 1 for centring). */
+.sc-button__label {
+  line-height: var(--sc-font-line-height-ui);
+}
 .sc-button__icon {
   display: inline-flex;
   inline-size: 1.125em;
@@ -131,6 +135,23 @@
   border: var(--sc-border-width-focus) solid currentColor;
   border-inline-end-color: transparent;
   animation: sc-spin 0.8s linear infinite;
+}
+/* Icon-only: square, the label kept for assistive tech only, no shortcut hint. Same element, so focus and
+   any open tooltip survive the switch. */
+.sc-button[data-icon-only] {
+  inline-size: var(--_h);
+  padding-inline: 0;
+}
+.sc-button[data-icon-only] > .sc-button__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.sc-button[data-icon-only] > .sc-button__shortcut {
+  display: none;
 }
 /* A shortcut hint after the label: a Kbd tinted to the button's own colour, so it reads on every variant. */
 .sc-button__shortcut {

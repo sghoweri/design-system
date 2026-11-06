@@ -19,6 +19,8 @@ export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   fullWidth?: boolean | undefined;
   /** A keyboard hint after the label: `shortcut={<Kbd>N</Kbd>}`. Hidden from assistive tech; announce the key with `aria-keyshortcuts="n"`. */
   shortcut?: ReactNode | undefined;
+  /** Shows only `iconStart` (or `iconEnd`) in a square button; the label stays the accessible name and the shortcut hides. Toggles without remounting, e.g. when a header runs out of room. Pair with a Tooltip carrying the label. */
+  iconOnly?: boolean | undefined;
 }
 
 /** The one way to trigger an action. Renders a native `<button>`; `type` defaults to `button`. */
@@ -30,6 +32,7 @@ export function Button({
   loading = false,
   fullWidth = false,
   shortcut,
+  iconOnly = false,
   type = 'button',
   className,
   children,
@@ -51,6 +54,7 @@ export function Button({
       data-size={size}
       data-loading={loading || undefined}
       data-full-width={fullWidth || undefined}
+      data-icon-only={iconOnly || undefined}
       aria-busy={loading || undefined}
       onClick={handleClick}
       {...rest}

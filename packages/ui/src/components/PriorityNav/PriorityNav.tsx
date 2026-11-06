@@ -6,13 +6,15 @@ import {
   useState,
   type ComponentPropsWithRef,
   type FocusEvent,
+  type CSSProperties,
   type MouseEventHandler,
   type ReactElement,
   type ReactNode,
 } from 'react';
-import { ChevronDownIcon } from '../../icons/icons.gen';
+import { ChevronDownIcon, MoreHorizontalIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
-import { fitCount, inlineFlags } from './fit';
+import { fitCount, inlineFlags, isOverflowing } from './fit';
+import { placePanel } from './place';
 
 export interface PriorityNavItem {
   /** Where the link goes. */
@@ -45,11 +47,28 @@ export interface PriorityNavProps extends Omit<ComponentPropsWithRef<'nav'>, 'ch
   moreCountLabel?: ((hidden: number) => string) | undefined;
   /** Renders each link. Default a plain `<a>`; pass a router link: `(props) => <Link {...props} />`. */
   renderLink?: ((props: PriorityNavLinkProps, item: PriorityNavItem) => ReactElement) | undefined;
+  /**
+   * Called when links start or stop collapsing into "More" (also `data-overflowing` on the `nav`), so a
+   * header can make room, e.g. an action button going icon-only.
+   */
+  onOverflowChange?: ((overflowing: boolean) => void) | undefined;
+  /**
+   * Room in px the row must have beyond fitting every link before it stops reporting overflow. Set it to
+   * the space your header gives back on overflow (the button label's width), so the two cannot oscillate.
+   * Default 0.
+   */
+  overflowHysteresis?: number | undefined;
 }
 
 const defaultCountLabel = (n: number) => (n === 1 ? '1 link' : `${n} links`);
 const defaultLink = ({ children, ...props }: PriorityNavLinkProps) => <a {...props}>{children}</a>;
 const keyOf = (item: PriorityNavItem) => item.id ?? item.href;
+
+/** CSS anchor positioning places the panel where it exists; elsewhere `placePanel` does, from JS. */
+const supportsAnchor = () =>
+  typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('anchor-name: --a');
+/** The Popover API puts the panel in the top layer, above every ancestor's overflow clip. */
+const supportsPopover = (el: HTMLElement) => typeof el.showPopover === 'function';
 
 /** Widths are re-measured when this changes: the keys and any string labels, in order. */
 function signatureOf(items: readonly PriorityNavItem[]): string {
@@ -68,6 +87,8 @@ interface Fit {
   current: number;
   /** How many non-current items are inline (`fitCount`). */
   count: number;
+  /** Latched overflow signal (`isOverflowing`). */
+  overflowing: boolean;
 }
 
 interface Measured {
@@ -89,20 +110,32 @@ export function PriorityNav({
   moreLabel = 'More',
   moreCountLabel = defaultCountLabel,
   renderLink = defaultLink,
+  onOverflowChange,
+  overflowHysteresis = 0,
   className,
+  style,
   ...rest
 }: PriorityNavProps) {
   const signature = signatureOf(items);
   const current = items.findIndex((item) => item.current);
-  const [fit, setFit] = useState<Fit>({ signature: null, current: -1, count: 0 });
+  const [fit, setFit] = useState<Fit>({ signature: null, current: -1, count: 0, overflowing: false });
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const listRef = useRef<HTMLUListElement>(null);
   const moreRef = useRef<HTMLLIElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLUListElement>(null);
   const measured = useRef<Measured | null>(null);
   const currentRef = useRef(current);
   const fitRef = useRef(fit);
+  const hysteresisRef = useRef(overflowHysteresis);
+  const onOverflowRef = useRef(onOverflowChange);
+
+  /** The split for the cached measurements: how many links stay inline, and the latched overflow flag. */
+  const solve = (m: Measured, cur: number, was: boolean) => ({
+    count: fitCount({ ...m, current: cur }),
+    overflowing: isOverflowing({ ...m, was, hysteresis: hysteresisRef.current }),
+  });
 
   // Until the items are measured (on the server, before hydration, after the items or the fonts change)
   // every link renders inline in a single line that clips (or scrolls without JS), and the toggle is laid
@@ -114,6 +147,11 @@ export function PriorityNav({
   useLayoutEffect(() => {
     currentRef.current = current;
     fitRef.current = fit;
+    hysteresisRef.current = overflowHysteresis;
+    onOverflowRef.current = onOverflowChange;
+  });
+
+  useLayoutEffect(() => {
     const list = listRef.current;
     const more = moreRef.current;
     if (!list || !more) return;
@@ -131,27 +169,46 @@ export function PriorityNav({
     } else if (fit.current === current) return;
     const m = measured.current;
     if (!m) return;
-    setFit({ signature, current, count: fitCount({ ...m, current }) });
+    setFit({ signature, current, ...solve(m, current, fit.overflowing) });
   }, [measuring, signature, current, fit]);
 
-  // One observer on the row. Its callback reads the size from the entry (no layout read) and writes state
-  // only when the number of inline links changes.
+  // One observer, on the row and on the "More" item. Its callback reads sizes from the entries (no layout
+  // read): the row's width, and the toggle's width when it switches between "More" and icon-only (a
+  // container query). It writes state only when the inline count or the overflow flag changes.
   useEffect(() => {
     const list = listRef.current;
-    if (!list || typeof ResizeObserver === 'undefined') return;
+    const more = moreRef.current;
+    if (!list || !more || typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver((entries) => {
-      const entry = entries[entries.length - 1];
       const m = measured.current;
-      if (!entry || !m) return;
-      m.available = entry.contentBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
-      const count = fitCount({ ...m, current: currentRef.current });
-      // Compare before calling setState: an unchanged count must not even schedule a render.
+      if (!m) return;
+      for (const entry of entries) {
+        if (entry.target === list)
+          m.available = entry.contentBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
+        else {
+          // Hidden (no overflow) reports 0; keep the last real width.
+          const width = entry.borderBoxSize?.[0]?.inlineSize ?? 0;
+          if (width > 0) m.more = width;
+        }
+      }
+      // Compare before calling setState: an unchanged split must not even schedule a render.
       const prev = fitRef.current;
-      if (prev.signature !== null && prev.count !== count) setFit({ ...prev, count });
+      if (prev.signature === null) return;
+      const next = solve(m, currentRef.current, prev.overflowing);
+      if (prev.count !== next.count || prev.overflowing !== next.overflowing) setFit({ ...prev, ...next });
     });
     observer.observe(list);
+    observer.observe(more);
     return () => observer.disconnect();
   }, []);
+
+  // Tell the header when the overflow flag changes (not on mount: it starts false everywhere).
+  const reported = useRef(false);
+  useEffect(() => {
+    if (reported.current === fit.overflowing) return;
+    reported.current = fit.overflowing;
+    onOverflowRef.current?.(fit.overflowing);
+  }, [fit.overflowing]);
 
   // Web fonts change every width. If they are still loading at mount, measure again once they are ready.
   useEffect(() => {
@@ -169,6 +226,51 @@ export function PriorityNav({
   const flags = measuring ? null : inlineFlags(items.length, current, fit.count);
   const overflow = flags ? items.filter((_, i) => !flags[i]) : [];
   const expanded = open && overflow.length > 0;
+
+  // The panel lives in the top layer while open (popover="manual": opening, Escape, outside clicks and
+  // focus stay ours, so behaviour is the same with or without the Popover API). It stays a DOM sibling of
+  // the toggle, so Tab moves from the toggle into the links with no invoker wiring.
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    if (!panel || !supportsPopover(panel)) return;
+    // Set on the client only, where the API exists: the server HTML and browsers without it keep `hidden`.
+    if (!panel.hasAttribute('popover')) panel.setAttribute('popover', 'manual');
+    const shown = panel.matches(':popover-open');
+    if (expanded && !shown) panel.showPopover();
+    else if (!expanded && shown) panel.hidePopover();
+  }, [expanded]);
+
+  // Without CSS anchor positioning: place the panel from JS on open, and again on resize or scroll while
+  // open. Each pass reads (two rects, one computed style), then writes `left`/`top` once.
+  useLayoutEffect(() => {
+    const panel = panelRef.current;
+    const toggle = toggleRef.current;
+    if (!expanded || !panel || !toggle || supportsAnchor()) return;
+    const place = () => {
+      const anchor = toggle.getBoundingClientRect();
+      const box = panel.getBoundingClientRect();
+      const css = getComputedStyle(panel);
+      const { left, top } = placePanel({
+        anchor,
+        panel: { width: box.width, height: box.height },
+        viewport: { width: document.documentElement.clientWidth, height: window.innerHeight },
+        gutter: parseFloat(css.getPropertyValue('--sc-spacing-md')) || 16,
+        offset: parseFloat(css.getPropertyValue('--sc-spacing-2xs')) || 4,
+        rtl: css.direction === 'rtl',
+      });
+      panel.style.left = `${left}px`;
+      panel.style.top = `${top}px`;
+    };
+    place();
+    window.addEventListener('resize', place, { passive: true });
+    window.addEventListener('scroll', place, { passive: true, capture: true });
+    return () => {
+      window.removeEventListener('resize', place);
+      window.removeEventListener('scroll', place, { capture: true });
+      panel.style.left = '';
+      panel.style.top = '';
+    };
+  }, [expanded]);
 
   // Click outside and Escape close the panel. Escape returns focus to the toggle.
   useEffect(() => {
@@ -209,7 +311,14 @@ export function PriorityNav({
     );
 
   return (
-    <nav className={cx('sc-priority-nav', className)} data-measuring={measuring || undefined} {...rest}>
+    <nav
+      className={cx('sc-priority-nav', className)}
+      data-measuring={measuring || undefined}
+      data-overflowing={fit.overflowing || undefined}
+      // A per-instance anchor name, so two navs on a page never anchor to each other's toggle.
+      style={{ ...style, '--_anchor': `--sc-priority-nav${panelId.replace(/[^\w-]/g, '')}` } as CSSProperties}
+      {...rest}
+    >
       <ul ref={listRef} className="sc-priority-nav__list">
         {items.map((item, i) =>
           flags && !flags[i] ? null : (
@@ -232,11 +341,13 @@ export function PriorityNav({
             aria-controls={panelId}
             onClick={() => setOpen((o) => !o)}
           >
-            {moreLabel}
+            {/* Narrow navs (a container query) show only the ellipsis; the label stays in the name. */}
+            <MoreHorizontalIcon className="sc-priority-nav__ellipsis" />
+            <span className="sc-priority-nav__toggle-label">{moreLabel}</span>
             <span className="sc-visually-hidden">, {moreCountLabel(overflow.length)}</span>
             <ChevronDownIcon size="sm" className="sc-priority-nav__chevron" />
           </button>
-          <ul id={panelId} className="sc-priority-nav__panel" hidden={!expanded}>
+          <ul ref={panelRef} id={panelId} className="sc-priority-nav__panel" hidden={!expanded}>
             {overflow.map((item) => (
               <li key={keyOf(item)}>{link(item, true)}</li>
             ))}

@@ -5,6 +5,8 @@
   position: relative;
   flex: 1 1 0%;
   min-inline-size: 0;
+  /* The toggle goes icon-only when the nav itself is narrow (below), whatever the viewport. */
+  container: sc-priority-nav / inline-size;
   font-family: var(--sc-font-family-sans);
   font-size: var(--sc-font-size-sm);
 }
@@ -106,26 +108,56 @@
   background: var(--sc-color-surface-active);
   color: var(--sc-color-text-default);
 }
+.sc-priority-nav__ellipsis {
+  display: none;
+}
+@container sc-priority-nav (inline-size <= 400px) {
+  .sc-priority-nav__toggle {
+    justify-content: center;
+    inline-size: var(--sc-size-control-sm);
+    padding-inline: 0;
+  }
+  .sc-priority-nav__ellipsis {
+    display: inline-block;
+  }
+  .sc-priority-nav__chevron {
+    display: none;
+  }
+  /* Visually hidden, still part of the accessible name ("More, 3 links"). */
+  .sc-priority-nav__toggle-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
 .sc-priority-nav__chevron {
   transition: rotate var(--sc-duration-fast) var(--sc-ease-standard);
 }
 .sc-priority-nav__toggle[aria-expanded='true'] > .sc-priority-nav__chevron {
   rotate: 180deg;
 }
-/* The panel: Menu's surface, a list of the collapsed links under the toggle, aligned to its end edge. */
-.sc-priority-nav__more {
-  position: relative;
+/* The panel: Menu's surface, a list of the collapsed links. While open it is in the top layer (Popover
+   API), so no ancestor's overflow clips it; it is fixed-positioned against the viewport either way. */
+.sc-priority-nav__toggle {
+  anchor-name: var(--_anchor);
 }
 .sc-priority-nav__panel {
-  position: absolute;
+  --_gutter: var(--sc-spacing-md);
+  position: fixed;
+  inset: auto;
   z-index: var(--sc-z-dropdown);
-  inset-block-start: calc(100% + var(--sc-spacing-2xs));
-  inset-inline-end: 0;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  min-inline-size: 180px;
-  max-inline-size: min(100vw - 2 * var(--sc-spacing-md), 320px);
+  inline-size: max-content;
+  min-inline-size: min(180px, 100vw - 2 * var(--_gutter));
+  max-inline-size: min(320px, 100vw - 2 * var(--_gutter));
+  max-block-size: min(28rem, 100dvh - 2 * var(--_gutter));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   margin: 0;
   padding: var(--sc-spacing-2xs);
   list-style: none;
@@ -133,11 +165,36 @@
   background: var(--sc-color-surface-raised);
   --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
   --sc-color-surface-active: var(--sc-color-surface-raised-active);
+  color: var(--sc-color-text-default);
   border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
   box-shadow: var(--sc-elevation-2);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
   transition:
     opacity var(--sc-duration-fast) var(--sc-ease-enter),
     translate var(--sc-duration-fast) var(--sc-ease-enter);
+}
+/* Anchored below the toggle, aligned to its inline-end edge; flips to its inline-start edge (and above
+   it) when that would leave the viewport; when no edge fits, it spans the viewport row under the toggle,
+   centred on it and kept a gutter from both edges. Without anchor positioning, JS sets left/top (place.ts). */
+@supports (anchor-name: --a) {
+  .sc-priority-nav__panel {
+    position-anchor: var(--_anchor);
+    position-area: block-end span-inline-start;
+    margin-block: var(--sc-spacing-2xs);
+    /* Makes an option that ends closer than the gutter to the viewport edge count as overflowing. */
+    margin-inline-start: var(--_gutter);
+    position-try-fallbacks:
+      flip-inline,
+      flip-block,
+      flip-block flip-inline,
+      --sc-priority-nav-fit;
+  }
+}
+@position-try --sc-priority-nav-fit {
+  position-area: block-end span-all;
+  justify-self: anchor-center;
+  margin-inline: var(--_gutter);
 }
 @starting-style {
   .sc-priority-nav__panel {

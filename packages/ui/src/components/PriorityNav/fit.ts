@@ -22,14 +22,18 @@ const EPSILON = 0.5;
  * until the next one does not fit. The run stays contiguous (a short item after a long one does not jump
  * the queue), so the row reads as the start of the list, plus the current page.
  */
+/** The inline size of every item in one row, gaps included. */
+export function rowWidth(widths: readonly number[], gap: number): number {
+  let total = 0;
+  for (const w of widths) total += w;
+  return widths.length > 1 ? total + gap * (widths.length - 1) : total;
+}
+
 export function fitCount({ widths, current, available, more, gap }: FitInput): number {
   const n = widths.length;
   const hasCurrent = current >= 0 && current < n;
   const others = hasCurrent ? n - 1 : n;
-  let total = 0;
-  for (const w of widths) total += w;
-  if (n > 1) total += gap * (n - 1);
-  if (total <= available + EPSILON) return others;
+  if (rowWidth(widths, gap) <= available + EPSILON) return others;
 
   let used = more + (hasCurrent ? widths[current]! + gap : 0);
   let count = 0;
@@ -55,4 +59,25 @@ export function inlineFlags(length: number, current: number, count: number): boo
     else flags.push(seen++ < count);
   }
   return flags;
+}
+
+export interface OverflowInput {
+  widths: readonly number[];
+  gap: number;
+  available: number;
+  /** The previous answer. */
+  was: boolean;
+  /** Extra room required, beyond fitting every item, before an overflowing row reports that it fits again. */
+  hysteresis: number;
+}
+
+/**
+ * Whether the row reports `overflowing`, with hysteresis. It starts as soon as the items do not all fit.
+ * Once started, it ends only when every item fits with `hysteresis` px to spare: when a header reacts to
+ * overflow by giving the row more room (an action button drops its label), the row then fits, and without
+ * the margin it would report "fits", the label would come back, and the row would overflow again.
+ */
+export function isOverflowing({ widths, gap, available, was, hysteresis }: OverflowInput): boolean {
+  const total = rowWidth(widths, gap);
+  return was ? total + Math.max(0, hysteresis) > available + EPSILON : total > available + EPSILON;
 }

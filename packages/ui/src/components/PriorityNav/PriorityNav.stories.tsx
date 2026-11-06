@@ -1,27 +1,38 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState, type ReactNode } from 'react';
-import { PriorityNav, type PriorityNavItem } from './PriorityNav';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { PriorityNav, type PriorityNavItem, type PriorityNavProps } from './PriorityNav';
 import { Popover } from '../Popover/Popover';
 import { IconButton } from '../IconButton/IconButton';
 import { Button } from '../Button/Button';
 import { Kbd } from '../Kbd/Kbd';
 import { BroomIcon } from '../BroomIcon/BroomIcon';
 import { Text } from '../Text/Text';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { PlusIcon } from '../../icons/icons.gen';
 import { DarkTheme } from '../../stories/helpers';
 
 const LABELS = ['Inbox', 'Applications', 'Sweeps', 'Files', 'Learning', 'Settings'];
+const MORE_LABELS = [...LABELS, 'Reports', 'Billing', 'Team', 'Help center'];
 
 /** Links that switch the current page in place instead of navigating, so the story can be clicked through. */
-function Demo({ initial = 'Inbox', label = 'Main' }: { initial?: string; label?: string }) {
+function Demo({
+  initial = 'Inbox',
+  label = 'Main',
+  labels = LABELS,
+  ...rest
+}: { initial?: string; label?: string; labels?: string[] } & Pick<
+  PriorityNavProps,
+  'onOverflowChange' | 'overflowHysteresis'
+>) {
   const [current, setCurrent] = useState(initial);
-  const items: PriorityNavItem[] = LABELS.map((label) => ({
+  const items: PriorityNavItem[] = labels.map((label) => ({
     href: `#${label.toLowerCase()}`,
     label,
     current: label === current,
   }));
   return (
     <PriorityNav
+      {...rest}
       aria-label={label}
       items={items}
       renderLink={({ children, onClick, href, ...props }, item) => (
@@ -119,8 +130,39 @@ export const PhoneWidth: Story = {
   ),
 };
 
-/** The global header these pieces were built for: brand, PriorityNav, the sweep status popover, the global action. */
-function Header() {
+export const LeftEdgePhone: Story = {
+  name: 'More at the left edge, phone width',
+  globals: { viewport: { value: 'phone390', isRotated: false } },
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <div style={{ padding: 'var(--sc-spacing-2xs)', blockSize: 400 }}>
+      <Text size="sm" tone="muted">
+        The toggle sits near the left edge, so the panel flips to the toggle’s start edge instead of running
+        off screen. It stays in the viewport even inside a clipping box.
+      </Text>
+      <div style={{ inlineSize: 150, overflow: 'hidden', resize: 'horizontal' }}>
+        <Demo initial="Inbox" />
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * The global header these pieces were built for: brand, PriorityNav, the sweep status popover, the global
+ * action. When links start collapsing, "Add item" goes icon-only (tooltip and shortcut kept); the nav's
+ * `overflowHysteresis` is the room the label takes, so the label only returns when it fits beside every link.
+ */
+function Header({ labels = LABELS }: { labels?: string[] }) {
+  const [compact, setCompact] = useState(false);
+  const [labelRoom, setLabelRoom] = useState(0);
+  const addRef = useRef<HTMLButtonElement>(null);
+  // Measure what the label costs while it is shown: full width minus the square icon-only width.
+  useLayoutEffect(() => {
+    const button = addRef.current;
+    if (!button || compact) return;
+    const { width, height } = button.getBoundingClientRect();
+    setLabelRoom(Math.ceil(width - height));
+  }, [compact]);
   return (
     <div
       style={{
@@ -132,8 +174,10 @@ function Header() {
         borderBlockEnd: 'var(--sc-border-width-hairline) solid var(--sc-color-border-default)',
       }}
     >
-      <Text weight="semibold">Example app</Text>
-      <Demo />
+      <Text weight="semibold" style={{ whiteSpace: 'nowrap' }}>
+        Example app
+      </Text>
+      <Demo labels={labels} onOverflowChange={setCompact} overflowHysteresis={labelRoom} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sc-spacing-xs)' }}>
         <Popover.Root>
           <Popover.Trigger render={<IconButton label="Sweeps: running" dot="success" />}>
@@ -144,9 +188,18 @@ function Header() {
             <Popover.Description>A sweep is running.</Popover.Description>
           </Popover.Content>
         </Popover.Root>
-        <Button size="sm" iconStart={<PlusIcon />} shortcut={<Kbd>N</Kbd>} aria-keyshortcuts="n">
-          Add item
-        </Button>
+        <Tooltip content="Add item (N)" side="bottom" disabled={!compact}>
+          <Button
+            ref={addRef}
+            size="sm"
+            iconStart={<PlusIcon />}
+            shortcut={<Kbd>N</Kbd>}
+            aria-keyshortcuts="n"
+            iconOnly={compact}
+          >
+            Add item
+          </Button>
+        </Tooltip>
       </div>
     </div>
   );
@@ -158,6 +211,36 @@ export const InAHeader: Story = {
     <Resizable initial={900}>
       <Header />
     </Resizable>
+  ),
+};
+
+export const HeaderOverflowing: Story = {
+  name: 'Header at 900px, overflowing',
+  render: () => (
+    <>
+      <Text size="sm" tone="muted">
+        Ten links do not fit: they collapse into More and Add item goes icon-only. Widen the box and the label
+        returns only once it fits beside every link.
+      </Text>
+      <Resizable initial={900}>
+        <Header labels={MORE_LABELS} />
+      </Resizable>
+    </>
+  ),
+};
+
+export const HeaderPhone: Story = {
+  name: 'Header at 375px, icon-only More',
+  render: () => (
+    <>
+      <Text size="sm" tone="muted">
+        The nav is under 400px wide (a container query on the nav), so More shows only an ellipsis; its name
+        is still “More, N links”.
+      </Text>
+      <div style={{ inlineSize: 375, paddingBlockEnd: 260 }}>
+        <Header />
+      </div>
+    </>
   ),
 };
 

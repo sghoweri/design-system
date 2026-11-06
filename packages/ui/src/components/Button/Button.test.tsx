@@ -72,4 +72,22 @@ describe('Button', () => {
     expect(hint).toHaveAttribute('aria-hidden', 'true');
     expect(hint.querySelector('kbd')).toHaveTextContent('N');
   });
+
+  it('goes icon-only without remounting, keeping the name and hiding the shortcut', () => {
+    const { rerender } = render(
+      <Button iconStart={<svg />} shortcut={<Kbd>N</Kbd>} aria-keyshortcuts="n">
+        Add item
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Add item' });
+    expect(button).not.toHaveAttribute('data-icon-only');
+    rerender(
+      <Button iconStart={<svg />} shortcut={<Kbd>N</Kbd>} aria-keyshortcuts="n" iconOnly>
+        Add item
+      </Button>,
+    );
+    expect(screen.getByRole('button', { name: 'Add item' })).toBe(button);
+    expect(button).toHaveAttribute('data-icon-only', 'true');
+    expect(button).toHaveAttribute('aria-keyshortcuts', 'n');
+  });
 });

@@ -1,4 +1,4 @@
-import { fitCount, inlineFlags } from './fit';
+import { fitCount, inlineFlags, isOverflowing } from './fit';
 
 // Six items: 64 120 72 64 88 88 (sum 496). "More" is 72 wide.
 const widths = [64, 120, 72, 64, 88, 88];
@@ -52,5 +52,42 @@ describe('inlineFlags', () => {
     expect(inlineFlags(6, 1, 2)).toEqual([true, true, true, false, false, false]);
     expect(inlineFlags(3, -1, 3)).toEqual([true, true, true]);
     expect(inlineFlags(0, -1, 0)).toEqual([]);
+  });
+});
+
+describe('isOverflowing', () => {
+  const total = 496; // the six widths above, no gap
+
+  it('starts as soon as the items do not all fit', () => {
+    expect(isOverflowing({ widths, gap: 0, available: total, was: false, hysteresis: 80 })).toBe(false);
+    expect(isOverflowing({ widths, gap: 0, available: total - 1, was: false, hysteresis: 80 })).toBe(true);
+  });
+
+  it('once started, ends only when every item fits with the hysteresis to spare', () => {
+    expect(isOverflowing({ widths, gap: 0, available: total + 79, was: true, hysteresis: 80 })).toBe(true);
+    expect(isOverflowing({ widths, gap: 0, available: total + 80, was: true, hysteresis: 80 })).toBe(false);
+    expect(isOverflowing({ widths, gap: 0, available: total + 10, was: true, hysteresis: 0 })).toBe(false);
+  });
+
+  it('does not oscillate when the header gives the row more room on overflow', () => {
+    // A header of width W: the row gets W - 120 with the full "Add item [N]" button, W - 40 icon-only.
+    const full = 120;
+    const icon = 40;
+    const settle = (W: number, hysteresis: number) => {
+      let overflowing = false;
+      const seen: boolean[] = [];
+      for (let frame = 0; frame < 6; frame++) {
+        const available = W - (overflowing ? icon : full);
+        overflowing = isOverflowing({ widths, gap: 0, available, was: overflowing, hysteresis });
+        seen.push(overflowing);
+      }
+      return seen;
+    };
+    // Without hysteresis, W = 580 flips every frame: 460 overflows, 540 fits, 460 overflows …
+    expect(settle(580, 0)).toEqual([true, false, true, false, true, false]);
+    // With the label's width as hysteresis it settles collapsed …
+    expect(settle(580, full - icon)).toEqual([true, true, true, true, true, true]);
+    // … and comes back only when the full button fits beside every link.
+    expect(settle(full + total, full - icon)).toEqual([false, false, false, false, false, false]);
   });
 });

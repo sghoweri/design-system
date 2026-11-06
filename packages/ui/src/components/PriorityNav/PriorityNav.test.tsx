@@ -13,16 +13,19 @@ const items = (current?: string): PriorityNavItem[] =>
   LABELS.map((label) => ({ href: `/${label.toLowerCase()}`, label, current: label === current }));
 
 let rowWidth = 1000;
-let observers: Array<{ cb: ResizeObserverCallback; target: Element | null }> = [];
+let anchorSupported = true;
+let observers: Array<{ cb: ResizeObserverCallback; target: Element | null; targets: Element[] }> = [];
 
+/** Records its targets; `resize` reports the row (the first target), `resizeMore` the "More" item. */
 class FakeResizeObserver {
-  private entry: { cb: ResizeObserverCallback; target: Element | null };
+  private entry: { cb: ResizeObserverCallback; target: Element | null; targets: Element[] };
   constructor(cb: ResizeObserverCallback) {
-    this.entry = { cb, target: null };
+    this.entry = { cb, target: null, targets: [] };
     observers.push(this.entry);
   }
   observe(target: Element) {
-    this.entry.target = target;
+    this.entry.target ??= target;
+    this.entry.targets.push(target);
   }
   unobserve() {}
   disconnect() {
@@ -46,10 +49,25 @@ function resize(width: number) {
   });
 }
 
+/** Reports a new width for the "More" item, as when the container query switches it to icon-only. */
+function resizeMore(width: number) {
+  act(() => {
+    for (const { cb, targets } of observers) {
+      const target = targets.find((t) => t.classList.contains('sc-priority-nav__more'));
+      if (!target) continue;
+      const entry = { target, borderBoxSize: [{ inlineSize: width, blockSize: 32 }] };
+      cb([entry as unknown as ResizeObserverEntry], {} as ResizeObserver);
+    }
+  });
+}
+
 beforeEach(() => {
   rowWidth = 1000;
   observers = [];
   vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+  // jsdom answers `true` to every CSS.supports query; behave like a browser with anchor positioning.
+  anchorSupported = true;
+  vi.stubGlobal('CSS', { supports: (q: string) => anchorSupported && q.includes('anchor') });
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
     let width = 0;
     if (this.classList.contains('sc-priority-nav__item')) width = 8 * (this.textContent ?? '').length + 24;
@@ -96,12 +114,14 @@ describe('PriorityNav', () => {
     await expectNoA11yViolations(container);
   });
 
-  it('server-renders every link inline, measuring, with the toggle hidden, and hydrates without warnings', async () => {
+  it('server-renders every link inline, measuring, with the toggle and panel hidden, and hydrates without warnings', async () => {
     const ui = <PriorityNav aria-label="Main" items={items('Inbox')} />;
     const html = renderToString(ui);
     for (const label of LABELS) expect(html).toContain(`>${label}</span></a>`);
     expect(html).toContain('data-measuring="true"');
     expect(html).toMatch(/class="sc-priority-nav__more" hidden=""/);
+    expect(html).toMatch(/class="sc-priority-nav__panel" hidden=""/);
+    expect(html).not.toContain('popover');
     const container = document.createElement('div');
     container.innerHTML = html;
     document.body.appendChild(container);
@@ -257,5 +277,124 @@ describe('PriorityNav', () => {
     expect(inlineLinks()).toEqual(['Inbox', 'Apps', 'Sweeps']);
     expect(screen.getByRole('button', { name: 'Plus, 3 autres' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Inbox' })).toHaveAttribute('data-router', 'yes');
+  });
+
+  it('puts the open panel in the top layer with the Popover API, keeping the disclosure semantics', async () => {
+    const user = userEvent.setup();
+    const open = new Set<Element>();
+    const show = vi.fn(function (this: HTMLElement) {
+      open.add(this);
+    });
+    const hide = vi.fn(function (this: HTMLElement) {
+      open.delete(this);
+    });
+    Object.assign(HTMLElement.prototype, { showPopover: show, hidePopover: hide });
+    const matches = Element.prototype.matches;
+    vi.spyOn(Element.prototype, 'matches').mockImplementation(function (this: Element, selector: string) {
+      return selector === ':popover-open' ? open.has(this) : matches.call(this, selector);
+    });
+    try {
+      rowWidth = 300;
+      render(<PriorityNav aria-label="Main" items={items()} />);
+      expect(panel()).not.toHaveAttribute('role');
+      await user.click(toggle());
+      expect(panel()).toHaveAttribute('popover', 'manual');
+      expect(show).toHaveBeenCalledTimes(1);
+      expect(open.has(panel())).toBe(true);
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true');
+      // The panel stays the toggle's next sibling in the DOM, so Tab goes from the toggle into its links
+      // (jsdom hides any [popover], so the Tab itself is covered by the tests without the API).
+      expect(toggle().nextElementSibling).toBe(panel());
+      expect(toggle()).toHaveFocus();
+      await user.keyboard('{Escape}');
+      expect(hide).toHaveBeenCalledTimes(1);
+      expect(open.size).toBe(0);
+      expect(toggle()).toHaveFocus();
+      await user.click(toggle());
+      await user.click(document.body);
+      expect(hide).toHaveBeenCalledTimes(2);
+      expect(toggle()).toHaveAttribute('aria-expanded', 'false');
+    } finally {
+      delete (HTMLElement.prototype as Partial<HTMLElement>).showPopover;
+      delete (HTMLElement.prototype as Partial<HTMLElement>).hidePopover;
+    }
+  });
+
+  it('gives each instance its own anchor name', () => {
+    rowWidth = 300;
+    render(
+      <>
+        <PriorityNav aria-label="Main" items={items()} />
+        <PriorityNav aria-label="Sections" items={items()} />
+      </>,
+    );
+    const names = screen.getAllByRole('navigation').map((nav) => nav.style.getPropertyValue('--_anchor'));
+    expect(names[0]).toMatch(/^--sc-priority-nav[\w-]+$/);
+    expect(names[1]).toMatch(/^--sc-priority-nav[\w-]+$/);
+    expect(names[0]).not.toBe(names[1]);
+  });
+
+  it('without CSS anchor positioning, places the panel from JS while open and on resize', async () => {
+    const user = userEvent.setup();
+    anchorSupported = false;
+    rowWidth = 300;
+    render(<PriorityNav aria-label="Main" items={items()} />);
+    await user.click(toggle());
+    // The toggle's stubbed rect is 0×32 at the origin; the gutter and offset fall back to 16 and 4.
+    expect(panel().style.left).toBe('16px');
+    expect(panel().style.top).toBe('36px');
+    const rect = vi.mocked(HTMLElement.prototype.getBoundingClientRect);
+    rect.mockClear();
+    act(() => {
+      window.dispatchEvent(new Event('resize'));
+    });
+    // One pass: the toggle's rect and the panel's rect, nothing else.
+    expect(rect).toHaveBeenCalledTimes(2);
+    await user.keyboard('{Escape}');
+    expect(panel().style.left).toBe('');
+    expect(panel().style.top).toBe('');
+  });
+
+  it('reports overflow with data-overflowing and onOverflowChange, with hysteresis', () => {
+    const onOverflowChange = vi.fn();
+    render(
+      <PriorityNav
+        aria-label="Main"
+        items={items()}
+        onOverflowChange={onOverflowChange}
+        overflowHysteresis={80}
+      />,
+    );
+    expect(nav()).not.toHaveAttribute('data-overflowing');
+    expect(onOverflowChange).not.toHaveBeenCalled();
+    resize(400);
+    expect(nav()).toHaveAttribute('data-overflowing', 'true');
+    expect(onOverflowChange).toHaveBeenLastCalledWith(true);
+    // The header made room: all 496px of links fit in 520, but not with 80 to spare, so the flag holds.
+    resize(520);
+    expect(inlineLinks()).toEqual(LABELS);
+    expect(nav()).toHaveAttribute('data-overflowing', 'true');
+    expect(onOverflowChange).toHaveBeenCalledTimes(1);
+    // Every link plus 80px to spare: the flag clears.
+    resize(576);
+    expect(nav()).not.toHaveAttribute('data-overflowing');
+    expect(onOverflowChange).toHaveBeenLastCalledWith(false);
+    expect(onOverflowChange).toHaveBeenCalledTimes(2);
+  });
+
+  it('uses the toggle’s current width: an icon-only More frees room for a link', () => {
+    rowWidth = 300;
+    render(<PriorityNav aria-label="Main" items={items()} />);
+    // 72 (More) + 64 + 120 = 256; + 72 = 328 > 300.
+    expect(inlineLinks()).toEqual(['Inbox', 'Applications']);
+    // Icon-only More is 32 wide: 32 + 64 + 120 + 72 = 288 fits.
+    resizeMore(32);
+    expect(inlineLinks()).toEqual(['Inbox', 'Applications', 'Sweeps']);
+    expect(toggle()).toHaveAccessibleName('More, 3 links');
+    expect(toggle().querySelector('.sc-priority-nav__toggle-label')).toHaveTextContent('More');
+    expect(toggle().querySelector('.sc-priority-nav__ellipsis')).toHaveAttribute('aria-hidden', 'true');
+    // Hidden (0) reports are ignored.
+    resizeMore(0);
+    expect(inlineLinks()).toEqual(['Inbox', 'Applications', 'Sweeps']);
   });
 });
