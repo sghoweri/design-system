@@ -4,7 +4,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useEffectEvent,
   useId,
   useMemo,
   useRef,
@@ -472,12 +471,16 @@ function Step({
   const phase = useContext(FrameContext);
   const { announce } = useContext(FlowContext);
   const message = announcement ?? (typeof title === 'string' ? title : undefined);
-  const arrive = useEffectEvent(() => {
-    titleRef.current?.focus({ preventScroll: true });
-    if (message) announce(message);
+  // The latest message and announcer, read when the step arrives. A ref rather than React's useEffectEvent, which
+  // the React canary bundled with Next 15 exports only as experimental_useEffectEvent (the import breaks next build).
+  const latest = useRef({ message, announce });
+  useEffect(() => {
+    latest.current = { message, announce };
   });
   useEffect(() => {
-    if (phase === 'enter') arrive();
+    if (phase !== 'enter') return;
+    titleRef.current?.focus({ preventScroll: true });
+    if (latest.current.message) latest.current.announce(latest.current.message);
   }, [phase]);
   return (
     <section className={cx('sc-flow__step', className)} aria-labelledby={id} {...rest}>
