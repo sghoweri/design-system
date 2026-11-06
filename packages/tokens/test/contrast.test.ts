@@ -31,6 +31,8 @@ const surfaces = [
   'surface-raised-hover',
   'surface-raised-active',
 ];
+// The opaque surfaces a component can sit on (no hover or pressed washes).
+const solidSurfaces = ['surface-canvas', 'surface-default', 'surface-raised', 'surface-sunken'];
 const pairs: Array<[string, string[], number]> = [
   ['text-default', surfaces, 4.5],
   ['text-muted', surfaces, 4.5],
@@ -46,6 +48,30 @@ const pairs: Array<[string, string[], number]> = [
   ['border-strong', ['surface-default', 'surface-canvas'], 3],
   ['border-focus', ['surface-canvas', 'surface-default', 'surface-raised'], 3],
   ['accent-default', ['surface-default', 'surface-canvas'], 3],
+  // Text on the selected-row wash (plain Card selected).
+  ['text-default', ['accent-wash'], 4.5],
+  ['text-muted', ['accent-wash'], 4.5],
+  ['accent-text', ['accent-wash'], 4.5],
+  // Selection and tone borders are the cue, not decoration: 3:1 on the fill inside them and every surface outside.
+  ['accent-border', ['accent-wash', 'accent-subtle', ...solidSurfaces], 3],
+  ['success-border', ['success-subtle', ...solidSurfaces], 3],
+  ['warning-border', ['warning-subtle', ...solidSurfaces], 3],
+  ['danger-border', ['danger-subtle', ...solidSurfaces], 3],
+  // ReasonList markers carry the tone as a shape and a colour.
+  ['success-solid', solidSurfaces, 3],
+  ['warning-solid', solidSurfaces, 3],
+  ['danger-solid', solidSurfaces, 3],
+  // Score ring: the arc against its surface.active track.
+  ['accent-default', ['surface-active'], 3],
+  ['success-solid', ['surface-active'], 3],
+  ['warning-solid', ['surface-active'], 3],
+  ['danger-solid', ['surface-active'], 3],
+  ['text-muted', ['surface-active'], 3],
+  // Word diff: text on the tints, and the underline and strike-through (the non-colour cue) on their tint.
+  ['text-default', ['diff-added-wash', 'diff-removed-wash'], 4.5],
+  ['text-muted', ['diff-removed-wash'], 4.5],
+  ['diff-added-stroke', ['diff-added-wash'], 3],
+  ['diff-removed-stroke', ['diff-removed-wash'], 3],
 ];
 
 describe.each(['light', 'dark'] as const)('%s theme contrast', (theme) => {
@@ -71,6 +97,7 @@ const washes: Array<[string, string]> = [
   ['surface-hover', 'surface-active'],
   ['surface-raised', 'surface-raised-hover'],
   ['surface-raised-hover', 'surface-raised-active'],
+  ['surface-default', 'accent-wash'],
 ];
 describe.each(['light', 'dark'] as const)('%s theme state washes', (theme) => {
   const t = json[theme];

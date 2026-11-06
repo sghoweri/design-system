@@ -78,6 +78,28 @@
         "$description": "Empty states and feature callouts."
       }
     },
+    "score": {
+      "sm": {
+        "$value": "40px",
+        "$type": "dimension",
+        "$description": "Score tile sm: list rows."
+      },
+      "md": {
+        "$value": "48px",
+        "$type": "dimension",
+        "$description": "Score tile md: cards and summaries."
+      },
+      "ring": {
+        "$value": "64px",
+        "$type": "dimension",
+        "$description": "Score ring: detail headers."
+      },
+      "ring-stroke": {
+        "$value": "6px",
+        "$type": "dimension",
+        "$description": "Stroke of the Score ring track and arc."
+      }
+    },
     "dialog": {
       "sm": {
         "$value": "400px",
@@ -107,6 +129,11 @@
         "$value": "2px",
         "$type": "dimension",
         "$description": "Focus ring stroke and offset."
+      },
+      "halo": {
+        "$value": "4px",
+        "$type": "dimension",
+        "$description": "Soft ring around a current or live marker (box-shadow spread), e.g. the current step."
       }
     }
   }

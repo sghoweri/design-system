@@ -117,10 +117,20 @@
         "$type": "color",
         "$description": "Soft accent Badge fill, selected row wash."
       },
+      "wash": {
+        "$value": "#232431",
+        "$type": "color",
+        "$description": "Faint selected-row wash, lighter than accent.subtle: brand.400 at 7% over surface.default, precomputed as an opaque swatch. Pair with accent.border."
+      },
       "text": {
         "$value": "{color.brand.300}",
         "$type": "color",
         "$description": "Text on accent.subtle and surface.default."
+      },
+      "border": {
+        "$value": "{color.brand.500}",
+        "$type": "color",
+        "$description": "Selection border on accent.wash (plain Card selected); 3:1 on accent.wash and every surface."
       }
     },
     "success": {
@@ -138,6 +148,11 @@
         "$value": "{color.green.400}",
         "$type": "color",
         "$description": "Solid success Badge fill."
+      },
+      "border": {
+        "$value": "{color.green.500}",
+        "$type": "color",
+        "$description": "Tone border and outline; 3:1 on success.subtle and every surface."
       }
     },
     "warning": {
@@ -155,6 +170,11 @@
         "$value": "{color.amber.400}",
         "$type": "color",
         "$description": "Solid warning Badge fill."
+      },
+      "border": {
+        "$value": "{color.amber.500}",
+        "$type": "color",
+        "$description": "Tone border and outline; 3:1 on warning.subtle and every surface."
       }
     },
     "info": {
@@ -190,10 +210,37 @@
         "$type": "color",
         "$description": "Danger Button fill and solid danger Badge."
       },
+      "border": {
+        "$value": "{color.red.500}",
+        "$type": "color",
+        "$description": "Tone border and outline; 3:1 on danger.subtle and every surface."
+      },
       "hover": {
         "$value": "{color.red.300}",
         "$type": "color",
         "$description": "Danger Button hover."
+      }
+    },
+    "diff": {
+      "added-wash": {
+        "$value": "{color.green.950}",
+        "$type": "color",
+        "$description": "Tint behind added text in a word diff."
+      },
+      "added-stroke": {
+        "$value": "{color.green.400}",
+        "$type": "color",
+        "$description": "Underline under added text; 3:1 on diff.added-wash."
+      },
+      "removed-wash": {
+        "$value": "{color.red.950}",
+        "$type": "color",
+        "$description": "Tint behind removed text in a word diff. Removed text is text.muted."
+      },
+      "removed-stroke": {
+        "$value": "{color.red.400}",
+        "$type": "color",
+        "$description": "Strike-through on removed text; 3:1 on diff.removed-wash."
       }
     }
   },
