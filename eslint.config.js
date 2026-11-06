@@ -17,6 +17,20 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      // Consumers on Next 15 get React from Next's bundled canary, which exports useEffectEvent only as
+      // experimental_useEffectEvent: importing it breaks their `next build`. Keep to APIs every React 19 peer has.
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react',
+              importNames: ['useEffectEvent'],
+              message: 'Not in the React canary bundled with Next 15; use a ref.',
+            },
+          ],
+        },
+      ],
     },
   },
 );
