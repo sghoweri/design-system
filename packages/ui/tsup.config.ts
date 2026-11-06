@@ -6,7 +6,7 @@ const shared: Options = {
   treeshake: true,
   splitting: false,
   target: 'es2022',
-  external: ['react', 'react-dom', 'react/jsx-runtime', /^@base-ui\/react/, /^@fontsource/],
+  external: ['react', 'react-dom', 'react/jsx-runtime', /^@base-ui\/react/, /^@fontsource/, /^filepond/],
 };
 
 export default defineConfig([

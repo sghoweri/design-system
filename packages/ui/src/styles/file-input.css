@@ -1,0 +1,217 @@
+/* ---- FileInput (FilePond, docs/adr/0004) ------------------------------------
+   FilePond's own stylesheet (filepond/dist/filepond.css) is concatenated just before this file, inside the
+   same layer. Everything here is scoped under .sc-file-input and wins by specificity, never !important.
+   FilePond lays out its rows in JS from measured sizes, so spacing is set in em on its elements and the
+   zone's height through min-height on the drop label. */
+.sc-file-input-field {
+  /* Drop zone height: two control heights, so `size` and compact density move it with the other fields. */
+  --_zone: calc(var(--_h) * 2);
+}
+.sc-file-input {
+  position: relative;
+  box-sizing: border-box;
+  border: var(--sc-border-width-hairline) dashed var(--sc-color-border-strong);
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-surface-default);
+  color: var(--sc-color-text-default);
+  font-size: var(--_fs);
+  transition:
+    border-color var(--sc-duration-fast) var(--sc-ease-standard),
+    background-color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-file-input:not([data-disabled]):hover {
+  border-color: var(--sc-color-text-muted);
+}
+/* The file input is FilePond's single tab stop and is invisible; the ring goes on the zone. */
+.sc-file-input:has(.filepond--browser:focus-visible) {
+  border-color: var(--sc-color-border-focus);
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: var(--sc-border-width-focus);
+}
+.sc-file-input:has(.filepond--root[data-hopper-state='drag-over']) {
+  border-style: solid;
+  border-color: var(--sc-color-accent-default);
+  background: var(--sc-color-accent-subtle);
+}
+.sc-file-input[data-invalid] {
+  border-color: var(--sc-color-danger-solid);
+}
+.sc-file-input[data-disabled] {
+  border-style: solid;
+  border-color: var(--sc-color-border-default);
+  background: var(--sc-color-surface-sunken);
+  color: var(--sc-color-text-muted);
+  cursor: not-allowed;
+}
+
+/* Before FilePond loads (server render, first paint): the same zone, inert. */
+.sc-file-input__placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--_zone);
+  padding: var(--sc-spacing-xs);
+  color: var(--sc-color-text-muted);
+  text-align: center;
+}
+.sc-file-input__browse {
+  color: var(--sc-color-text-link);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* FilePond's root and the panel it animates behind the rows: the zone above paints the surface instead. */
+.sc-file-input .filepond--root {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: var(--sc-font-line-height-ui);
+  color: inherit;
+}
+.sc-file-input .filepond--panel-root {
+  background-color: transparent;
+}
+.sc-file-input .filepond--drip {
+  display: none;
+}
+.sc-file-input .filepond--root .filepond--drop-label {
+  min-height: var(--_zone);
+  color: var(--sc-color-text-muted);
+}
+/* Disabled reads through the sunken surface, solid border and cursor; the text stays at muted so it keeps AA
+   (axe cannot tell this label belongs to a disabled control). */
+.sc-file-input[data-disabled] .filepond--root .filepond--drop-label {
+  color: var(--sc-color-text-muted);
+}
+.sc-file-input .filepond--drop-label.filepond--drop-label label {
+  padding: var(--sc-spacing-xs);
+  font-size: 1em;
+  line-height: var(--sc-font-line-height-ui);
+  cursor: pointer;
+}
+.sc-file-input .filepond--root[data-disabled] .filepond--drop-label label {
+  opacity: 1;
+}
+.sc-file-input .filepond--label-action {
+  color: var(--sc-color-text-link);
+  text-decoration-color: currentColor;
+  text-underline-offset: 0.2em;
+}
+.sc-file-input[data-disabled] .filepond--label-action {
+  color: inherit;
+}
+.sc-file-input .filepond--root .filepond--list-scroller {
+  margin-block: 0 0.5em;
+}
+.sc-file-input .filepond--list.filepond--list {
+  inset-inline: 0.5em;
+}
+
+/* File rows */
+.sc-file-input .filepond--item {
+  margin: 0.25em 0;
+}
+.sc-file-input .filepond--item-panel {
+  border-radius: var(--sc-radius-md);
+  background-color: var(--sc-color-surface-sunken);
+}
+.sc-file-input[data-disabled] .filepond--item-panel {
+  background-color: var(--sc-color-surface-default);
+}
+.sc-file-input .filepond--item > .filepond--panel .filepond--panel-bottom {
+  box-shadow: none;
+}
+.sc-file-input .filepond--file {
+  align-items: center;
+  padding: 0.5em 0.75em;
+  color: var(--sc-color-text-default);
+}
+.sc-file-input[data-disabled] .filepond--file {
+  color: var(--sc-color-text-muted);
+}
+.sc-file-input .filepond--file-info {
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--sc-spacing-xs);
+  margin-inline-end: 2.5em;
+}
+.sc-file-input .filepond--file-info .filepond--file-info-main {
+  flex: 0 1 auto;
+  inline-size: auto;
+  font-size: 1em;
+  font-weight: var(--sc-font-weight-medium);
+  line-height: var(--sc-font-line-height-ui);
+}
+.sc-file-input .filepond--file-info .filepond--file-info-sub {
+  flex: none;
+  font-size: var(--sc-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--sc-color-text-muted);
+  opacity: 1;
+}
+.sc-file-input .filepond--file-status {
+  display: none;
+}
+.sc-file-input .filepond--progress-indicator {
+  color: var(--sc-color-text-muted);
+}
+/* The × at the end of each row: a ghost icon button. */
+.sc-file-input .filepond--file-action-button.filepond--file-action-button {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--sc-size-control-sm);
+  block-size: var(--sc-size-control-sm);
+  border-radius: var(--sc-radius-sm);
+  font-size: inherit;
+}
+.sc-file-input .filepond--file [data-align*='right'] {
+  inset-inline-end: 0.25em;
+}
+.sc-file-input .filepond--file-action-button.filepond--file-action-button svg {
+  inline-size: var(--sc-size-icon-md);
+  block-size: var(--sc-size-icon-md);
+}
+.sc-file-input .filepond--action-remove-item {
+  top: 50%;
+  margin-block-start: calc(var(--sc-size-control-sm) / -2);
+  background: transparent;
+  color: var(--sc-color-text-muted);
+  box-shadow: none;
+  cursor: pointer;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-ease-standard),
+    color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-file-input .filepond--action-remove-item:hover,
+.sc-file-input .filepond--action-remove-item:focus {
+  background: var(--sc-color-surface-hover);
+  color: var(--sc-color-text-default);
+  box-shadow: none;
+}
+.sc-file-input .filepond--file-action-button.filepond--file-action-button:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: 0;
+}
+.sc-file-input .filepond--action-remove-item[disabled] {
+  background: transparent;
+  color: var(--sc-color-text-subtle);
+  cursor: not-allowed;
+}
+
+/* The message slot stays in the tree (it is the live region); out of the flow while empty. */
+.sc-file-input__messages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-spacing-3xs);
+}
+.sc-file-input__messages:empty {
+  position: absolute;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-file-input,
+  .sc-file-input .filepond--action-remove-item {
+    transition: none;
+  }
+}
