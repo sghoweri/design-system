@@ -126,8 +126,21 @@ export {
   type TableHeaderProps,
   type TableRootProps,
   type TableRowProps,
+  type TableSelectionCellProps,
+  type TableSelectionHeaderProps,
   type TableSortDirection,
 } from './components/Table/Table';
+export { useRowSelection, type RowSelection } from './components/Table/useRowSelection';
+export type { RowSelectionHeaderState } from './components/Table/rowSelection';
+export { SelectionBar, type SelectionBarProps } from './components/SelectionBar/SelectionBar';
+export {
+  Toast,
+  useToast,
+  type ToastApi,
+  type ToastOptions,
+  type ToastProviderProps,
+  type ToastTone,
+} from './components/Toast/Toast';
 export {
   Stat,
   type StatDeltaTone,

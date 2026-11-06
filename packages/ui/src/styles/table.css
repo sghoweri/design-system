@@ -149,6 +149,25 @@
 .sc-table__row[data-selected] > .sc-table__header {
   background: var(--sc-color-accent-subtle);
 }
+/* A selected row still shows its hover (docs/adr/0003): the selected wash, a step towards the accent. */
+.sc-table__row[data-selected][data-interactive]:hover > .sc-table__cell,
+.sc-table__row[data-selected][data-interactive]:hover > .sc-table__header {
+  background: color-mix(in oklab, var(--sc-color-accent-subtle), var(--sc-color-accent-default) 10%);
+}
+/* Selection column: the cell is the hit area, the checkbox the control (the checkbox inherits the cursor). */
+.sc-table__select {
+  inline-size: 1px;
+  padding-inline-end: var(--sc-spacing-2xs);
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+.sc-table__select > .sc-checkbox {
+  vertical-align: middle;
+}
+.sc-table__select[data-disabled] {
+  cursor: not-allowed;
+}
 .sc-table__header[data-align='center'],
 .sc-table__cell[data-align='center'] {
   text-align: center;
