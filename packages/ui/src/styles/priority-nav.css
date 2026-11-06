@@ -65,7 +65,7 @@
   color: var(--sc-color-text-muted);
   font: inherit;
   font-weight: var(--sc-font-weight-medium);
-  line-height: 1;
+  line-height: var(--sc-font-line-height-ui);
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
