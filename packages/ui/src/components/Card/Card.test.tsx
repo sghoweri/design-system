@@ -23,6 +23,17 @@ describe('Card', () => {
     expect(item).toHaveAttribute('data-padding', 'sm');
   });
 
+  it('renders a labelled navigation landmark with `as="nav"`', () => {
+    render(
+      <Card as="nav" aria-label="Your files" padding="sm">
+        <a href="#profile">profile.md</a>
+      </Card>,
+    );
+    const nav = screen.getByRole('navigation', { name: 'Your files' });
+    expect(nav.tagName).toBe('NAV');
+    expect(nav).toHaveClass('sc-card');
+  });
+
   it('composes through `render` and keeps its class and state attributes', () => {
     render(
       // eslint-disable-next-line jsx-a11y/anchor-has-content -- content comes from Card through render

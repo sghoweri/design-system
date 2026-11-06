@@ -3,7 +3,7 @@ import { cx } from '../../utils/cx';
 
 export type CardVariant = 'outlined' | 'elevated' | 'filled';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
-export type CardElement = 'div' | 'article' | 'section' | 'li' | 'a' | 'button';
+export type CardElement = 'div' | 'article' | 'section' | 'nav' | 'li' | 'a' | 'button';
 
 export interface CardProps extends useRender.ComponentProps<'div'> {
   /** `outlined` hairline (default), `elevated` floats, `filled` is an inset region. */
@@ -14,7 +14,7 @@ export interface CardProps extends useRender.ComponentProps<'div'> {
   interactive?: boolean | undefined;
   /** Accent border with a 1px inset, for the active row or chosen option. */
   selected?: boolean | undefined;
-  /** Element to render when `render` is not given. */
+  /** Element to render when `render` is not given. Use `nav` (with an `aria-label`) for a carded navigation landmark. */
   as?: CardElement | undefined;
 }
 
