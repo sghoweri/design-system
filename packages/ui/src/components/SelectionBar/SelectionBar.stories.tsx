@@ -18,12 +18,11 @@ const meta = {
   title: 'Components/SelectionBar',
   component: SelectionBar,
   args: { count: 4, onClear: () => undefined, children: actions },
-  argTypes: { side: { control: 'radio', options: ['bottom', 'top'] } },
 } satisfies Meta<typeof SelectionBar>;
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** The bar on its own; see Table / Selection for it with a table. Hidden at count 0. */
+/** The bar on its own, floating at the bottom of the canvas; see Table / Selection for it with a table. Hidden at count 0. */
 export const Playground: Story = {};
 
 export const Dark: Story = {

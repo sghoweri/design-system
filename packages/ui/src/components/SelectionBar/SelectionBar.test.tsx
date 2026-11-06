@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom/vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { SelectionBar } from './SelectionBar';
@@ -54,24 +54,26 @@ describe('SelectionBar', () => {
     await user.tab();
     expect(screen.getByRole('button', { name: 'Close 1' })).toHaveFocus();
     await user.keyboard('{Enter}');
-    expect(screen.queryByRole('toolbar')).toBeNull();
-    expect(screen.getByRole('status')).toHaveTextContent('Selection cleared');
     expect(opener).toHaveFocus();
+    expect(screen.getByRole('status')).toHaveTextContent('Selection cleared');
+    // It fades out still showing the last count, then leaves the DOM.
+    expect(screen.getByRole('toolbar').parentElement).not.toHaveAttribute('data-open');
+    await waitFor(() => expect(screen.queryByRole('toolbar')).toBeNull());
   });
 
-  it('takes its labels and side', () => {
-    render(
+  it('takes its labels, and leaves a spacer in the flow while it shows', () => {
+    const { container } = render(
       <SelectionBar
         count={3}
         onClear={() => undefined}
         aria-label="Application actions"
         countLabel={(n) => `${n} applications`}
         clearLabel="Deselect"
-        side="top"
       />,
     );
     expect(screen.getByRole('toolbar', { name: 'Application actions' })).toHaveTextContent('3 applications');
     expect(screen.getByRole('button', { name: 'Deselect' })).toBeInTheDocument();
-    expect(screen.getByRole('toolbar').parentElement).toHaveAttribute('data-side', 'top');
+    expect(screen.getByRole('toolbar').parentElement).toHaveAttribute('data-open');
+    expect(container.querySelector('.sc-selection-bar__spacer')).toHaveAttribute('aria-hidden', 'true');
   });
 });
