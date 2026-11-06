@@ -21,6 +21,8 @@
 @import './disclosure.css';
 @import './empty-state.css';
 @import './skeleton.css';
+@import 'filepond/dist/filepond.css';
+@import './file-input.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);

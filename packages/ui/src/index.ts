@@ -147,3 +147,4 @@ export {
 export { Skeleton, type SkeletonProps, type SkeletonVariant } from './components/Skeleton/Skeleton';
 export type { SpacingSize } from './types';
 export const version = '0.1.1';
+export { FileInput, type FileInputProps } from './components/FileInput/FileInput';
