@@ -33,6 +33,7 @@ export {
   type DialogActionsProps,
   type DialogBodyProps,
   type DialogCloseProps,
+  type DialogCloseRequestReason,
   type DialogContentProps,
   type DialogDescriptionProps,
   type DialogRootProps,
@@ -184,3 +185,19 @@ export {
   type PopoverTriggerProps,
 } from './components/Popover/Popover';
 export { BroomIcon, type BroomIconProps } from './components/BroomIcon/BroomIcon';
+export {
+  FullScreenFlow,
+  type FlowChapter,
+  type FlowCloseRequestReason,
+  type FlowDirection,
+  type FullScreenFlowBodyProps,
+  type FullScreenFlowFooterProps,
+  type FullScreenFlowHeaderProps,
+  type FullScreenFlowProgressProps,
+  type FullScreenFlowRailGroupProps,
+  type FullScreenFlowRailItemProps,
+  type FullScreenFlowRailProps,
+  type FullScreenFlowRootProps,
+  type FullScreenFlowStepProps,
+  type FullScreenFlowViewportProps,
+} from './components/FullScreenFlow/FullScreenFlow';
