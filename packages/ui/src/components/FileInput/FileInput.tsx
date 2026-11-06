@@ -3,12 +3,14 @@ import type * as FilePondApi from 'filepond';
 import type { FilePond, FilePondFile, FilePondOptions } from 'filepond';
 import type { FieldProps } from '../Field/FieldShell';
 import { cx } from '../../utils/cx';
+import { FilePreviewDialog } from '../FilePreviewDialog/FilePreviewDialog';
 import {
   describeAccept,
   escapeHtml,
   matchesAccept,
   parseAccept,
   parseSize,
+  previewKind,
   rejectionMessage,
   type FileRejectionReason,
 } from './accept';
@@ -34,6 +36,12 @@ export interface FileInputProps extends FieldProps {
   idleLabel?: string | undefined;
   /** The browse link's text. Default "browse". */
   browseLabel?: string | undefined;
+  /**
+   * Lets people check a file before it is uploaded: the name of each PDF, plain text, Markdown or image
+   * file becomes a button that opens it in a `FilePreviewDialog`. Other types (DOCX …) show a plain name.
+   * Default `true`; no preview while `disabled`.
+   */
+  preview?: boolean | undefined;
 }
 
 type FilePondModule = typeof FilePondApi;
@@ -72,6 +80,7 @@ export function FileInput({
   onFilesChange,
   idleLabel,
   browseLabel = 'browse',
+  preview = true,
 }: FileInputProps) {
   const id = useId();
   const labelId = `${id}label`;
@@ -84,6 +93,10 @@ export function FileInput({
 
   const [rejections, setRejections] = useState<string[]>([]);
   const [inputId, setInputId] = useState<string>();
+  /** The file in the preview dialog (kept while it closes) and the row button that opened it. */
+  const [previewFile, setPreviewFile] = useState<File | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const previewTriggerRef = useRef<HTMLButtonElement | null>(null);
   /** Bumps every time a pond is created, so the sync effects run against the new instance. */
   const [pondVersion, setPondVersion] = useState(0);
 
@@ -123,6 +136,12 @@ export function FileInput({
     describedBy: [description != null ? descriptionId : null, messages.length > 0 ? messagesId : null],
     isInvalid,
     acceptAttr,
+    preview: preview && !disabled,
+    openPreview: (file: File, trigger: HTMLButtonElement) => {
+      previewTriggerRef.current = trigger;
+      setPreviewFile(file);
+      setPreviewOpen(true);
+    },
   };
   const liveRef = useRef(live);
   useEffect(() => {
@@ -159,6 +178,16 @@ export function FileInput({
     const acceptedIds = new Set<string>();
     const noteRemove = (event: Event) => {
       if ((event.target as Element | null)?.closest?.('.filepond--action-remove-item')) removeIntent = true;
+    };
+    const onPreviewClick = (event: Event) => {
+      const button = (event.target as Element | null)?.closest?.<HTMLButtonElement>(
+        '.sc-file-input__preview',
+      );
+      const file = button?.dataset.fileId ? pond?.getFile(button.dataset.fileId)?.file : null;
+      if (!button || !(file instanceof File)) return;
+      // FilePond treats a click in a row as "activate item"; this click is ours.
+      event.stopPropagation();
+      liveRef.current.openPreview(file, button);
     };
 
     const emit = () => {
@@ -211,11 +240,39 @@ export function FileInput({
       set(root.querySelector('.filepond--label-action'), 'tabindex', null);
       for (const item of root.querySelectorAll('.filepond--item')) {
         const fileName = item.querySelector('.filepond--file-info-main')?.textContent?.trim();
-        if (fileName)
-          set(item.querySelector('.filepond--action-remove-item'), 'aria-label', `Remove ${fileName}`);
+        const remove = item.querySelector('.filepond--action-remove-item');
+        if (fileName) set(remove, 'aria-label', `Remove ${fileName}`);
+        patchPreview(item, remove);
       }
       // FilePond drops its file input while disabled; the label's `for` follows.
       setInputId(input?.id || undefined);
+    };
+
+    // The file's name as a real button, a foreign node in FilePond's row. It goes before the × so the tab
+    // order follows the row (name, then remove); FilePond attaches a row's children once, when it creates
+    // the row, and never re-inserts them by index, so the extra node does not disturb it. FilePond's own
+    // name span stays (it holds a reference to it) and is hidden by CSS while the button is there.
+    const patchPreview = (item: Element, remove: Element | null) => {
+      const row = item.querySelector('.filepond--file');
+      if (!row) return;
+      let button = row.querySelector<HTMLButtonElement>(':scope > .sc-file-input__preview');
+      const id = item.id.replace(/^filepond--item-/, '');
+      const file = pond?.getFile(id)?.file;
+      if (!liveRef.current.preview || !(file instanceof File) || previewKind(file) == null) {
+        button?.remove();
+        return;
+      }
+      if (!button) {
+        button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'sc-file-input__preview';
+        row.insertBefore(button, remove ?? row.firstChild);
+      }
+      // Only write what changed: these writes are seen by the observer that called this.
+      if (button.dataset.fileId !== id) button.dataset.fileId = id;
+      if (button.textContent !== file.name) button.textContent = file.name;
+      const name = `Preview ${file.name}`;
+      if (button.getAttribute('aria-label') !== name) button.setAttribute('aria-label', name);
     };
 
     void import('filepond').then((mod) => {
@@ -285,6 +342,7 @@ export function FileInput({
       host.addEventListener('drop', startAttempt, true);
       host.addEventListener('change', startAttempt, true);
       host.addEventListener('click', noteRemove, true);
+      host.addEventListener('click', onPreviewClick);
       settledRef.current = [];
       setPondVersion((v) => v + 1);
     });
@@ -294,6 +352,7 @@ export function FileInput({
       host.removeEventListener('drop', startAttempt, true);
       host.removeEventListener('change', startAttempt, true);
       host.removeEventListener('click', noteRemove, true);
+      host.removeEventListener('click', onPreviewClick);
       observer?.disconnect();
       if (pond) {
         pond.element?.remove();
@@ -333,6 +392,7 @@ export function FileInput({
     isInvalid,
     description,
     messages.length,
+    preview,
   ]);
 
   // The `files` prop (or `defaultFiles`) → the pond's list.
@@ -402,6 +462,19 @@ export function FileInput({
           </p>
         ))}
       </div>
+      {previewFile ? (
+        <FilePreviewDialog
+          file={previewFile}
+          open={previewOpen}
+          onOpenChange={setPreviewOpen}
+          // Focus returns to the name button; Safari does not focus a button on click, so say so.
+          finalFocus={() => {
+            const trigger = previewTriggerRef.current;
+            if (trigger?.isConnected) return trigger;
+            return hostRef.current?.querySelector<HTMLInputElement>('input.filepond--browser') ?? true;
+          }}
+        />
+      ) : null}
     </div>
   );
 }

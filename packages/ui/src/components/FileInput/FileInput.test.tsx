@@ -3,7 +3,15 @@ import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import { hydrateRoot } from 'react-dom/client';
 import { FileInput } from './FileInput';
-import { describeAccept, formatSize, matchesAccept, parseAccept, parseSize } from './accept';
+import {
+  describeAccept,
+  formatListSize,
+  formatSize,
+  matchesAccept,
+  parseAccept,
+  parseSize,
+  previewKind,
+} from './accept';
 import { expectNoA11yViolations } from '../../../test/axe';
 
 // FilePond waits 250ms after a browse and animates on its own frame loop, so waits get room.
@@ -61,6 +69,29 @@ describe('FileInput helpers', () => {
     expect(formatSize(512)).toBe('512 bytes');
     expect(describeAccept(parseAccept('.pdf,.docx,text/plain'))).toBe('PDF, DOCX or plain text');
     expect(describeAccept(['image/*'])).toBe('any image');
+    // The dialog's size line matches FilePond's row: whole KB rounded down.
+    expect(formatListSize(1_234)).toBe('1 KB');
+    expect(formatListSize(14_500_000)).toBe('14.5 MB');
+    expect(formatListSize(10_000_000)).toBe('10 MB');
+  });
+
+  it('previews only PDFs, plain text, Markdown and images, by extension or MIME type', () => {
+    expect(previewKind({ name: 'cv.pdf', type: '' })).toBe('pdf');
+    expect(previewKind({ name: 'scan', type: 'application/pdf' })).toBe('pdf');
+    expect(previewKind({ name: 'notes.MD', type: '' })).toBe('text');
+    expect(previewKind({ name: 'letter.txt', type: 'text/plain' })).toBe('text');
+    expect(previewKind({ name: 'photo.jpeg', type: '' })).toBe('image');
+    expect(previewKind({ name: 'shot', type: 'image/png' })).toBe('image');
+    expect(previewKind({ name: 'phone.heic', type: 'image/heic' })).toBeNull();
+    expect(
+      previewKind({
+        name: 'cv.docx',
+        type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      }),
+    ).toBeNull();
+    // Never framed: HTML runs with the page's origin from a blob URL.
+    expect(previewKind({ name: 'page.html', type: 'text/html' })).toBeNull();
+    expect(previewKind({ name: 'archive.zip', type: 'application/zip' })).toBeNull();
   });
 });
 
@@ -196,6 +227,62 @@ describe('FileInput', () => {
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(input).toHaveAccessibleDescription(/Choose a document\./);
     await expectNoA11yViolations(container);
+  });
+
+  it('turns the name of a previewable file into a button, before the ×, that opens a preview', async () => {
+    const create = vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:preview');
+    const revoke = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {});
+    const docx = new File(['PK'], 'letter.docx', {
+      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    });
+    const { container } = render(
+      <FileInput label="Documents" multiple defaultFiles={[pdf('a.pdf'), docx]} />,
+    );
+    const button = await waitFor(() => {
+      const found = document.querySelector<HTMLButtonElement>('button[aria-label="Preview a.pdf"]');
+      expect(found).not.toBeNull();
+      return found!;
+    }, slow);
+    expect(button).toHaveTextContent('a.pdf');
+    expect(button).toHaveAttribute('type', 'button');
+    // One extra tab stop per row, ahead of the × in the same row.
+    const remove = document.querySelector('button[aria-label="Remove a.pdf"]')!;
+    expect(button.compareDocumentPosition(remove) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    // DOCX cannot be shown: its name stays plain text.
+    await waitFor(
+      () => expect(document.querySelector('button[aria-label="Remove letter.docx"]')).not.toBeNull(),
+      slow,
+    );
+    expect(document.querySelector('button[aria-label="Preview letter.docx"]')).toBeNull();
+    await expectNoA11yViolations(container);
+
+    act(() => button.click());
+    const dialog = await screen.findByRole('dialog', { name: 'a.pdf' });
+    expect(screen.getByTitle('Preview of a.pdf')).toHaveAttribute('src', 'blob:preview');
+    expect(create).toHaveBeenCalledTimes(1);
+    expect((create.mock.calls[0]![0] as Blob).type).toBe('application/pdf');
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }));
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    expect(revoke).toHaveBeenCalledWith('blob:preview');
+    await waitFor(() => expect(button).toHaveFocus());
+    create.mockRestore();
+    revoke.mockRestore();
+  });
+
+  it('offers no preview with preview={false} or while disabled', async () => {
+    const { rerender } = render(<FileInput label="Document" defaultFiles={[pdf('a.pdf')]} preview={false} />);
+    await waitFor(
+      () => expect(document.querySelector('button[aria-label="Remove a.pdf"]')).not.toBeNull(),
+      slow,
+    );
+    expect(document.querySelector('.sc-file-input__preview')).toBeNull();
+    rerender(<FileInput label="Document" defaultFiles={[pdf('a.pdf')]} />);
+    await waitFor(
+      () => expect(document.querySelector('button[aria-label="Preview a.pdf"]')).not.toBeNull(),
+      slow,
+    );
+    rerender(<FileInput label="Document" defaultFiles={[pdf('a.pdf')]} disabled />);
+    await waitFor(() => expect(document.querySelector('.sc-file-input__preview')).toBeNull(), slow);
   });
 
   it('disables: FilePond removes its file input, so nothing is focusable and the label has no target', async () => {

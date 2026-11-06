@@ -1,0 +1,60 @@
+/* ---- FilePreviewDialog -------------------------------------------------------
+   A `lg` Dialog whose body holds the file: a PDF frame, a text block or an image, each held inside the
+   viewport so the popup itself rarely scrolls. */
+.sc-file-preview__frame,
+.sc-file-preview__text,
+.sc-file-preview__image {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-md);
+}
+.sc-file-preview__frame {
+  /* The popup's 85dvh cap, less its title, description, padding and the action row, so it never scrolls. */
+  block-size: clamp(16rem, 85dvh - 11rem, 60rem);
+  background: var(--sc-color-surface-sunken);
+}
+.sc-file-preview__text {
+  max-block-size: 60dvh;
+  margin: 0;
+  padding: var(--sc-spacing-sm) var(--sc-spacing-md);
+  overflow: auto;
+  background: var(--sc-color-surface-sunken);
+  color: var(--sc-color-text-default);
+  font-family: var(--sc-font-family-mono);
+  font-size: var(--sc-font-size-xs);
+  line-height: var(--sc-font-line-height-normal);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.sc-file-preview__text:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: var(--sc-border-width-focus);
+}
+.sc-file-preview__image {
+  inline-size: auto;
+  max-inline-size: 100%;
+  max-block-size: 65dvh;
+  margin-inline: auto;
+  object-fit: contain;
+  background: var(--sc-color-surface-sunken);
+}
+.sc-file-preview__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-start: var(--sc-spacing-md);
+}
+.sc-file-preview__tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sc-spacing-sm);
+}
+.sc-file-preview__note {
+  margin: var(--sc-spacing-xs) 0 0;
+  color: var(--sc-color-text-muted);
+}
+.sc-file-preview__tab > .sc-file-preview__note {
+  margin: 0;
+}

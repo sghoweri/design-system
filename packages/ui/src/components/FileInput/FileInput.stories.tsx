@@ -6,6 +6,13 @@ import { Inline } from '../Inline/Inline';
 import { Button } from '../Button/Button';
 import { Text } from '../Text/Text';
 import { Compact, DarkTheme } from '../../stories/helpers';
+import {
+  sampleCoverTxt,
+  sampleImage,
+  sampleNotesMd,
+  samplePdf,
+  sampleResumePdf,
+} from '../../stories/sampleFiles';
 
 const DOCUMENT_TYPES = '.pdf,.docx,.txt,.md';
 
@@ -13,13 +20,13 @@ const DOCUMENT_TYPES = '.pdf,.docx,.txt,.md';
 function sampleFile(name: string, type: string, bytes: number) {
   return new File([new Uint8Array(bytes)], name, { type, lastModified: 1_762_300_000_000 });
 }
-const resume = sampleFile('resume-2026.pdf', 'application/pdf', 182_000);
+const resume = sampleResumePdf();
 const coverLetter = sampleFile(
   'cover-letter-linear.docx',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   41_000,
 );
-const notes = sampleFile('interview-notes.md', 'text/markdown', 6_200);
+const notes = sampleNotesMd();
 const installer = sampleFile('setup.exe', 'application/x-msdownload', 2_400_000);
 const scan = sampleFile('portfolio-scan.pdf', 'application/pdf', 14_500_000);
 
@@ -66,6 +73,35 @@ export const InvalidType: Story = {
 export const TooLarge: Story = {
   name: 'Too large',
   render: (args) => <FileInput {...args} defaultFiles={[scan]} />,
+};
+
+/**
+ * The name of a PDF, plain text, Markdown or image file is a button that opens it in a `FilePreviewDialog`
+ * before anything is uploaded. Tab reaches it before the ×; closing the dialog returns focus to it.
+ */
+export const PreviewPdf: Story = {
+  name: 'Preview: PDF',
+  render: (args) => <FileInput {...args} defaultFiles={[resume]} />,
+};
+
+/** Plain text and Markdown open as text. */
+export const PreviewText: Story = {
+  name: 'Preview: text',
+  args: { label: 'Documents', multiple: true, accept: `${DOCUMENT_TYPES},image/*` },
+  render: (args) => <FileInput {...args} defaultFiles={[sampleCoverTxt(), notes, sampleImage()]} />,
+};
+
+/** DOCX and other types the browser cannot show keep a plain name: no button, nothing framed. */
+export const PreviewDocx: Story = {
+  name: 'Preview: DOCX (none)',
+  render: (args) => <FileInput {...args} defaultFiles={[coverLetter]} />,
+};
+
+/** `preview={false}`: every name is plain text. */
+export const PreviewOff: Story = {
+  name: 'Preview off',
+  args: { label: 'Documents', multiple: true, preview: false },
+  render: (args) => <FileInput {...args} defaultFiles={[resume, notes]} />,
 };
 
 export const Disabled: Story = {
@@ -189,11 +225,9 @@ export const Phone: Story = {
         label="Documents"
         multiple
         defaultFiles={[
-          sampleFile(
-            'a-very-long-file-name-for-the-staff-role-resume-final-v3.pdf',
-            'application/pdf',
-            320_000,
-          ),
+          samplePdf('a-very-long-file-name-for-the-staff-role-resume-final-v3.pdf', [
+            { heading: 'Long file name', lines: ['A sample page.'] },
+          ]),
           notes,
         ]}
       />

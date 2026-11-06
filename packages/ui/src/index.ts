@@ -163,6 +163,10 @@ export type { SpacingSize } from './types';
 export const version = '0.1.1';
 export { FileInput, type FileInputProps } from './components/FileInput/FileInput';
 export {
+  FilePreviewDialog,
+  type FilePreviewDialogProps,
+} from './components/FilePreviewDialog/FilePreviewDialog';
+export {
   PriorityNav,
   type PriorityNavItem,
   type PriorityNavLinkProps,
