@@ -15,6 +15,8 @@ toolbar.css
 banner.css
 progress.css
 table.css
+selection-bar.css
+toast.css
 stat.css
 chip.css
 disclosure.css

@@ -1,0 +1,78 @@
+/* ---- Toast ----------------------------------------------------------------- */
+.sc-toast-viewport {
+  position: fixed;
+  inset-block-end: var(--sc-spacing-lg);
+  inset-inline-end: var(--sc-spacing-lg);
+  z-index: var(--sc-z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sc-spacing-xs);
+  inline-size: min(360px, 100vw - 2 * var(--sc-spacing-md));
+  outline: none;
+}
+/* A raised surface, so washes inside use the raised tokens (docs/adr/0003). */
+.sc-toast {
+  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
+  --sc-color-surface-active: var(--sc-color-surface-raised-active);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--sc-spacing-xs);
+  inline-size: 100%;
+  padding: var(--sc-spacing-xs) var(--sc-spacing-xs) var(--sc-spacing-xs) var(--sc-spacing-sm);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  border-inline-start: var(--sc-border-width-focus) solid var(--sc-color-border-strong);
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-surface-raised);
+  box-shadow: var(--sc-elevation-2);
+  color: var(--sc-color-text-default);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  transition:
+    opacity var(--sc-duration-fast) var(--sc-ease-standard),
+    translate var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-toast:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: var(--sc-border-width-focus);
+}
+.sc-toast[data-tone='success'] {
+  border-inline-start-color: var(--sc-color-success-solid);
+}
+.sc-toast[data-tone='danger'] {
+  border-inline-start-color: var(--sc-color-danger-solid);
+}
+.sc-toast[data-starting-style],
+.sc-toast[data-ending-style] {
+  opacity: 0;
+  translate: 0 var(--sc-spacing-xs);
+}
+.sc-toast__content {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.sc-toast__title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: var(--sc-font-weight-medium);
+}
+.sc-toast__description {
+  margin: 0;
+  color: var(--sc-color-text-muted);
+  font-size: var(--sc-font-size-xs);
+}
+.sc-toast__action,
+.sc-toast__close {
+  flex: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-toast {
+    transition: none;
+  }
+  .sc-toast[data-starting-style],
+  .sc-toast[data-ending-style] {
+    translate: none;
+  }
+}

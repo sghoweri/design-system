@@ -35,6 +35,7 @@ const ACTIVATABLE = [
   '.sc-dialog__close',
   '.sc-table__sort',
   '.sc-table__row[data-interactive]',
+  '.sc-table__select',
   '.sc-card[data-interactive]',
   '.sc-file-input .filepond--drop-label.filepond--drop-label label',
   '.sc-file-input .filepond--action-remove-item',
@@ -51,6 +52,8 @@ const DISABLED = [
   '.sc-input:disabled',
   '.sc-file-input[data-disabled]',
   '.sc-file-input .filepond--action-remove-item[disabled]',
+  '.sc-table__select[data-disabled]',
+  '.sc-toolbar .sc-button[data-disabled]',
 ];
 /** Selectors allowed to say `cursor: default`: not activatable themselves. */
 const DEFAULT_ALLOWED = ['.sc-field__label'];

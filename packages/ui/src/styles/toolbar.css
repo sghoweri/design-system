@@ -83,3 +83,9 @@
 .sc-toolbar__group[data-gap='4xl'] {
   gap: var(--sc-spacing-4xl);
 }
+/* Toolbar.Button stays focusable when disabled (aria-disabled + data-disabled, no `disabled` attribute), so the
+   Button's :disabled look is repeated for it here. */
+.sc-toolbar .sc-button[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

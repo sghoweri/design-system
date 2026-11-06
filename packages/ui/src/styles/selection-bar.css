@@ -1,0 +1,31 @@
+/* ---- SelectionBar ---------------------------------------------------------- */
+/* Sticks to the edge of its scrolling container. A raised surface, so washes inside use the raised tokens (docs/adr/0003). */
+.sc-selection-bar {
+  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
+  --sc-color-surface-active: var(--sc-color-surface-raised-active);
+  position: sticky;
+  z-index: var(--sc-z-sticky);
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding: var(--sc-spacing-2xs) var(--sc-spacing-xs) var(--sc-spacing-2xs) var(--sc-spacing-sm);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-surface-raised);
+  box-shadow: var(--sc-elevation-2);
+  color: var(--sc-color-text-default);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+}
+.sc-selection-bar[data-side='bottom'] {
+  inset-block-end: var(--sc-spacing-sm);
+}
+.sc-selection-bar[data-side='top'] {
+  inset-block-start: var(--sc-spacing-sm);
+}
+.sc-selection-bar__count {
+  flex: none;
+  font-weight: var(--sc-font-weight-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
