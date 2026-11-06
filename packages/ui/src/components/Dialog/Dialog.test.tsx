@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Dialog } from './Dialog';
+import { useState } from 'react';
+import { Dialog, type DialogCloseRequestReason } from './Dialog';
 import { Button } from '../Button/Button';
 import { Menu } from '../Menu/Menu';
 import { Select } from '../Select/Select';
@@ -148,6 +149,62 @@ describe('Dialog', () => {
     expect(menu).toBeInTheDocument();
     await user.click(screen.getByRole('menuitem', { name: 'Company' }));
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  it('routes Esc and every Dialog.Close to onRequestClose; the app closes it through open', async () => {
+    const user = userEvent.setup();
+    const reasons: DialogCloseRequestReason[] = [];
+    function Guarded() {
+      const [open, setOpen] = useState(true);
+      return (
+        <>
+          <p>Page</p>
+          <Dialog.Root open={open} onRequestClose={(reason) => reasons.push(reason)}>
+            <Dialog.Content variant="fullscreen">
+              <Dialog.Close />
+              <Dialog.Title>Set up your search</Dialog.Title>
+              <Dialog.Body>
+                <p>Body</p>
+              </Dialog.Body>
+              <Dialog.Actions>
+                <Dialog.Close render={<Button variant="secondary" />}>Cancel</Dialog.Close>
+                <Button onClick={() => setOpen(false)}>Leave</Button>
+              </Dialog.Actions>
+            </Dialog.Content>
+          </Dialog.Root>
+        </>
+      );
+    }
+    const { baseElement } = render(<Guarded />);
+    const dialog = await screen.findByRole('dialog');
+    expect(dialog).toHaveAttribute('data-variant', 'fullscreen');
+    await user.keyboard('{Escape}');
+    await user.click(screen.getByRole('button', { name: 'Close' }));
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(reasons).toEqual(['escape-key', 'close-press', 'close-press']);
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    await expectNoA11yViolations(baseElement);
+    await user.click(screen.getByRole('button', { name: 'Leave' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+
+  it('still swallows Esc when not dismissible, even with onRequestClose', async () => {
+    const user = userEvent.setup();
+    const onRequestClose = vi.fn();
+    render(
+      <Dialog.Root defaultOpen dismissible={false} onRequestClose={onRequestClose}>
+        <Dialog.Content size="sm">
+          <Dialog.Title>Finish setting up?</Dialog.Title>
+          <Dialog.Close render={<Button />}>Later</Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Root>,
+    );
+    await screen.findByRole('dialog');
+    await user.keyboard('{Escape}');
+    expect(onRequestClose).not.toHaveBeenCalled();
+    await user.click(screen.getByRole('button', { name: 'Later' }));
+    expect(onRequestClose).toHaveBeenCalledWith('close-press');
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 });

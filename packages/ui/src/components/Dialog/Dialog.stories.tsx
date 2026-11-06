@@ -284,3 +284,57 @@ export const CompactDensity: Story = {
     </Compact>
   ),
 };
+
+function FullScreenGuarded() {
+  const [open, setOpen] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen} onRequestClose={() => setConfirming(true)}>
+      <Dialog.Trigger render={<Button />}>Edit notes</Dialog.Trigger>
+      <Dialog.Content variant="fullscreen">
+        <Dialog.Close />
+        <Dialog.Title>Notes for Staff Frontend Engineer at Northwind</Dialog.Title>
+        <Dialog.Description>Esc, the × and Cancel ask first; Save closes.</Dialog.Description>
+        <Dialog.Body>
+          <Textarea
+            label="Notes"
+            rows={18}
+            defaultValue="Recruiter said the team is six people and ships weekly."
+          />
+        </Dialog.Body>
+        <Dialog.Actions>
+          <Dialog.Close render={<Button variant="secondary" />}>Cancel</Dialog.Close>
+          <Button onClick={() => setOpen(false)}>Save</Button>
+        </Dialog.Actions>
+        <Dialog.Root open={confirming} onOpenChange={setConfirming}>
+          <Dialog.Content size="sm">
+            <Dialog.Title>Discard your changes?</Dialog.Title>
+            <Dialog.Actions>
+              <Dialog.Close render={<Button variant="secondary" />}>Keep editing</Dialog.Close>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  setConfirming(false);
+                  setOpen(false);
+                }}
+              >
+                Discard
+              </Button>
+            </Dialog.Actions>
+          </Dialog.Content>
+        </Dialog.Root>
+      </Dialog.Content>
+    </Dialog.Root>
+  );
+}
+
+/**
+ * `variant="fullscreen"` covers the viewport (inset 16px with a rounded edge from 900px) and slides in from
+ * the inline end; the body scrolls between a pinned title and actions. With `onRequestClose` on the Root,
+ * Esc, the × and every `Dialog.Close` ask the app instead of closing: here, a nested confirmation.
+ * `FullScreenFlow` builds a multi-step flow on this surface.
+ */
+export const FullScreen: Story = {
+  name: 'Full screen, asks before closing',
+  render: () => <FullScreenGuarded />,
+};

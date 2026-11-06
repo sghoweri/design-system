@@ -28,3 +28,4 @@ skeleton.css
 filepond/dist/filepond.css
 file-input.css
 file-preview-dialog.css
+full-screen-flow.css

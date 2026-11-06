@@ -43,6 +43,7 @@ const ACTIVATABLE = [
   '.sc-priority-nav__link',
   '.sc-priority-nav__toggle',
   '.sc-popover__close',
+  '.sc-flow__rail-item',
 ];
 const DISABLED = [
   '.sc-button:disabled',
@@ -58,6 +59,7 @@ const DISABLED = [
   '.sc-file-input .filepond--action-remove-item[disabled]',
   '.sc-table__select[data-disabled]',
   '.sc-toolbar .sc-button[data-disabled]',
+  '.sc-flow__rail-item:disabled',
 ];
 /** Selectors allowed to say `cursor: default`: not activatable themselves. */
 const DEFAULT_ALLOWED = ['.sc-field__label'];

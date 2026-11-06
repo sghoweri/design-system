@@ -1,6 +1,6 @@
 # @salemcobalt/ui
 
-React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, `Icon` and a shipped icon set, `BroomIcon`, `Badge`, `Card`, `Stack`, `Inline`, `Heading`, `Text`, `Kbd`, `Dialog`, `Tooltip`, `Menu`, `Popover`, `PriorityNav`, `Toolbar`, `Banner`, `Spinner`, `Progress`, `Tabs`, `Input`, `Textarea`, `Select`, `FileInput` and `FilePreviewDialog`, `Checkbox`, `Switch`, `Table` (with row selection), `SelectionBar`, `Toast`, `Stat`, `Chip`, `Disclosure`, `EmptyState`, `Skeleton`. Requires `@salemcobalt/tokens`.
+React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, `Icon` and a shipped icon set, `BroomIcon`, `Badge`, `Card`, `Stack`, `Inline`, `Heading`, `Text`, `Kbd`, `Dialog`, `FullScreenFlow`, `Tooltip`, `Menu`, `Popover`, `PriorityNav`, `Toolbar`, `Banner`, `Spinner`, `Progress`, `Tabs`, `Input`, `Textarea`, `Select`, `FileInput` and `FilePreviewDialog`, `Checkbox`, `Switch`, `Table` (with row selection), `SelectionBar`, `Toast`, `Stat`, `Chip`, `Disclosure`, `EmptyState`, `Skeleton`. Requires `@salemcobalt/tokens`.
 
 ```ts
 import '@salemcobalt/tokens/css'; // custom properties, light + dark
@@ -32,7 +32,8 @@ Styles ship as one stylesheet inside `@layer sc`, so an app's unlayered CSS alwa
 | `Card`               | `variant` outlined · elevated · filled; `padding` none · sm · md · lg; `interactive`; `selected`; `as` or `render` to make it an `a`/`button`/`li`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `Stack`, `Inline`    | `gap` from the spacing scale (`none` … `4xl`); `align`; `justify`; `as`. `Inline` wraps unless `wrap={false}`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `Kbd`                | One key per `Kbd`; `Kbd.Group label="Command K"` groups a shortcut with a `+` (or `separator="space"`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `Dialog`             | `Root` (`open`, `defaultOpen`, `onOpenChange`, `dismissible`), `Trigger`, `Content` (`size` sm · md · lg, every size clamps to the viewport minus a 16px gutter; `variant="sheet"` becomes a bottom sheet below 640px with a scrolling `Body`), `Title`, `Description`, `Body`, `Actions`, `Close`. Menus, selects and tooltips opened inside render above it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `Dialog`             | `Root` (`open`, `defaultOpen`, `onOpenChange`, `dismissible`, `onRequestClose(reason)`: Esc, backdrop and every `Close` ask instead of closing; close by setting `open`), `Trigger`, `Content` (`size` sm · md · lg, every size clamps to the viewport minus a 16px gutter; `variant="sheet"` becomes a bottom sheet below 640px with a scrolling `Body`; `variant="fullscreen"` covers the viewport, inset 16px from 900px, with a scrolling `Body`), `Title`, `Description`, `Body`, `Actions`, `Close`. Menus, selects and tooltips opened inside render above it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `FullScreenFlow`     | A multi-step takeover on `Dialog variant="fullscreen"` (docs/adr/0006). `Root` (`open` default `true`, required `onRequestClose(reason)` for Esc and the ×, `onNext`/`onBack` for Enter and the arrow keys outside controls, `decoration`), `Header` (`title` names the dialog, `logo`, `compactTitle` below 760px, `status`, `closeLabel`; children: `Progress`), `Progress` (`chapters` `{ label, steps }[]`, `step` counted from 1, `label`; current chapter `aria-current="step"`), `Body`, `Rail` (from 1000px, `footer`) › `RailGroup` (`label`) › `RailItem` (`current`, `done`, `disabled`, `adornment`), `Viewport` (`direction` forward · back; one keyed `Step`), `Step` (`title` an `<h2>` that takes focus, `eyebrow`, `description`, `announcement` for the live region), `Footer` (`back`, `hint`, children; 44px buttons). The app owns the step state; the flow owns motion, focus and announcements.                                                                                                                                                                                                                                                                |
 | `Toolbar`            | `Root` (required `aria-label`, `wrap`, `gap`), `Group` (`aria-label`, `gap`), `Separator`, `Spacer`, `Button` (`render={<IconButton … />}` or `render={<Menu.Trigger render={…} />}` so the control joins the roving focus: Tab enters, arrows move, Tab leaves), `Link` (an anchor in the same navigation; `render={<IconButton label render={<a href />} />}` for an icon link).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | `Banner`             | `tone` info (default) · success · warning · danger · neutral; `icon` (or `false`); `action` slot; `dismissible` + `onDismiss` (`open` to control); warning and danger are `role="alert"`, the rest `role="status"`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | `Tabs`               | `Root` (`value`, `defaultValue`, `onValueChange`), `List` (required `aria-label`, `fill`), `Tab` (`value`, `icon`, `count`, `disabled`), `Panel` (`value`, `keepMounted`). Arrow keys move, Enter/Space activates. `List variant="segmented"`: a quiet segmented control (sunken track, the active tab raised on `surface-default`, no accent, plain muted counts); `line` stays the default.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
@@ -67,6 +68,48 @@ Styles ship as one stylesheet inside `@layer sc`, so an app's unlayered CSS alwa
     </Dialog.Actions>
   </Dialog.Content>
 </Dialog.Root>
+```
+
+```tsx
+// The app owns the step (a machine, the URL); the flow owns motion, focus and announcements.
+<FullScreenFlow.Root onRequestClose={() => setConfirmLeave(true)} onNext={next} onBack={back}>
+  <FullScreenFlow.Header
+    title="Set up your search"
+    compactTitle={`${n} of 10 · ${step.label}`}
+    closeLabel="Save and exit"
+  >
+    <FullScreenFlow.Progress
+      chapters={[
+        { label: 'You', steps: 3 },
+        { label: 'Your search', steps: 4 },
+      ]}
+      step={n}
+      label={`Step ${n} of 10 · ${step.label}`}
+    />
+  </FullScreenFlow.Header>
+  <FullScreenFlow.Body>
+    <FullScreenFlow.Rail aria-label="Setup steps">…RailGroup › RailItem…</FullScreenFlow.Rail>
+    <FullScreenFlow.Viewport direction={direction}>
+      <FullScreenFlow.Step key={step.id} title={step.title} announcement={`Step ${n} of 10, ${step.label}`}>
+        …
+      </FullScreenFlow.Step>
+    </FullScreenFlow.Viewport>
+  </FullScreenFlow.Body>
+  <FullScreenFlow.Footer
+    back={
+      <Button variant="ghost" size="lg" onClick={back}>
+        Back
+      </Button>
+    }
+  >
+    <Button size="lg" onClick={next}>
+      Continue
+    </Button>
+  </FullScreenFlow.Footer>
+  <Dialog.Root open={confirmLeave} onOpenChange={setConfirmLeave}>
+    …Leave for now? …
+  </Dialog.Root>
+</FullScreenFlow.Root>
 ```
 
 ```tsx

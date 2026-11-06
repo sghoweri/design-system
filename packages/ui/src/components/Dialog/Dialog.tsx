@@ -5,7 +5,15 @@ import { XIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
 
 export type DialogSize = 'sm' | 'md' | 'lg';
-export type DialogVariant = 'dialog' | 'sheet';
+export type DialogVariant = 'dialog' | 'sheet' | 'fullscreen';
+/** How a person asked to close: Esc, a press on the backdrop, or a `Dialog.Close`. */
+export type DialogCloseRequestReason = 'escape-key' | 'outside-press' | 'close-press';
+
+const REQUESTABLE: ReadonlySet<string> = new Set<DialogCloseRequestReason>([
+  'escape-key',
+  'outside-press',
+  'close-press',
+]);
 
 export interface DialogRootProps {
   /** Controlled open state. */
@@ -16,11 +24,25 @@ export interface DialogRootProps {
   onOpenChange?: ((open: boolean) => void) | undefined;
   /** When `false`, Esc and backdrop clicks no longer close the dialog. Default `true`. */
   dismissible?: boolean | undefined;
+  /**
+   * When set, the dialog no longer closes itself: Esc, a backdrop press and every `Dialog.Close` call
+   * this with the reason instead, and the app closes it by setting `open` to `false` (for example after
+   * a "Leave for now?" confirmation). Use with a controlled `open`. `dismissible={false}` still swallows
+   * Esc and backdrop presses first.
+   */
+  onRequestClose?: ((reason: DialogCloseRequestReason) => void) | undefined;
   children?: ReactNode | undefined;
 }
 
 /** Owns the open state. Wrap a `Dialog.Trigger` and a `Dialog.Content`. */
-function Root({ dismissible = true, onOpenChange, open, defaultOpen, children }: DialogRootProps) {
+function Root({
+  dismissible = true,
+  onOpenChange,
+  onRequestClose,
+  open,
+  defaultOpen,
+  children,
+}: DialogRootProps) {
   return (
     <BaseDialog.Root
       open={open}
@@ -33,6 +55,11 @@ function Root({ dismissible = true, onOpenChange, open, defaultOpen, children }:
           (details.reason === 'escape-key' || details.reason === 'outside-press')
         ) {
           details.cancel();
+          return;
+        }
+        if (!next && onRequestClose && REQUESTABLE.has(details.reason)) {
+          details.cancel();
+          onRequestClose(details.reason as DialogCloseRequestReason);
           return;
         }
         onOpenChange?.(next);
@@ -56,6 +83,10 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
    * `dialog` (default) centres the popup. `sheet` is the same on wide viewports but below 640px it
    * becomes a bottom sheet: full width, rounded top, title and actions pinned while `Dialog.Body`
    * scrolls, padding that clears the home indicator. Use it for forms and pickers opened from a list.
+   * `fullscreen` covers the viewport (inset by 16px with a rounded edge from 900px), slides in from the
+   * inline end, keeps clear of the safe areas, and lets `Dialog.Body` scroll between a pinned title and
+   * actions; `size` is ignored. It is the surface of `FullScreenFlow`. Pair it with `onRequestClose` on
+   * the Root when leaving needs a confirmation.
    */
   variant?: DialogVariant | undefined;
   className?: string | undefined;

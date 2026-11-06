@@ -1,0 +1,432 @@
+/* ---- FullScreenFlow -------------------------------------------------------- */
+/* The flow is `Dialog variant="fullscreen"` with this class on the popup: header, body and footer rows,
+   no padding of its own (each row clears the safe areas itself). */
+.sc-dialog__popup.sc-flow {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: 0;
+  isolation: isolate;
+  font-size: var(--sc-font-size-md);
+  line-height: var(--sc-font-line-height-normal);
+}
+.sc-flow__decoration {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.sc-flow__header,
+.sc-flow__body,
+.sc-flow__footer {
+  position: relative;
+  z-index: 1;
+  min-inline-size: 0;
+}
+
+/* Header: title, progress centred in the space left, status, ×. */
+.sc-flow__header {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-spacing-sm) var(--sc-spacing-md);
+  padding-block: calc(var(--sc-spacing-xs) + env(safe-area-inset-top, 0px)) var(--sc-spacing-xs);
+  padding-inline: calc(var(--sc-spacing-md) + env(safe-area-inset-left, 0px))
+    calc(var(--sc-spacing-xs) + env(safe-area-inset-right, 0px));
+  border-block-end: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  background: color-mix(in oklab, var(--sc-color-surface-default) 88%, transparent);
+  backdrop-filter: blur(6px);
+}
+.sc-flow__heading {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-xs);
+  min-inline-size: 0;
+}
+.sc-flow__logo {
+  display: inline-flex;
+  flex: none;
+}
+.sc-flow .sc-flow__title {
+  margin: 0;
+  padding: 0;
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-snug);
+  font-weight: var(--sc-font-weight-semibold);
+  letter-spacing: var(--sc-font-tracking-normal);
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+.sc-flow__compact-title {
+  display: none;
+  min-inline-size: 0;
+  overflow: hidden;
+  font-size: var(--sc-font-size-sm);
+  font-weight: var(--sc-font-weight-medium);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sc-flow__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-2xs);
+  margin-inline-start: auto;
+  font-size: var(--sc-font-size-xs);
+  color: var(--sc-color-text-subtle);
+  white-space: nowrap;
+}
+.sc-flow__close {
+  flex: none;
+  margin-inline-start: auto;
+}
+.sc-flow__status + .sc-flow__close {
+  margin-inline-start: 0;
+}
+
+/* Progress: one segment per chapter, as wide as its share of the steps (flex-grow set inline). */
+.sc-flow__progress {
+  flex: 1 1 12rem;
+  display: grid;
+  gap: var(--sc-spacing-2xs);
+  min-inline-size: 0;
+  max-inline-size: 32.5rem;
+  margin-inline: auto;
+}
+.sc-flow__progress + .sc-flow__status,
+.sc-flow__progress + .sc-flow__close {
+  margin-inline-start: 0;
+}
+.sc-flow__progress-label {
+  overflow: hidden;
+  font-size: var(--sc-font-size-xs);
+  color: var(--sc-color-text-muted);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sc-flow__progress-label :where(b, strong) {
+  color: var(--sc-color-text-default);
+  font-weight: var(--sc-font-weight-medium);
+}
+.sc-flow__segments {
+  display: flex;
+  gap: var(--sc-spacing-2xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sc-flow__segment {
+  flex: 1 1 0;
+  block-size: 4px;
+  overflow: hidden;
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-surface-active);
+}
+.sc-flow__segment-fill {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--sc-color-accent-default);
+  transition: inline-size var(--sc-duration-slower) var(--sc-ease-standard);
+}
+
+/* Body: rail beside the viewport from 1000px. */
+.sc-flow__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-block-size: 0;
+}
+.sc-flow__rail {
+  display: none;
+}
+@media (width >= 1000px) {
+  .sc-flow__body:has(> .sc-flow__rail) {
+    grid-template-columns: 14.5rem minmax(0, 1fr);
+  }
+  .sc-flow__rail {
+    display: block;
+    overflow-y: auto;
+    padding-block: var(--sc-spacing-lg);
+    padding-inline: var(--sc-spacing-md) var(--sc-spacing-sm);
+    border-inline-end: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  }
+}
+.sc-flow__rail-group {
+  margin-block-end: var(--sc-spacing-sm);
+}
+.sc-flow__rail-label {
+  display: block;
+  padding: 0 var(--sc-spacing-xs) var(--sc-spacing-2xs);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-font-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sc-color-text-subtle);
+}
+.sc-flow__rail-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sc-flow__rail-item {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--sc-spacing-xs);
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--sc-size-control-sm);
+  padding: 0 var(--sc-spacing-xs);
+  border: 0;
+  border-radius: var(--sc-radius-md);
+  background: transparent;
+  color: var(--sc-color-text-muted);
+  font: inherit;
+  font-size: var(--sc-font-size-sm);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-ease-standard),
+    color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-flow__rail-item:hover:not(:disabled) {
+  background: var(--sc-color-surface-hover);
+  color: var(--sc-color-text-default);
+}
+.sc-flow__rail-item:disabled {
+  color: var(--sc-color-text-subtle);
+  cursor: not-allowed;
+}
+.sc-flow__rail-item[aria-current='step'] {
+  background: var(--sc-color-accent-subtle);
+  color: var(--sc-color-accent-text);
+  font-weight: var(--sc-font-weight-medium);
+}
+.sc-flow__rail-mark {
+  display: grid;
+  place-items: center;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+.sc-flow__rail-item:not([data-done]) .sc-flow__rail-mark::before {
+  content: '';
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: var(--sc-radius-full);
+  background: currentColor;
+  opacity: 0.55;
+}
+.sc-flow__rail-item[data-done] .sc-flow__rail-mark {
+  color: var(--sc-color-success-text);
+}
+.sc-flow__rail-adornment {
+  display: inline-flex;
+  color: var(--sc-color-accent-text);
+}
+.sc-flow__rail-note {
+  display: grid;
+  gap: var(--sc-spacing-2xs);
+  margin-block-start: var(--sc-spacing-md);
+  padding: var(--sc-spacing-xs) var(--sc-spacing-sm);
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-surface-sunken);
+  font-size: var(--sc-font-size-xs);
+  color: var(--sc-color-text-muted);
+}
+@media (height <= 820px) {
+  .sc-flow__rail-note {
+    display: none;
+  }
+}
+
+/* Viewport: the leaving and arriving steps share one grid cell while they animate. */
+.sc-flow__viewport {
+  position: relative;
+  display: grid;
+  min-block-size: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.sc-flow__frame {
+  --_dir: 1;
+  --_flip: 1;
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+}
+.sc-flow__frame[data-direction='back'] {
+  --_dir: -1;
+}
+.sc-flow__frame:dir(rtl) {
+  --_flip: -1;
+}
+.sc-flow__frame[data-phase='enter'] {
+  animation: sc-flow-step-in var(--sc-duration-slower) var(--sc-ease-enter) both;
+}
+.sc-flow__frame[data-phase='exit'] {
+  pointer-events: none;
+  animation: sc-flow-step-out var(--sc-duration-base) var(--sc-ease-exit) forwards;
+}
+@keyframes sc-flow-step-in {
+  from {
+    opacity: 0;
+    translate: calc(var(--_dir) * var(--_flip) * 72px) 0;
+  }
+}
+@keyframes sc-flow-step-out {
+  to {
+    opacity: 0;
+    translate: calc(var(--_dir) * var(--_flip) * -40px) 0;
+    scale: 0.985;
+  }
+}
+@keyframes sc-flow-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes sc-flow-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Step */
+.sc-flow__step {
+  display: grid;
+  align-content: start;
+  gap: var(--sc-spacing-lg);
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: 45rem;
+  margin-inline: auto;
+  padding: var(--sc-spacing-xl) var(--sc-spacing-md) var(--sc-spacing-2xl);
+}
+@media (width >= 700px) {
+  .sc-flow__step {
+    padding-block-start: var(--sc-spacing-2xl);
+    padding-inline: var(--sc-spacing-xl);
+  }
+}
+.sc-flow__step-head {
+  display: grid;
+  gap: var(--sc-spacing-xs);
+}
+.sc-flow__eyebrow {
+  margin: 0;
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-font-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sc-color-accent-text);
+}
+.sc-flow__step-title {
+  margin: 0;
+  font-size: var(--sc-font-size-3xl);
+  line-height: var(--sc-font-line-height-snug);
+  font-weight: var(--sc-font-weight-semibold);
+  letter-spacing: var(--sc-font-tracking-tight);
+  text-wrap: balance;
+}
+/* Focus lands here only by script, to move the reading position; Tab never reaches it. */
+.sc-flow__step-title:focus,
+.sc-flow__step-title:focus-visible {
+  outline: none;
+}
+.sc-flow__step-description {
+  max-inline-size: 60ch;
+  color: var(--sc-color-text-muted);
+}
+
+/* Footer: back at the start, hint and primary action at the end, every button a 44px target. */
+.sc-flow__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-spacing-sm);
+  padding-block: var(--sc-spacing-sm) calc(var(--sc-spacing-sm) + env(safe-area-inset-bottom, 0px));
+  padding-inline: calc(var(--sc-spacing-md) + env(safe-area-inset-left, 0px))
+    calc(var(--sc-spacing-md) + env(safe-area-inset-right, 0px));
+  border-block-start: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  background: color-mix(in oklab, var(--sc-color-surface-default) 92%, transparent);
+  backdrop-filter: blur(6px);
+}
+.sc-flow__footer .sc-button {
+  min-block-size: var(--sc-size-touch-target);
+  min-inline-size: max(var(--_h), var(--sc-size-touch-target));
+}
+.sc-flow__footer-hint {
+  display: none;
+  align-items: center;
+  gap: var(--sc-spacing-2xs);
+  font-size: var(--sc-font-size-xs);
+  color: var(--sc-color-text-subtle);
+}
+.sc-flow__footer-actions {
+  display: flex;
+  gap: var(--sc-spacing-xs);
+  margin-inline-start: auto;
+}
+.sc-flow__footer-actions > .sc-button:last-child {
+  min-inline-size: 10rem;
+}
+
+@media (width >= 760px) {
+  .sc-flow__footer-hint {
+    display: inline-flex;
+    margin-inline-start: auto;
+  }
+  .sc-flow__footer-hint + .sc-flow__footer-actions {
+    margin-inline-start: 0;
+  }
+}
+@media (width < 760px) {
+  .sc-flow__header {
+    flex-wrap: wrap;
+    row-gap: var(--sc-spacing-xs);
+  }
+  .sc-flow__heading {
+    flex: 1 1 0;
+  }
+  .sc-flow__progress {
+    order: 1;
+    flex-basis: 100%;
+    max-inline-size: none;
+    padding-inline-end: var(--sc-spacing-xs);
+  }
+  .sc-flow__progress-label {
+    display: none;
+  }
+  .sc-flow__heading[data-compact] > .sc-flow__title {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .sc-flow__compact-title {
+    display: inline;
+  }
+  .sc-flow__step-title {
+    font-size: var(--sc-font-size-2xl);
+  }
+}
+@media (width < 520px) {
+  .sc-flow__footer-actions {
+    flex: 1 1 auto;
+  }
+  .sc-flow__footer-actions > :last-child {
+    flex: 1 1 auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-flow__frame[data-phase='enter'] {
+    animation: sc-flow-fade-in var(--sc-duration-base) var(--sc-ease-enter) both;
+  }
+  .sc-flow__frame[data-phase='exit'] {
+    animation: sc-flow-fade-out var(--sc-duration-fast) var(--sc-ease-exit) forwards;
+  }
+  .sc-flow__segment-fill {
+    transition: none;
+  }
+}
