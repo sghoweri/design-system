@@ -1,0 +1,132 @@
+/* ---- Popover --------------------------------------------------------------- */
+.sc-popover__positioner {
+  z-index: var(--sc-z-dropdown);
+  outline: 0;
+}
+/* Menu's surface: raised background, hairline border, large radius, elevation 2. */
+.sc-popover {
+  position: relative;
+  box-sizing: border-box;
+  inline-size: max-content;
+  max-inline-size: min(100vw - 2 * var(--sc-spacing-md), 360px);
+  max-block-size: var(--available-height);
+  overflow: auto;
+  padding: var(--sc-spacing-md);
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-surface-raised);
+  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
+  --sc-color-surface-active: var(--sc-color-surface-raised-active);
+  color: var(--sc-color-text-default);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  box-shadow: var(--sc-elevation-2);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-normal);
+  outline: 0;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity var(--sc-duration-fast) var(--sc-ease-enter),
+    scale var(--sc-duration-fast) var(--sc-ease-enter);
+}
+/* With an arrow the popup must not clip it. */
+.sc-popover:has(> .sc-popover__arrow) {
+  overflow: visible;
+}
+.sc-popover[data-starting-style],
+.sc-popover[data-ending-style] {
+  opacity: 0;
+  scale: 0.97;
+}
+.sc-popover[data-ending-style] {
+  transition-timing-function: var(--sc-ease-exit);
+}
+.sc-popover[data-instant] {
+  transition: none;
+}
+.sc-popover__title {
+  margin: 0;
+  font-size: var(--sc-font-size-md);
+  line-height: var(--sc-font-line-height-snug);
+  font-weight: var(--sc-font-weight-semibold);
+}
+.sc-popover__title:has(~ .sc-popover__close),
+.sc-popover__close ~ .sc-popover__title {
+  padding-inline-end: var(--sc-spacing-xl);
+}
+.sc-popover__description {
+  margin: var(--sc-spacing-2xs) 0 0;
+  color: var(--sc-color-text-muted);
+}
+.sc-popover__close {
+  position: absolute;
+  inset-block-start: var(--sc-spacing-xs);
+  inset-inline-end: var(--sc-spacing-xs);
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--sc-size-control-sm);
+  block-size: var(--sc-size-control-sm);
+  padding: 0;
+  border: 0;
+  border-radius: var(--sc-radius-md);
+  background: transparent;
+  color: var(--sc-color-text-muted);
+  cursor: pointer;
+}
+.sc-popover__close:hover {
+  background: var(--sc-color-surface-hover);
+  color: var(--sc-color-text-default);
+}
+.sc-popover__close:focus-visible {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: calc(-1 * var(--sc-border-width-focus));
+}
+/* A 16×8 tip with the popup's fill and border, placed by Base UI on the side facing the trigger. It overlaps
+   the popup's border by one hairline so the border does not run across its base. */
+.sc-popover__arrow {
+  --_w: 16px;
+  --_h: 8px;
+  display: block;
+  inline-size: var(--_w);
+  block-size: calc(var(--_h) + var(--sc-border-width-hairline));
+  overflow: clip;
+  pointer-events: none;
+}
+.sc-popover__arrow::before {
+  content: '';
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 50%;
+  box-sizing: border-box;
+  inline-size: calc(var(--_h) * 1.4142);
+  block-size: calc(var(--_h) * 1.4142);
+  background: var(--sc-color-surface-raised);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  translate: -50% 50%;
+  rotate: 45deg;
+}
+.sc-popover__arrow[data-side='top'] {
+  inset-block-end: calc(-1 * var(--_h));
+  rotate: 180deg;
+}
+.sc-popover__arrow[data-side='bottom'] {
+  inset-block-start: calc(-1 * var(--_h));
+}
+.sc-popover__arrow[data-side='left'],
+.sc-popover__arrow[data-side='inline-start'] {
+  inset-inline-end: calc(-1 * (var(--_w) + var(--_h)) / 2);
+  rotate: 90deg;
+}
+.sc-popover__arrow[data-side='right'],
+.sc-popover__arrow[data-side='inline-end'] {
+  inset-inline-start: calc(-1 * (var(--_w) + var(--_h)) / 2);
+  rotate: -90deg;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-popover {
+    transition-duration: 0ms;
+  }
+  .sc-popover[data-starting-style],
+  .sc-popover[data-ending-style] {
+    scale: none;
+  }
+}

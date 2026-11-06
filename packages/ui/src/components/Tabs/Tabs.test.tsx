@@ -64,4 +64,26 @@ describe('Tabs', () => {
     expect(screen.getByRole('tab', { name: 'B' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByRole('tabpanel')).toHaveTextContent('B panel');
   });
+
+  it('keeps the line look by default and marks the segmented variant for the stylesheet', async () => {
+    const { container, rerender } = render(<Example />);
+    expect(screen.getByRole('tablist')).toHaveAttribute('data-variant', 'line');
+    rerender(
+      <Tabs.Root defaultValue="matches">
+        <Tabs.List aria-label="Inbox sections" variant="segmented">
+          <Tabs.Tab value="matches" count={16}>
+            Matches
+          </Tabs.Tab>
+          <Tabs.Tab value="handled" count={13}>
+            Handled
+          </Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="matches">Matches content</Tabs.Panel>
+        <Tabs.Panel value="handled">Handled content</Tabs.Panel>
+      </Tabs.Root>,
+    );
+    expect(screen.getByRole('tablist')).toHaveAttribute('data-variant', 'segmented');
+    expect(screen.getByRole('tab', { name: 'Matches 16' })).toHaveAttribute('aria-selected', 'true');
+    await expectNoA11yViolations(container);
+  });
 });

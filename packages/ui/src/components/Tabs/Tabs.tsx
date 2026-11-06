@@ -26,18 +26,27 @@ function Root({ className, onValueChange, ...rest }: TabsRootProps) {
   );
 }
 
+export type TabsListVariant = 'line' | 'segmented';
+
 export interface TabsListProps extends Omit<BaseTabs.List.Props, 'className'> {
   /** Names the set of tabs for assistive tech: "Inbox sections". */
   'aria-label': string;
   /** Tabs share the width equally instead of sizing to their labels. */
   fill?: boolean | undefined;
+  /** `line` (default): an accent underline on the active tab. `segmented`: a quiet segmented control, a sunken track with the active tab raised and no accent colour. */
+  variant?: TabsListVariant | undefined;
   className?: string | undefined;
 }
 
 /** The row of tabs with the sliding indicator. Arrow keys move between tabs; Enter or Space activates. */
-function List({ fill = false, className, children, ...rest }: TabsListProps) {
+function List({ fill = false, variant = 'line', className, children, ...rest }: TabsListProps) {
   return (
-    <BaseTabs.List className={cx('sc-tabs__list', className)} data-fill={fill || undefined} {...rest}>
+    <BaseTabs.List
+      className={cx('sc-tabs__list', className)}
+      data-fill={fill || undefined}
+      data-variant={variant}
+      {...rest}
+    >
       {children}
       <BaseTabs.Indicator className="sc-tabs__indicator" />
     </BaseTabs.List>

@@ -95,9 +95,11 @@
   inline-size: 100%;
   block-size: 100%;
 }
+/* The label clips for the ellipsis, so it needs a real line box or descenders get cut (the chip sets line-height: 1). */
 .sc-chip__label {
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: var(--sc-font-line-height-ui);
 }
 .sc-chip[data-removable] > .sc-chip__action,
 .sc-chip[data-removable] > .sc-chip__label {

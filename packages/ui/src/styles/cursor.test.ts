@@ -39,6 +39,9 @@ const ACTIVATABLE = [
   '.sc-card[data-interactive]',
   '.sc-file-input .filepond--drop-label.filepond--drop-label label',
   '.sc-file-input .filepond--action-remove-item',
+  '.sc-priority-nav__link',
+  '.sc-priority-nav__toggle',
+  '.sc-popover__close',
 ];
 const DISABLED = [
   '.sc-button:disabled',

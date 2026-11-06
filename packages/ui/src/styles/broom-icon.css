@@ -1,0 +1,75 @@
+/* ---- BroomIcon ------------------------------------------------------------- */
+/* Geometry and motion as approved: the body pivots on the handle top (20.2, 2.2) from -14deg to 8deg while
+   the dust fades in and drifts left in step; strokes stay a fixed screen width at any size. */
+.sc-broom {
+  --sc-broom-stroke: 1.25px;
+}
+/* `display` (72px) is a one-off for the broom's showcase and empty states. Move it into the Icon sizes and
+   tokens if a second icon ever needs it. */
+.sc-icon.sc-broom[data-size='display'] {
+  --_s: calc(var(--sc-size-icon-xl) * 3);
+  --sc-broom-stroke: 1.75px;
+}
+.sc-broom__body,
+.sc-broom__dust {
+  transform-box: view-box;
+  stroke-width: var(--sc-broom-stroke);
+}
+.sc-broom__body {
+  transform-origin: 20.2px 2.2px;
+}
+.sc-broom * {
+  vector-effect: non-scaling-stroke;
+}
+.sc-broom__band {
+  fill: currentColor;
+  stroke: none;
+}
+.sc-broom__dust {
+  opacity: 0;
+}
+.sc-broom[data-sweeping] .sc-broom__body {
+  animation: sc-broom-sweep 0.9s ease-in-out infinite alternate;
+}
+.sc-broom[data-sweeping] .sc-broom__dust {
+  animation: sc-broom-dust 0.9s ease-in-out infinite alternate;
+}
+@keyframes sc-broom-sweep {
+  from {
+    transform: rotate(-14deg);
+  }
+  to {
+    transform: rotate(8deg);
+  }
+}
+/* At the top of the sweep (8deg) the head stays about 2 grid units clear of the dust. */
+@keyframes sc-broom-dust {
+  from {
+    opacity: 0;
+    transform: translateX(0.5px);
+  }
+  to {
+    opacity: 0.9;
+    transform: translateX(-1px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-broom[data-sweeping] .sc-broom__body,
+  .sc-broom[data-sweeping] .sc-broom__dust {
+    animation: none;
+  }
+  .sc-broom[data-sweeping] .sc-broom__dust {
+    opacity: 0.9;
+  }
+}
+/* Drawn on a 24px grid (the shipped icons use 16px), so inside an IconButton it takes the next icon size up:
+   20px in an md button, as in the approved nav mock. */
+.sc-icon-button > .sc-button__icon:has(> .sc-broom) {
+  --_icon: var(--sc-size-icon-lg);
+}
+.sc-icon-button[data-size='sm'] > .sc-button__icon:has(> .sc-broom) {
+  --_icon: var(--sc-size-icon-md);
+}
+.sc-icon-button[data-size='lg'] > .sc-button__icon:has(> .sc-broom) {
+  --_icon: var(--sc-size-icon-xl);
+}

@@ -113,6 +113,10 @@
 .sc-button[data-loading] > .sc-button__label {
   opacity: 0;
 }
+/* Its own line box, so descenders sit inside the label (the button sets line-height: 1 for centring). */
+.sc-button__label {
+  line-height: var(--sc-font-line-height-ui);
+}
 .sc-button__icon {
   display: inline-flex;
   inline-size: 1.125em;
@@ -131,6 +135,44 @@
   border: var(--sc-border-width-focus) solid currentColor;
   border-inline-end-color: transparent;
   animation: sc-spin 0.8s linear infinite;
+}
+/* Icon-only: square, the label kept for assistive tech only, no shortcut hint. Same element, so focus and
+   any open tooltip survive the switch. */
+.sc-button[data-icon-only] {
+  inline-size: var(--_h);
+  padding-inline: 0;
+}
+.sc-button[data-icon-only] > .sc-button__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.sc-button[data-icon-only] > .sc-button__shortcut {
+  display: none;
+}
+/* A shortcut hint after the label: a Kbd tinted to the button's own colour, so it reads on every variant. */
+.sc-button__shortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-3xs);
+  flex: none;
+  margin-inline-start: var(--sc-spacing-3xs);
+}
+.sc-button__shortcut .sc-kbd {
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+  box-shadow: none;
+  opacity: 0.72;
+}
+.sc-button__shortcut .sc-kbd-group {
+  color: inherit;
+}
+.sc-button[data-loading] > .sc-button__shortcut {
+  opacity: 0;
 }
 @keyframes sc-spin {
   to {
@@ -167,6 +209,40 @@
 }
 .sc-icon-button[data-loading] > .sc-button__icon {
   opacity: 0;
+}
+/* Status dot, top-left: icons such as the broom own the top-right and fill the bottom. Physical corner on
+   purpose, because the glyph does not mirror in RTL either. */
+.sc-icon-button__dot {
+  --_dot: var(--sc-color-accent-default);
+  position: absolute;
+  inset: var(--sc-spacing-2xs) auto auto var(--sc-spacing-2xs);
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: var(--sc-radius-full);
+  background: var(--_dot);
+  box-shadow: 0 0 0 var(--sc-border-width-focus)
+    var(--sc-icon-button-dot-ring, var(--sc-color-surface-default));
+  pointer-events: none;
+}
+.sc-icon-button[data-size='sm'] > .sc-icon-button__dot {
+  inset: var(--sc-spacing-3xs) auto auto var(--sc-spacing-3xs);
+  inline-size: 6px;
+  block-size: 6px;
+}
+.sc-icon-button__dot[data-tone='neutral'] {
+  --_dot: var(--sc-color-text-subtle);
+}
+.sc-icon-button__dot[data-tone='success'] {
+  --_dot: var(--sc-color-success-solid);
+}
+.sc-icon-button__dot[data-tone='warning'] {
+  --_dot: var(--sc-color-warning-solid);
+}
+.sc-icon-button__dot[data-tone='danger'] {
+  --_dot: var(--sc-color-danger-solid);
+}
+.sc-icon-button__dot[data-tone='info'] {
+  --_dot: var(--sc-color-info-solid);
 }
 .sc-button[data-popup-open] {
   background: var(--sc-color-surface-active);

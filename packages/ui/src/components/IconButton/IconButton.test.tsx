@@ -91,4 +91,21 @@ describe('IconButton', () => {
     expect(link).not.toHaveAttribute('type');
     await expectNoA11yViolations(container);
   });
+
+  it('shows a decorative status dot only when asked', () => {
+    const { rerender } = render(
+      <IconButton label="Alerts">
+        <PauseIcon />
+      </IconButton>,
+    );
+    expect(screen.getByRole('button').querySelector('.sc-icon-button__dot')).toBeNull();
+    rerender(
+      <IconButton label="Alerts: 2 new" dot="danger">
+        <PauseIcon />
+      </IconButton>,
+    );
+    const dot = screen.getByRole('button', { name: 'Alerts: 2 new' }).querySelector('.sc-icon-button__dot');
+    expect(dot).toHaveAttribute('data-tone', 'danger');
+    expect(dot).toHaveAttribute('aria-hidden', 'true');
+  });
 });
