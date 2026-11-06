@@ -94,3 +94,22 @@ export const Padding: Story = {
     </Stack>
   ),
 };
+
+export const AsNavigation: Story = {
+  name: 'As a navigation landmark',
+  render: () => (
+    <Card as="nav" aria-label="Your files" padding="sm" style={{ maxInlineSize: '16rem' }}>
+      <Stack gap="2xs" as="ul" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+        <li>
+          <a href="#profile">profile.md</a>
+        </li>
+        <li>
+          <a href="#rubric">rubric.md</a>
+        </li>
+        <li>
+          <a href="#sources">sources.yaml</a>
+        </li>
+      </Stack>
+    </Card>
+  ),
+};
