@@ -4,10 +4,10 @@
 .sc-broom {
   --sc-broom-stroke: 1.25px;
 }
-.sc-icon[data-size='display'] {
+/* `display` (72px) is a one-off for the broom's showcase and empty states. Move it into the Icon sizes and
+   tokens if a second icon ever needs it. */
+.sc-icon.sc-broom[data-size='display'] {
   --_s: calc(var(--sc-size-icon-xl) * 3);
-}
-.sc-broom[data-size='display'] {
   --sc-broom-stroke: 1.75px;
 }
 .sc-broom__body,

@@ -1,7 +1,7 @@
 # ADR 0005: PriorityNav — Priority+ navigation as a disclosure, measured once
 
 Date: 2026-11-05
-Status: proposed
+Status: accepted (Salem, 2026-11-05)
 
 ## Context
 
