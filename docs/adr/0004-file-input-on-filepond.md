@@ -1,7 +1,7 @@
 # ADR 0004: FileInput on FilePond
 
 Date: 2026-11-05
-Status: proposed (needs Salem's sign-off: the first runtime dependency beyond Base UI)
+Status: accepted (Salem, 2026-11-05). FileInput CSS stays in the main stylesheet.
 
 ## Context
 
