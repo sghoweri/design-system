@@ -111,6 +111,7 @@ export {
   Text,
   type TextAlign,
   type TextElement,
+  type TextFamily,
   type TextProps,
   type TextSize,
   type TextWeight,
@@ -201,3 +202,26 @@ export {
   type FullScreenFlowStepProps,
   type FullScreenFlowViewportProps,
 } from './components/FullScreenFlow/FullScreenFlow';
+export {
+  Score,
+  type ScoreProps,
+  type ScoreSize,
+  type ScoreTone,
+  type ScoreVariant,
+} from './components/Score/Score';
+export {
+  ReasonList,
+  type ReasonListItemProps,
+  type ReasonListProps,
+  type ReasonListSize,
+  type ReasonTone,
+} from './components/ReasonList/ReasonList';
+export {
+  WordDiff,
+  type WordDiffElement,
+  type WordDiffKind,
+  type WordDiffPart,
+  type WordDiffProps,
+  type WordDiffSize,
+} from './components/WordDiff/WordDiff';
+export { Quote, type QuoteProps } from './components/Quote/Quote';

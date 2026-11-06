@@ -37,4 +37,17 @@ describe('Text', () => {
     expect(dd).toHaveAttribute('data-truncate', 'clamp');
     expect(dd.style.getPropertyValue('--sc-text-lines')).toBe('2');
   });
+
+  it('sets the mono family only when asked', () => {
+    render(
+      <>
+        <Text family="mono" size="xs" tone="muted" truncate>
+          Quillstack · 5 h
+        </Text>
+        <Text>Prose</Text>
+      </>,
+    );
+    expect(screen.getByText('Quillstack · 5 h')).toHaveAttribute('data-family', 'mono');
+    expect(screen.getByText('Prose')).not.toHaveAttribute('data-family');
+  });
 });

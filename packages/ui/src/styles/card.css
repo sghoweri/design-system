@@ -67,6 +67,26 @@
   border-color: var(--sc-color-accent-default);
   box-shadow: inset 0 0 0 1px var(--sc-color-accent-default);
 }
+/* Plain: a quiet row. No surface or shadow; interactive hover is a wash (no border or elevation, so a long list
+   does not flicker); selected is the accent wash with a 1px accent border (3:1, the selection cue). */
+.sc-card[data-variant='plain'] {
+  background: transparent;
+  border-color: transparent;
+}
+.sc-card[data-variant='plain'][data-interactive]:hover {
+  background: var(--sc-color-surface-hover);
+  border-color: transparent;
+  box-shadow: none;
+}
+.sc-card[data-variant='plain'][data-interactive]:active {
+  background: var(--sc-color-surface-active);
+}
+.sc-card[data-variant='plain'][data-selected],
+.sc-card[data-variant='plain'][data-selected]:hover {
+  background: var(--sc-color-accent-wash);
+  border-color: var(--sc-color-accent-border);
+  box-shadow: none;
+}
 @media (prefers-reduced-motion: reduce) {
   .sc-card {
     transition: none;

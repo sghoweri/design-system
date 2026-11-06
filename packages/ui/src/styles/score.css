@@ -1,0 +1,133 @@
+/* ---- Score ----------------------------------------------------------------- */
+/* A number on a tinted tile, or inside a ring. Tone sets the tint (--_bg), the number (--_fg) and the solid used
+   for the ring arc and the selected tile (--_solid, --_on-solid). */
+.sc-score {
+  --_bg: var(--sc-color-accent-subtle);
+  --_fg: var(--sc-color-accent-text);
+  --_solid: var(--sc-color-accent-default);
+  --_on-solid: var(--sc-color-text-on-accent);
+  --_s: var(--sc-size-score-sm);
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  box-sizing: border-box;
+  inline-size: var(--_s);
+  block-size: var(--_s);
+  border-radius: var(--sc-radius-lg);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  font-weight: var(--sc-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  vertical-align: middle;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-ease-standard),
+    color var(--sc-duration-fast) var(--sc-ease-standard);
+}
+.sc-score[data-size='md'] {
+  --_s: var(--sc-size-score-md);
+  border-radius: var(--sc-radius-xl);
+  font-size: var(--sc-font-size-lg);
+}
+.sc-score[data-tone='neutral'] {
+  /* surface.active, so the tile still shows on a hovered row (surface.hover). Selected turns accent. */
+  --_bg: var(--sc-color-surface-active);
+  --_fg: var(--sc-color-text-muted);
+  --_solid: var(--sc-color-text-muted);
+}
+.sc-score[data-tone='success'] {
+  --_bg: var(--sc-color-success-subtle);
+  --_fg: var(--sc-color-success-text);
+  --_solid: var(--sc-color-success-solid);
+  --_on-solid: var(--sc-color-text-on-status);
+}
+.sc-score[data-tone='warning'] {
+  --_bg: var(--sc-color-warning-subtle);
+  --_fg: var(--sc-color-warning-text);
+  --_solid: var(--sc-color-warning-solid);
+  --_on-solid: var(--sc-color-text-on-status);
+}
+.sc-score[data-tone='danger'] {
+  --_bg: var(--sc-color-danger-subtle);
+  --_fg: var(--sc-color-danger-text);
+  --_solid: var(--sc-color-danger-solid);
+  --_on-solid: var(--sc-color-text-on-status);
+}
+.sc-score__body {
+  display: grid;
+  justify-items: center;
+  gap: var(--sc-spacing-3xs);
+}
+.sc-score__caption {
+  font-family: var(--sc-font-family-mono);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-font-tracking-wide);
+  text-transform: uppercase;
+  color: var(--sc-color-text-muted);
+}
+/* Selected: the tile goes solid in its tone (neutral goes accent), inside a selected row or on `selected`. */
+.sc-score[data-variant='tile'][data-selected],
+.sc-card[data-selected] .sc-score[data-variant='tile'],
+[aria-pressed='true'] .sc-score[data-variant='tile'],
+[aria-selected='true'] .sc-score[data-variant='tile'] {
+  background: var(--_solid);
+  color: var(--_on-solid);
+}
+.sc-score[data-variant='tile'][data-tone='neutral'][data-selected],
+.sc-card[data-selected] .sc-score[data-variant='tile'][data-tone='neutral'],
+[aria-pressed='true'] .sc-score[data-variant='tile'][data-tone='neutral'],
+[aria-selected='true'] .sc-score[data-variant='tile'][data-tone='neutral'] {
+  background: var(--sc-color-accent-default);
+  color: var(--sc-color-text-on-accent);
+}
+.sc-score[data-variant='tile'][data-selected] .sc-score__caption,
+.sc-card[data-selected] .sc-score[data-variant='tile'] .sc-score__caption,
+[aria-pressed='true'] .sc-score[data-variant='tile'] .sc-score__caption,
+[aria-selected='true'] .sc-score[data-variant='tile'] .sc-score__caption {
+  color: inherit;
+}
+/* Ring: the number in the tone's text colour over a donut. The SVG is drawn for the 64px ring token with a 6px
+   stroke (r = 29 in Score.tsx); the arc length comes from --sc-score-fill (0–100, set inline). */
+.sc-score[data-variant='ring'] {
+  --_s: var(--sc-size-score-ring);
+  border-radius: var(--sc-radius-full);
+  background: transparent;
+  font-size: var(--sc-font-size-lg);
+}
+.sc-score__ring {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  rotate: -90deg;
+  overflow: visible;
+}
+.sc-score__track,
+.sc-score__arc {
+  fill: none;
+  stroke-width: var(--sc-size-score-ring-stroke);
+}
+.sc-score__track {
+  stroke: var(--sc-color-surface-active);
+}
+.sc-score__arc {
+  stroke: var(--_solid);
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--sc-score-fill, 0));
+  /* Moves only when the value changes; the first render draws it in place. */
+  transition: stroke-dashoffset var(--sc-duration-slow) var(--sc-ease-enter);
+}
+.sc-score[data-variant='ring'] .sc-score__body {
+  position: relative;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-score,
+  .sc-score__arc {
+    transition: none;
+  }
+}

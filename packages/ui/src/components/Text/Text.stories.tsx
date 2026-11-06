@@ -21,6 +21,7 @@ const meta = {
     },
     weight: { control: 'radio', options: ['regular', 'medium', 'semibold'] },
     align: { control: 'radio', options: [undefined, 'start', 'center', 'end'] },
+    family: { control: 'radio', options: ['sans', 'mono'] },
   },
 } satisfies Meta<typeof Text>;
 export default meta;
@@ -50,6 +51,18 @@ export const Tones: Story = {
       <Text tone="warning">Warning: due today</Text>
       <Text tone="danger">Danger: rejected</Text>
       <Text tone="info">Info: screening</Text>
+    </Stack>
+  ),
+};
+
+/** `family="mono"` sets data apart from prose: row metadata, run times, dates. */
+export const Mono: Story = {
+  render: () => (
+    <Stack gap="3xs" style={{ maxWidth: 280 }}>
+      <Text weight="semibold">Staff Frontend Engineer, Design Systems</Text>
+      <Text family="mono" size="xs" tone="muted" truncate>
+        Quillstack · Remote US · 5 h · merged from two boards
+      </Text>
     </Stack>
   ),
 };

@@ -29,3 +29,7 @@ filepond/dist/filepond.css
 file-input.css
 file-preview-dialog.css
 full-screen-flow.css
+score.css
+reason-list.css
+word-diff.css
+quote.css

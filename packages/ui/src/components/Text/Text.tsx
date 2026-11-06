@@ -5,6 +5,7 @@ import { cx } from '../../utils/cx';
 export type TextSize = 'xs' | 'sm' | 'md' | 'lg';
 export type TextWeight = 'regular' | 'medium' | 'semibold';
 export type TextAlign = 'start' | 'center' | 'end';
+export type TextFamily = 'sans' | 'mono';
 export type TextElement =
   | 'p'
   | 'span'
@@ -33,6 +34,8 @@ export interface TextProps extends ComponentPropsWithRef<'p'> {
   truncate?: boolean | number | undefined;
   /** Tabular figures, for numbers that line up in columns. */
   numeric?: boolean | undefined;
+  /** `sans` (default) or `mono` for data next to prose: row metadata, dates, counts ("Quillstack · 5 h"). */
+  family?: TextFamily | undefined;
 }
 
 /** Running text and labels from the type scale. Parents own spacing: Text has no margins. */
@@ -44,6 +47,7 @@ export function Text({
   align,
   truncate = false,
   numeric = false,
+  family = 'sans',
   className,
   style,
   ...rest
@@ -57,6 +61,7 @@ export function Text({
     'data-align': align,
     'data-truncate': truncate === true ? '' : clamp !== undefined ? 'clamp' : undefined,
     'data-numeric': numeric || undefined,
+    'data-family': family === 'mono' ? 'mono' : undefined,
     style: clamp !== undefined ? ({ ...style, '--sc-text-lines': clamp } as CSSProperties) : style,
     ...rest,
   });

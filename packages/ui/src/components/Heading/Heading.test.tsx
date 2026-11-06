@@ -32,4 +32,22 @@ describe('Heading', () => {
     expect(div).toHaveAttribute('data-tone', 'muted');
     expect(div).toHaveAttribute('data-truncate');
   });
+
+  it('has an overline size that is muted unless a tone is set', async () => {
+    const { container } = render(
+      <>
+        <Heading level={3} size="overline">
+          Why it fits
+        </Heading>
+        <Heading level={3} size="overline" tone="accent">
+          You
+        </Heading>
+      </>,
+    );
+    const [plain, toned] = screen.getAllByRole('heading', { level: 3 });
+    expect(plain).toHaveAttribute('data-size', 'overline');
+    expect(plain).toHaveAttribute('data-tone', 'muted');
+    expect(toned).toHaveAttribute('data-tone', 'accent');
+    await expectNoA11yViolations(container);
+  });
 });
