@@ -90,6 +90,50 @@
 .sc-tabs__panel[data-hidden] {
   display: none;
 }
+/* Segmented: a quiet control. Sunken track, the active tab raised on `surface-default` by the sliding
+   indicator, no accent colour; counts are plain muted numbers
+   (`text-muted`, not `text-subtle`, which fails AA on the sunken track). */
+.sc-tabs__list[data-variant='segmented'] {
+  display: inline-flex;
+  align-self: flex-start;
+  max-inline-size: 100%;
+  gap: var(--sc-spacing-3xs);
+  padding: var(--sc-spacing-3xs);
+  border-block-end: 0;
+  border-radius: var(--sc-radius-md);
+  background: var(--sc-color-surface-sunken);
+  isolation: isolate;
+}
+.sc-tabs__list[data-variant='segmented'][data-fill] {
+  display: flex;
+  align-self: stretch;
+}
+.sc-tabs__list[data-variant='segmented'] > .sc-tabs__tab {
+  position: relative;
+  z-index: 1;
+  block-size: var(--sc-size-control-sm);
+  padding-inline: var(--sc-spacing-sm);
+  border-radius: var(--sc-radius-sm);
+}
+.sc-tabs__list[data-variant='segmented'] > .sc-tabs__tab:hover:not([data-disabled]) {
+  background: transparent;
+}
+.sc-tabs__list[data-variant='segmented'] .sc-tabs__count,
+.sc-tabs__list[data-variant='segmented'] > .sc-tabs__tab[data-active] > .sc-tabs__count {
+  padding-inline: 0;
+  background: transparent;
+  color: var(--sc-color-text-muted);
+  font-weight: var(--sc-font-weight-regular);
+}
+.sc-tabs__list[data-variant='segmented'] > .sc-tabs__indicator {
+  inset-block: 0 auto;
+  z-index: 0;
+  block-size: var(--active-tab-height);
+  translate: var(--active-tab-left) var(--active-tab-top);
+  background: var(--sc-color-surface-default);
+  border-radius: var(--sc-radius-sm);
+  box-shadow: var(--sc-elevation-1);
+}
 @media (prefers-reduced-motion: reduce) {
   .sc-tabs__tab,
   .sc-tabs__indicator {

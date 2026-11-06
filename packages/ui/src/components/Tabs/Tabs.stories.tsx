@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tabs } from './Tabs';
 import { Text } from '../Text/Text';
+import { Stack } from '../Stack/Stack';
 import { ArchiveIcon, CheckIcon, InboxIcon } from '../../icons/icons.gen';
 import { Compact, DarkTheme } from '../../stories/helpers';
 
@@ -12,10 +13,10 @@ const meta: Meta<typeof Tabs.Root> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function Example({ fill = false }: { fill?: boolean }) {
+function Example({ fill = false, variant }: { fill?: boolean; variant?: 'line' | 'segmented' }) {
   return (
     <Tabs.Root defaultValue="inbox">
-      <Tabs.List aria-label="Inbox sections" fill={fill}>
+      <Tabs.List aria-label="Inbox sections" fill={fill} variant={variant}>
         <Tabs.Tab value="inbox" icon={<InboxIcon />} count={12}>
           Inbox
         </Tabs.Tab>
@@ -48,6 +49,57 @@ function Example({ fill = false }: { fill?: boolean }) {
 export const Playground: Story = { render: () => <Example /> };
 
 export const Fill: Story = { name: 'Equal widths', render: () => <Example fill /> };
+
+function Segmented() {
+  return (
+    <Tabs.Root defaultValue="matches">
+      <Tabs.List aria-label="Inbox sections" variant="segmented">
+        <Tabs.Tab value="matches" count={16}>
+          Matches
+        </Tabs.Tab>
+        <Tabs.Tab value="below" count={3}>
+          Below floor
+        </Tabs.Tab>
+        <Tabs.Tab value="handled" count={13}>
+          Handled
+        </Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel value="matches">
+        <Text>Sixteen postings ranked by score.</Text>
+      </Tabs.Panel>
+      <Tabs.Panel value="below">
+        <Text>Three postings under the salary floor.</Text>
+      </Tabs.Panel>
+      <Tabs.Panel value="handled">
+        <Text>Thirteen handled.</Text>
+      </Tabs.Panel>
+    </Tabs.Root>
+  );
+}
+
+/** A quiet segmented control: sunken track, the active tab raised on the surface, no accent colour, plain counts. */
+export const SegmentedVariant: Story = {
+  name: 'Segmented',
+  render: () => (
+    <Stack gap="lg">
+      <Segmented />
+      <Example variant="segmented" />
+      <Example variant="segmented" fill />
+    </Stack>
+  ),
+};
+
+export const SegmentedDark: Story = {
+  name: 'Segmented, dark theme',
+  render: () => (
+    <DarkTheme>
+      <Stack gap="lg">
+        <Segmented />
+        <Example variant="segmented" />
+      </Stack>
+    </DarkTheme>
+  ),
+};
 
 export const CompactDensity: Story = {
   name: 'Compact density',

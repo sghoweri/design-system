@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from './Button';
+import { Kbd } from '../Kbd/Kbd';
 
 describe('Button', () => {
   it('renders a native button with type=button and data attributes', () => {
@@ -57,5 +58,36 @@ describe('Button', () => {
     render(<Button iconStart={<svg data-testid="icon" />}>Label</Button>);
     expect(screen.getByTestId('icon').parentElement).toHaveAttribute('aria-hidden', 'true');
     expect(screen.getByRole('button')).toHaveAccessibleName('Label');
+  });
+
+  it('shows a shortcut hint after the label, hidden from the accessible name', () => {
+    render(
+      <Button shortcut={<Kbd>N</Kbd>} aria-keyshortcuts="n">
+        Add a job
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Add a job' });
+    expect(button).toHaveAttribute('aria-keyshortcuts', 'n');
+    const hint = button.querySelector('.sc-button__shortcut')!;
+    expect(hint).toHaveAttribute('aria-hidden', 'true');
+    expect(hint.querySelector('kbd')).toHaveTextContent('N');
+  });
+
+  it('goes icon-only without remounting, keeping the name and hiding the shortcut', () => {
+    const { rerender } = render(
+      <Button iconStart={<svg />} shortcut={<Kbd>N</Kbd>} aria-keyshortcuts="n">
+        Add item
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Add item' });
+    expect(button).not.toHaveAttribute('data-icon-only');
+    rerender(
+      <Button iconStart={<svg />} shortcut={<Kbd>N</Kbd>} aria-keyshortcuts="n" iconOnly>
+        Add item
+      </Button>,
+    );
+    expect(screen.getByRole('button', { name: 'Add item' })).toBe(button);
+    expect(button).toHaveAttribute('data-icon-only', 'true');
+    expect(button).toHaveAttribute('aria-keyshortcuts', 'n');
   });
 });
