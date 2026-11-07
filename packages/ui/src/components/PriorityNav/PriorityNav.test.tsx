@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Profiler } from 'react';
@@ -6,7 +8,8 @@ import { hydrateRoot } from 'react-dom/client';
 import { PriorityNav, type PriorityNavItem } from './PriorityNav';
 import { expectNoA11yViolations } from '../../../test/axe';
 
-// jsdom has no layout. Each item is 8px per character + 24px; "More" is 72px; the gap is 0 (no CSS).
+// jsdom has no layout. Each item is 8px per character of its label + 24px, + 16px with a badge; "More" is 72px;
+// the gap is 0 (no CSS).
 // Inbox 64 · Applications 120 · Sweeps 72 · Files 64 · Learning 88 · Settings 88 = 496.
 const LABELS = ['Inbox', 'Applications', 'Sweeps', 'Files', 'Learning', 'Settings'];
 const items = (current?: string): PriorityNavItem[] =>
@@ -70,7 +73,11 @@ beforeEach(() => {
   vi.stubGlobal('CSS', { supports: (q: string) => anchorSupported && q.includes('anchor') });
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
     let width = 0;
-    if (this.classList.contains('sc-priority-nav__item')) width = 8 * (this.textContent ?? '').length + 24;
+    if (this.classList.contains('sc-priority-nav__item'))
+      width =
+        8 * (this.querySelector('.sc-priority-nav__label')?.textContent ?? '').length +
+        24 +
+        (this.querySelector('.sc-priority-nav__badge') ? 16 : 0);
     if (this.classList.contains('sc-priority-nav__more')) width = 72;
     return {
       width,
@@ -396,5 +403,140 @@ describe('PriorityNav', () => {
     // Hidden (0) reports are ignored.
     resizeMore(0);
     expect(inlineLinks()).toEqual(['Inbox', 'Applications', 'Sweeps']);
+  });
+
+  describe('badges', () => {
+    const withBadges = (
+      extra: Record<string, Partial<PriorityNavItem>>,
+      current?: string,
+    ): PriorityNavItem[] => items(current).map((item) => ({ ...item, ...extra[String(item.label)] }));
+    const files = { badge: 2, badgeLabel: '2 suggestions to review' } as const;
+    const badgeOn = (el: Element) => el.querySelector(':scope > .sc-priority-nav__badge');
+
+    it('shows a count on an inline item, named by badgeLabel, and leaves More alone', async () => {
+      const { container } = render(<PriorityNav aria-label="Main" items={withBadges({ Files: files })} />);
+      expect(inlineLinks()).toEqual(
+        LABELS.map((l) => (l === 'Files' ? 'Files2, 2 suggestions to review' : l)),
+      );
+      const link = screen.getByRole('link', { name: 'Files, 2 suggestions to review' });
+      const badge = badgeOn(link)!;
+      expect(badge).toHaveTextContent(/^2$/);
+      expect(badge).toHaveAttribute('data-kind', 'count');
+      expect(badge).toHaveAttribute('aria-hidden', 'true');
+      expect(screen.queryByRole('button')).toBeNull();
+      await expectNoA11yViolations(container);
+    });
+
+    it('moves a collapsed item’s badge onto More: its count and its label in More’s name', async () => {
+      const user = userEvent.setup();
+      rowWidth = 300;
+      const { container } = render(<PriorityNav aria-label="Main" items={withBadges({ Files: files })} />);
+      expect(inlineLinks()).toEqual(['Inbox', 'Applications']);
+      expect(toggle()).toHaveAccessibleName('More, 4 links, 2 suggestions to review');
+      expect(badgeOn(toggle())).toHaveTextContent(/^2$/);
+      expect(badgeOn(toggle())).toHaveAttribute('aria-hidden', 'true');
+      await expectNoA11yViolations(container);
+      // Expanded: the item keeps its own badge in the panel.
+      await user.click(toggle());
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true');
+      const link = within(panel()).getByRole('link', { name: 'Files, 2 suggestions to review' });
+      expect(badgeOn(link)).toHaveTextContent(/^2$/);
+      await expectNoA11yViolations(container);
+      // Room returns: Files is inline again and More (gone) no longer carries it.
+      await user.keyboard('{Escape}');
+      resize(1000);
+      expect(screen.queryByRole('button')).toBeNull();
+      expect(badgeOn(screen.getByRole('link', { name: 'Files, 2 suggestions to review' }))).not.toBeNull();
+    });
+
+    it('sums collapsed counts, shows a dot for dots alone, and names every collapsed badge', () => {
+      rowWidth = 300;
+      const { rerender } = render(
+        <PriorityNav
+          aria-label="Main"
+          items={withBadges({
+            Files: files,
+            Learning: { badge: 'dot', badgeLabel: 'new lessons' },
+            Settings: { badge: 3, badgeLabel: '3 alerts' },
+          })}
+        />,
+      );
+      expect(badgeOn(toggle())).toHaveTextContent(/^5$/);
+      expect(toggle()).toHaveAccessibleName('More, 4 links, 2 suggestions to review, new lessons, 3 alerts');
+      rerender(
+        <PriorityNav
+          aria-label="Main"
+          items={withBadges({ Learning: { badge: 'dot', badgeLabel: 'new lessons' } })}
+        />,
+      );
+      expect(badgeOn(toggle())).toHaveAttribute('data-kind', 'dot');
+      expect(badgeOn(toggle())).toBeEmptyDOMElement();
+      expect(toggle()).toHaveAccessibleName('More, 4 links, new lessons');
+    });
+
+    it('counts only collapsed items on More, and draws nothing for 0', () => {
+      rowWidth = 300;
+      render(
+        <PriorityNav
+          aria-label="Main"
+          items={withBadges({
+            Inbox: { badge: 4, badgeLabel: '4 new' },
+            Sweeps: { badge: 0, badgeLabel: 'none' },
+          })}
+        />,
+      );
+      expect(badgeOn(screen.getByRole('link', { name: 'Inbox, 4 new' }))).toHaveTextContent('4');
+      expect(badgeOn(toggle())).toBeNull();
+      expect(toggle()).toHaveAccessibleName('More, 4 links');
+    });
+
+    it('reads a count without badgeLabel as the bare number; a dot without one is silent', () => {
+      render(
+        <PriorityNav
+          aria-label="Main"
+          items={withBadges({ Files: { badge: 7 }, Learning: { badge: 'dot' } })}
+        />,
+      );
+      expect(screen.getByRole('link', { name: 'Files, 7' })).toBeInTheDocument();
+      expect(badgeOn(screen.getByRole('link', { name: 'Learning' }))).toHaveAttribute('data-kind', 'dot');
+    });
+
+    it('measures again when a badge appears, since it changes the item’s width', () => {
+      rowWidth = 300;
+      const { rerender } = render(<PriorityNav aria-label="Main" items={items()} />);
+      // Inbox 64 + Applications 120 + More 72 = 256: 44px spare.
+      expect(inlineLinks()).toEqual(['Inbox', 'Applications']);
+      // A badge on Applications makes it 136: 64 + 136 + 72 = 272 still fits.
+      rerender(
+        <PriorityNav
+          aria-label="Main"
+          items={withBadges({ Applications: { badge: 12, badgeLabel: '12 drafts' } })}
+        />,
+      );
+      expect(inlineLinks()).toEqual(['Inbox', 'Applications12, 12 drafts']);
+      // At 260 it does not: Applications collapses and More carries its count.
+      resize(260);
+      expect(inlineLinks()).toEqual(['Inbox']);
+      expect(badgeOn(toggle())).toHaveTextContent(/^12$/);
+    });
+
+    it('adds no motion: badges declare no transition or animation, and the reduced-motion rule is unchanged', () => {
+      const css = readFileSync(join(__dirname, '../../styles/priority-nav.css'), 'utf8').replace(
+        /\/\*[\s\S]*?\*\//g,
+        '',
+      );
+      for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        if (!m[1]!.includes('__badge')) continue;
+        expect(m[2]).not.toMatch(/transition|animation/);
+      }
+      const reduced =
+        /@media \(prefers-reduced-motion: reduce\) \{\s*([^{]+)\{\s*transition: none;\s*\}\s*\}/.exec(css);
+      expect(reduced?.[1]!.split(',').map((s) => s.trim())).toEqual([
+        '.sc-priority-nav__link',
+        '.sc-priority-nav__toggle',
+        '.sc-priority-nav__chevron',
+        '.sc-priority-nav__panel',
+      ]);
+    });
   });
 });

@@ -25,6 +25,14 @@ export interface PriorityNavItem {
   id?: string | undefined;
   /** The page being shown: `aria-current="page"`, and the link never collapses into "More". */
   current?: boolean | undefined;
+  /**
+   * A small count (`2`) or `'dot'` after the label: something waiting there. `0` shows nothing. Visual only; say
+   * what it means in `badgeLabel`. While the item is collapsed, "More" shows the summed count (or a dot) and adds
+   * the label to its accessible name.
+   */
+  badge?: number | 'dot' | undefined;
+  /** What the badge means, appended to the link's (and, while collapsed, More's) accessible name: "2 suggestions to review". A count without it is read as the bare number; a dot without it is not announced. */
+  badgeLabel?: string | undefined;
 }
 
 /** What `renderLink` receives: spread it onto your link component. */
@@ -63,6 +71,28 @@ export interface PriorityNavProps extends Omit<ComponentPropsWithRef<'nav'>, 'ch
 const defaultCountLabel = (n: number) => (n === 1 ? '1 link' : `${n} links`);
 const defaultLink = ({ children, ...props }: PriorityNavLinkProps) => <a {...props}>{children}</a>;
 const keyOf = (item: PriorityNavItem) => item.id ?? item.href;
+/** The badge to draw, or none: `0`, negative and non-finite counts show nothing. */
+const badgeOf = (item: PriorityNavItem): number | 'dot' | null =>
+  item.badge === 'dot'
+    ? 'dot'
+    : typeof item.badge === 'number' && item.badge > 0 && Number.isFinite(item.badge)
+      ? item.badge
+      : null;
+/** What a badge adds to an accessible name. */
+const badgeTextOf = (item: PriorityNavItem): string | null => {
+  const badge = badgeOf(item);
+  if (badge === null) return null;
+  return item.badgeLabel ?? (badge === 'dot' ? null : String(badge));
+};
+
+/** The visible badge: a count pill or a dot. Decorative; its meaning is in visually hidden text beside it. */
+function Badge({ value }: { value: number | 'dot' }) {
+  return (
+    <span className="sc-priority-nav__badge" data-kind={value === 'dot' ? 'dot' : 'count'} aria-hidden="true">
+      {value === 'dot' ? null : value}
+    </span>
+  );
+}
 
 /** CSS anchor positioning places the panel where it exists; elsewhere `placePanel` does, from JS. */
 const supportsAnchor = () =>
@@ -70,12 +100,12 @@ const supportsAnchor = () =>
 /** The Popover API puts the panel in the top layer, above every ancestor's overflow clip. */
 const supportsPopover = (el: HTMLElement) => typeof el.showPopover === 'function';
 
-/** Widths are re-measured when this changes: the keys and any string labels, in order. */
+/** Widths are re-measured when this changes: the keys, any string labels and the badges, in order. */
 function signatureOf(items: readonly PriorityNavItem[]): string {
   return items
     .map((item) => {
       const text = typeof item.label === 'string' || typeof item.label === 'number' ? item.label : '';
-      return `${keyOf(item)}\u0001${text}`;
+      return `${keyOf(item)}\u0001${text}\u0001${badgeOf(item) ?? ''}`;
     })
     .join('\u0002');
 }
@@ -226,6 +256,15 @@ export function PriorityNav({
   const flags = measuring ? null : inlineFlags(items.length, current, fit.count);
   const overflow = flags ? items.filter((_, i) => !flags[i]) : [];
   const expanded = open && overflow.length > 0;
+  // "More" carries the collapsed items' badges: their summed count, or a dot when they only have dots.
+  const overflowBadges = overflow.map(badgeOf).filter((b) => b !== null);
+  const overflowCount = overflowBadges.reduce<number>((sum, b) => sum + (b === 'dot' ? 0 : b), 0);
+  const moreBadge = overflowCount > 0 ? overflowCount : overflowBadges.length > 0 ? 'dot' : null;
+  const moreBadgeText = overflow
+    .map(badgeTextOf)
+    .filter((text) => text !== null)
+    .map((text) => `, ${text}`)
+    .join('');
 
   // The panel lives in the top layer while open (popover="manual": opening, Escape, outside clicks and
   // focus stay ours, so behaviour is the same with or without the Popover API). It stays a DOM sibling of
@@ -298,17 +337,26 @@ export function PriorityNav({
     if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
   };
 
-  const link = (item: PriorityNavItem, inPanel: boolean) =>
-    renderLink(
+  const link = (item: PriorityNavItem, inPanel: boolean) => {
+    const badge = badgeOf(item);
+    const badgeText = badgeTextOf(item);
+    return renderLink(
       {
         href: item.href,
         className: 'sc-priority-nav__link',
         'aria-current': item.current ? 'page' : undefined,
         onClick: inPanel ? () => setOpen(false) : undefined,
-        children: <span className="sc-priority-nav__label">{item.label}</span>,
+        children: (
+          <>
+            <span className="sc-priority-nav__label">{item.label}</span>
+            {badge !== null ? <Badge value={badge} /> : null}
+            {badgeText !== null ? <span className="sc-visually-hidden">, {badgeText}</span> : null}
+          </>
+        ),
       },
       item,
     );
+  };
 
   return (
     <nav
@@ -344,7 +392,11 @@ export function PriorityNav({
             {/* Narrow navs (a container query) show only the ellipsis; the label stays in the name. */}
             <MoreHorizontalIcon className="sc-priority-nav__ellipsis" />
             <span className="sc-priority-nav__toggle-label">{moreLabel}</span>
-            <span className="sc-visually-hidden">, {moreCountLabel(overflow.length)}</span>
+            <span className="sc-visually-hidden">
+              , {moreCountLabel(overflow.length)}
+              {moreBadgeText}
+            </span>
+            {moreBadge !== null ? <Badge value={moreBadge} /> : null}
             <ChevronDownIcon size="sm" className="sc-priority-nav__chevron" />
           </button>
           <ul ref={panelRef} id={panelId} className="sc-priority-nav__panel" hidden={!expanded}>

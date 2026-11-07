@@ -87,11 +87,36 @@ export const Ring: Story = {
   },
 };
 
+/**
+ * `value={null}`: not scored yet. A muted dash on the neutral tile, or inside an empty ring; no tone (any `tone` is
+ * ignored) and no arc. Assistive tech reads "Fit score: not scored"; `valueText` overrides it. Inside a selected row
+ * the tile turns solid accent, as a neutral one does.
+ */
+export const NotScored: Story = {
+  name: 'Not scored',
+  render: () => (
+    <Inline gap="md" align="center">
+      <Score value={null} label="Fit score" />
+      <Score value={null} size="md" caption="fit" label="Fit score" />
+      <Score value={null} selected label="Fit score" />
+      <Score variant="ring" value={null} label="Fit score" />
+      <Score
+        variant="ring"
+        value={null}
+        caption="fit"
+        label="Fit score"
+        valueText="Fit score: waiting for a sweep"
+      />
+    </Inline>
+  ),
+};
+
 const jobs = [
   { score: 94, tone: 'success', title: 'Staff Frontend Engineer, Design Systems', meta: 'Quillstack · 5 h' },
   { score: 88, tone: 'success', title: 'Principal Engineer, Web Platform', meta: 'Fernpoint Health · 11 h' },
   { score: 74, tone: 'accent', title: 'Lead UI Engineer', meta: 'Kestrel Mobility · 1 d' },
   { score: 58, tone: 'warning', title: 'Senior Frontend Engineer, Growth', meta: 'Orbitwise · 2 d' },
+  { score: null, tone: 'neutral', title: 'Frontend Engineer, Maps', meta: 'Lumen Atlas · 3 d' },
 ] as const;
 
 function InboxRowList() {

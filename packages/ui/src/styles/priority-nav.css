@@ -111,6 +111,37 @@
 .sc-priority-nav__ellipsis {
   display: none;
 }
+/* Item badge (`badge`): a count pill or a dot after the label, in accent. Decorative (aria-hidden); the link's
+   name carries `badgeLabel`. "More" shows the collapsed items' badges summed. No transition or animation. */
+.sc-priority-nav__badge {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  box-sizing: border-box;
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-accent-default);
+  color: var(--sc-color-text-on-accent);
+  pointer-events: none;
+}
+.sc-priority-nav__badge[data-kind='count'] {
+  min-inline-size: var(--sc-size-icon-md);
+  block-size: var(--sc-size-icon-md);
+  padding-inline: var(--sc-spacing-3xs);
+  font-size: var(--sc-font-size-xs);
+  font-weight: var(--sc-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.sc-priority-nav__badge[data-kind='dot'] {
+  inline-size: 8px;
+  block-size: 8px;
+}
+.sc-priority-nav__panel .sc-priority-nav__badge {
+  margin-inline-start: auto;
+}
+.sc-priority-nav__toggle {
+  position: relative;
+}
 @container sc-priority-nav (inline-size <= 400px) {
   .sc-priority-nav__toggle {
     justify-content: center;
@@ -122,6 +153,17 @@
   }
   .sc-priority-nav__chevron {
     display: none;
+  }
+  /* Icon-only: the badge sits on the toggle's inline-end corner, ringed like IconButton's dot. */
+  .sc-priority-nav__toggle > .sc-priority-nav__badge {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 0;
+    box-shadow: 0 0 0 var(--sc-border-width-focus) var(--sc-color-surface-default);
+  }
+  .sc-priority-nav__toggle > .sc-priority-nav__badge[data-kind='dot'] {
+    inset-block-start: var(--sc-spacing-2xs);
+    inset-inline-end: var(--sc-spacing-2xs);
   }
   /* Visually hidden, still part of the accessible name ("More, 3 links"). */
   .sc-priority-nav__toggle-label {

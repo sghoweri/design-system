@@ -13,14 +13,21 @@ import { DarkTheme } from '../../stories/helpers';
 
 const LABELS = ['Inbox', 'Applications', 'Sweeps', 'Files', 'Learning', 'Settings'];
 const MORE_LABELS = [...LABELS, 'Reports', 'Billing', 'Team', 'Help center'];
+type Badges = Record<string, Pick<PriorityNavItem, 'badge' | 'badgeLabel'>>;
+/** Fictional counts: two suggestions waiting in Files, something new in Learning. */
+const BADGES: Badges = {
+  Files: { badge: 2, badgeLabel: '2 suggestions to review' },
+  Learning: { badge: 'dot', badgeLabel: 'new lessons' },
+};
 
 /** Links that switch the current page in place instead of navigating, so the story can be clicked through. */
 function Demo({
   initial = 'Inbox',
   label = 'Main',
   labels = LABELS,
+  badges,
   ...rest
-}: { initial?: string; label?: string; labels?: string[] } & Pick<
+}: { initial?: string; label?: string; labels?: string[]; badges?: Badges | undefined } & Pick<
   PriorityNavProps,
   'onOverflowChange' | 'overflowHysteresis'
 >) {
@@ -29,6 +36,7 @@ function Demo({
     href: `#${label.toLowerCase()}`,
     label,
     current: label === current,
+    ...badges?.[label],
   }));
   return (
     <PriorityNav
@@ -152,7 +160,7 @@ export const LeftEdgePhone: Story = {
  * action. When links start collapsing, "Add item" goes icon-only (tooltip and shortcut kept); the nav's
  * `overflowHysteresis` is the room the label takes, so the label only returns when it fits beside every link.
  */
-function Header({ labels = LABELS }: { labels?: string[] }) {
+function Header({ labels = LABELS, badges }: { labels?: string[]; badges?: Badges | undefined }) {
   const [compact, setCompact] = useState(false);
   const [labelRoom, setLabelRoom] = useState(0);
   const addRef = useRef<HTMLButtonElement>(null);
@@ -177,7 +185,7 @@ function Header({ labels = LABELS }: { labels?: string[] }) {
       <Text weight="semibold" style={{ whiteSpace: 'nowrap' }}>
         Example app
       </Text>
-      <Demo labels={labels} onOverflowChange={setCompact} overflowHysteresis={labelRoom} />
+      <Demo labels={labels} badges={badges} onOverflowChange={setCompact} overflowHysteresis={labelRoom} />
       <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sc-spacing-xs)' }}>
         <Popover.Root>
           <Popover.Trigger render={<IconButton label="Sweeps: running" dot="success" />}>
@@ -244,13 +252,46 @@ export const HeaderPhone: Story = {
   ),
 };
 
+export const ItemBadges: Story = {
+  name: 'Item badges',
+  render: () => (
+    <>
+      <Text size="sm" tone="muted">
+        Files has a count, Learning a dot. Narrow the box: once they collapse, More shows the summed count (or
+        a dot when only dots are collapsed) and its name adds their labels, e.g. “More, 3 links, 2 suggestions
+        to review, new lessons”. Each link keeps its badge in the panel.
+      </Text>
+      <Resizable>
+        <Demo badges={BADGES} />
+      </Resizable>
+    </>
+  ),
+};
+
+export const ItemBadgesPhone: Story = {
+  name: 'Item badges, header at 375px',
+  render: () => (
+    <>
+      <Text size="sm" tone="muted">
+        At phone width Files is collapsed, so the icon-only More carries its count in the corner.
+      </Text>
+      <div style={{ inlineSize: 375, paddingBlockEnd: 260 }}>
+        <Header badges={BADGES} />
+      </div>
+    </>
+  ),
+};
+
 export const Dark: Story = {
   name: 'Dark theme',
   render: () => (
     <DarkTheme>
       <Resizable initial={900}>
-        <Header />
+        <Header badges={BADGES} />
       </Resizable>
+      <div style={{ inlineSize: 375, paddingBlockEnd: 260 }}>
+        <Header badges={BADGES} />
+      </div>
       <Resizable initial={340}>
         <Demo initial="Settings" label="Sections" />
       </Resizable>

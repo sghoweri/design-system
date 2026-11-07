@@ -56,6 +56,12 @@
   --_solid: var(--sc-color-danger-solid);
   --_on-solid: var(--sc-color-text-on-status);
 }
+/* Not scored (`value={null}`): no tone, a muted dash on the neutral tile or inside an empty ring. --_solid stays
+   accent, so a selected row still turns the tile solid accent, as neutral does. */
+.sc-score[data-unscored] {
+  --_bg: var(--sc-color-surface-active);
+  --_fg: var(--sc-color-text-muted);
+}
 .sc-score__body {
   display: grid;
   justify-items: center;
