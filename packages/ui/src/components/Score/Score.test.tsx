@@ -58,4 +58,38 @@ describe('Score', () => {
     rerender(<Score variant="ring" value={0} />);
     expect(score.querySelector('.sc-score__arc')).toBeNull();
   });
+
+  it('shows a neutral dash without a value, read as not scored, with no tone', async () => {
+    const { container } = render(<Score value={null} tone="success" label="Fit score" caption="fit" />);
+    const score = container.querySelector('.sc-score')!;
+    expect(score).toHaveAttribute('data-unscored');
+    expect(score).not.toHaveAttribute('data-tone');
+    expect(score.querySelector('.sc-score__value')).toHaveTextContent('–');
+    expect(score.querySelector('.sc-visually-hidden')).toHaveTextContent(/^Fit score: not scored$/);
+    await expectNoA11yViolations(container);
+  });
+
+  it('names an unscored row button, and lets valueText override the sentence', () => {
+    render(
+      <Card render={<button type="button" />} variant="plain" interactive selected aria-pressed="true">
+        <Score value={null} label="Fit score" /> Lead UI Engineer
+      </Card>,
+    );
+    expect(
+      screen.getByRole('button', { name: 'Fit score: not scored Lead UI Engineer' }),
+    ).toBeInTheDocument();
+    const { container } = render(<Score value={null} valueText="Waiting for a score" />);
+    expect(container.querySelector('.sc-visually-hidden')).toHaveTextContent(/^Waiting for a score$/);
+  });
+
+  it('draws an unscored ring as the track alone, with the dash', async () => {
+    const { container } = render(<Score variant="ring" value={null} tone="danger" label="Fit score" />);
+    const score = container.querySelector<HTMLElement>('.sc-score')!;
+    expect(score).not.toHaveAttribute('data-tone');
+    expect(score.querySelector('.sc-score__track')).not.toBeNull();
+    expect(score.querySelector('.sc-score__arc')).toBeNull();
+    expect(score.querySelector('.sc-score__value')).toHaveTextContent('–');
+    expect(score.querySelector('.sc-visually-hidden')).toHaveTextContent('Fit score: not scored');
+    await expectNoA11yViolations(container);
+  });
 });

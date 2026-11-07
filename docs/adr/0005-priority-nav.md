@@ -36,7 +36,7 @@ Hard constraints from the brief: accessible, server-rendered with no hydration w
 ## Consequences
 
 - No dependency, about 2.6 KB min+gzip of JS and 1.4 KB of CSS.
-- The width cache can go stale if a non-string label (a count badge, say) changes width without its key or string label changing; give such items a key that changes with them. Documented on `PriorityNavItem.label`.
+- The width cache can go stale if a non-string label (a count badge, say) changes width without its key or string label changing; give such items a key that changes with them. Documented on `PriorityNavItem.label`. The item `badge` is part of the cache key, so a badge appearing or its count changing re-measures.
 - Before hydration (and without JS) the current page can be scrolled out of view at narrow widths. Fixing that needs JS or server knowledge of the viewport; accepted.
 - jsdom has no layout, so the unit tests stub `getBoundingClientRect`, `clientWidth` and `ResizeObserver`; behaviour with real fonts and widths was checked in Storybook with Playwright (resizing, reduced motion, Escape and focus, axe in both themes, JS disabled).
 - If the header later needs submenus (a "Settings" group), that is a second disclosure in the same structure, not a Menu.
