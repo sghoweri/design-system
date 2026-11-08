@@ -26,6 +26,8 @@ export interface EditorHandle {
   update(next: EditorOptions): void;
   /** Focuses the editor, optionally with a selection (from the Textarea it replaced). */
   focus(anchor?: number, head?: number): void;
+  /** Selects line `line` (1-based, clamped to the document), scrolls it into view and focuses the editor. */
+  selectLine(line: number): void;
   destroy(): void;
 }
 
@@ -199,6 +201,13 @@ export function mountEditor(
         const max = view.state.doc.length;
         view.dispatch({ selection: { anchor: Math.min(anchor, max), head: Math.min(head ?? anchor, max) } });
       }
+      view.focus();
+    },
+    selectLine(line) {
+      if (current.disabled) return;
+      const doc = view.state.doc;
+      const { from, to } = doc.line(Math.min(Math.max(Math.trunc(line), 1), doc.lines));
+      view.dispatch({ selection: { anchor: from, head: to }, scrollIntoView: true });
       view.focus();
     },
     destroy() {

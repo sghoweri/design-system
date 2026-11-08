@@ -2,17 +2,27 @@ import { Field } from '@base-ui/react/field';
 import {
   useEffect,
   useId,
+  useImperativeHandle,
   useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ReactNode,
+  type Ref,
 } from 'react';
 import { cx } from '../../utils/cx';
 import type * as CodeMirror from './codemirror';
 import type { EditorHandle, EditorOptions, TextEditorLanguage } from './codemirror';
 
 export type { TextEditorLanguage };
+
+/** What `ref` gives you: focus and line selection, on the Textarea before CodeMirror loads and on CodeMirror after. */
+export interface TextEditorHandle {
+  /** Focuses the editor. */
+  focus(): void;
+  /** Selects line `line` (1-based, clamped to the text), scrolls it into view and focuses the editor. */
+  selectLine(line: number): void;
+}
 
 export interface TextEditorProps {
   /** Required. The visible label. */
@@ -45,6 +55,8 @@ export interface TextEditorProps {
   id?: string | undefined;
   /** Class on the wrapper. */
   className?: string | undefined;
+  /** Focus and select a line from outside, such as "Show line 12". */
+  ref?: Ref<TextEditorHandle> | undefined;
 }
 
 type CodeMirrorModule = typeof CodeMirror;
@@ -52,6 +64,14 @@ type CodeMirrorModule = typeof CodeMirror;
 const load = (): Promise<CodeMirrorModule> => import('./codemirror');
 
 const isProse = (language: TextEditorLanguage) => language === 'markdown' || language === 'text';
+
+/** Line `line`'s start and end offsets in `text`, without its line break; clamped like CodeMirror's. */
+function lineRange(text: string, line: number): [number, number] {
+  const lines = text.split('\n');
+  const n = Math.min(Math.max(Math.trunc(line), 1), lines.length);
+  const start = lines.slice(0, n - 1).reduce((at, l) => at + l.length + 1, 0);
+  return [start, start + lines[n - 1]!.length];
+}
 
 /**
  * A code and text editor on CodeMirror 6, with inline word diffs against `base`. Client-only: the server and the
@@ -72,6 +92,7 @@ export function TextEditor({
   rows = 8,
   id: idProp,
   className,
+  ref,
 }: TextEditorProps) {
   const [module, setModule] = useState<CodeMirrorModule | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -137,6 +158,24 @@ export function TextEditor({
   useLayoutEffect(() => {
     handleRef.current?.update(options);
   });
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      focus() {
+        if (handleRef.current) return handleRef.current.focus();
+        if (!optionsRef.current.disabled) textareaRef.current?.focus();
+      },
+      selectLine(line) {
+        if (handleRef.current) return handleRef.current.selectLine(line);
+        const ta = textareaRef.current;
+        if (!ta || optionsRef.current.disabled) return;
+        ta.focus();
+        ta.setSelectionRange(...lineRange(ta.value, line));
+      },
+    }),
+    [],
+  );
 
   const prose = isProse(language);
   return (

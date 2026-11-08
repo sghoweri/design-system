@@ -36,6 +36,7 @@ No extra CSS: `@salemcobalt/ui/styles.css` has the field and diff styles, and Co
 - **`disabled`, `readOnly`:** read-only stays focusable and selectable, and keeps a phone's keyboard down.
 - **`rows`:** minimum visible lines (default 8). The editor grows with its content; the page scrolls, not the field.
 - **`id`:** the editable element's id.
+- **`ref`:** a `TextEditorHandle` with `focus()` and `selectLine(line)`. `selectLine` takes a 1-based line (clamped to the text), selects it, scrolls it into view and focuses the editor, for links like "Show line 12". Both work on the Textarea before CodeMirror loads, and the swap keeps the selection; both do nothing while disabled.
 
 ## How it loads
 
