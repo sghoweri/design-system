@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TextEditor } from './TextEditor';
 import { diffParts } from './diffParts';
 import { fixtures, type Fixture } from './fixtures';
@@ -60,6 +60,14 @@ const checks: { title: string; how: string }[] = [
     how: 'In the YAML story, type near the bottom, then scroll up and down with the keyboard still open. The line you type on stays above the keyboard, and nothing jumps.',
   },
   {
+    title: 'Taps near the bottom',
+    how: 'Tap near the bottom of the text to move the caret. The field should stay focused, and the line you type on sits well above the bottom edge.',
+  },
+  {
+    title: 'Marks while typing',
+    how: 'Off (default): the marks disappear while you type and come back when you leave the field. On: they stay, and catch up a moment after you stop typing.',
+  },
+  {
     title: 'No zoom, no pinching',
     how: 'Tapping into the editor must not zoom the page in. You should never need to pinch to read or edit.',
   },
@@ -83,6 +91,7 @@ function Checklist() {
 function Lab({ fixture, plain = false }: { fixture: Fixture; plain?: boolean }) {
   const [value, setValue] = useState(fixture.start ?? fixture.base);
   const [showChanges, setShowChanges] = useState(true);
+  const [liveDiff, setLiveDiff] = useState(false);
   // The Textarea's changes view is option (d): a read-only WordDiff under it.
   const parts = useMemo(
     () => (plain && showChanges ? diffParts(fixture.base, value) : []),
@@ -92,6 +101,14 @@ function Lab({ fixture, plain = false }: { fixture: Fixture; plain?: boolean }) 
     <Stack gap="sm">
       <Inline gap="sm" align="center" wrap>
         <Switch label="Show changes" checked={showChanges} onCheckedChange={setShowChanges} />
+        {plain ? null : (
+          <Checkbox
+            label="Show changes while typing"
+            checked={liveDiff}
+            onCheckedChange={setLiveDiff}
+            disabled={!showChanges}
+          />
+        )}
         <Button
           size="sm"
           variant="secondary"
@@ -125,17 +142,43 @@ function Lab({ fixture, plain = false }: { fixture: Fixture; plain?: boolean }) 
           onValueChange={setValue}
           base={fixture.base}
           view={showChanges ? 'inline' : 'edit'}
+          liveDiff={liveDiff}
         />
       )}
     </Stack>
   );
 }
 
+// Room under the content (and scroll padding on the page), so the editor never sits on the bottom edge where Safari's collapsed toolbar takes taps.
+const pageStyle = { maxInlineSize: 720, paddingBlockEnd: '40vh' } as const;
+
+function useScrollPadding() {
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.scrollPaddingBlockEnd = '96px';
+    return () => {
+      root.style.scrollPaddingBlockEnd = '';
+    };
+  }, []);
+}
+
 function Page({ fixture }: { fixture: Fixture }) {
+  useScrollPadding();
   return (
-    <Stack gap="lg" style={{ maxInlineSize: 720 }}>
+    <Stack gap="lg" style={pageStyle}>
       <Lab fixture={fixture} />
       <Checklist />
+    </Stack>
+  );
+}
+
+function Comparison() {
+  useScrollPadding();
+  return (
+    <Stack gap="xl" style={pageStyle}>
+      <Lab fixture={fixtures.yaml} plain />
+      <Lab fixture={fixtures.markdown} plain />
+      <Lab fixture={fixtures.json} plain />
     </Stack>
   );
 }
@@ -162,11 +205,5 @@ export const JsonCareerFile: Story = {
 export const TextareaComparison: Story = {
   name: 'Plain Textarea (comparison)',
   args: { label: '', value: '', onValueChange: () => undefined },
-  render: () => (
-    <Stack gap="xl" style={{ maxInlineSize: 720 }}>
-      <Lab fixture={fixtures.yaml} plain />
-      <Lab fixture={fixtures.markdown} plain />
-      <Lab fixture={fixtures.json} plain />
-    </Stack>
-  ),
+  render: () => <Comparison />,
 };

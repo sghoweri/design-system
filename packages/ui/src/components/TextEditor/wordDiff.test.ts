@@ -1,6 +1,7 @@
 import { EditorState } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
 import { diffParts } from './diffParts';
-import { wordDiff, wordDiffDecorations } from './wordDiff';
+import { DEBOUNCE_MS, setDiffFocus, wordDiff, wordDiffDecorations } from './wordDiff';
 
 interface Found {
   kind: 'added' | 'removed' | 'removed-lines';
@@ -72,5 +73,50 @@ describe('wordDiff', () => {
       .map((p) => p.text)
       .join('');
     expect(joined).toBe(doc);
+  });
+
+  describe('liveDiff', () => {
+    afterEach(() => vi.useRealTimers());
+    const edited = base.replace('manager', 'senior');
+
+    it('off (default): no decorations while focused, even while typing; the diff shows on blur', () => {
+      let state = EditorState.create({ doc: edited, extensions: wordDiff(base) });
+      expect(decorations(state)).toHaveLength(2);
+      state = state.update({ effects: setDiffFocus.of(true) }).state;
+      expect(decorations(state)).toEqual([]);
+      state = state.update({ changes: { from: 0, insert: '# ' } }).state;
+      expect(decorations(state)).toEqual([]);
+      state = state.update({ effects: setDiffFocus.of(false) }).state;
+      expect(decorations(state).map((d) => d.kind)).toEqual(['added', 'removed', 'added']);
+    });
+
+    it('on: decorations stay while focused, follow edits by position, and recompute after the pause', () => {
+      vi.useFakeTimers();
+      const view = new EditorView({
+        doc: edited,
+        extensions: wordDiff(base, { live: true }),
+        parent: document.body,
+      });
+      view.dispatch({ effects: setDiffFocus.of(true) });
+      expect(decorations(view.state)).toHaveLength(2);
+      view.dispatch({ changes: { from: 0, insert: '# ' } });
+      // Mapped, not recomputed: the old marks shifted by two, the new "# " not marked yet.
+      const at = view.state.doc.toString().indexOf('senior\n');
+      expect(decorations(view.state)).toEqual([
+        { kind: 'removed', from: at, to: at, text: 'manager' },
+        { kind: 'added', from: at, to: at + 6, text: 'senior' },
+      ]);
+      vi.advanceTimersByTime(DEBOUNCE_MS - 1);
+      view.dispatch({ changes: { from: 2, insert: 'hi\n' } }); // typing again restarts the wait
+      vi.advanceTimersByTime(DEBOUNCE_MS - 1);
+      expect(decorations(view.state)).toHaveLength(2);
+      vi.advanceTimersByTime(1);
+      expect(decorations(view.state)).toEqual([
+        { kind: 'added', from: 0, to: 4, text: '# hi' },
+        { kind: 'removed', from: at + 3, to: at + 3, text: 'manager' },
+        { kind: 'added', from: at + 3, to: at + 9, text: 'senior' },
+      ]);
+      view.destroy();
+    });
   });
 });

@@ -29,6 +29,11 @@ export interface TextEditorProps {
   base?: string | undefined;
   /** `edit` (default) or `inline`: changes against `base` shown in place, removed words struck through. */
   view?: TextEditorView | undefined;
+  /**
+   * Keep showing changes while the editor has focus, updated 300ms after the last keystroke. Default false: the
+   * diff hides while you type, so nothing moves under the caret, and shows again on blur.
+   */
+  liveDiff?: boolean | undefined;
   /** Minimum visible lines; the editor grows with its content. Default 8. */
   rows?: number | undefined;
   /** Class on the wrapper. */
@@ -52,6 +57,7 @@ export function TextEditor({
   language = 'text',
   base,
   view = 'edit',
+  liveDiff = false,
   rows = 8,
   className,
 }: TextEditorProps) {
@@ -71,6 +77,7 @@ export function TextEditor({
     value,
     base,
     diff: view === 'inline',
+    liveDiff,
     language,
     attributes: {
       'aria-labelledby': labelId,

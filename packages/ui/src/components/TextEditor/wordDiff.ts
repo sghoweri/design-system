@@ -9,8 +9,22 @@
  * The classes are WordDiff's, and the content carries `class="sc-word-diff" data-family="mono"`, so it looks the
  * same as WordDiff from `@salemcobalt/ui/styles.css`. Not `@codemirror/merge` (see the design doc).
  */
-import { Facet, StateField, type EditorState, type Extension, type Text } from '@codemirror/state';
-import { Decoration, EditorView, WidgetType, type DecorationSet } from '@codemirror/view';
+import {
+  Facet,
+  StateEffect,
+  StateField,
+  type EditorState,
+  type Extension,
+  type Text,
+} from '@codemirror/state';
+import {
+  Decoration,
+  EditorView,
+  ViewPlugin,
+  WidgetType,
+  type DecorationSet,
+  type ViewUpdate,
+} from '@codemirror/view';
 import { diffParts } from './diffParts';
 
 const edges = /^(\s*)([\s\S]*?)(\s*)$/;
@@ -62,29 +76,93 @@ export function diffDecorations(doc: Text, base: string): DecorationSet {
   return Decoration.set(ranges, true);
 }
 
-const baseFacet = Facet.define<string, string>({ combine: (values) => values[0] ?? '' });
+interface DiffConfig {
+  base: string;
+  /** Show changes while the editor has focus, recomputed `DEBOUNCE_MS` after the last edit. */
+  live: boolean;
+}
+interface DiffState {
+  decorations: DecorationSet;
+  focused: boolean;
+  /** Mapped through edits since the last diff; the debounce will recompute. */
+  stale: boolean;
+}
 
-const diffField = StateField.define<DecorationSet>({
-  create: (state) => diffDecorations(state.doc, state.facet(baseFacet)),
+/** Quiet time after the last edit before a live diff recomputes. */
+export const DEBOUNCE_MS = 300;
+
+const config = Facet.define<DiffConfig, DiffConfig>({
+  combine: (values) => values[0] ?? { base: '', live: false },
+});
+/** The editor gained (true) or lost focus. Exported so tests can focus a bare EditorState. */
+export const setDiffFocus = StateEffect.define<boolean>();
+const refresh = StateEffect.define<null>();
+
+const compute = (state: EditorState, focused: boolean): DiffState => ({
+  decorations: diffDecorations(state.doc, state.facet(config).base),
+  focused,
+  stale: false,
+});
+
+const diffField = StateField.define<DiffState>({
+  create: (state) => compute(state, false),
   update(value, tr) {
-    const base = tr.state.facet(baseFacet);
-    if (!tr.docChanged && base === tr.startState.facet(baseFacet)) return value;
-    // Prototype: the whole diff on every change. Fine for the lab's files; the app version should defer it.
-    return diffDecorations(tr.state.doc, base);
+    let focused = value.focused;
+    let refreshed = false;
+    for (const e of tr.effects) {
+      if (e.is(setDiffFocus)) focused = e.value;
+      if (e.is(refresh)) refreshed = true;
+    }
+    const { base, live } = tr.state.facet(config);
+    const prev = tr.startState.facet(config);
+    // Not live: nothing moves under the caret while typing. The diff shows again on blur.
+    if (focused && !live) return { decorations: Decoration.none, focused, stale: false };
+    const configChanged = base !== prev.base || live !== prev.live;
+    // Live and typing: keep the old marks where they were; the debounce recomputes.
+    if (focused && tr.docChanged && !refreshed && !configChanged)
+      return { decorations: value.decorations.map(tr.changes), focused, stale: true };
+    if (refreshed || configChanged || tr.docChanged || focused !== value.focused)
+      return compute(tr.state, focused);
+    return value;
   },
   // Block widgets have to come from state, not a view plugin.
-  provide: (field) => EditorView.decorations.from(field),
+  provide: (field) => EditorView.decorations.from(field, (value) => value.decorations),
 });
+
+// Schedules the recompute of a stale (live) diff, restarting on every edit.
+const debounce = ViewPlugin.fromClass(
+  class {
+    timer: ReturnType<typeof setTimeout> | undefined;
+    constructor(readonly view: EditorView) {}
+    update(u: ViewUpdate) {
+      if (!u.docChanged || !u.state.field(diffField).stale) return;
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.view.dispatch({ effects: refresh.of(null) }), DEBOUNCE_MS);
+    }
+    destroy() {
+      clearTimeout(this.timer);
+    }
+  },
+);
 
 const theme = EditorView.theme({
   '.cm-sc-removed-lines': { paddingInline: 'var(--sc-spacing-sm)', whiteSpace: 'pre-wrap' },
 });
 
-/** Shows the document's changes against `base` inline. Reconfigure it (in a Compartment) to change the base. */
-export function wordDiff(base: string): Extension {
-  return [baseFacet.of(base), diffField, theme];
+/**
+ * Shows the document's changes against `base` inline. Reconfigure it (in a Compartment) to change the base or
+ * `live`. With `live` off (default), the diff hides while the editor has focus and comes back on blur.
+ */
+export function wordDiff(base: string, { live = false }: { live?: boolean } = {}): Extension {
+  return [
+    config.of({ base, live }),
+    diffField,
+    debounce,
+    EditorView.focusChangeEffect.of((_state, focusing) => setDiffFocus.of(focusing)),
+    theme,
+  ];
 }
 
 /** Test seam: the decorations in `state`, or none when the extension isn't on. */
 export const wordDiffDecorations = (state: EditorState): DecorationSet =>
-  state.field(diffField, false) ?? Decoration.none;
+  state.field(diffField, false)?.decorations ?? Decoration.none;

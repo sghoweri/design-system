@@ -4,7 +4,7 @@ import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { Compartment, EditorState, type Extension } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
 import { tags as t } from '@lezer/highlight';
-import { wordDiff } from './wordDiff';
+import { setDiffFocus, wordDiff } from './wordDiff';
 
 export type TextEditorLanguage = 'yaml' | 'json' | 'markdown' | 'text';
 
@@ -14,6 +14,8 @@ export interface EditorOptions {
   base: string | undefined;
   /** Show changes against `base` inline. */
   diff: boolean;
+  /** Keep showing them while focused, recomputed after a pause in typing. Off: hidden until blur. */
+  liveDiff: boolean;
   language: TextEditorLanguage;
   /** Attributes for the editable element (ARIA wiring from the React side). */
   attributes: Record<string, string>;
@@ -37,6 +39,10 @@ const inputAttributes = (language: TextEditorLanguage): Record<string, string> =
   language === 'markdown' || language === 'text'
     ? { spellcheck: 'true', autocorrect: 'on', autocapitalize: 'sentences' }
     : { spellcheck: 'false', autocorrect: 'off', autocapitalize: 'off' };
+
+/** Touch screens: keep the caret line this far above the bottom of the viewport, clear of Safari's toolbar. */
+const TOUCH_BOTTOM_MARGIN = 96;
+const coarse = () => typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 
 // One theme, all tokens: the box matches .sc-input.sc-textarea[data-variant='code'].
 const theme = EditorView.theme({
@@ -66,9 +72,14 @@ const theme = EditorView.theme({
     caretColor: 'var(--sc-color-text-default)',
   },
   '.cm-line, .cm-sc-removed-lines': { paddingInline: 'var(--sc-spacing-sm)' },
-  // iOS zooms the page into a focused field under 16px (as in field.css).
+  // Touch: iOS zooms the page into a focused field under 16px (as in field.css). Room under the last line, so a tap
+  // there isn't near Safari's collapsed toolbar, which takes taps at the bottom edge of the screen.
   '@media (pointer: coarse)': {
-    '.cm-content': { fontSize: 'max(16px, calc(var(--sc-font-size-sm) * 0.95))' },
+    '.cm-content': {
+      fontSize: 'max(16px, calc(var(--sc-font-size-sm) * 0.95))',
+      paddingBlockEnd: 'var(--sc-spacing-xl)',
+    },
+    '.cm-scroller': { scrollPaddingBlockEnd: `${TOUCH_BOTTOM_MARGIN}px` },
   },
 });
 
@@ -95,7 +106,8 @@ export function mountEditor(
   const diffSlot = new Compartment();
   const languageSlot = new Compartment();
   const attributeSlot = new Compartment();
-  const diffExtension = (o: EditorOptions) => (o.diff && o.base != null ? wordDiff(o.base) : []);
+  const diffExtension = (o: EditorOptions) =>
+    o.diff && o.base != null ? wordDiff(o.base, { live: o.liveDiff }) : [];
   const attributes = (o: EditorOptions) =>
     EditorView.contentAttributes.of({ ...inputAttributes(o.language), ...o.attributes });
   let current = options;
@@ -118,6 +130,7 @@ export function mountEditor(
         keymap.of([...defaultKeymap, ...historyKeymap]),
         EditorView.lineWrapping,
         EditorState.tabSize.of(2),
+        EditorView.scrollMargins.of(() => (coarse() ? { bottom: TOUCH_BOTTOM_MARGIN } : null)),
         theme,
         syntaxHighlighting(highlight),
         // WordDiff's own classes, so the marks and widgets look like WordDiff family="mono".
@@ -138,7 +151,8 @@ export function mountEditor(
       const prev = current;
       current = next;
       const effects = [];
-      if (next.diff !== prev.diff || next.base !== prev.base)
+      const diffAdded = next.diff && !prev.diff;
+      if (next.diff !== prev.diff || next.base !== prev.base || next.liveDiff !== prev.liveDiff)
         effects.push(diffSlot.reconfigure(diffExtension(next)));
       if (
         next.language !== prev.language ||
@@ -149,6 +163,8 @@ export function mountEditor(
       const changes =
         next.value !== doc.toString() ? { from: 0, to: doc.length, insert: next.value } : undefined;
       if (effects.length || changes) view.dispatch(changes ? { effects, changes } : { effects });
+      // A diff turned on while focused starts out believing it's blurred.
+      if (diffAdded && view.hasFocus) view.dispatch({ effects: setDiffFocus.of(true) });
       if (next.language !== prev.language) loadLanguage(next.language);
     },
     focus(anchor, head) {
