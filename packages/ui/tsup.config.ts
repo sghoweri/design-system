@@ -6,7 +6,18 @@ const shared: Options = {
   treeshake: true,
   splitting: false,
   target: 'es2022',
-  external: ['react', 'react-dom', 'react/jsx-runtime', /^@base-ui\/react/, /^@fontsource/, /^filepond/],
+  external: [
+    'react',
+    'react-dom',
+    'react/jsx-runtime',
+    /^@base-ui\/react/,
+    /^@fontsource/,
+    /^filepond/,
+    // Optional peers of the editor entry.
+    /^@codemirror\//,
+    /^@lezer\//,
+    'diff',
+  ],
 };
 
 export default defineConfig([
@@ -20,6 +31,17 @@ export default defineConfig([
     banner: { js: "'use client';" },
     // tsup's extra rollup tree-shake pass drops module-level directives; esbuild already
     // tree-shakes a single ESM entry, so skip it here.
+    treeshake: false,
+  },
+  {
+    // `@salemcobalt/ui/editor`, its own entry so CodeMirror never reaches the main one (Gold Standard 04 rule 21).
+    // Splitting keeps the dynamic import('./codemirror') a separate chunk the consumer's bundler loads on mount.
+    ...shared,
+    entry: { editor: 'src/components/TextEditor/index.ts' },
+    dts: true,
+    clean: false,
+    splitting: true,
+    banner: { js: "'use client';" },
     treeshake: false,
   },
   {
