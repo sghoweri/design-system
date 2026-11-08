@@ -3,7 +3,12 @@
     "fast": { "$value": "100ms", "$type": "duration", "$description": "Hover and press color changes." },
     "base": { "$value": "200ms", "$type": "duration", "$description": "Dialog enter, backdrop fade." },
     "slow": { "$value": "300ms", "$type": "duration", "$description": "Layout shifts, panels sliding." },
-    "slower": { "$value": "500ms", "$type": "duration", "$description": "Page-level transitions only." }
+    "slower": { "$value": "500ms", "$type": "duration", "$description": "Page-level transitions only." },
+    "data": {
+      "$value": "600ms",
+      "$type": "duration",
+      "$description": "A value moving to its new amount: a score ring's arc, a meter's fill."
+    }
   },
   "ease": {
     "standard": {
@@ -20,6 +25,11 @@
       "$value": "cubic-bezier(0.4, 0, 1, 1)",
       "$type": "cubicBezier",
       "$description": "Elements leaving, at 75% of the enter duration."
+    },
+    "data": {
+      "$value": "cubic-bezier(0.2, 0.7, 0.2, 1)",
+      "$type": "cubicBezier",
+      "$description": "A value settling: quick off the mark, then a long, soft landing. Pairs with duration.data."
     }
   }
 }
