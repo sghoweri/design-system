@@ -1,6 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { useState } from 'react';
-import { TextEditor, type TextEditorProps } from './TextEditor';
+import { EditorView } from '@codemirror/view';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import { createRef, useState } from 'react';
+import { TextEditor, type TextEditorHandle, type TextEditorProps } from './TextEditor';
 import { expectNoA11yViolations } from '../../../test/axe';
 
 const base = 'enabled: true\nseniority_floor: manager\n';
@@ -72,5 +73,51 @@ describe('TextEditor', () => {
     const { container } = render(<Controlled base={undefined} />);
     const content = await editorContent(container);
     expect(content.querySelector('del, ins')).toBeNull();
+  });
+
+  describe('ref', () => {
+    it('selects a line in the fallback Textarea before CodeMirror loads', async () => {
+      const ref = createRef<TextEditorHandle>();
+      const { container } = render(<Controlled ref={ref} />);
+      const textarea = screen.getByLabelText<HTMLTextAreaElement>('search.yaml');
+      act(() => ref.current!.selectLine(2));
+      expect(textarea).toHaveFocus();
+      expect([textarea.selectionStart, textarea.selectionEnd]).toEqual([14, 37]); // "seniority_floor: senior"
+      // The swap keeps focus and the selection.
+      const content = await editorContent(container);
+      expect(content).toHaveFocus();
+      const { from, to } = EditorView.findFromDOM(content)!.state.selection.main;
+      expect([from, to]).toEqual([14, 37]);
+    });
+
+    it('selects a line in CodeMirror and focuses it, clamped to the text', async () => {
+      const ref = createRef<TextEditorHandle>();
+      const { container } = render(<Controlled ref={ref} />);
+      const content = await editorContent(container);
+      const view = EditorView.findFromDOM(content)!;
+      act(() => ref.current!.selectLine(1));
+      expect(content).toHaveFocus();
+      expect([view.state.selection.main.from, view.state.selection.main.to]).toEqual([0, 13]);
+      act(() => ref.current!.selectLine(99)); // the empty line after the trailing newline
+      expect(view.state.selection.main.from).toBe(view.state.doc.length);
+      act(() => ref.current!.selectLine(0));
+      expect(view.state.selection.main.from).toBe(0);
+    });
+
+    it('focus() focuses the editor; neither method does anything while disabled', async () => {
+      const ref = createRef<TextEditorHandle>();
+      const { container, rerender } = render(<Controlled ref={ref} />);
+      const content = await editorContent(container);
+      act(() => ref.current!.focus());
+      expect(content).toHaveFocus();
+      act(() => content.blur());
+      rerender(<Controlled ref={ref} disabled />);
+      await waitFor(() => expect(content).toHaveAttribute('contenteditable', 'false'));
+      act(() => {
+        ref.current!.focus();
+        ref.current!.selectLine(2);
+      });
+      expect(content).not.toHaveFocus();
+    });
   });
 });
