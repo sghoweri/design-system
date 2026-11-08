@@ -225,3 +225,11 @@ export {
   type WordDiffSize,
 } from './components/WordDiff/WordDiff';
 export { Quote, type QuoteProps } from './components/Quote/Quote';
+export {
+  Avatar,
+  AvatarButton,
+  avatarInitials,
+  type AvatarButtonProps,
+  type AvatarProps,
+  type AvatarSize,
+} from './components/Avatar/Avatar';

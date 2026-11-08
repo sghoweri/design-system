@@ -35,6 +35,7 @@
 @import './word-diff.css';
 @import './text-editor.css';
 @import './quote.css';
+@import './avatar.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);

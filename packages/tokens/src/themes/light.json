@@ -242,6 +242,23 @@
         "$type": "color",
         "$description": "Strike-through on removed text; 3:1 on diff.removed-wash."
       }
+    },
+    "avatar": {
+      "fill": {
+        "$value": "{color.brand.100}",
+        "$type": "color",
+        "$description": "Avatar disc behind initials: a brand tint a step stronger than accent.subtle. Not the boundary on its own (1.0-1.4:1 on the surfaces); avatar.ring is."
+      },
+      "text": {
+        "$value": "{color.brand.700}",
+        "$type": "color",
+        "$description": "Initials on avatar.fill; 4.5:1."
+      },
+      "ring": {
+        "$value": "{color.brand.500}",
+        "$type": "color",
+        "$description": "Avatar's 1px inset ring, the shape's boundary: 3:1 on avatar.fill and on canvas, default, raised and sunken."
+      }
     }
   },
   "elevation": {

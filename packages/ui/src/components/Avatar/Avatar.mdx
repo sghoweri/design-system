@@ -1,0 +1,47 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as AvatarStories from './Avatar.stories';
+
+<Meta of={AvatarStories} />
+
+# Avatar
+
+A person: their picture, else their initials on a brand tint inside a 1px ring. `AvatarButton` is the same circle as a round button, for an account menu or a profile link. Both are on Base UI's Avatar, which shows the initials until the picture has loaded and keeps them if it fails.
+
+<Canvas of={AvatarStories.OnCanvas} />
+
+```tsx
+import { Avatar, AvatarButton, Menu } from '@salemcobalt/ui';
+
+<Avatar name="Robin Test" src={user.photoUrl} size="sm" />;
+
+<Menu.Root modal={false}>
+  <Menu.Trigger render={<AvatarButton label="Account: Robin Test" name="Robin Test" size="sm" />} />
+  <Menu.Content align="end">…</Menu.Content>
+</Menu.Root>;
+```
+
+## Props
+
+- **`name`:** the person's name, or their email address when there is no name. The initials are the first letters of the first and last words (`Robin Test` → RT), or of an email's local part split on `.` `_` `+` `-` and digits (`robin.test@…` → RT, `robin@…` → R). `avatarInitials(name)` is exported for the same letters elsewhere.
+- **`initials`:** overrides them, shown as given, up to two characters.
+- **`src`:** a picture, cropped to the circle. With no name and no initials and no picture, a person glyph.
+- **`size`:** `xs` 24px (beside a line of text), `sm` 32, `md` 40 (default), `lg` 48: the icon `xl` size and the three control heights, so `data-density="compact"` shrinks `sm`–`lg` with the controls.
+- **`label`** (Avatar): gives it an accessible name (`role="img"`). Leave it out where the name is written next to it; the avatar is then hidden from assistive tech.
+- **`label`** (AvatarButton): required, the button's name ("Account: Robin Test"). The avatar inside is decorative. Native button props pass through; `render` swaps the element (`render={<a href="/profile" />}`, or a Next.js `Link`).
+
+## Colour
+
+The bug that started this: a circle filled with `accent.subtle` (brand 50) was all but invisible on the neutral 50 canvas (1.03:1). A tint can't be the boundary of a light shape on a light page, so the ring is. Three tokens, checked in both themes by the tokens package's contrast test:
+
+| Token               | Light     | Dark      | Checked                                                                                                   |
+| ------------------- | --------- | --------- | --------------------------------------------------------------------------------------------------------- |
+| `color.avatar.fill` | brand 100 | brand 900 | the tint; 1.13:1 on canvas light, 1.30:1 dark (not relied on)                                             |
+| `color.avatar.text` | brand 700 | brand 300 | initials on the fill: 7.37:1 light, 7.82:1 dark                                                           |
+| `color.avatar.ring` | brand 500 | brand 400 | on canvas 4.44:1 light, 7.15:1 dark; on the fill 3.92:1 / 5.48:1; ≥ 3:1 on default, raised and sunken too |
+
+## AvatarButton states
+
+- **Hover and open:** the ring goes from 1px to 2px (`border.width.focus`), on `:hover` and while its popup is open (`data-popup-open` or `aria-expanded="true"`).
+- **Focus:** the system focus ring, 2px offset.
+- **Disabled:** half opacity, `not-allowed`.
+- **Touch:** under `pointer: coarse` the hit area grows to 44px without moving the layout, as on Button.
