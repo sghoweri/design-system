@@ -13,9 +13,14 @@
 .sc-word-diff[data-size='md'] {
   font-size: var(--sc-font-size-md);
 }
-p.sc-word-diff,
-div.sc-word-diff {
+p.sc-word-diff:not([data-family='mono']),
+div.sc-word-diff:not([data-family='mono']) {
   max-inline-size: var(--sc-font-measure);
+}
+/* Code and structured text: the mono face, full width, tabs as two columns. */
+.sc-word-diff[data-family='mono'] {
+  font-family: var(--sc-font-family-mono);
+  tab-size: 2;
 }
 .sc-word-diff__added,
 .sc-word-diff__removed {
@@ -37,4 +42,9 @@ div.sc-word-diff {
   color: var(--sc-color-text-muted);
   text-decoration-line: line-through;
   text-decoration-color: var(--sc-color-diff-removed-stroke);
+}
+/* In mono, side padding would push every later character off its column. */
+.sc-word-diff[data-family='mono'] .sc-word-diff__added,
+.sc-word-diff[data-family='mono'] .sc-word-diff__removed {
+  padding-inline: 0;
 }

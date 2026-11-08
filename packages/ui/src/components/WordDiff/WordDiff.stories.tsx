@@ -80,3 +80,19 @@ export const Dark: Story = {
     </DarkTheme>
   ),
 };
+
+/** `family="mono"` for code and structured text: a Search settings change, full width, columns kept. */
+export const StructuredText: Story = {
+  args: {
+    as: 'div',
+    family: 'mono',
+    parts: [
+      { kind: 'same', text: 'enabled: true\nrole_focus: frontend\nseniority_floor: ' },
+      { kind: 'removed', text: 'manager' },
+      { kind: 'added', text: 'senior' },
+      { kind: 'same', text: '\ntitles_include: [Staff Frontend Engineer, ' },
+      { kind: 'added', text: 'Design Systems Lead, ' },
+      { kind: 'same', text: 'UI Platform Engineer]\nexclude_companies: []\n' },
+    ],
+  },
+};

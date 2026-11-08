@@ -55,6 +55,26 @@ describe('WordDiff', () => {
     expect(srText(root)).toBe('[supprimé: |]|[ajouté: |]');
   });
 
+  it('mono: marks the element for code and structured text; sans is the default and unmarked', async () => {
+    const { container } = render(
+      <WordDiff
+        as="div"
+        family="mono"
+        parts={[
+          { kind: 'same', text: 'seniority_floor: ' },
+          { kind: 'removed', text: 'manager' },
+          { kind: 'added', text: 'senior' },
+          { kind: 'same', text: '\n' },
+        ]}
+      />,
+    );
+    expect(container.querySelector('.sc-word-diff')).toHaveAttribute('data-family', 'mono');
+    expect(render(<WordDiff parts={parts} />).container.querySelector('.sc-word-diff')).not.toHaveAttribute(
+      'data-family',
+    );
+    await expectNoA11yViolations(container);
+  });
+
   it('keeps a whitespace-only change as plain text', () => {
     const { container } = render(<WordDiff parts={[{ kind: 'added', text: '  ' }]} />);
     expect(container.querySelector('ins')).toBeNull();
