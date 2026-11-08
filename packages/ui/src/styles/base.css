@@ -1,6 +1,7 @@
 /* Shared: focus ring, reduced motion. Component files follow. */
 .sc-focus-ring:focus-visible,
 .sc-button:focus-visible,
+.sc-avatar-button:focus-visible,
 .sc-card[data-interactive]:focus-visible,
 .sc-dialog__close:focus-visible,
 .sc-menu__item:focus-visible,

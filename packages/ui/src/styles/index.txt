@@ -34,3 +34,4 @@ reason-list.css
 word-diff.css
 text-editor.css
 quote.css
+avatar.css

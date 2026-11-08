@@ -23,6 +23,7 @@ const cursorOf = (selector: string) =>
 
 const ACTIVATABLE = [
   '.sc-button',
+  '.sc-avatar-button',
   '.sc-menu__item',
   '.sc-select',
   '.sc-select__item',
@@ -47,6 +48,7 @@ const ACTIVATABLE = [
 ];
 const DISABLED = [
   '.sc-button:disabled',
+  '.sc-avatar-button:disabled',
   '.sc-menu__item[data-disabled]',
   '.sc-select[data-disabled]',
   '.sc-select__item[data-disabled]',

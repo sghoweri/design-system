@@ -72,6 +72,10 @@ const pairs: Array<[string, string[], number]> = [
   ['text-muted', ['diff-removed-wash'], 4.5],
   ['diff-added-stroke', ['diff-added-wash'], 3],
   ['diff-removed-stroke', ['diff-removed-wash'], 3],
+  // Avatar: initials on the disc, and the ring (the shape's boundary; the tint alone is 1.0-1.4:1) on the disc inside
+  // it and every surface outside. accent.subtle once filled it alone and vanished on the canvas.
+  ['avatar-text', ['avatar-fill'], 4.5],
+  ['avatar-ring', ['avatar-fill', ...solidSurfaces], 3],
 ];
 
 describe.each(['light', 'dark'] as const)('%s theme contrast', (theme) => {
