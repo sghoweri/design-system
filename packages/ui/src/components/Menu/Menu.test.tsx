@@ -70,6 +70,29 @@ describe('Menu', () => {
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
   });
 
+  it('closes when a link item is chosen, unless closeOnClick is false', async () => {
+    const user = userEvent.setup();
+    const { unmount } = render(<Example />);
+    await user.click(screen.getByRole('button', { name: 'Pause' }));
+    await user.click(await screen.findByRole('menuitem', { name: 'Archive' }));
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
+    unmount();
+
+    render(
+      <Menu.Root>
+        <Menu.Trigger>Go</Menu.Trigger>
+        <Menu.Content>
+          <Menu.LinkItem href="#stay" closeOnClick={false}>
+            Stay
+          </Menu.LinkItem>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Go' }));
+    await user.click(await screen.findByRole('menuitem', { name: 'Stay' }));
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
   it('toggles a checkbox item without closing and selects a radio item', async () => {
     const user = userEvent.setup();
     render(<Example />);
