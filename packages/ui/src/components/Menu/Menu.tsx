@@ -135,10 +135,26 @@ export interface MenuLinkItemProps extends Omit<BaseMenu.LinkItem.Props, 'classN
   className?: string | undefined;
 }
 
-/** An item that navigates: renders an `<a href>`. */
-function LinkItem({ icon, trailing, tone = 'default', className, children, ...rest }: MenuLinkItemProps) {
+/**
+ * An item that navigates: renders an `<a href>`. Closes the menu when chosen, like `Menu.Item`: with client-side
+ * routing the page stays mounted, so an open menu would sit over the new page. Pass `closeOnClick={false}` to keep it.
+ */
+function LinkItem({
+  icon,
+  trailing,
+  tone = 'default',
+  className,
+  closeOnClick = true,
+  children,
+  ...rest
+}: MenuLinkItemProps) {
   return (
-    <BaseMenu.LinkItem className={cx('sc-menu__item', className)} data-tone={tone} {...rest}>
+    <BaseMenu.LinkItem
+      className={cx('sc-menu__item', className)}
+      data-tone={tone}
+      closeOnClick={closeOnClick}
+      {...rest}
+    >
       <ItemBody icon={icon} trailing={trailing}>
         {children}
       </ItemBody>
