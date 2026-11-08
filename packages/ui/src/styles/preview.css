@@ -33,6 +33,7 @@
 @import './score.css';
 @import './reason-list.css';
 @import './word-diff.css';
+@import './text-editor.css';
 @import './quote.css';
 html {
   background: var(--sc-color-surface-canvas);

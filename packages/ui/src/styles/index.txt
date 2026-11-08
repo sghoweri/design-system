@@ -32,4 +32,5 @@ full-screen-flow.css
 score.css
 reason-list.css
 word-diff.css
+text-editor.css
 quote.css

@@ -181,6 +181,23 @@ Styles ship as one stylesheet inside `@layer sc`, so an app's unlayered CSS alwa
 </form>
 ```
 
+### Editor: `@salemcobalt/ui/editor`
+
+`TextEditor` is a CodeMirror 6 editor with inline word diffs: pass `base` (the saved text) and removed words show struck through where they were, added words underlined, like `WordDiff family="mono"`. It lives at its own entry, so the main one never pulls in CodeMirror, and CodeMirror and `diff` are optional peers:
+
+```sh
+pnpm add @codemirror/view @codemirror/state @codemirror/commands @codemirror/language \
+  @codemirror/lang-yaml @codemirror/lang-markdown @codemirror/lang-json @lezer/highlight diff
+```
+
+```tsx
+import { TextEditor } from '@salemcobalt/ui/editor';
+
+<TextEditor label="search.yaml" language="yaml" value={text} onValueChange={setText} base={saved} />;
+```
+
+Props: `value`, `onValueChange`, `base` (no base, no diff), `language` yaml · markdown · json · text, `liveDiff` (default `false`: the diff hides while focused and shows on blur; `true` keeps it, updated 300ms after typing stops), `label`, `description`, `error`, `disabled`, `readOnly`, `rows` (minimum lines; it grows), `id`. Client-only: the server and first client render show a code `<textarea>` in the same field chrome, then CodeMirror's chunk (a dynamic `import()`) replaces it, keeping focus and the selection. Each language is its own chunk. No extra CSS beyond `styles.css`; CodeMirror injects its token theme at mount (give it a nonce under a strict CSP).
+
 Icons are generated from `src/icons/svg/*.svg` by `scripts/build-icons.mjs` (run by `pnpm build`): the folder is the manifest, every fill and stroke must be `currentColor` or `none`, and the output is committed. The package has no side effects besides CSS, so a bundler keeps only the icons an app imports.
 
 Accessibility baseline: native elements, one focus ring on `:focus-visible`, WCAG AA text on every fill in both themes, 44px touch targets on coarse pointers, `prefers-reduced-motion` honoured, logical properties throughout, Dialog traps focus, closes on Esc and returns focus to its trigger, Menu is fully keyboard operable, and every IconButton is named. Tooltips are hints only: they never open on touch and the trigger must already carry its own name.

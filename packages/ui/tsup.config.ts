@@ -6,7 +6,18 @@ const shared: Options = {
   treeshake: true,
   splitting: false,
   target: 'es2022',
-  external: ['react', 'react-dom', 'react/jsx-runtime', /^@base-ui\/react/, /^@fontsource/, /^filepond/],
+  external: [
+    'react',
+    'react-dom',
+    'react/jsx-runtime',
+    /^@base-ui\/react/,
+    /^@fontsource/,
+    /^filepond/,
+    // Optional peers of the editor entry.
+    /^@codemirror\//,
+    /^@lezer\//,
+    'diff',
+  ],
 };
 
 export default defineConfig([
@@ -14,12 +25,25 @@ export default defineConfig([
     ...shared,
     entry: { index: 'src/index.ts' },
     dts: true,
-    clean: true,
+    // No config cleans: the configs build in parallel, and a cleaning DTS pass deletes the other entries' .d.ts.
+    // The build script empties dist first.
+    clean: false,
     // Every component is a Client Component (event handlers, Base UI hooks), so the
     // bundle declares it once here. Server Components can import and render them.
     banner: { js: "'use client';" },
     // tsup's extra rollup tree-shake pass drops module-level directives; esbuild already
     // tree-shakes a single ESM entry, so skip it here.
+    treeshake: false,
+  },
+  {
+    // `@salemcobalt/ui/editor`, its own entry so CodeMirror never reaches the main one (Gold Standard 04 rule 21).
+    // Splitting keeps the dynamic import('./codemirror') a separate chunk the consumer's bundler loads on mount.
+    ...shared,
+    entry: { editor: 'src/components/TextEditor/index.ts' },
+    dts: true,
+    clean: false,
+    splitting: true,
+    banner: { js: "'use client';" },
     treeshake: false,
   },
   {
