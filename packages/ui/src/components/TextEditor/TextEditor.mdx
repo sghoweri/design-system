@@ -1,0 +1,58 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as TextEditorStories from './TextEditor.stories';
+
+<Meta of={TextEditorStories} />
+
+# TextEditor
+
+A code and text editor on CodeMirror 6 with inline word diffs: pass `base` (the saved version, say), and removed words show struck through where they were, added words underlined, like `WordDiff family="mono"`. Removed text is never part of the document: the caret steps over it, and it can't be edited or copied. YAML, Markdown and JSON highlighting; each language loads on its own.
+
+<Canvas of={TextEditorStories.Json} />
+
+```tsx
+import { TextEditor } from '@salemcobalt/ui/editor';
+
+<TextEditor label="search.yaml" language="yaml" value={text} onValueChange={setText} base={saved} />;
+```
+
+## Install
+
+It lives at its own entry, `@salemcobalt/ui/editor`, never in the main one. CodeMirror and `diff` are optional peers, so apps that don't use the editor don't install them:
+
+```sh
+pnpm add @codemirror/view @codemirror/state @codemirror/commands @codemirror/language \
+  @codemirror/lang-yaml @codemirror/lang-markdown @codemirror/lang-json @lezer/highlight diff
+```
+
+No extra CSS: `@salemcobalt/ui/styles.css` has the field and diff styles, and CodeMirror's theme (on the same tokens) is injected when it mounts. Under a strict Content Security Policy, CodeMirror needs a `style-src` nonce.
+
+## Props
+
+- **`value`, `onValueChange`:** controlled text.
+- **`base`:** the text to compare against. With a base, changes show inline; without one, there's no diff.
+- **`language`:** `yaml` · `markdown` · `json` · `text` (default). Markdown and text keep the phone's autocorrect, capitals and spellcheck; YAML and JSON don't.
+- **`liveDiff`:** default `false`: the diff hides while the editor has focus, so nothing moves under the caret, and shows again on blur. `true` keeps it, updated 300ms after the last keystroke.
+- **`label`, `description`, `error`:** as on every field. The label names the editor, description and error describe it, and an error marks it invalid.
+- **`disabled`, `readOnly`:** read-only stays focusable and selectable, and keeps a phone's keyboard down.
+- **`rows`:** minimum visible lines (default 8). The editor grows with its content; the page scrolls, not the field.
+- **`id`:** the editable element's id.
+
+## How it loads
+
+Client-only. The server and the first client render show a code `<textarea>` in the same field chrome, with the same value; CodeMirror's chunk loads after hydration (a plain dynamic `import()`, which every bundler splits) and replaces it, keeping focus and the selection. In a Next.js App Router page it works from a Server or Client Component without `next/dynamic`: the entry is marked `'use client'`.
+
+## The iPhone checklist
+
+Salem checked option (b) of the word-diff design on an iPhone before the app committed to it. Run these again after changes to the editor, on a phone, and compare with the Plain Textarea story:
+
+- **Typing speed:** a fast sentence in Markdown keeps up with your thumbs, no letters dropped.
+- **Autocorrect and predictive text:** in Markdown a misspelled word fixes itself and a suggestion lands once, in the right place. In YAML and JSON both stay off.
+- **Dictation:** a spoken sentence arrives whole.
+- **Selection handles:** long-press a word and drag the handles across lines and across a struck-through word. Copying gives only the real text.
+- **Caret across a struck-through word:** hold the space bar to move the caret. It jumps over the struck word, and backspace never deletes it.
+- **Paste:** lines pasted from Notes land once, as plain text.
+- **Shake or three-finger undo:** undoes the last edit, not everything. Reset to base can be undone too.
+- **Scrolling with the keyboard open:** type near the bottom of the YAML file and scroll. The line you type on stays above the keyboard.
+- **Taps near the bottom:** tapping near the bottom of the text moves the caret and the field stays focused; the line you type on sits well above Safari's toolbar.
+- **Changes while typing:** with `liveDiff` off the marks hide while you type and come back on blur; on, they catch up a moment after you stop.
+- **No zoom:** tapping into the editor doesn't zoom the page, and you never need to pinch.

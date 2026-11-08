@@ -1,0 +1,19 @@
+/* ---- TextEditor (@salemcobalt/ui/editor) ------------------------------------ */
+/* CodeMirror is themed in JS (EditorView.theme on these tokens). These rules size the code Textarea it renders
+   before CodeMirror loads like the editor: grown to its content (field-sizing; `rows` where unsupported), at least
+   `rows` lines, with the editor's room under the last line on touch screens, clear of Safari's bottom toolbar. */
+.sc-field[data-editor='fallback'] .sc-textarea {
+  field-sizing: content;
+  min-block-size: calc(
+    var(--_rows, 8) * 1lh + 2 * var(--sc-spacing-xs) + 2 * var(--sc-border-width-hairline)
+  );
+}
+@media (pointer: coarse) {
+  .sc-field[data-editor='fallback'] .sc-textarea {
+    padding-block-end: var(--sc-spacing-xl);
+    min-block-size: calc(
+      var(--_rows, 8) * 1lh + var(--sc-spacing-xs) + var(--sc-spacing-xl) + 2 *
+        var(--sc-border-width-hairline)
+    );
+  }
+}
