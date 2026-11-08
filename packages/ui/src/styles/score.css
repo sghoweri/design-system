@@ -125,8 +125,9 @@
   stroke-linecap: round;
   stroke-dasharray: 100;
   stroke-dashoffset: calc(100 - var(--sc-score-fill, 0));
-  /* Moves only when the value changes; the first render draws it in place. */
-  transition: stroke-dashoffset var(--sc-duration-slow) var(--sc-ease-enter);
+  /* Moves only when the value changes; the first render draws it in place. The data motion (600ms, a long soft
+     landing) is what makes a change from one score to the next read; the 300ms panel timing was over too soon. */
+  transition: stroke-dashoffset var(--sc-duration-data) var(--sc-ease-data);
 }
 .sc-score[data-variant='ring'] .sc-score__body {
   position: relative;
