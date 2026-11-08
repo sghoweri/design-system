@@ -8,6 +8,7 @@ export interface WordDiffPart {
 }
 export type WordDiffElement = 'p' | 'div' | 'span';
 export type WordDiffSize = 'sm' | 'md';
+export type WordDiffFamily = 'sans' | 'mono';
 
 export interface WordDiffProps extends Omit<ComponentPropsWithRef<'p'>, 'children'> {
   /** Runs of unchanged, removed and added text, in reading order, whitespace included. Rendered exactly: joining every `text` gives the visible string. */
@@ -16,6 +17,11 @@ export interface WordDiffProps extends Omit<ComponentPropsWithRef<'p'>, 'childre
   as?: WordDiffElement | undefined;
   /** `sm` 14px UI text (default) or `md` body copy. */
   size?: WordDiffSize | undefined;
+  /**
+   * `sans` prose (default), or `mono` for code and structured text (YAML, JSON, Markdown source): the mono face, no
+   * reading-measure cap, and marks without side padding so columns stay aligned.
+   */
+  family?: WordDiffFamily | undefined;
   /** Screen reader word around added text: "[added: …]". Default "added". */
   addedLabel?: string | undefined;
   /** Screen reader word around removed text: "[removed: …]". Default "removed". */
@@ -51,6 +57,7 @@ export function WordDiff({
   parts,
   as = 'p',
   size = 'sm',
+  family = 'sans',
   addedLabel = 'added',
   removedLabel = 'removed',
   className,
@@ -70,7 +77,12 @@ export function WordDiff({
   );
   return createElement(
     as,
-    { className: cx('sc-word-diff', className), 'data-size': size, ...rest },
+    {
+      className: cx('sc-word-diff', className),
+      'data-size': size,
+      ...(family === 'mono' ? { 'data-family': 'mono' } : {}),
+      ...rest,
+    },
     children,
   );
 }
