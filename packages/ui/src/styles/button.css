@@ -60,10 +60,10 @@
   background: var(--sc-color-accent-default);
   color: var(--sc-color-text-on-accent);
 }
-.sc-button[data-variant='primary']:hover {
+.sc-button[data-variant='primary']:hover:where(:not(:disabled)) {
   background: var(--sc-color-accent-hover);
 }
-.sc-button[data-variant='primary']:active {
+.sc-button[data-variant='primary']:active:where(:not(:disabled)) {
   background: var(--sc-color-accent-active);
 }
 .sc-button[data-variant='secondary'] {
@@ -71,41 +71,36 @@
   color: var(--sc-color-text-default);
   border-color: var(--sc-color-border-strong);
 }
-.sc-button[data-variant='secondary']:hover {
+.sc-button[data-variant='secondary']:hover:where(:not(:disabled)) {
   background: var(--sc-color-surface-hover);
 }
-.sc-button[data-variant='secondary']:active {
+.sc-button[data-variant='secondary']:active:where(:not(:disabled)) {
   background: var(--sc-color-surface-active);
 }
 .sc-button[data-variant='ghost'] {
   background: transparent;
   color: var(--sc-color-text-default);
 }
-.sc-button[data-variant='ghost']:hover {
+.sc-button[data-variant='ghost']:hover:where(:not(:disabled)) {
   background: var(--sc-color-surface-hover);
 }
-.sc-button[data-variant='ghost']:active {
+.sc-button[data-variant='ghost']:active:where(:not(:disabled)) {
   background: var(--sc-color-surface-active);
 }
 .sc-button[data-variant='danger'] {
   background: var(--sc-color-danger-solid);
   color: var(--sc-color-text-on-status);
 }
-.sc-button[data-variant='danger']:hover {
+.sc-button[data-variant='danger']:hover:where(:not(:disabled)) {
   background: var(--sc-color-danger-hover);
 }
-.sc-button[data-variant='danger']:active {
+.sc-button[data-variant='danger']:active:where(:not(:disabled)) {
   background: var(--sc-color-danger-hover);
   filter: brightness(0.95);
 }
 .sc-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-.sc-button:disabled:hover,
-.sc-button:disabled:active {
-  background: revert-layer;
-  filter: none;
 }
 .sc-button[data-loading] {
   cursor: progress;
