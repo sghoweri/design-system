@@ -51,7 +51,7 @@
 .sc-banner > .sc-button[data-variant='ghost'] {
   color: inherit;
 }
-.sc-banner > .sc-button[data-variant='ghost']:hover,
-.sc-banner > .sc-button[data-variant='ghost']:active {
+.sc-banner > .sc-button[data-variant='ghost']:hover:where(:not(:disabled)),
+.sc-banner > .sc-button[data-variant='ghost']:active:where(:not(:disabled)) {
   background: rgb(from var(--_fg) r g b / 0.1);
 }
