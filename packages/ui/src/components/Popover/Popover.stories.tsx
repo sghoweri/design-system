@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Popover } from './Popover';
+import { Dialog } from '../Dialog/Dialog';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
 import { BroomIcon } from '../BroomIcon/BroomIcon';
@@ -105,5 +106,66 @@ export const Dark: Story = {
         <SweepStatus defaultOpen />
       </div>
     </DarkTheme>
+  ),
+};
+
+/**
+ * Opened from a row's action button rather than a `Popover.Trigger`: a controlled Root with `anchor` on the Content.
+ * The panel is portaled to the body, so opening it never moves the list.
+ */
+function AnchoredToRow() {
+  const [open, setOpen] = useState(true);
+  const anchor = useRef<HTMLButtonElement>(null);
+  return (
+    <Stack gap="xs" style={{ inlineSize: 320 }}>
+      <Inline justify="between" align="center">
+        <Text size="sm">Led a design system across 4 product teams</Text>
+        <IconButton ref={anchor} label="Correct this reason" size="sm" onClick={() => setOpen(true)}>
+          <RefreshIcon />
+        </IconButton>
+      </Inline>
+      <Text size="sm" tone="muted">
+        The row below stays where it is while the panel is open.
+      </Text>
+      <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Content anchor={anchor} align="end">
+          <Popover.Close />
+          <Popover.Title>Correct this reason</Popover.Title>
+          <Popover.Description>Anchored to the row's button, not a Popover.Trigger.</Popover.Description>
+        </Popover.Content>
+      </Popover.Root>
+    </Stack>
+  );
+}
+
+export const Anchored: Story = {
+  name: 'Anchored to another element',
+  render: () => <AnchoredToRow />,
+};
+
+/** A Dialog opened from inside a popover stacks above it; the popover stays open underneath and gets focus back. */
+export const DialogFromPopover: Story = {
+  name: 'Dialog opened from inside',
+  render: () => (
+    <Popover.Root defaultOpen>
+      <Popover.Trigger>Show that you have this</Popover.Trigger>
+      <Popover.Content align="start" style={{ inlineSize: 320 }}>
+        <Stack gap="sm">
+          <Popover.Title>Show that you have this</Popover.Title>
+          <Dialog.Root>
+            <Dialog.Trigger render={<Button size="sm" variant="secondary" />}>
+              Choose from your career history
+            </Dialog.Trigger>
+            <Dialog.Content variant="sheet">
+              <Dialog.Title>Choose from your career history</Dialog.Title>
+              <Dialog.Description>This dialog covers the popover that opened it.</Dialog.Description>
+              <Dialog.Actions>
+                <Dialog.Close render={<Button variant="ghost" size="sm" />}>Cancel</Dialog.Close>
+              </Dialog.Actions>
+            </Dialog.Content>
+          </Dialog.Root>
+        </Stack>
+      </Popover.Content>
+    </Popover.Root>
   ),
 };

@@ -62,6 +62,12 @@ export interface PopoverContentProps extends Omit<BasePopover.Popup.Props, 'clas
   sideOffset?: number | undefined;
   /** Draws a tip pointing at the trigger. */
   arrow?: boolean | undefined;
+  /**
+   * What to position against instead of the `Popover.Trigger`: an element, a ref to one, a virtual element or a
+   * function returning either. For a popover opened from elsewhere (a menu item, a row action) with a controlled
+   * `Popover.Root open`. The panel is still portaled to `document.body`.
+   */
+  anchor?: BasePopover.Positioner.Props['anchor'];
   className?: string | undefined;
 }
 
@@ -71,6 +77,7 @@ function Content({
   align = 'center',
   sideOffset,
   arrow = false,
+  anchor,
   className,
   children,
   ...rest
@@ -81,6 +88,7 @@ function Content({
         side={side}
         align={align}
         sideOffset={sideOffset ?? (arrow ? 8 : 4)}
+        anchor={anchor}
         className="sc-popover__positioner"
       >
         <BasePopover.Popup className={cx('sc-popover', className)} {...rest}>

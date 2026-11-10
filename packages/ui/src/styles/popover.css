@@ -3,6 +3,11 @@
   z-index: var(--sc-z-dropdown);
   outline: 0;
 }
+/* A Dialog opened from inside the popover (Base UI nests its portal next to this positioner) stacks above it: while
+   one is open the popover drops to the backdrop layer, and the dialog's own scrim, later in the DOM, covers it. */
+.sc-popover__positioner:has(~ * .sc-dialog__popup) {
+  z-index: var(--sc-z-backdrop);
+}
 /* Menu's surface: raised background, hairline border, large radius, elevation 2. */
 .sc-popover {
   position: relative;

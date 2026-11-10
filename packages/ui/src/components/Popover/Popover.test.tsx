@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import { useRef, useState } from 'react';
 import userEvent from '@testing-library/user-event';
 import { Popover } from './Popover';
 import { Button } from '../Button/Button';
@@ -28,6 +29,24 @@ function Example({
       </Popover.Root>
       <button type="button">Outside</button>
     </>
+  );
+}
+
+/** Opened from a row action, not a Popover.Trigger: controlled, positioned against the action button. */
+function AnchoredExample() {
+  const [open, setOpen] = useState(false);
+  const anchor = useRef<HTMLButtonElement>(null);
+  return (
+    <div data-testid="row">
+      <button type="button" ref={anchor} onClick={() => setOpen(true)}>
+        Row actions
+      </button>
+      <Popover.Root open={open} onOpenChange={setOpen}>
+        <Popover.Content anchor={anchor} align="end">
+          <Popover.Title>Correct this reason</Popover.Title>
+        </Popover.Content>
+      </Popover.Root>
+    </div>
   );
 }
 
@@ -89,6 +108,20 @@ describe('Popover', () => {
     await user.click(trigger);
     await screen.findByRole('dialog');
     await user.click(screen.getByRole('button', { name: 'Outside' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+
+  it('positions against an `anchor` with no Trigger, portaled to the body, and closes through onOpenChange', async () => {
+    const user = userEvent.setup();
+    render(<AnchoredExample />);
+    await user.click(screen.getByRole('button', { name: 'Row actions' }));
+    const popup = await screen.findByRole('dialog', { name: 'Correct this reason' });
+    expect(screen.getByTestId('row')).not.toContainElement(popup);
+    // The portal container is a direct child of <body>, so nothing around the anchor can clip or shift it.
+    const positioner = popup.parentElement;
+    expect(positioner).toHaveClass('sc-popover__positioner');
+    expect(positioner?.parentElement?.parentElement).toBe(document.body);
+    await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
 });
