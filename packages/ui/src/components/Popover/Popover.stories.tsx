@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useRef, useState } from 'react';
 import { Popover } from './Popover';
+import { Dialog } from '../Dialog/Dialog';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
 import { BroomIcon } from '../BroomIcon/BroomIcon';
@@ -140,4 +141,31 @@ function AnchoredToRow() {
 export const Anchored: Story = {
   name: 'Anchored to another element',
   render: () => <AnchoredToRow />,
+};
+
+/** A Dialog opened from inside a popover stacks above it; the popover stays open underneath and gets focus back. */
+export const DialogFromPopover: Story = {
+  name: 'Dialog opened from inside',
+  render: () => (
+    <Popover.Root defaultOpen>
+      <Popover.Trigger>Show that you have this</Popover.Trigger>
+      <Popover.Content align="start" style={{ inlineSize: 320 }}>
+        <Stack gap="sm">
+          <Popover.Title>Show that you have this</Popover.Title>
+          <Dialog.Root>
+            <Dialog.Trigger render={<Button size="sm" variant="secondary" />}>
+              Choose from your career history
+            </Dialog.Trigger>
+            <Dialog.Content variant="sheet">
+              <Dialog.Title>Choose from your career history</Dialog.Title>
+              <Dialog.Description>This dialog covers the popover that opened it.</Dialog.Description>
+              <Dialog.Actions>
+                <Dialog.Close render={<Button variant="ghost" size="sm" />}>Cancel</Dialog.Close>
+              </Dialog.Actions>
+            </Dialog.Content>
+          </Dialog.Root>
+        </Stack>
+      </Popover.Content>
+    </Popover.Root>
+  ),
 };
