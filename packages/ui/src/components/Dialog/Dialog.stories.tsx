@@ -8,6 +8,7 @@ import { Input } from '../Input/Input';
 import { Menu } from '../Menu/Menu';
 import { Select } from '../Select/Select';
 import { Stack } from '../Stack/Stack';
+import { Text } from '../Text/Text';
 import { Textarea } from '../Textarea/Textarea';
 import { RefreshIcon } from '../../icons/icons.gen';
 import { Compact, DarkTheme } from '../../stories/helpers';
@@ -171,6 +172,54 @@ export const Sheet: Story = {
   name: 'Sheet at 390px',
   globals: phone,
   render: () => <SheetForm />,
+};
+
+function SwipeSheet({ dismissOnSwipe = true }: { dismissOnSwipe?: boolean }) {
+  const [open, setOpen] = useState(true);
+  return (
+    <Dialog.Root open={open} onOpenChange={setOpen}>
+      <Dialog.Trigger render={<Button />}>Pick careers</Dialog.Trigger>
+      <Dialog.Content variant="sheet" dismissOnSwipe={dismissOnSwipe}>
+        <Dialog.Close />
+        <Dialog.Title>Pick careers</Dialog.Title>
+        <Dialog.Description>
+          {dismissOnSwipe
+            ? 'Drag the handle or this header down to close. The list scrolls and never closes the sheet.'
+            : 'dismissOnSwipe={false}: the handle is decoration; close with × or Done.'}
+        </Dialog.Description>
+        <Dialog.Body>
+          <Stack gap="xs">
+            {Array.from({ length: 30 }, (_, i) => (
+              <Text key={i}>Career {i + 1}: Staff Frontend Engineer</Text>
+            ))}
+          </Stack>
+        </Dialog.Body>
+        <Dialog.Actions>
+          <Dialog.Close render={<Button />}>Done</Dialog.Close>
+        </Dialog.Actions>
+      </Dialog.Content>
+    </Dialog.Root>
+  );
+}
+
+/**
+ * Below 640px a sheet closes by swiping down from the handle or the header (top 64px, outside controls):
+ * past 30% of its height or on a quick flick it closes through `onOpenChange(false)`, otherwise it springs
+ * back. `Dialog.Body` keeps scrolling and never starts the gesture. The handle is a `Dialog.Close` named
+ * "Dismiss" (Enter or Space); Esc still closes. Reduced motion: no slide and no spring. Use touch emulation
+ * in the browser's device toolbar, or drag with the mouse.
+ */
+export const SheetSwipe: Story = {
+  name: 'Sheet, swipe to dismiss',
+  globals: phone,
+  render: () => <SwipeSheet />,
+};
+
+/** `dismissOnSwipe={false}` for a sheet where an accidental close loses work. */
+export const SheetNoSwipe: Story = {
+  name: 'Sheet, swipe off',
+  globals: phone,
+  render: () => <SwipeSheet dismissOnSwipe={false} />,
 };
 
 /** The same sheet on a wide viewport is an ordinary centred dialog with a scrolling body. */

@@ -4,6 +4,7 @@
 .sc-avatar-button:focus-visible,
 .sc-card[data-interactive]:focus-visible,
 .sc-dialog__close:focus-visible,
+.sc-dialog__handle:focus-visible,
 .sc-menu__item:focus-visible,
 .sc-input:focus-visible,
 .sc-select:focus-visible,
