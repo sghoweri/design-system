@@ -132,6 +132,10 @@
   overflow: auto;
   overscroll-behavior: contain;
 }
+/* The sheet's grab handle shows only where the sheet docks. */
+.sc-dialog__handle {
+  display: none;
+}
 /* Below 640px the sheet docks to the bottom edge, full width, and slides up. The breakpoint is fixed
    here because custom properties cannot drive a media query. */
 @media (width < 640px) {
@@ -148,17 +152,48 @@
     border-radius: var(--sc-radius-xl) var(--sc-radius-xl) 0 0;
     transition:
       opacity var(--sc-duration-base) var(--sc-ease-enter),
-      translate var(--sc-duration-base) var(--sc-ease-enter);
+      translate var(--sc-duration-base) var(--sc-ease-enter),
+      transform var(--sc-duration-slow) var(--sc-ease-standard);
   }
-  .sc-dialog__popup[data-variant='sheet']::before {
-    content: '';
+  /* The handle: a 36 × 4 bar centred in a 64 × 24 target, where the bar alone used to sit. */
+  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__handle {
+    display: grid;
+    place-items: center;
     flex: none;
     align-self: center;
+    inline-size: 64px;
+    block-size: 24px;
+    margin-block: calc(-1 * var(--sc-spacing-sm) - 10px) calc(var(--sc-spacing-md) - 10px);
+    padding: 0;
+    border: 0;
+    border-radius: var(--sc-radius-md);
+    background: transparent;
+    color: var(--sc-color-border-strong);
+  }
+  /* Inset, so the popup's clipped top edge does not cut the ring. */
+  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__handle:focus-visible {
+    outline-offset: calc(-1 * var(--sc-border-width-focus));
+  }
+  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__handle::before {
+    content: '';
     inline-size: 36px;
     block-size: 4px;
-    margin-block: calc(-1 * var(--sc-spacing-sm)) var(--sc-spacing-md);
     border-radius: var(--sc-radius-full);
-    background: var(--sc-color-border-strong);
+    background: currentColor;
+  }
+  /* Swipe to dismiss (sheetSwipe.ts): the page never pans under the sheet, while `Dialog.Body` and any other
+     scroll container inside keep scrolling, because touch-action resets at a scroll container. The drag
+     moves the sheet with `transform`, which adds to the `translate` the exit transition animates. */
+  .sc-dialog__popup[data-variant='sheet'][data-swipe-dismiss] {
+    touch-action: none;
+  }
+  .sc-dialog__popup[data-variant='sheet'][data-swipe-dismiss] > .sc-dialog__handle {
+    cursor: grab;
+  }
+  .sc-dialog__popup[data-variant='sheet'][data-swiping] {
+    cursor: grabbing;
+    user-select: none;
+    transition: none;
   }
   .sc-dialog__popup[data-variant='sheet'][data-starting-style],
   .sc-dialog__popup[data-variant='sheet'][data-ending-style] {
@@ -259,5 +294,16 @@
   }
   .sc-dialog__popup[data-variant='fullscreen'][data-ending-style] {
     transition-duration: var(--sc-duration-fast);
+  }
+}
+/* Reduced motion: a docked sheet appears and goes without sliding, and a released swipe closes or snaps
+   back in place without the spring. */
+@media (width < 640px) and (prefers-reduced-motion: reduce) {
+  .sc-dialog__popup[data-variant='sheet'] {
+    transition-duration: 0ms;
+  }
+  .sc-dialog__popup[data-variant='sheet'][data-starting-style],
+  .sc-dialog__popup[data-variant='sheet'][data-ending-style] {
+    translate: none;
   }
 }

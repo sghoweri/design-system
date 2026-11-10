@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { Dialog, type DialogCloseRequestReason } from './Dialog';
@@ -206,5 +206,173 @@ describe('Dialog', () => {
     await user.click(screen.getByRole('button', { name: 'Later' }));
     expect(onRequestClose).toHaveBeenCalledWith('close-press');
     expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  describe('sheet swipe to dismiss', () => {
+    const rect = (top: number, height: number) =>
+      ({ top, height, bottom: top + height, left: 0, right: 390, width: 390, x: 0, y: top }) as DOMRect;
+
+    // jsdom has no layout: show the handle (as below 640px) and give the popup a 500px box at y = 300.
+    beforeEach(() => {
+      vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue([
+        rect(0, 24),
+      ] as unknown as DOMRectList);
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(rect(300, 500));
+    });
+    afterEach(() => vi.restoreAllMocks());
+
+    function pointer(el: Element, type: string, y: number, t: number, x = 20) {
+      const ev = new MouseEvent(type, { bubbles: true, cancelable: true, clientX: x, clientY: y, button: 0 });
+      Object.defineProperties(ev, {
+        pointerId: { value: 1 },
+        pointerType: { value: 'touch' },
+        isPrimary: { value: true },
+        timeStamp: { value: t },
+      });
+      act(() => {
+        el.dispatchEvent(ev);
+      });
+    }
+
+    /** Press at y = 310 on `el`, move down `to` px over `ms`, release. */
+    function drag(el: Element, to: number, ms: number) {
+      pointer(el, 'pointerdown', 310, 0);
+      const steps = 5;
+      for (let i = 1; i <= steps; i++) pointer(el, 'pointermove', 310 + (to * i) / steps, (ms * i) / steps);
+      pointer(el, 'pointerup', 310 + to, ms);
+    }
+
+    function Sheet({
+      onOpenChange,
+      dismissOnSwipe,
+      dismissible,
+      onRequestClose,
+    }: {
+      onOpenChange?: (o: boolean) => void;
+      dismissOnSwipe?: boolean;
+      dismissible?: boolean;
+      onRequestClose?: (r: DialogCloseRequestReason) => void;
+    }) {
+      return (
+        <Dialog.Root
+          defaultOpen
+          onOpenChange={onOpenChange}
+          dismissible={dismissible}
+          onRequestClose={onRequestClose}
+        >
+          <Dialog.Content variant="sheet" dismissOnSwipe={dismissOnSwipe}>
+            <Dialog.Close />
+            <Dialog.Title>Pick careers</Dialog.Title>
+            <Dialog.Body>
+              <p>Body text</p>
+            </Dialog.Body>
+            <Dialog.Actions>
+              <Dialog.Close render={<Button />}>Done</Dialog.Close>
+            </Dialog.Actions>
+          </Dialog.Content>
+        </Dialog.Root>
+      );
+    }
+
+    it('has a named handle that closes from the keyboard', async () => {
+      const user = userEvent.setup();
+      const onOpenChange = vi.fn();
+      const { baseElement } = render(<Sheet onOpenChange={onOpenChange} />);
+      const handle = await screen.findByRole('button', { name: 'Dismiss' });
+      expect(screen.getByRole('dialog')).toHaveAttribute('data-swipe-dismiss');
+      await expectNoA11yViolations(baseElement);
+      handle.focus();
+      await user.keyboard('{Enter}');
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+      expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    });
+
+    it('closes when released past 30% of the height, through onOpenChange', async () => {
+      const onOpenChange = vi.fn();
+      render(<Sheet onOpenChange={onOpenChange} />);
+      const handle = await screen.findByRole('button', { name: 'Dismiss' });
+      drag(handle, 160, 800);
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+      expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    });
+
+    it('springs back when released short of the threshold, slowly', async () => {
+      const onOpenChange = vi.fn();
+      render(<Sheet onOpenChange={onOpenChange} />);
+      const dialog = await screen.findByRole('dialog');
+      const title = screen.getByRole('heading', { name: 'Pick careers' });
+      pointer(title, 'pointerdown', 310, 0);
+      pointer(title, 'pointermove', 360, 400);
+      expect(dialog.style.transform).toBe('translateY(50px)');
+      expect(dialog).toHaveAttribute('data-swiping');
+      pointer(title, 'pointermove', 400, 800);
+      pointer(title, 'pointerup', 400, 1000);
+      expect(dialog.style.transform).toBe('');
+      expect(dialog).not.toHaveAttribute('data-swiping');
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('closes on a quick flick, however short', async () => {
+      render(<Sheet />);
+      const handle = await screen.findByRole('button', { name: 'Dismiss' });
+      drag(handle, 40, 50);
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    });
+
+    it('never starts a drag inside the body, nor below the 64px header zone', async () => {
+      render(<Sheet />);
+      const dialog = await screen.findByRole('dialog');
+      drag(screen.getByText('Body text'), 300, 100);
+      expect(dialog.style.transform).toBe('');
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      const actions = screen.getByRole('button', { name: 'Done' }).parentElement!;
+      pointer(actions, 'pointerdown', 300 + 65, 0);
+      pointer(actions, 'pointermove', 300 + 300, 50);
+      pointer(actions, 'pointerup', 300 + 300, 60);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    it('does nothing while the handle is hidden (the centred dialog from 640px)', async () => {
+      vi.spyOn(HTMLElement.prototype, 'getClientRects').mockReturnValue([] as unknown as DOMRectList);
+      render(<Sheet />);
+      const handle = await screen.findByRole('button', { name: 'Dismiss' });
+      drag(handle, 300, 100);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    it('asks onRequestClose and springs back when the app keeps it open', async () => {
+      const onRequestClose = vi.fn();
+      render(<Sheet onRequestClose={onRequestClose} />);
+      const dialog = await screen.findByRole('dialog');
+      drag(screen.getByRole('button', { name: 'Dismiss' }), 300, 1000);
+      expect(onRequestClose).toHaveBeenCalledWith('close-press');
+      await waitFor(() => expect(dialog.style.transform).toBe(''));
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    it('is off with dismissOnSwipe={false} or a non-dismissible Root: the handle is decoration', async () => {
+      const { unmount } = render(<Sheet dismissOnSwipe={false} />);
+      const dialog = await screen.findByRole('dialog');
+      expect(screen.queryByRole('button', { name: 'Dismiss' })).toBeNull();
+      expect(dialog).not.toHaveAttribute('data-swipe-dismiss');
+      const handle = dialog.querySelector('.sc-dialog__handle')!;
+      expect(handle).toHaveAttribute('aria-hidden', 'true');
+      drag(handle, 300, 100);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      unmount();
+
+      render(<Sheet dismissible={false} />);
+      await screen.findByRole('dialog');
+      expect(screen.queryByRole('button', { name: 'Dismiss' })).toBeNull();
+    });
+
+    it('renders no handle outside the sheet variant', async () => {
+      render(<Example />);
+      await userEvent.setup().click(screen.getByRole('button', { name: 'Archive' }));
+      const dialog = await screen.findByRole('dialog');
+      expect(dialog.querySelector('.sc-dialog__handle')).toBeNull();
+    });
   });
 });

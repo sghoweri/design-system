@@ -1,6 +1,7 @@
 import { Dialog as BaseDialog } from '@base-ui/react/dialog';
-import type { ComponentPropsWithRef, ReactNode } from 'react';
+import { createContext, useCallback, useContext, type ComponentPropsWithRef, type ReactNode } from 'react';
 import { Inline, type InlineProps } from '../Inline/Inline';
+import { attachSheetSwipe } from './sheetSwipe';
 import { XIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
 
@@ -34,6 +35,8 @@ export interface DialogRootProps {
   children?: ReactNode | undefined;
 }
 
+const DismissibleContext = createContext(true);
+
 /** Owns the open state. Wrap a `Dialog.Trigger` and a `Dialog.Content`. */
 function Root({
   dismissible = true,
@@ -65,7 +68,7 @@ function Root({
         onOpenChange?.(next);
       }}
     >
-      {children}
+      <DismissibleContext.Provider value={dismissible}>{children}</DismissibleContext.Provider>
     </BaseDialog.Root>
   );
 }
@@ -89,6 +92,14 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
    * the Root when leaving needs a confirmation.
    */
   variant?: DialogVariant | undefined;
+  /**
+   * `sheet` only. Below 640px a downward drag on the handle or the header (the top 64px, outside controls
+   * and `Dialog.Body`) moves the sheet; letting go past 30% of its height, or flicking down, closes it the
+   * way a press on the handle does (the handle is a `Dialog.Close` named "Dismiss"). Set `false` where an
+   * accidental close loses work; the handle then stays as decoration only. Off whenever the Root is not
+   * `dismissible`. Default `true`.
+   */
+  dismissOnSwipe?: boolean | undefined;
   className?: string | undefined;
 }
 
@@ -96,7 +107,17 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
  * Portal, backdrop and the popup. Focus moves inside on open and returns to the trigger on close.
  * Menus, selects and tooltips opened from inside render above it (`--sc-z-dropdown` > `--sc-z-dialog`).
  */
-function Content({ size = 'md', variant = 'dialog', className, children, ...rest }: DialogContentProps) {
+function Content({
+  size = 'md',
+  variant = 'dialog',
+  dismissOnSwipe = true,
+  className,
+  children,
+  ...rest
+}: DialogContentProps) {
+  const dismissible = useContext(DismissibleContext);
+  const isSheet = variant === 'sheet';
+  const swipe = isSheet && dismissOnSwipe && dismissible;
   return (
     <BaseDialog.Portal>
       <BaseDialog.Backdrop className="sc-dialog__backdrop" />
@@ -104,13 +125,28 @@ function Content({ size = 'md', variant = 'dialog', className, children, ...rest
         className={cx('sc-dialog__popup', className)}
         data-size={size}
         data-variant={variant}
+        data-swipe-dismiss={swipe ? '' : undefined}
         aria-modal="true"
         {...rest}
       >
+        {isSheet && <SheetHandle swipe={swipe} />}
         {children}
       </BaseDialog.Popup>
     </BaseDialog.Portal>
   );
+}
+
+/**
+ * The grab handle at the top of a docked sheet (hidden from 640px). With swipe on it is a `Dialog.Close`:
+ * Enter, Space or a tap closes, and a drag from it or the header follows the finger.
+ */
+function SheetHandle({ swipe }: { swipe: boolean }) {
+  const attach = useCallback(
+    (node: HTMLButtonElement | null) => (node ? attachSheetSwipe(node) : undefined),
+    [],
+  );
+  if (!swipe) return <div className="sc-dialog__handle" aria-hidden="true" />;
+  return <BaseDialog.Close ref={attach} className="sc-dialog__handle" aria-label="Dismiss" />;
 }
 
 export interface DialogTitleProps extends Omit<BaseDialog.Title.Props, 'className'> {
