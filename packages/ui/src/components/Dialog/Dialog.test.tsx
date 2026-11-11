@@ -208,6 +208,38 @@ describe('Dialog', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument();
   });
 
+  it('gives a dialog opened inside another its own backdrop, next to its popup, so the first dialog dims', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dialog.Root defaultOpen>
+        <Dialog.Content variant="fullscreen">
+          <Dialog.Title>Posting</Dialog.Title>
+          <Dialog.Root>
+            <Dialog.Trigger render={<Button variant="secondary" />}>Correct a reason</Dialog.Trigger>
+            <Dialog.Content variant="sheet">
+              <Dialog.Title>De-prioritize this</Dialog.Title>
+              <Dialog.Close render={<Button variant="secondary" />}>Cancel</Dialog.Close>
+            </Dialog.Content>
+          </Dialog.Root>
+        </Dialog.Content>
+      </Dialog.Root>,
+    );
+    await screen.findByRole('dialog', { name: 'Posting' });
+    expect(document.querySelectorAll('.sc-dialog__backdrop')).toHaveLength(1);
+    await user.click(screen.getByRole('button', { name: 'Correct a reason' }));
+    const sheet = await screen.findByRole('dialog', { name: 'De-prioritize this' });
+    expect(sheet).toHaveAttribute('data-nested');
+    const backdrops = document.querySelectorAll('.sc-dialog__backdrop');
+    expect(backdrops).toHaveLength(2);
+    // The nested scrim is a sibling before the nested popup: dialog.css lifts it over the parent popup with
+    // `.sc-dialog__backdrop:has(~ .sc-dialog__popup[data-nested])`.
+    expect(backdrops[1]!.parentElement).toBe(sheet.parentElement);
+    expect(backdrops[1]!.matches(':has(~ .sc-dialog__popup[data-nested])')).toBe(true);
+    expect(backdrops[0]!.matches(':has(~ .sc-dialog__popup[data-nested])')).toBe(false);
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+    await waitFor(() => expect(document.querySelectorAll('.sc-dialog__backdrop')).toHaveLength(1));
+  });
+
   describe('sheet swipe to dismiss', () => {
     const rect = (top: number, height: number) =>
       ({ top, height, bottom: top + height, left: 0, right: 390, width: 390, x: 0, y: top }) as DOMRect;

@@ -6,6 +6,11 @@
   background: var(--sc-color-surface-backdrop);
   transition: opacity var(--sc-duration-base) var(--sc-ease-enter);
 }
+/* A dialog opened from inside another (Base UI nests its portal after the parent's popup): its scrim covers the
+   parent's popup too, so the layer behind the new one reads as behind. Same layer as the popups; DOM order stacks it. */
+.sc-dialog__backdrop:has(~ .sc-dialog__popup[data-nested]) {
+  z-index: var(--sc-z-dialog);
+}
 .sc-dialog__backdrop[data-starting-style],
 .sc-dialog__backdrop[data-ending-style] {
   opacity: 0;
