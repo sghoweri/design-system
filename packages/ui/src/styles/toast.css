@@ -60,6 +60,10 @@
 .sc-toast[data-tone='danger'] {
   border-inline-start-color: var(--sc-color-danger-solid);
 }
+/* Filled; the fill, text and button states come from the .sc-on-accent scope (base.css). */
+.sc-toast[data-tone='accent'] {
+  border-color: var(--sc-color-accent-default);
+}
 .sc-toast[data-starting-style],
 .sc-toast[data-ending-style] {
   opacity: 0;

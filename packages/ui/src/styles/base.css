@@ -17,6 +17,26 @@
   outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
   outline-offset: var(--sc-border-width-focus);
 }
+/* Controls on an accent fill. The scope repoints the semantic tokens its descendants read, the way raised surfaces
+   repoint the washes (docs/adr/0003), so secondary and ghost Buttons, IconButtons, muted text and focus rings inside
+   need no rules of their own: text, strong borders and focus rings take text.on-accent; hover and pressed take
+   accent.hover and accent.active, the primary Button's states. The element's own focus ring is outside the fill, so it
+   keeps its colour by setting it again. Contrast: packages/tokens/test/contrast.test.ts. */
+.sc-on-accent,
+.sc-toast[data-tone='accent'] {
+  --sc-color-text-default: var(--sc-color-text-on-accent);
+  --sc-color-text-muted: var(--sc-color-text-on-accent);
+  --sc-color-border-strong: var(--sc-color-text-on-accent);
+  --sc-color-border-focus: var(--sc-color-text-on-accent);
+  --sc-color-surface-hover: var(--sc-color-accent-hover);
+  --sc-color-surface-active: var(--sc-color-accent-active);
+  background: var(--sc-color-accent-default);
+  color: var(--sc-color-text-on-accent);
+}
+.sc-on-accent:focus-visible,
+.sc-toast[data-tone='accent']:focus-visible {
+  outline-color: var(--sc-color-accent-default);
+}
 /* Keeps content for assistive tech only. */
 .sc-visually-hidden {
   position: absolute;
