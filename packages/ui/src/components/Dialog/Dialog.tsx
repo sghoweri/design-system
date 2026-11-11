@@ -123,7 +123,8 @@ function Content({
     <BaseDialog.Portal>
       {/* `forceRender`: Base UI drops the backdrop of a dialog opened inside another, so a sheet over a full-screen
           dialog didn't dim it. The nested one's scrim sits above its parent's popup (dialog.css). */}
-      <BaseDialog.Backdrop className="sc-dialog__backdrop" forceRender />
+      {/* `data-variant`: a sheet's scrim moves on the sheet's duration and curve (dialog.css). */}
+      <BaseDialog.Backdrop className="sc-dialog__backdrop" data-variant={variant} forceRender />
       <BaseDialog.Popup
         className={cx('sc-dialog__popup', className)}
         data-size={size}

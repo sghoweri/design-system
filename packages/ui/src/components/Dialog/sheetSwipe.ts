@@ -115,7 +115,9 @@ export function attachSheetSwipe(handle: HTMLElement): () => void {
         return;
       }
       dragging = true;
-      height = popup.getBoundingClientRect().height;
+      // The visible height: the bottom border is the overhang below the screen's edge (dialog.css).
+      height =
+        popup.getBoundingClientRect().height - (parseFloat(getComputedStyle(popup).borderBottomWidth) || 0);
       popup.dataset.swiping = '';
       popup.setPointerCapture?.(e.pointerId);
       window.getSelection()?.removeAllRanges();
@@ -149,13 +151,18 @@ export function attachSheetSwipe(handle: HTMLElement): () => void {
       velocity: releaseVelocity(samples),
     };
     if (shouldDismissSheet(release)) {
-      // Keep the offset: the exit transition slides the rest of the way from here.
+      // Keep the offset: the exit transition slides the rest of the way from here, decelerating (`data-swiped`)
+      // instead of starting slow under a moving finger.
       delete popup.dataset.swiping;
+      popup.dataset.swiped = '';
       handle.click();
       suppressClick = true;
       // `onRequestClose` may have kept it open (a "Discard changes?" step): spring back.
       window.requestAnimationFrame(() => {
-        if (popup.isConnected && popup.hasAttribute('data-open')) settle();
+        if (popup.isConnected && popup.hasAttribute('data-open')) {
+          delete popup.dataset.swiped;
+          settle();
+        }
       });
     } else {
       suppressClick = true;
