@@ -30,10 +30,14 @@
   transition-timing-function: var(--sc-ease-exit);
 }
 /* The popup never exceeds the viewport minus a gutter each side, whatever `size` says. 100dvw rather than
-   100% so the clamp holds inside a transformed or narrow portal container too. */
+   100% so the clamp holds inside a transformed or narrow portal container too. Under `viewport-fit=cover` each
+   gutter is at least the safe-area inset on that axis (the larger of the pair, as the popup is centred), so a
+   centred dialog on a landscape phone stays clear of the notch, the rounded corners and the home indicator. */
 .sc-dialog__popup {
   --_gutter: var(--sc-spacing-md);
-  --_max: calc(100dvw - 2 * var(--_gutter));
+  --_side: max(var(--_gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  --_ends: max(var(--_gutter), env(safe-area-inset-top, 0px), env(safe-area-inset-bottom, 0px));
+  --_max: calc(100dvw - 2 * var(--_side));
   position: fixed;
   inset: 0;
   margin: auto;
@@ -41,7 +45,7 @@
   box-sizing: border-box;
   inline-size: min(var(--_max), var(--sc-size-dialog-md));
   max-inline-size: var(--_max);
-  max-block-size: min(100dvh - 2 * var(--_gutter), 85dvh);
+  max-block-size: min(100dvh - 2 * var(--_ends), 85dvh);
   block-size: fit-content;
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   padding: var(--sc-spacing-lg);
@@ -298,6 +302,14 @@
   min-block-size: 0;
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   overscroll-behavior: contain;
+}
+/* A `Dialog.Close` on the full-screen surface sits at the top inline-end corner of the screen, so it clears the
+   status bar and a landscape notch the way the padding does. */
+.sc-dialog__popup[data-variant='fullscreen'] .sc-dialog__close {
+  inset-block-start: calc(var(--sc-spacing-sm) + env(safe-area-inset-top, 0px));
+  inset-inline-end: calc(
+    var(--sc-spacing-sm) + max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))
+  );
 }
 /* Below 900px the full-screen surface runs past the bottom edge like the sheet (the overhang, a bottom border in
    its own colour), so a collapsing browser toolbar uncovers more of it, not the page. */

@@ -2,6 +2,7 @@ import { Select as BaseSelect } from '@base-ui/react/select';
 import { useState, type KeyboardEvent, type ReactNode } from 'react';
 import { FieldShell, type FieldProps } from '../Field/FieldShell';
 import { CheckIcon, ChevronDownIcon, XIcon } from '../../icons/icons.gen';
+import { useSafeAreaPadding } from '../../utils/useSafeAreaPadding';
 
 export interface SelectOption<Value extends string = string> {
   value: Value;
@@ -90,6 +91,7 @@ export function Select<Value extends string = string>({
     onValueChange?.(next);
   };
   const canClear = clearable && current != null && !disabled && !readOnly;
+  const collisionPadding = useSafeAreaPadding();
   const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (canClear && (event.key === 'Backspace' || event.key === 'Delete')) {
       event.preventDefault();
@@ -146,6 +148,7 @@ export function Select<Value extends string = string>({
           <BaseSelect.Positioner
             className="sc-select__positioner"
             sideOffset={4}
+            collisionPadding={collisionPadding}
             alignItemWithTrigger={false}
           >
             <BaseSelect.Popup className="sc-select__popup">

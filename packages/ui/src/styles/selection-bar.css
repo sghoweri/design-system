@@ -1,17 +1,19 @@
 /* ---- SelectionBar ---------------------------------------------------------- */
 /* Floats centred at the bottom of the viewport, sized to its content. A raised surface like Menu and Popover, so
-   washes inside use the raised tokens (docs/adr/0003). */
+   washes inside use the raised tokens (docs/adr/0003). Its sides keep the gutter or the larger side safe-area inset,
+   whichever is wider (a landscape phone's notch and rounded corners under `viewport-fit=cover`). */
 .sc-selection-bar {
   --_gutter: var(--sc-spacing-md);
+  --_side: max(var(--_gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
   --sc-color-surface-active: var(--sc-color-surface-raised-active);
   position: fixed;
-  inset-inline: var(--_gutter);
+  inset-inline: var(--_side);
   inset-block-end: calc(var(--_gutter) + env(safe-area-inset-bottom, 0px));
   z-index: var(--sc-z-sticky);
   box-sizing: border-box;
   inline-size: fit-content;
-  max-inline-size: min(100vw - 2 * var(--_gutter), 48rem);
+  max-inline-size: min(100vw - 2 * var(--_side), 48rem);
   margin-inline: auto;
   padding: var(--sc-spacing-2xs) var(--sc-spacing-xs) var(--sc-spacing-2xs) var(--sc-spacing-sm);
   border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
