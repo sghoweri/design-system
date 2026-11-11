@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Banner } from './Banner';
 import { Button } from '../Button/Button';
+import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
 import { PauseIcon } from '../../icons/icons.gen';
 import { Compact, DarkTheme } from '../../stories/helpers';
@@ -101,6 +102,51 @@ export const Dark: Story = {
           You are offline.
         </Banner>
       </Stack>
+    </DarkTheme>
+  ),
+};
+
+/** `placement="page"`: the full-bleed notice above an app's header, e.g. a GitHub Actions outage. */
+export const PagePlacement: Story = {
+  name: 'Page placement',
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <Stack gap="none">
+      <Banner tone="info" placement="page" role="status">
+        <strong>GitHub Actions is slow.</strong> Sweeps may start late.
+      </Banner>
+      <Banner
+        tone="warning"
+        placement="page"
+        role="status"
+        action={
+          <Inline gap="2xs" wrap={false}>
+            <Button variant="ghost" size="sm">
+              Details
+            </Button>
+            <Button variant="ghost" size="sm">
+              Hide
+            </Button>
+          </Inline>
+        }
+      >
+        <strong>GitHub Actions is down.</strong> Sweeps wait and run when it's back.
+      </Banner>
+      <Banner tone="success" placement="page" role="status">
+        <strong>GitHub Actions is back.</strong> Running 2 jobs that waited.
+      </Banner>
+    </Stack>
+  ),
+};
+
+export const PagePlacementDark: Story = {
+  name: 'Page placement, dark',
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <DarkTheme>
+      <Banner tone="warning" placement="page" role="status">
+        <strong>GitHub Actions is down.</strong> Sweeps wait and run when it's back.
+      </Banner>
     </DarkTheme>
   ),
 };

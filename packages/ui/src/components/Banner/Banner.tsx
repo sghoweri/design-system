@@ -4,13 +4,20 @@ import { CircleCheckIcon, CircleXIcon, InfoIcon, WarningIcon, XIcon } from '../.
 import { cx } from '../../utils/cx';
 
 export type BannerTone = 'info' | 'success' | 'warning' | 'danger' | 'neutral';
+export type BannerPlacement = 'inline' | 'page';
 
 export interface BannerProps extends ComponentPropsWithRef<'div'> {
   /** Colour and default icon. `warning` and `danger` are announced as alerts; the rest as status. */
   tone?: BannerTone | undefined;
+  /**
+   * `inline` (default): a rounded strip inside a view. `page`: a full-bleed notice across the top of the page, above
+   * the header: square, compact, with a hairline under it. A page notice is there on every load, so pass
+   * `role="status"` with a `warning` tone unless it must interrupt.
+   */
+  placement?: BannerPlacement | undefined;
   /** Replaces the tone's icon; `false` removes it. */
   icon?: ReactNode | false | undefined;
-  /** One Button, usually `variant="ghost" size="sm"`, at the end of the strip. */
+  /** One Button, usually `variant="ghost" size="sm"`, at the end of the strip; or an Inline of two (Details, Hide). */
   action?: ReactNode | undefined;
   /** Shows a close button that hides the banner. */
   dismissible?: boolean | undefined;
@@ -33,6 +40,7 @@ const toneIcons: Record<BannerTone, ReactNode> = {
 /** A single-line status strip across the top of a view: paused, offline, "3 new since you looked". */
 export function Banner({
   tone = 'info',
+  placement = 'inline',
   icon,
   action,
   dismissible = false,
@@ -53,6 +61,7 @@ export function Banner({
       role={role ?? (tone === 'warning' || tone === 'danger' ? 'alert' : 'status')}
       className={cx('sc-banner', className)}
       data-tone={tone}
+      data-placement={placement === 'page' ? 'page' : undefined}
       {...rest}
     >
       {glyph ? (
