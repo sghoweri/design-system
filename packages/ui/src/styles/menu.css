@@ -93,6 +93,14 @@
   grid-column: 2;
   min-inline-size: 0;
 }
+/* A second line under the label; the icon and trailing text stay on the label's line. */
+.sc-menu__description {
+  grid-column: 2;
+  grid-row: 2;
+  min-inline-size: 0;
+  color: var(--sc-color-text-muted);
+  font-size: var(--sc-font-size-xs);
+}
 .sc-menu__trailing {
   grid-column: 3;
   display: inline-flex;

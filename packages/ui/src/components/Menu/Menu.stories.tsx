@@ -8,12 +8,16 @@ import { Inline } from '../Inline/Inline';
 import { Kbd } from '../Kbd/Kbd';
 import {
   ArchiveIcon,
+  ArrowDownIcon,
   ClockIcon,
+  EditIcon,
   ExternalLinkIcon,
+  EyeOffIcon,
   FlagIcon,
   MoreHorizontalIcon,
   PauseIcon,
   PlayIcon,
+  StarIcon,
   TrashIcon,
 } from '../../icons/icons.gen';
 import { Compact, DarkTheme } from '../../stories/helpers';
@@ -111,6 +115,65 @@ export const Overflow: Story = {
   render: () => <OverflowMenu />,
 };
 
+function DescribedMenu() {
+  const [picked, setPicked] = useState('nothing yet');
+  return (
+    <Inline gap="md">
+      <Menu.Root>
+        <Menu.Trigger render={<IconButton label="Options for this note" tooltip />}>
+          <MoreHorizontalIcon />
+        </Menu.Trigger>
+        <Menu.Content align="end">
+          <Menu.Item
+            icon={<StarIcon />}
+            description="Keep it above the others"
+            onClick={() => setPicked('Pin to top')}
+          >
+            Pin to top
+          </Menu.Item>
+          <Menu.Item
+            icon={<EyeOffIcon />}
+            description="Leave it out of this list"
+            onClick={() => setPicked('Hide')}
+          >
+            Hide
+          </Menu.Item>
+          <Menu.Item
+            icon={<ArrowDownIcon />}
+            description="Still listed, just lower"
+            onClick={() => setPicked('Move down')}
+          >
+            Move down
+          </Menu.Item>
+          <Menu.Item onClick={() => setPicked('Copy text')}>Copy text</Menu.Item>
+          <Menu.Item icon={<ClockIcon />} onClick={() => setPicked('Remind me')}>
+            Remind me
+          </Menu.Item>
+          <Menu.Separator />
+          <Menu.Item
+            icon={<EditIcon />}
+            description="Something in it is wrong"
+            onClick={() => setPicked('Correct this…')}
+          >
+            Correct this…
+          </Menu.Item>
+        </Menu.Content>
+      </Menu.Root>
+      <span>Picked: {picked}</span>
+    </Inline>
+  );
+}
+
+/**
+ * `description` puts a muted second line under the label. It is the item's accessible description
+ * (`aria-describedby`), so a screen reader reads the label as the name and the line after it. Items with and
+ * without an icon or a description mix in one menu: the icon column is always reserved, so labels line up.
+ */
+export const Descriptions: Story = {
+  name: 'Icons, descriptions and a separator',
+  render: () => <DescribedMenu />,
+};
+
 function ViewMenu() {
   const [stale, setStale] = useState(false);
   const [applied, setApplied] = useState(true);
@@ -177,6 +240,7 @@ export const Dark: Story = {
         <PauseMenu />
         <OverflowMenu />
         <ViewMenu />
+        <DescribedMenu />
       </Inline>
     </DarkTheme>
   ),
