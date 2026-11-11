@@ -240,6 +240,31 @@ describe('Dialog', () => {
     await waitFor(() => expect(document.querySelectorAll('.sc-dialog__backdrop')).toHaveLength(1));
   });
 
+  it('locks page scroll while a sheet is open and releases it after it closes', async () => {
+    const user = userEvent.setup();
+    render(
+      <Dialog.Root>
+        <Dialog.Trigger render={<Button />}>Pick careers</Dialog.Trigger>
+        <Dialog.Content variant="sheet">
+          <Dialog.Title>Pick careers</Dialog.Title>
+          <Dialog.Actions>
+            <Dialog.Close render={<Button />}>Done</Dialog.Close>
+          </Dialog.Actions>
+        </Dialog.Content>
+      </Dialog.Root>,
+    );
+    const locked = () => getComputedStyle(document.body).overflowY === 'hidden';
+    await waitFor(() => expect(locked()).toBe(false)); // an earlier test's dialog unlocks on a timeout
+    await user.click(screen.getByRole('button', { name: 'Pick careers' }));
+    await screen.findByRole('dialog');
+    await waitFor(() => expect(locked()).toBe(true));
+    // The scrim moves on the sheet's timing (dialog.css matches it by variant).
+    expect(document.querySelector('.sc-dialog__backdrop')).toHaveAttribute('data-variant', 'sheet');
+    await user.click(screen.getByRole('button', { name: 'Done' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(locked()).toBe(false));
+  });
+
   describe('sheet swipe to dismiss', () => {
     const rect = (top: number, height: number) =>
       ({ top, height, bottom: top + height, left: 0, right: 390, width: 390, x: 0, y: top }) as DOMRect;
@@ -328,6 +353,16 @@ describe('Dialog', () => {
       expect(onOpenChange).toHaveBeenLastCalledWith(false);
     });
 
+    it('measures the threshold on the visible height, not the overhang below the edge', async () => {
+      // 660px box with a 160px bottom border (the overhang, dialog.css): 500px on screen, so 160px is past 30%.
+      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(rect(300, 660));
+      render(<Sheet />);
+      const dialog = await screen.findByRole('dialog');
+      dialog.style.borderBottom = '160px solid';
+      drag(screen.getByRole('button', { name: 'Dismiss' }), 160, 800);
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    });
+
     it('springs back when released short of the threshold, slowly', async () => {
       const onOpenChange = vi.fn();
       render(<Sheet onOpenChange={onOpenChange} />);
@@ -381,6 +416,8 @@ describe('Dialog', () => {
       drag(screen.getByRole('button', { name: 'Dismiss' }), 300, 1000);
       expect(onRequestClose).toHaveBeenCalledWith('close-press');
       await waitFor(() => expect(dialog.style.transform).toBe(''));
+      // The swiped exit curve is only for a close that goes ahead.
+      expect(dialog).not.toHaveAttribute('data-swiped');
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 

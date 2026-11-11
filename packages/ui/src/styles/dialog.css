@@ -1,9 +1,19 @@
 /* ---- Dialog ---------------------------------------------------------------- */
+/* `--_overhang`: how far a docked surface (the scrim, a phone sheet, a full-screen dialog) runs past the bottom edge
+   of the layout viewport, out of sight. It covers what a collapsing or floating browser toolbar uncovers there. */
+.sc-dialog__backdrop,
+.sc-dialog__popup {
+  --_overhang: 160px;
+}
 .sc-dialog__backdrop {
   position: fixed;
-  inset: 0;
+  /* The scrim runs past the bottom edge: when a phone's browser toolbar collapses or floats, the strip it uncovers
+     is still dimmed instead of showing the page undimmed beneath it. */
+  inset: 0 0 calc(-1 * var(--_overhang));
   z-index: var(--sc-z-backdrop);
   background: var(--sc-color-surface-backdrop);
+  /* A drag on the scrim never pans the page behind it (iOS rubber-banding included); a tap still closes. */
+  touch-action: none;
   transition: opacity var(--sc-duration-base) var(--sc-ease-enter);
 }
 /* A dialog opened from inside another (Base UI nests its portal after the parent's popup): its scrim covers the
@@ -147,21 +157,44 @@
 /* Below 640px the sheet docks to the bottom edge, full width, and slides up. The breakpoint is fixed
    here because custom properties cannot drive a media query. */
 @media (width < 640px) {
+  /* The sheet's surface runs on past the bottom edge as a bottom border in its own colour (the overhang), so no
+     strip of page shows under it when the browser toolbar collapses; the content and its safe-area padding end at
+     the edge as before. `touch-action: none`: a drag on the sheet outside a scroller never pans the page behind
+     it, while `Dialog.Body` and any other scroll container inside keep scrolling (touch-action resets at a
+     scroll container). The drag (sheetSwipe.ts) moves it with `transform`, on top of the `translate` that
+     opens and closes it.
+     Motion: the sheet and its scrim share one duration and curve each way, so the scrim never goes before the
+     sheet does. In: `slow` on `standard`, which leaves the bottom edge gently instead of jumping a quarter of its
+     height in the first frame. Out: 75% of that on `exit`, accelerating, so it is in view until it leaves.
+     After a swipe it decelerates instead (`data-swiped`), carrying on from the finger's speed. */
   .sc-dialog__popup[data-variant='sheet'] {
-    inset: auto 0 0 0;
+    inset: auto 0 calc(-1 * var(--_overhang)) 0;
     margin: 0;
     inline-size: 100%;
     max-inline-size: none;
-    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - var(--sc-spacing-xl));
+    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - var(--sc-spacing-xl) + var(--_overhang));
     padding-block-end: calc(var(--sc-spacing-lg) + env(safe-area-inset-bottom, 0px));
     padding-inline: calc(var(--sc-spacing-lg) + env(safe-area-inset-left, 0px))
       calc(var(--sc-spacing-lg) + env(safe-area-inset-right, 0px));
-    border-block-end: 0;
+    border-block-end: var(--_overhang) solid var(--sc-color-surface-raised);
     border-radius: var(--sc-radius-xl) var(--sc-radius-xl) 0 0;
+    touch-action: none;
     transition:
-      opacity var(--sc-duration-base) var(--sc-ease-enter),
-      translate var(--sc-duration-base) var(--sc-ease-enter),
+      translate var(--sc-duration-slow) var(--sc-ease-standard),
       transform var(--sc-duration-slow) var(--sc-ease-standard);
+  }
+  .sc-dialog__backdrop[data-variant='sheet'] {
+    transition-duration: var(--sc-duration-slow);
+    transition-timing-function: var(--sc-ease-standard);
+  }
+  .sc-dialog__popup[data-variant='sheet'][data-ending-style],
+  .sc-dialog__backdrop[data-variant='sheet'][data-ending-style] {
+    transition-duration: calc(var(--sc-duration-slow) * 0.75);
+    transition-timing-function: var(--sc-ease-exit);
+  }
+  .sc-dialog__popup[data-variant='sheet'][data-ending-style][data-swiped] {
+    transition-duration: var(--sc-duration-base);
+    transition-timing-function: var(--sc-ease-enter);
   }
   /* The handle: a 36 × 4 bar centred in a 64 × 24 target, where the bar alone used to sit. */
   .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__handle {
@@ -189,12 +222,6 @@
     border-radius: var(--sc-radius-full);
     background: currentColor;
   }
-  /* Swipe to dismiss (sheetSwipe.ts): the page never pans under the sheet, while `Dialog.Body` and any other
-     scroll container inside keep scrolling, because touch-action resets at a scroll container. The drag
-     moves the sheet with `transform`, which adds to the `translate` the exit transition animates. */
-  .sc-dialog__popup[data-variant='sheet'][data-swipe-dismiss] {
-    touch-action: none;
-  }
   .sc-dialog__popup[data-variant='sheet'][data-swipe-dismiss] > .sc-dialog__handle {
     cursor: grab;
   }
@@ -203,10 +230,11 @@
     user-select: none;
     transition: none;
   }
+  /* Just below the edge: its visible height, not counting the overhang already out of sight. */
   .sc-dialog__popup[data-variant='sheet'][data-starting-style],
   .sc-dialog__popup[data-variant='sheet'][data-ending-style] {
     opacity: 1;
-    translate: 0 100%;
+    translate: 0 calc(100% - var(--_overhang));
     scale: none;
   }
   /* Actions stack full width, confirming action on top, in thumb reach. */
@@ -271,6 +299,14 @@
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   overscroll-behavior: contain;
 }
+/* Below 900px the full-screen surface runs past the bottom edge like the sheet (the overhang, a bottom border in
+   its own colour), so a collapsing browser toolbar uncovers more of it, not the page. */
+@media (width < 900px) {
+  .sc-dialog__popup[data-variant='fullscreen'] {
+    inset-block-end: calc(-1 * var(--_overhang));
+    border-block-end: var(--_overhang) solid var(--sc-color-surface-default);
+  }
+}
 /* From 900px the backdrop shows a margin around it, so it still reads as a layer over the app. */
 @media (width >= 900px) {
   .sc-dialog__popup[data-variant='fullscreen'] {
@@ -307,7 +343,11 @@
 /* Reduced motion: a docked sheet appears and goes without sliding, and a released swipe closes or snaps
    back in place without the spring. */
 @media (width < 640px) and (prefers-reduced-motion: reduce) {
-  .sc-dialog__popup[data-variant='sheet'] {
+  .sc-dialog__popup[data-variant='sheet'],
+  .sc-dialog__popup[data-variant='sheet'][data-ending-style],
+  .sc-dialog__popup[data-variant='sheet'][data-ending-style][data-swiped],
+  .sc-dialog__backdrop[data-variant='sheet'],
+  .sc-dialog__backdrop[data-variant='sheet'][data-ending-style] {
     transition-duration: 0ms;
   }
   .sc-dialog__popup[data-variant='sheet'][data-starting-style],
