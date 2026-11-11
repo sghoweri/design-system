@@ -1,5 +1,5 @@
 import { Menu as BaseMenu } from '@base-ui/react/menu';
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import { Button } from '../Button/Button';
 import { CheckIcon, ChevronDownIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
@@ -88,32 +88,69 @@ function Content({
 }
 
 interface ItemSlots {
-  /** A 16px icon before the label. */
+  /** A 16px icon before the label. Decorative: hidden from assistive tech. */
   icon?: ReactNode | undefined;
+  /**
+   * A muted second line under the label that says what the item does. It is the item's accessible
+   * description (`aria-describedby`), not part of its name.
+   */
+  description?: ReactNode | undefined;
   /** Muted text at the end: a shortcut (`<Kbd>`) or a count. */
   trailing?: ReactNode | undefined;
   /** `danger` for destructive actions; put them last, after a separator. */
   tone?: MenuItemTone | undefined;
 }
 
-function ItemBody({
-  icon,
-  trailing,
-  children,
-}: {
-  icon?: ReactNode;
-  trailing?: ReactNode;
-  children?: ReactNode;
-}) {
-  return (
+type AriaRefs = { 'aria-labelledby'?: string | undefined; 'aria-describedby'?: string | undefined };
+
+/**
+ * The item's body, and the ARIA that goes on the item. With a description, the name comes from the label
+ * (and trailing text) through `aria-labelledby`, so the description line is not read twice; ids the caller
+ * passes are kept in front.
+ */
+function useItemBody(
+  {
+    icon,
+    description,
+    trailing,
+    children,
+  }: Pick<ItemSlots, 'icon' | 'description' | 'trailing'> & {
+    children?: ReactNode;
+  },
+  aria: AriaRefs,
+): [ReactNode, AriaRefs] {
+  const id = useId();
+  const hasDescription = description !== undefined && description !== null && description !== false;
+  const hasTrailing = trailing !== undefined;
+  const join = (...ids: (string | false | undefined)[]) => ids.filter(Boolean).join(' ') || undefined;
+  const body = (
     <>
       <span className="sc-menu__icon" aria-hidden="true">
         {icon}
       </span>
-      <span className="sc-menu__label">{children}</span>
-      {trailing !== undefined ? <span className="sc-menu__trailing">{trailing}</span> : null}
+      <span className="sc-menu__label" id={hasDescription ? `${id}-label` : undefined}>
+        {children}
+      </span>
+      {hasDescription ? (
+        <span className="sc-menu__description" id={`${id}-description`}>
+          {description}
+        </span>
+      ) : null}
+      {hasTrailing ? (
+        <span className="sc-menu__trailing" id={hasDescription ? `${id}-trailing` : undefined}>
+          {trailing}
+        </span>
+      ) : null}
     </>
   );
+  if (!hasDescription) return [body, aria];
+  return [
+    body,
+    {
+      'aria-labelledby': aria['aria-labelledby'] ?? join(`${id}-label`, hasTrailing && `${id}-trailing`),
+      'aria-describedby': join(aria['aria-describedby'], `${id}-description`),
+    },
+  ];
 }
 
 export interface MenuItemProps extends Omit<BaseMenu.Item.Props, 'className'>, ItemSlots {
@@ -121,12 +158,24 @@ export interface MenuItemProps extends Omit<BaseMenu.Item.Props, 'className'>, I
 }
 
 /** One action. Closes the menu when activated. */
-function Item({ icon, trailing, tone = 'default', className, children, ...rest }: MenuItemProps) {
+function Item({
+  icon,
+  description,
+  trailing,
+  tone = 'default',
+  className,
+  children,
+  'aria-labelledby': labelledBy,
+  'aria-describedby': describedBy,
+  ...rest
+}: MenuItemProps) {
+  const [body, aria] = useItemBody(
+    { icon, description, trailing, children },
+    { 'aria-labelledby': labelledBy, 'aria-describedby': describedBy },
+  );
   return (
-    <BaseMenu.Item className={cx('sc-menu__item', className)} data-tone={tone} {...rest}>
-      <ItemBody icon={icon} trailing={trailing}>
-        {children}
-      </ItemBody>
+    <BaseMenu.Item className={cx('sc-menu__item', className)} data-tone={tone} {...aria} {...rest}>
+      {body}
     </BaseMenu.Item>
   );
 }
@@ -141,23 +190,29 @@ export interface MenuLinkItemProps extends Omit<BaseMenu.LinkItem.Props, 'classN
  */
 function LinkItem({
   icon,
+  description,
   trailing,
   tone = 'default',
   className,
   closeOnClick = true,
   children,
+  'aria-labelledby': labelledBy,
+  'aria-describedby': describedBy,
   ...rest
 }: MenuLinkItemProps) {
+  const [body, aria] = useItemBody(
+    { icon, description, trailing, children },
+    { 'aria-labelledby': labelledBy, 'aria-describedby': describedBy },
+  );
   return (
     <BaseMenu.LinkItem
       className={cx('sc-menu__item', className)}
       data-tone={tone}
       closeOnClick={closeOnClick}
+      {...aria}
       {...rest}
     >
-      <ItemBody icon={icon} trailing={trailing}>
-        {children}
-      </ItemBody>
+      {body}
     </BaseMenu.LinkItem>
   );
 }

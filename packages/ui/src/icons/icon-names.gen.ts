@@ -23,6 +23,7 @@ export const iconNames = [
   'edit',
   'external-link',
   'eye',
+  'eye-off',
   'filter',
   'flag',
   'inbox',

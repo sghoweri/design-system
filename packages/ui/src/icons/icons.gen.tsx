@@ -211,6 +211,18 @@ export function EyeIcon(props: IconGlyphProps) {
   );
 }
 
+/** `eye-off` */
+export function EyeOffIcon(props: IconGlyphProps) {
+  return (
+    <Icon {...props}>
+      <path d="M6.37 3.99C6.87 3.84 7.42 3.75 8 3.75C12 3.75 14.25 8 14.25 8C14.25 8 13.65 9.13 12.53 10.22" />
+      <path d="M9.63 12.01C9.13 12.16 8.58 12.25 8 12.25C4 12.25 1.75 8 1.75 8C1.75 8 2.35 6.87 3.47 5.78" />
+      <path d="M9.41 9.41A2 2 0 0 1 6.59 6.59" />
+      <path d="M2.5 2.5l11 11" />
+    </Icon>
+  );
+}
+
 /** `filter` */
 export function FilterIcon(props: IconGlyphProps) {
   return (

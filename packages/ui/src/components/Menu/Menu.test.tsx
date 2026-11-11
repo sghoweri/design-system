@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { Menu } from './Menu';
 import { IconButton } from '../IconButton/IconButton';
-import { MoreHorizontalIcon, PauseIcon } from '../../icons/icons.gen';
+import { EyeOffIcon, MoreHorizontalIcon, PauseIcon } from '../../icons/icons.gen';
 import { expectNoA11yViolations } from '../../../test/axe';
 
 function Example({ onPauseMine = () => {} }: { onPauseMine?: () => void }) {
@@ -135,6 +135,86 @@ describe('Menu', () => {
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
     await waitFor(() => expect(trigger).toHaveFocus());
+  });
+
+  it('gives an item a description line that is its accessible description, not part of its name', async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu.Root>
+        <Menu.Trigger>Options</Menu.Trigger>
+        <Menu.Content>
+          <Menu.Item icon={<EyeOffIcon />} description="Leave it out of this list">
+            Hide
+          </Menu.Item>
+          <Menu.Item description="Lower in the list" trailing="3">
+            Move down
+          </Menu.Item>
+          <Menu.LinkItem href="#help" description="Opens the guide">
+            Help
+          </Menu.LinkItem>
+          <Menu.Item aria-describedby="outside" description="Kept after the caller's id">
+            Keep
+          </Menu.Item>
+          <Menu.Item icon={<PauseIcon />}>Pause</Menu.Item>
+          <Menu.Item>Plain</Menu.Item>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Options' }));
+    await screen.findByRole('menu');
+
+    const hide = screen.getByRole('menuitem', { name: 'Hide' });
+    expect(hide).toHaveAccessibleDescription('Leave it out of this list');
+    expect(hide.querySelector('.sc-menu__description')).toHaveTextContent('Leave it out of this list');
+    // the icon is decorative
+    const icon = hide.querySelector('.sc-menu__icon');
+    expect(icon).toHaveAttribute('aria-hidden', 'true');
+    expect(icon?.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+
+    // trailing text stays in the name, the description stays out of it
+    const down = screen.getByRole('menuitem', { name: 'Move down 3' });
+    expect(down).toHaveAccessibleDescription('Lower in the list');
+
+    const help = screen.getByRole('menuitem', { name: 'Help' });
+    expect(help).toHaveAttribute('href', '#help');
+    expect(help).toHaveAccessibleDescription('Opens the guide');
+
+    const keep = screen.getByRole('menuitem', { name: 'Keep' });
+    expect(keep.getAttribute('aria-describedby')?.split(' ')[0]).toBe('outside');
+
+    await expectNoA11yViolations(document.body);
+  });
+
+  it('leaves items without a description as they were: name from content, no ARIA references', async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu.Root>
+        <Menu.Trigger>Options</Menu.Trigger>
+        <Menu.Content>
+          <Menu.Item icon={<PauseIcon />} trailing="Z">
+            Pause
+          </Menu.Item>
+          <Menu.LinkItem href="#plain">Plain</Menu.LinkItem>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Options' }));
+    await screen.findByRole('menu');
+    for (const item of [
+      screen.getByRole('menuitem', { name: /^Pause/ }),
+      screen.getByRole('menuitem', { name: 'Plain' }),
+    ]) {
+      expect(item).not.toHaveAttribute('aria-labelledby');
+      expect(item).not.toHaveAttribute('aria-describedby');
+      expect(item).toHaveAccessibleDescription('');
+      expect(item.querySelector('.sc-menu__description')).toBeNull();
+      expect([...item.children].map((c) => c.className)).toEqual(
+        item.textContent?.includes('Z')
+          ? ['sc-menu__icon', 'sc-menu__label', 'sc-menu__trailing']
+          : ['sc-menu__icon', 'sc-menu__label'],
+      );
+      for (const child of item.querySelectorAll('span')) expect(child).not.toHaveAttribute('id');
+    }
   });
 
   it('renders an IconButton through the trigger render prop and reports open state', async () => {

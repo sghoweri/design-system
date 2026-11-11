@@ -39,10 +39,11 @@ const ATTRS = {
 };
 const COLOR = /^(currentColor|none)$/;
 
-const files = readdirSync(svgDir)
+// Sort the names, not the file names: `eye-off.svg` sorts before `eye.svg`, `eye` before `eye-off`.
+const names = readdirSync(svgDir)
   .filter((f) => f.endsWith('.svg'))
+  .map((f) => f.slice(0, -4))
   .sort();
-const names = files.map((f) => f.slice(0, -4));
 const seen = new Set();
 const errors = [];
 for (const name of names) {
