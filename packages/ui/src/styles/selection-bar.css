@@ -30,6 +30,8 @@
     translate var(--sc-duration-base) var(--sc-ease-standard);
 }
 .sc-selection-bar[data-open] {
+  /* Toasts sit above it (toast.css). */
+  anchor-name: --sc-bottom-bar;
   opacity: 1;
   translate: none;
   pointer-events: auto;

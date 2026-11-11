@@ -1,15 +1,29 @@
 /* ---- Toast ----------------------------------------------------------------- */
+/* Bottom-end, clear of a bar fixed along the bottom: an open SelectionBar, or any bar of the app's that sets
+   `anchor-name: --sc-bottom-bar`. Without one, the gutter. Phones use the md gutter on both sides. */
 .sc-toast-viewport {
+  --_gutter: var(--sc-spacing-lg);
+  --_bottom: calc(var(--_gutter) + env(safe-area-inset-bottom, 0px));
   position: fixed;
-  inset-block-end: var(--sc-spacing-lg);
-  inset-inline-end: var(--sc-spacing-lg);
+  inset-block-end: var(--_bottom);
+  inset-inline-end: var(--_gutter);
   z-index: var(--sc-z-toast);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--sc-spacing-xs);
-  inline-size: min(360px, 100vw - 2 * var(--sc-spacing-md));
+  inline-size: min(360px, 100vw - 2 * var(--_gutter));
   outline: none;
+}
+@supports (anchor-name: --a) {
+  .sc-toast-viewport {
+    inset-block-end: max(var(--_bottom), calc(anchor(--sc-bottom-bar top, 0px) + var(--sc-spacing-xs)));
+  }
+}
+@media (width < 640px) {
+  .sc-toast-viewport {
+    --_gutter: var(--sc-spacing-md);
+  }
 }
 /* A raised surface, so washes inside use the raised tokens (docs/adr/0003). */
 .sc-toast {

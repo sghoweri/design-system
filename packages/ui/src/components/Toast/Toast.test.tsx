@@ -73,4 +73,85 @@ describe('Toast', () => {
     await vi.waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
     vi.useRealTimers();
   });
+
+  it('stays until answered: no timeout, an action that keeps it open, a text dismiss, onClose once', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+    const reload = vi.fn();
+    const onClose = vi.fn();
+    render(
+      <Toast.Provider timeout={6000}>
+        <Trigger
+          options={{
+            id: 'updated',
+            title: 'The app was updated',
+            timeout: 0,
+            action: { label: 'Reload', onClick: reload, keepOpen: true },
+            dismissLabel: 'Later',
+            onClose,
+          }}
+        />
+      </Toast.Provider>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Show' }));
+    const toast = await screen.findByRole('dialog', { name: 'The app was updated' });
+    expect(screen.queryByRole('button', { name: 'Dismiss' })).toBeNull();
+    await act(async () => {
+      vi.advanceTimersByTime(60_000);
+    });
+    expect(toast).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Reload' }));
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('dialog', { name: 'The app was updated' })).toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+    await user.click(screen.getByRole('button', { name: 'Later' }));
+    await vi.waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    expect(onClose).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+  });
+
+  it('adding the same id again updates it in place', async () => {
+    const user = userEvent.setup();
+    function Twice() {
+      const toast = useToast();
+      return (
+        <>
+          <button type="button" onClick={() => toast.add({ id: 'one', title: 'First', timeout: 0 })}>
+            First
+          </button>
+          <button type="button" onClick={() => toast.add({ id: 'one', title: 'Second', timeout: 0 })}>
+            Second
+          </button>
+        </>
+      );
+    }
+    render(
+      <Toast.Provider>
+        <Twice />
+      </Toast.Provider>,
+    );
+    await user.click(screen.getByRole('button', { name: 'First' }));
+    await screen.findByRole('dialog', { name: 'First' });
+    await user.click(screen.getByRole('button', { name: 'Second' }));
+    await screen.findByRole('dialog', { name: 'Second' });
+    expect(screen.getAllByRole('dialog')).toHaveLength(1);
+  });
+
+  it('a Provider inside another shares its viewport: one Notifications region', async () => {
+    const user = userEvent.setup();
+    render(
+      <Toast.Provider>
+        <Trigger options={{ title: 'From the app' }} />
+        <Toast.Provider>
+          <Trigger options={{ title: 'From a page' }} />
+        </Toast.Provider>
+      </Toast.Provider>,
+    );
+    const [outer, inner] = screen.getAllByRole('button', { name: 'Show' });
+    await user.click(outer!);
+    await user.click(inner!);
+    expect(screen.getAllByRole('region', { name: 'Notifications' })).toHaveLength(1);
+    expect(await screen.findByRole('dialog', { name: 'From a page' })).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'From the app' })).toBeInTheDocument();
+  });
 });

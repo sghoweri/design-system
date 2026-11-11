@@ -1,5 +1,5 @@
 import { Toast as BaseToast } from '@base-ui/react/toast';
-import { useMemo, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, type ReactNode } from 'react';
 import { XIcon } from '../../icons/icons.gen';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
@@ -12,12 +12,24 @@ export interface ToastOptions {
   description?: ReactNode | undefined;
   /** A coloured edge. Default `neutral`. */
   tone?: ToastTone | undefined;
-  /** One action, usually Undo. It closes the toast after `onClick`. */
-  action?: { label: string; onClick: () => void } | undefined;
+  /**
+   * One action, usually Undo. It closes the toast after `onClick`, unless `keepOpen` (the action asks first, and the
+   * person may cancel).
+   */
+  action?: { label: string; onClick: () => void; keepOpen?: boolean | undefined } | undefined;
   /** Milliseconds before it closes; paused while hovered or focused; `0` keeps it. Default: the Provider's. */
   timeout?: number | undefined;
   /** `high` announces assertively (errors). Default `low`, polite. */
   priority?: 'low' | 'high' | undefined;
+  /**
+   * Names the toast. Adding one whose id is showing updates it in place (new text, the timer starts again) instead
+   * of stacking a second.
+   */
+  id?: string | undefined;
+  /** The dismiss control as a text button ("Later") instead of the ×. */
+  dismissLabel?: string | undefined;
+  /** Called once when it closes, however: dismissed, swiped away, its action, its timeout or `close()`. */
+  onClose?: (() => void) | undefined;
 }
 
 export interface ToastProviderProps {
@@ -28,20 +40,29 @@ export interface ToastProviderProps {
   limit?: number | undefined;
 }
 
-/** Holds the toasts for `useToast()` below it and renders them, bottom-end, in the top layer. */
+const InsideProvider = createContext(false);
+
+/**
+ * Holds the toasts for `useToast()` below it and renders them, bottom-end, above the page. One viewport per page: a
+ * Provider inside another adds nothing (its `timeout` and `limit` are ignored), so a component may wrap itself in one
+ * and still share the app's.
+ */
 function Provider({ children, timeout = 6000, limit = 3 }: ToastProviderProps) {
+  if (useContext(InsideProvider)) return children;
   return (
-    <BaseToast.Provider timeout={timeout} limit={limit}>
-      {children}
-      <BaseToast.Portal>
-        <Viewport />
-      </BaseToast.Portal>
-    </BaseToast.Provider>
+    <InsideProvider.Provider value>
+      <BaseToast.Provider timeout={timeout} limit={limit}>
+        {children}
+        <BaseToast.Portal>
+          <Viewport />
+        </BaseToast.Portal>
+      </BaseToast.Provider>
+    </InsideProvider.Provider>
   );
 }
 
 function Viewport() {
-  const { toasts, close } = BaseToast.useToastManager();
+  const { toasts, close } = BaseToast.useToastManager<ToastData>();
   return (
     <BaseToast.Viewport className="sc-toast-viewport">
       {toasts.map((toast) => (
@@ -56,13 +77,23 @@ function Viewport() {
               render={<Button variant="secondary" size="sm" />}
             />
           ) : null}
-          <IconButton label="Dismiss" size="sm" className="sc-toast__close" onClick={() => close(toast.id)}>
-            <XIcon />
-          </IconButton>
+          {toast.data?.dismissLabel ? (
+            <Button variant="ghost" size="sm" className="sc-toast__close" onClick={() => close(toast.id)}>
+              {toast.data.dismissLabel}
+            </Button>
+          ) : (
+            <IconButton label="Dismiss" size="sm" className="sc-toast__close" onClick={() => close(toast.id)}>
+              <XIcon />
+            </IconButton>
+          )}
         </BaseToast.Root>
       ))}
     </BaseToast.Viewport>
   );
+}
+
+interface ToastData {
+  dismissLabel?: string | undefined;
 }
 
 export interface ToastApi {
@@ -74,24 +105,37 @@ export interface ToastApi {
 
 /** Shows toasts from inside a `Toast.Provider`. */
 export function useToast(): ToastApi {
-  const manager = BaseToast.useToastManager();
+  const manager = BaseToast.useToastManager<ToastData>();
   return useMemo(
     () => ({
-      add: ({ title, description, tone = 'neutral', action, timeout, priority }: ToastOptions) => {
-        let id = '';
+      add: ({
+        title,
+        description,
+        tone = 'neutral',
+        action,
+        timeout,
+        priority,
+        id: given,
+        dismissLabel,
+        onClose,
+      }: ToastOptions) => {
+        let id = given ?? '';
         id = manager.add({
           title,
           description,
           type: tone,
+          data: { dismissLabel },
+          ...(given ? { id: given } : {}),
           ...(timeout !== undefined ? { timeout } : {}),
           ...(priority ? { priority } : {}),
+          ...(onClose ? { onClose } : {}),
           ...(action
             ? {
                 actionProps: {
                   children: action.label,
                   onClick: () => {
                     action.onClick();
-                    manager.close(id);
+                    if (!action.keepOpen) manager.close(id);
                   },
                 },
               }
