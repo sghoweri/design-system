@@ -15,7 +15,7 @@
   inline-size: max-content;
   max-inline-size: min(100vw - 2 * var(--sc-spacing-md), 360px);
   max-block-size: var(--available-height);
-  overflow: auto;
+  overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   padding: var(--sc-spacing-md);
   border-radius: var(--sc-radius-lg);
   background: var(--sc-color-surface-raised);
