@@ -14,13 +14,17 @@ export interface PopoverRootProps {
   defaultOpen?: boolean | undefined;
   /** Called when the popover opens or closes. */
   onOpenChange?: ((open: boolean) => void) | undefined;
-  /** Default `false`: the page stays interactive and focus may leave. `true` makes the page inert until it closes. */
+  /**
+   * Default `true` (2026-11-11): the page doesn't scroll and focus stays in the popover until it closes, so an anchored
+   * panel never drifts away from its trigger on a phone. `false` for a popover that opens on hover or must let the page
+   * keep scrolling.
+   */
   modal?: boolean | undefined;
   children?: ReactNode | undefined;
 }
 
 /** Owns the open state. Wrap a `Popover.Trigger` and a `Popover.Content`. */
-function Root({ open, defaultOpen, onOpenChange, modal = false, children }: PopoverRootProps) {
+function Root({ open, defaultOpen, onOpenChange, modal = true, children }: PopoverRootProps) {
   return (
     <BasePopover.Root
       open={open}
@@ -150,5 +154,5 @@ function Close({ className, children, render, ...rest }: PopoverCloseProps) {
   );
 }
 
-/** A non-modal panel anchored to a trigger, for a small form, a status summary or a legend. Built on Base UI's Popover. */
+/** A panel anchored to a trigger (modal by default: the page doesn't scroll while it's open), for a small form, a status summary or a legend. Built on Base UI's Popover. */
 export const Popover = { Root, Trigger, Content, Title, Description, Close };

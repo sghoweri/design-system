@@ -51,6 +51,30 @@ function AnchoredExample() {
 }
 
 describe('Popover', () => {
+  // 2026-11-11: modal by default, so the page doesn't scroll under an open popover (Base UI's scroll lock).
+  it('locks page scroll while open by default', async () => {
+    render(
+      <Popover.Root>
+        <Popover.Trigger>Open</Popover.Trigger>
+        <Popover.Content>Panel</Popover.Content>
+      </Popover.Root>,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    await waitFor(() => expect(document.body.style.overflowY).toBe('hidden'));
+  });
+
+  it('leaves page scroll alone with modal={false}', async () => {
+    render(
+      <Popover.Root modal={false}>
+        <Popover.Trigger>Open</Popover.Trigger>
+        <Popover.Content>Panel</Popover.Content>
+      </Popover.Root>,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Open' }));
+    await screen.findByText('Panel');
+    expect(document.body.style.overflowY).not.toBe('hidden');
+  });
+
   it('renders a secondary Button trigger by default', () => {
     render(
       <Popover.Root>
@@ -107,7 +131,8 @@ describe('Popover', () => {
 
     await user.click(trigger);
     await screen.findByRole('dialog');
-    await user.click(screen.getByRole('button', { name: 'Outside' }));
+    // Modal by default: the page behind is inert and hidden from assistive tech, and a click there still closes.
+    await user.click(document.body);
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
 

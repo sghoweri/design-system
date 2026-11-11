@@ -33,7 +33,7 @@
   max-inline-size: var(--_max);
   max-block-size: min(100dvh - 2 * var(--_gutter), 85dvh);
   block-size: fit-content;
-  overflow: auto;
+  overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   padding: var(--sc-spacing-lg);
   border-radius: var(--sc-radius-xl);
   background: var(--sc-color-surface-raised);
@@ -137,7 +137,7 @@
 .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__body {
   flex: 1 1 auto;
   min-block-size: 0;
-  overflow: auto;
+  overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   overscroll-behavior: contain;
 }
 /* The sheet's grab handle shows only where the sheet docks. */
@@ -268,7 +268,7 @@
 .sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__body {
   flex: 1 1 auto;
   min-block-size: 0;
-  overflow: auto;
+  overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   overscroll-behavior: contain;
 }
 /* From 900px the backdrop shows a margin around it, so it still reads as a layer over the app. */
