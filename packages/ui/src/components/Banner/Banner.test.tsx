@@ -63,4 +63,18 @@ describe('Banner', () => {
     );
     expect(screen.queryByRole('status')).toBeNull();
   });
+
+  it('marks the page placement only when asked, and keeps the role it is given', async () => {
+    const { container, rerender } = render(<Banner tone="warning">Sweeps are paused.</Banner>);
+    expect(screen.getByRole('alert')).not.toHaveAttribute('data-placement');
+    rerender(
+      <Banner tone="warning" placement="page" role="status">
+        GitHub Actions is down.
+      </Banner>,
+    );
+    const banner = screen.getByRole('status');
+    expect(banner).toHaveAttribute('data-placement', 'page');
+    expect(banner).toHaveAttribute('data-tone', 'warning');
+    await expectNoA11yViolations(container);
+  });
 });

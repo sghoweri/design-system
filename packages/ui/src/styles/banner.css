@@ -16,6 +16,14 @@
   font-size: var(--sc-font-size-sm);
   line-height: var(--sc-font-line-height-ui);
 }
+/* A full-bleed notice across the top of the page (the Bolt docs' top bar, shorter): square, compact, a hairline under it. */
+.sc-banner[data-placement='page'] {
+  min-block-size: var(--sc-size-control-sm);
+  padding-block: var(--sc-spacing-3xs);
+  padding-inline: var(--sc-spacing-sm) var(--sc-spacing-2xs);
+  border-radius: 0;
+  border-block-end: 1px solid rgb(from var(--_fg) r g b / 0.2);
+}
 .sc-banner[data-tone='success'] {
   --_bg: var(--sc-color-success-subtle);
   --_fg: var(--sc-color-success-text);
