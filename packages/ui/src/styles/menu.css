@@ -100,6 +100,7 @@
   min-inline-size: 0;
   color: var(--sc-color-text-muted);
   font-size: var(--sc-font-size-xs);
+  text-wrap-style: pretty;
 }
 .sc-menu__trailing {
   grid-column: 3;

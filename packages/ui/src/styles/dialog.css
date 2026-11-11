@@ -72,17 +72,20 @@
   font-weight: var(--sc-font-weight-semibold);
   letter-spacing: var(--sc-font-tracking-snug);
   padding-inline-end: var(--sc-spacing-xl);
+  text-wrap-style: balance;
 }
 .sc-dialog__description {
   margin: var(--sc-spacing-2xs) 0 0;
   font-size: var(--sc-font-size-sm);
   line-height: var(--sc-font-line-height-normal);
   color: var(--sc-color-text-muted);
+  text-wrap-style: pretty;
 }
 .sc-dialog__body {
   margin-block-start: var(--sc-spacing-md);
   font-size: var(--sc-font-size-sm);
   line-height: var(--sc-font-line-height-normal);
+  text-wrap-style: pretty;
 }
 /* Content wraps instead of widening the popup: long URLs break, fields and media stay inside the box. */
 .sc-dialog__title,

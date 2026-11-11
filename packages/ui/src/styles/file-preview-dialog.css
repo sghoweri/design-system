@@ -54,6 +54,7 @@
 .sc-file-preview__note {
   margin: var(--sc-spacing-xs) 0 0;
   color: var(--sc-color-text-muted);
+  text-wrap-style: pretty;
 }
 .sc-file-preview__tab > .sc-file-preview__note {
   margin: 0;

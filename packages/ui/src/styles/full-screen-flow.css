@@ -232,6 +232,7 @@
   background: var(--sc-color-surface-sunken);
   font-size: var(--sc-font-size-xs);
   color: var(--sc-color-text-muted);
+  text-wrap-style: pretty;
 }
 @media (height <= 820px) {
   .sc-flow__rail-note {
@@ -336,6 +337,7 @@
 .sc-flow__step-description {
   max-inline-size: 60ch;
   color: var(--sc-color-text-muted);
+  text-wrap-style: pretty;
 }
 
 /* Footer: back at the start, hint and primary action at the end, every button a 44px target. */

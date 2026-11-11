@@ -39,11 +39,13 @@
   margin: 0;
   color: var(--sc-color-text-muted);
   font-size: var(--sc-font-size-xs);
+  text-wrap-style: pretty;
 }
 .sc-field__error {
   margin: 0;
   color: var(--sc-color-danger-text);
   font-size: var(--sc-font-size-xs);
+  text-wrap-style: pretty;
 }
 /* Input */
 .sc-input-wrap {
@@ -382,6 +384,7 @@
   grid-column: 2;
   color: var(--sc-color-text-muted);
   font-size: var(--sc-font-size-xs);
+  text-wrap-style: pretty;
 }
 .sc-choice[data-label-position='start'] > .sc-choice__description {
   grid-column: 1;
