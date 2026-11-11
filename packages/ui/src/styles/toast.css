@@ -77,11 +77,13 @@
   margin: 0;
   font-size: inherit;
   font-weight: var(--sc-font-weight-medium);
+  text-wrap-style: balance;
 }
 .sc-toast__description {
   margin: 0;
   color: var(--sc-color-text-muted);
   font-size: var(--sc-font-size-xs);
+  text-wrap-style: pretty;
 }
 .sc-toast__action,
 .sc-toast__close {

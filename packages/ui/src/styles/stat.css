@@ -86,4 +86,5 @@
   grid-area: hint;
   color: var(--sc-color-text-muted);
   font-size: var(--sc-font-size-xs);
+  text-wrap-style: pretty;
 }

@@ -13,6 +13,7 @@
   font-size: var(--sc-font-size-sm);
   line-height: var(--sc-font-line-height-ui);
   color: var(--sc-color-text-muted);
+  text-wrap-style: pretty;
 }
 .sc-reason-list[data-size='sm'] {
   --_m: 7px;

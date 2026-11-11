@@ -53,6 +53,7 @@
   font-size: var(--sc-font-size-md);
   line-height: var(--sc-font-line-height-snug);
   font-weight: var(--sc-font-weight-semibold);
+  text-wrap-style: balance;
 }
 .sc-popover__title:has(~ .sc-popover__close),
 .sc-popover__close ~ .sc-popover__title {
@@ -61,6 +62,7 @@
 .sc-popover__description {
   margin: var(--sc-spacing-2xs) 0 0;
   color: var(--sc-color-text-muted);
+  text-wrap-style: pretty;
 }
 .sc-popover__close {
   position: absolute;
