@@ -3,6 +3,7 @@ import { useId, type ReactNode } from 'react';
 import { Button } from '../Button/Button';
 import { CheckIcon, ChevronDownIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
+import { useSafeAreaPadding } from '../../utils/useSafeAreaPadding';
 
 export type MenuSide = 'top' | 'bottom' | 'left' | 'right';
 export type MenuAlign = 'start' | 'center' | 'end';
@@ -76,9 +77,16 @@ function Content({
   children,
   ...rest
 }: MenuContentProps) {
+  const collisionPadding = useSafeAreaPadding();
   return (
     <BaseMenu.Portal>
-      <BaseMenu.Positioner side={side} align={align} sideOffset={sideOffset} className="sc-menu__positioner">
+      <BaseMenu.Positioner
+        side={side}
+        align={align}
+        sideOffset={sideOffset}
+        collisionPadding={collisionPadding}
+        className="sc-menu__positioner"
+      >
         <BaseMenu.Popup className={cx('sc-menu', className)} {...rest}>
           {children}
         </BaseMenu.Popup>

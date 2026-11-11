@@ -2,19 +2,22 @@
 /* Bottom-end, clear of a bar fixed along the bottom: an open SelectionBar, or any `position: fixed` bar of the app's
    that sets `anchor-name: --sc-bottom-bar`. Without one, the gutter. Phones use the md gutter on both sides.
    A sticky bar can't be an anchor (anchor() reads where it would be unstuck); while one shows, the app raises the
-   toasts by setting `--sc-toast-offset-block-end` (on :root, for example) to the room it needs. */
+   toasts by setting `--sc-toast-offset-block-end` (on :root, for example) to the room it needs.
+   Under `viewport-fit=cover` the side keeps clear of a landscape phone's notch or Dynamic Island and rounded corners:
+   the gutter or the larger side inset, whichever is wider (the larger of the two, so inline-end is right either way). */
 .sc-toast-viewport {
   --_gutter: var(--sc-spacing-lg);
+  --_side: max(var(--_gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   --_bottom: calc(var(--_gutter) + var(--sc-toast-offset-block-end, 0px) + env(safe-area-inset-bottom, 0px));
   position: fixed;
   inset-block-end: var(--_bottom);
-  inset-inline-end: var(--_gutter);
+  inset-inline-end: var(--_side);
   z-index: var(--sc-z-toast);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--sc-spacing-xs);
-  inline-size: min(360px, 100vw - 2 * var(--_gutter));
+  inline-size: min(360px, 100vw - 2 * var(--_side));
   outline: none;
 }
 @supports (anchor-name: --a) {

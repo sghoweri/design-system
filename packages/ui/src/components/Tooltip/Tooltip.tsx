@@ -1,6 +1,7 @@
 import { Tooltip as BaseTooltip } from '@base-ui/react/tooltip';
 import type { ReactElement, ReactNode } from 'react';
 import { cx } from '../../utils/cx';
+import { useSafeAreaPadding } from '../../utils/useSafeAreaPadding';
 
 export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
 export type TooltipAlign = 'start' | 'center' | 'end';
@@ -46,6 +47,7 @@ function TooltipBase({
   disabled,
   className,
 }: TooltipProps) {
+  const collisionPadding = useSafeAreaPadding();
   return (
     <BaseTooltip.Root
       open={open}
@@ -55,7 +57,13 @@ function TooltipBase({
     >
       <BaseTooltip.Trigger render={children} delay={delay} closeDelay={closeDelay} />
       <BaseTooltip.Portal>
-        <BaseTooltip.Positioner side={side} align={align} sideOffset={6} className="sc-tooltip__positioner">
+        <BaseTooltip.Positioner
+          side={side}
+          align={align}
+          sideOffset={6}
+          collisionPadding={collisionPadding}
+          className="sc-tooltip__positioner"
+        >
           <BaseTooltip.Popup role="tooltip" className={cx('sc-tooltip', className)}>
             <BaseTooltip.Arrow className="sc-tooltip__arrow" />
             {content}

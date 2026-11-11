@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { Button } from '../Button/Button';
 import { XIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
+import { useSafeAreaPadding } from '../../utils/useSafeAreaPadding';
 
 export type PopoverSide = 'top' | 'bottom' | 'left' | 'right';
 export type PopoverAlign = 'start' | 'center' | 'end';
@@ -97,6 +98,7 @@ function Content({
   children,
   ...rest
 }: PopoverContentProps) {
+  const collisionPadding = useSafeAreaPadding();
   return (
     <BasePopover.Portal>
       <BasePopover.Positioner
@@ -105,6 +107,7 @@ function Content({
         sideOffset={sideOffset ?? (arrow ? 8 : 4)}
         anchor={anchor}
         collisionAvoidance={COLLISION_AVOIDANCE}
+        collisionPadding={collisionPadding}
         className="sc-popover__positioner"
       >
         <BasePopover.Popup className={cx('sc-popover', className)} {...rest}>
