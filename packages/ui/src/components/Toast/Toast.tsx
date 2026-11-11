@@ -4,13 +4,16 @@ import { XIcon } from '../../icons/icons.gen';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
 
-export type ToastTone = 'neutral' | 'success' | 'danger';
+export type ToastTone = 'neutral' | 'success' | 'danger' | 'accent';
 
 export interface ToastOptions {
   /** Required. One line: "Closed 5 applications". */
   title: ReactNode;
   description?: ReactNode | undefined;
-  /** A coloured edge. Default `neutral`. */
+  /**
+   * `neutral` (default), `success` and `danger` colour the edge. `accent` fills the toast with the accent colour, for
+   * the rare notice that has to be seen (the app was updated); its buttons read on the fill (`.sc-on-accent`).
+   */
   tone?: ToastTone | undefined;
   /**
    * One action, usually Undo. It closes the toast after `onClick`, unless `keepOpen` (the action asks first, and the

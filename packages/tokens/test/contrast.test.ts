@@ -39,6 +39,10 @@ const pairs: Array<[string, string[], number]> = [
   ['text-subtle', ['surface-default'], 4.5],
   ['text-link', ['surface-canvas', 'surface-default'], 4.5],
   ['text-on-accent', ['accent-default', 'accent-hover'], 4.5],
+  // The .sc-on-accent scope (accent Toast): text, button labels in every state, and the ring, borders and focus rings
+  // drawn in text.on-accent on the fill; the fill's own focus ring (accent.default) on the page outside it.
+  ['text-on-accent', ['accent-active'], 4.5],
+  ['accent-default', ['surface-raised'], 3],
   ['accent-text', ['accent-subtle', 'surface-default'], 4.5],
   ['success-text', ['success-subtle', 'surface-default'], 4.5],
   ['warning-text', ['warning-subtle', 'surface-default'], 4.5],
@@ -102,6 +106,9 @@ const washes: Array<[string, string]> = [
   ['surface-raised', 'surface-raised-hover'],
   ['surface-raised-hover', 'surface-raised-active'],
   ['surface-default', 'accent-wash'],
+  // Hover and pressed on an accent fill (.sc-on-accent).
+  ['accent-default', 'accent-hover'],
+  ['accent-hover', 'accent-active'],
 ];
 describe.each(['light', 'dark'] as const)('%s theme state washes', (theme) => {
   const t = json[theme];

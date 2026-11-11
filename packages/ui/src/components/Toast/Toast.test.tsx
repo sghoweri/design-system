@@ -3,6 +3,8 @@ import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Toast, useToast, type ToastOptions } from './Toast';
 import { expectNoA11yViolations } from '../../../test/axe';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 function Trigger({ options }: { options: ToastOptions }) {
   const toast = useToast();
@@ -28,6 +30,41 @@ describe('Toast', () => {
     expect(toast).toHaveAccessibleDescription('2 were already closed.');
     expect(toast).toHaveAttribute('data-tone', 'neutral');
     await expectNoA11yViolations(document.body);
+  });
+
+  it('the accent tone fills the toast; its buttons and description read on the fill', async () => {
+    const user = userEvent.setup();
+    render(
+      <Toast.Provider>
+        <Trigger
+          options={{
+            title: 'The app was updated',
+            description: 'Reload to get the latest.',
+            tone: 'accent',
+            timeout: 0,
+            action: { label: 'Reload', onClick: () => undefined },
+            dismissLabel: 'Later',
+          }}
+        />
+      </Toast.Provider>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Show' }));
+    const toast = await screen.findByRole('dialog', { name: 'The app was updated' });
+    expect(toast).toHaveAttribute('data-tone', 'accent');
+    expect(toast).toHaveAccessibleDescription('Reload to get the latest.');
+    await expectNoA11yViolations(document.body);
+    // jsdom has no cascade, so check the stylesheet: the scope repoints every token a Button or the description reads.
+    const css = readFileSync(join(__dirname, '..', '..', 'styles', 'base.css'), 'utf8');
+    const scope = /\.sc-toast\[data-tone='accent'\] \{([^}]*)\}/.exec(css)?.[1] ?? '';
+    for (const [token, value] of [
+      ['text-default', 'text-on-accent'],
+      ['text-muted', 'text-on-accent'],
+      ['border-strong', 'text-on-accent'],
+      ['border-focus', 'text-on-accent'],
+      ['surface-hover', 'accent-hover'],
+      ['surface-active', 'accent-active'],
+    ])
+      expect(scope).toContain(`--sc-color-${token}: var(--sc-color-${value});`);
   });
 
   it('runs the action once and closes; Dismiss closes', async () => {

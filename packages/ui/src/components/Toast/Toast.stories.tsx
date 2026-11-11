@@ -114,3 +114,40 @@ export const Persistent_: Story = {
     </Toast.Provider>
   ),
 };
+
+function Accent() {
+  const toast = useToast();
+  return (
+    <Button
+      variant="secondary"
+      onClick={() =>
+        toast.add({
+          id: 'app-updated',
+          title: 'The app was updated',
+          description: 'Reload to get the latest.',
+          tone: 'accent',
+          timeout: 0,
+          action: { label: 'Reload', onClick: () => undefined, keepOpen: true },
+          dismissLabel: 'Later',
+        })
+      }
+    >
+      Show the accent toast
+    </Button>
+  );
+}
+
+/**
+ * `tone: 'accent'` fills the toast with the accent colour, for the rare notice that has to be seen (the app was
+ * updated). Keep it for one toast at a time; the other tones are an edge on a raised surface. Its buttons, description
+ * and focus rings read on the fill through the `.sc-on-accent` scope: text.on-accent on accent.default is 4.64:1 light
+ * and 7.15:1 dark, hover and pressed use the primary Button's accent.hover and accent.active.
+ */
+export const AccentTone: Story = {
+  name: 'Accent tone',
+  render: () => (
+    <Toast.Provider>
+      <Accent />
+    </Toast.Provider>
+  ),
+};
