@@ -104,7 +104,8 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
 }
 
 /**
- * Portal, backdrop and the popup. Focus moves inside on open and returns to the trigger on close.
+ * Portal, backdrop and the popup. Focus moves inside on open and returns to the trigger on close. A dialog opened
+ * from inside another has its own backdrop too, over the first dialog.
  * Menus, selects and tooltips opened from inside render above it (`--sc-z-dropdown` > `--sc-z-dialog`).
  */
 function Content({
@@ -120,7 +121,9 @@ function Content({
   const swipe = isSheet && dismissOnSwipe && dismissible;
   return (
     <BaseDialog.Portal>
-      <BaseDialog.Backdrop className="sc-dialog__backdrop" />
+      {/* `forceRender`: Base UI drops the backdrop of a dialog opened inside another, so a sheet over a full-screen
+          dialog didn't dim it. The nested one's scrim sits above its parent's popup (dialog.css). */}
+      <BaseDialog.Backdrop className="sc-dialog__backdrop" forceRender />
       <BaseDialog.Popup
         className={cx('sc-dialog__popup', className)}
         data-size={size}
