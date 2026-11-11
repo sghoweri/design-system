@@ -103,7 +103,8 @@ function Persistent() {
 /**
  * A toast that stays until it is answered: `timeout: 0`, an action that keeps it open (`keepOpen`, for an action
  * that may ask first), a text dismiss (`dismissLabel: 'Later'`) and `onClose`. Adding it again with the same `id`
- * updates it in place. It sits above an open SelectionBar (or any bar with `anchor-name: --sc-bottom-bar`).
+ * updates it in place. It sits above an open SelectionBar (or any fixed bar with `anchor-name: --sc-bottom-bar`); for a
+ * sticky bar, set `--sc-toast-offset-block-end` while it shows.
  */
 export const Persistent_: Story = {
   name: 'Persistent, with a SelectionBar',
