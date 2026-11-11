@@ -54,7 +54,10 @@ function Trigger({ render, className, children, ...rest }: PopoverTriggerProps) 
 }
 
 export interface PopoverContentProps extends Omit<BasePopover.Popup.Props, 'className'> {
-  /** Side of the trigger it opens on; flips when there is no room. Default `bottom`. */
+  /**
+   * Side of the trigger it opens on. Default `bottom`. With no room it flips to the opposite side (`top` for `bottom`),
+   * never to a perpendicular one; when neither side fits, it takes the roomier one and scrolls inside.
+   */
   side?: PopoverSide | undefined;
   /** Alignment along that side. Default `center`. */
   align?: PopoverAlign | undefined;
@@ -70,6 +73,14 @@ export interface PopoverContentProps extends Omit<BasePopover.Popup.Props, 'clas
   anchor?: BasePopover.Positioner.Props['anchor'];
   className?: string | undefined;
 }
+
+/**
+ * Collisions stay on the axis asked for: flip to the opposite side, shift along it, then shrink to the room there
+ * (`max-block-size: var(--available-height)`; the panel scrolls). Base UI's popover default instead falls back to the
+ * perpendicular axis when neither side fits the whole panel, so on a short viewport a `bottom` popover anchored at the
+ * end of a row opened to its left, over the row it is about. This is Base UI's own setting for Menu and Select.
+ */
+const COLLISION_AVOIDANCE = { fallbackAxisSide: 'none' } as const;
 
 /** Portal, positioner and the panel. Any content goes inside; name it with `Popover.Title`. */
 function Content({
@@ -89,6 +100,7 @@ function Content({
         align={align}
         sideOffset={sideOffset ?? (arrow ? 8 : 4)}
         anchor={anchor}
+        collisionAvoidance={COLLISION_AVOIDANCE}
         className="sc-popover__positioner"
       >
         <BasePopover.Popup className={cx('sc-popover', className)} {...rest}>

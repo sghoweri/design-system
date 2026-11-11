@@ -124,4 +124,66 @@ describe('Popover', () => {
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
+
+  describe('on a viewport too short for the panel above or below', () => {
+    // jsdom has no layout: give the viewport, the anchor and the panel real sizes. 1280×600, the anchor at the end of
+    // a row in the middle, and a 480×500 panel that fits on neither side but would fit whole to the anchor's left.
+    const rect = (x: number, y: number, width: number, height: number) =>
+      ({
+        x,
+        y,
+        width,
+        height,
+        top: y,
+        left: x,
+        right: x + width,
+        bottom: y + height,
+        toJSON: () => ({}),
+      }) as DOMRect;
+    const restore: Array<() => void> = [];
+    const stub = <T extends object>(target: T, key: string, value: PropertyDescriptor) => {
+      const before = Object.getOwnPropertyDescriptor(target, key);
+      Object.defineProperty(target, key, { configurable: true, ...value });
+      restore.push(() =>
+        before ? Object.defineProperty(target, key, before) : delete (target as Record<string, unknown>)[key],
+      );
+    };
+    beforeEach(() => {
+      stub(document.documentElement, 'clientWidth', { get: () => 1280 });
+      stub(document.documentElement, 'clientHeight', { get: () => 600 });
+      const isPanel = (el: HTMLElement) =>
+        el.classList.contains('sc-popover__positioner') || el.classList.contains('sc-popover');
+      stub(HTMLElement.prototype, 'offsetWidth', {
+        get(this: HTMLElement) {
+          return isPanel(this) ? 480 : 0;
+        },
+      });
+      stub(HTMLElement.prototype, 'offsetHeight', {
+        get(this: HTMLElement) {
+          return isPanel(this) ? 500 : 0;
+        },
+      });
+      const own = HTMLElement.prototype.getBoundingClientRect;
+      stub(HTMLElement.prototype, 'getBoundingClientRect', {
+        value(this: HTMLElement) {
+          if (this.textContent === 'Row actions' && this.tagName === 'BUTTON') return rect(1200, 290, 24, 24);
+          return isPanel(this) ? rect(0, 0, 480, 500) : own.call(this);
+        },
+      });
+    });
+    afterEach(() => {
+      while (restore.length) restore.pop()?.();
+    });
+
+    it('stays below or above its anchor (never beside it, over the row) and is told the room it has to scroll in', async () => {
+      const user = userEvent.setup();
+      render(<AnchoredExample />);
+      await user.click(screen.getByRole('button', { name: 'Row actions' }));
+      const popup = await screen.findByRole('dialog', { name: 'Correct this reason' });
+      const positioner = popup.parentElement as HTMLElement;
+      await waitFor(() => expect(positioner.style.getPropertyValue('--available-height')).not.toBe(''));
+      expect(['bottom', 'top']).toContain(popup.getAttribute('data-side'));
+      expect(parseFloat(positioner.style.getPropertyValue('--available-height'))).toBeLessThan(300);
+    });
+  });
 });
