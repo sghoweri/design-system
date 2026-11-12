@@ -25,6 +25,17 @@
   padding-inline: var(--sc-spacing-2xs);
   font-size: calc(var(--sc-font-size-xs) * 0.92);
 }
+/* pill: full radius in the mono face (the homepage's .pill), for status and evidence. Mono runs wider, so no
+   tracking; the extra inline padding keeps the text clear of the round ends. */
+.sc-badge[data-shape='pill'] {
+  border-radius: var(--sc-radius-full);
+  padding-inline: var(--sc-spacing-sm);
+  font-family: var(--sc-font-family-mono);
+  letter-spacing: 0;
+}
+.sc-badge[data-shape='pill'][data-size='sm'] {
+  padding-inline: var(--sc-spacing-xs);
+}
 .sc-badge__dot {
   inline-size: 6px;
   block-size: 6px;

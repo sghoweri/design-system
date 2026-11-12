@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Badge } from './Badge';
+import { expectNoA11yViolations } from '../../../test/axe';
 
 describe('Badge', () => {
   it('renders text with default tone, variant and size', () => {
@@ -29,5 +30,21 @@ describe('Badge info tone', () => {
   it('accepts the info tone', () => {
     render(<Badge tone="info">Screening</Badge>);
     expect(screen.getByText('Screening')).toHaveAttribute('data-tone', 'info');
+  });
+});
+
+describe('Badge shape', () => {
+  it('is rounded by default and pill on request', async () => {
+    const { container } = render(
+      <>
+        <Badge>Draft</Badge>
+        <Badge shape="pill" tone="success" dot>
+          Applied
+        </Badge>
+      </>,
+    );
+    expect(screen.getByText('Draft')).toHaveAttribute('data-shape', 'rounded');
+    expect(screen.getByText('Applied')).toHaveAttribute('data-shape', 'pill');
+    await expectNoA11yViolations(container);
   });
 });

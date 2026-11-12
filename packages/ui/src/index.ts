@@ -2,6 +2,7 @@ export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from '.
 export {
   Badge,
   type BadgeProps,
+  type BadgeShape,
   type BadgeSize,
   type BadgeTone,
   type BadgeVariant,
