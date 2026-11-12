@@ -128,6 +128,8 @@
   --_d: var(--sc-size-progress-ring-md);
   position: relative;
   display: inline-grid;
+  /* one cell the size of the ring: the bar's `1fr auto` columns and gap would put the centre left of middle */
+  grid-template-columns: 1fr;
   place-items: center;
   flex: none;
   inline-size: var(--_d);
