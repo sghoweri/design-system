@@ -29,6 +29,25 @@ describe('Input', () => {
     await expectNoA11yViolations(container);
   });
 
+  it('renders the error inside a live region that is there before the error is', async () => {
+    const { container, rerender } = render(<Input label="Job title" />);
+    const region = container.querySelector('.sc-field__error-region')!;
+    expect(region).toHaveAttribute('aria-live', 'polite');
+    expect(region).toBeEmptyDOMElement();
+
+    rerender(<Input label="Job title" error="“Frontend” is already in this list." />);
+    expect(container.querySelector('.sc-field__error-region')).toBe(region);
+    expect(region).toHaveTextContent('“Frontend” is already in this list.');
+    const input = screen.getByLabelText('Job title');
+    expect(input).toHaveAccessibleDescription('“Frontend” is already in this list.');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    await expectNoA11yViolations(container);
+
+    rerender(<Input label="Job title" />);
+    expect(region).toBeEmptyDOMElement();
+    expect(input).not.toHaveAttribute('aria-invalid');
+  });
+
   it('hides the label visually but keeps the name, and shows icons', async () => {
     const { container } = render(<Input label="Search" hideLabel iconStart={<SearchIcon />} size="sm" />);
     const input = screen.getByRole('textbox', { name: 'Search' });
