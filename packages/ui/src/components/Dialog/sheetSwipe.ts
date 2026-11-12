@@ -115,9 +115,8 @@ export function attachSheetSwipe(handle: HTMLElement): () => void {
         return;
       }
       dragging = true;
-      // The visible height: the bottom border is the overhang below the screen's edge (dialog.css).
-      height =
-        popup.getBoundingClientRect().height - (parseFloat(getComputedStyle(popup).borderBottomWidth) || 0);
+      // The visible height: the overhang below the screen's edge is a box-shadow, outside the box (dialog.css).
+      height = popup.getBoundingClientRect().height;
       popup.dataset.swiping = '';
       popup.setPointerCapture?.(e.pointerId);
       window.getSelection()?.removeAllRanges();

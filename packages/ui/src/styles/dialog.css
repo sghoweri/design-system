@@ -1,6 +1,10 @@
 /* ---- Dialog ---------------------------------------------------------------- */
 /* `--_overhang`: how far a docked surface (the scrim, a phone sheet, a full-screen dialog) runs past the bottom edge
-   of the layout viewport, out of sight. It covers what a collapsing or floating browser toolbar uncovers there. */
+   of the layout viewport, out of sight. It covers what a collapsing or floating browser toolbar uncovers there.
+   The sheet and the full-screen surface draw it as a box-shadow, not by moving their bottom edge: Safari on iOS 26
+   and later paints fixed elements only inside the layout viewport and fills its status-bar and toolbar areas by
+   extending the colour of a fixed surface whose box sits exactly on that edge. A box pushed past the edge (the old
+   negative inset and bottom border) gets no extension, so the page showed above and below it. */
 .sc-dialog__backdrop,
 .sc-dialog__popup {
   --_overhang: 160px;
@@ -161,9 +165,9 @@
 /* Below 640px the sheet docks to the bottom edge, full width, and slides up. The breakpoint is fixed
    here because custom properties cannot drive a media query. */
 @media (width < 640px) {
-  /* The sheet's surface runs on past the bottom edge as a bottom border in its own colour (the overhang), so no
-     strip of page shows under it when the browser toolbar collapses; the content and its safe-area padding end at
-     the edge as before. `touch-action: none`: a drag on the sheet outside a scroller never pans the page behind
+  /* The sheet's box ends at the bottom edge, so iOS Safari extends its colour under the toolbar; a box-shadow in its
+     own colour runs on past the edge (the overhang), so no strip of page shows under it where a browser paints
+     there instead (a collapsing toolbar). The content and its safe-area padding end at the edge. `touch-action: none`: a drag on the sheet outside a scroller never pans the page behind
      it, while `Dialog.Body` and any other scroll container inside keep scrolling (touch-action resets at a
      scroll container). The drag (sheetSwipe.ts) moves it with `transform`, on top of the `translate` that
      opens and closes it.
@@ -172,16 +176,18 @@
      height in the first frame. Out: 75% of that on `exit`, accelerating, so it is in view until it leaves.
      After a swipe it decelerates instead (`data-swiped`), carrying on from the finger's speed. */
   .sc-dialog__popup[data-variant='sheet'] {
-    inset: auto 0 calc(-1 * var(--_overhang)) 0;
+    inset: auto 0 0 0;
     margin: 0;
     inline-size: 100%;
     max-inline-size: none;
-    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - var(--sc-spacing-xl) + var(--_overhang));
+    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - var(--sc-spacing-xl));
     padding-block-end: calc(var(--sc-spacing-lg) + env(safe-area-inset-bottom, 0px));
     padding-inline: calc(var(--sc-spacing-lg) + env(safe-area-inset-left, 0px))
       calc(var(--sc-spacing-lg) + env(safe-area-inset-right, 0px));
-    border-block-end: var(--_overhang) solid var(--sc-color-surface-raised);
     border-radius: var(--sc-radius-xl) var(--sc-radius-xl) 0 0;
+    box-shadow:
+      0 var(--_overhang) 0 0 var(--sc-color-surface-raised),
+      var(--sc-elevation-3);
     touch-action: none;
     transition:
       translate var(--sc-duration-slow) var(--sc-ease-standard),
@@ -234,11 +240,11 @@
     user-select: none;
     transition: none;
   }
-  /* Just below the edge: its visible height, not counting the overhang already out of sight. */
+  /* Just below the edge. */
   .sc-dialog__popup[data-variant='sheet'][data-starting-style],
   .sc-dialog__popup[data-variant='sheet'][data-ending-style] {
     opacity: 1;
-    translate: 0 calc(100% - var(--_overhang));
+    translate: 0 100%;
     scale: none;
   }
   /* Actions stack full width, confirming action on top, in thumb reach. */
@@ -311,12 +317,12 @@
     var(--sc-spacing-sm) + max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))
   );
 }
-/* Below 900px the full-screen surface runs past the bottom edge like the sheet (the overhang, a bottom border in
-   its own colour), so a collapsing browser toolbar uncovers more of it, not the page. */
+/* Below 900px the full-screen surface runs past the bottom edge like the sheet (the overhang, a box-shadow in its
+   own colour; its box stays on the edges so iOS Safari extends it under the status bar and toolbar), so a collapsing
+   browser toolbar uncovers more of it, not the page. */
 @media (width < 900px) {
   .sc-dialog__popup[data-variant='fullscreen'] {
-    inset-block-end: calc(-1 * var(--_overhang));
-    border-block-end: var(--_overhang) solid var(--sc-color-surface-default);
+    box-shadow: 0 var(--_overhang) 0 0 var(--sc-color-surface-default);
   }
 }
 /* From 900px the backdrop shows a margin around it, so it still reads as a layer over the app. */
