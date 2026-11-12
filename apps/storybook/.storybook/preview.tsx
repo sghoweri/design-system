@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import type React from 'react';
 import '@salemcobalt/tokens/css';
 import '../../../packages/ui/src/fonts';
+// The display face (font.family.display) is the app's to load; Storybook loads it so Score md and ring show it.
+import '@fontsource-variable/unbounded';
 import '../../../packages/ui/src/styles/preview.css';
 
 function ThemeSync({

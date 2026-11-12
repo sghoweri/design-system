@@ -32,6 +32,13 @@
   border-radius: var(--sc-radius-xl);
   font-size: var(--sc-font-size-lg);
 }
+/* The brand face on the big numerals only (tile md and the ring; the 40px row tile stays sans at 14px). Unbounded
+   is wide, so it keeps the tile's lg size with a little negative tracking. */
+.sc-score[data-size='md'] .sc-score__value,
+.sc-score[data-variant='ring'] .sc-score__value {
+  font-family: var(--sc-font-family-display);
+  letter-spacing: -0.02em;
+}
 .sc-score[data-tone='neutral'] {
   /* surface.active, so the tile still shows on a hovered row (surface.hover). Selected turns accent. */
   --_bg: var(--sc-color-surface-active);
