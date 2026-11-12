@@ -15,7 +15,11 @@ const meta: Meta<typeof EmptyState> = {
     description: 'Postings you apply to show up here, with their stage and the last reply.',
     size: 'md',
   },
-  argTypes: { size: { control: 'radio', options: ['sm', 'md'] }, icon: { control: false } },
+  argTypes: {
+    size: { control: 'radio', options: ['sm', 'md'] },
+    headingLevel: { control: 'select', options: [undefined, 1, 2, 3, 4, 5, 6] },
+    icon: { control: false },
+  },
   decorators: [(Story) => <div style={{ maxWidth: 640 }}>{Story()}</div>],
 };
 export default meta;
@@ -64,6 +68,25 @@ export const Small: Story = {
         </Table.Body>
       </Table.Root>
     </Stack>
+  ),
+};
+
+/**
+ * `headingLevel` when the empty state stands in for the view's content, so the view still has a heading in
+ * the outline. The title renders as `h2` here and looks the same.
+ */
+export const AsTheViewHeading: Story = {
+  name: 'As the view heading',
+  render: () => (
+    <EmptyState
+      as="section"
+      headingLevel={2}
+      icon={<InboxIcon />}
+      title="Your inbox is clear"
+      description="New postings land here after the next sweep."
+    >
+      <Button variant="secondary">Run a sweep now</Button>
+    </EmptyState>
   ),
 };
 

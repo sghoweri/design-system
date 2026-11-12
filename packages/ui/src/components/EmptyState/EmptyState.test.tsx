@@ -32,4 +32,18 @@ describe('EmptyState', () => {
     expect(root.querySelector('.sc-empty-state__description')).toBeNull();
     expect(root.querySelector('.sc-empty-state__actions')).toBeNull();
   });
+
+  it('renders the title as a heading at headingLevel, a p without it', async () => {
+    const { container, rerender } = render(
+      <EmptyState headingLevel={2} title="Your inbox is clear" description="New postings land here." />,
+    );
+    const heading = screen.getByRole('heading', { level: 2, name: 'Your inbox is clear' });
+    expect(heading.tagName).toBe('H2');
+    expect(heading).toHaveClass('sc-empty-state__title');
+    await expectNoA11yViolations(container);
+
+    rerender(<EmptyState title="Your inbox is clear" />);
+    expect(screen.queryByRole('heading')).toBeNull();
+    expect(screen.getByText('Your inbox is clear').tagName).toBe('P');
+  });
 });
