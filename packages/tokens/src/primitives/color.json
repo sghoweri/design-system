@@ -6,7 +6,7 @@
       "$description": "Primitive."
     },
     "black": {
-      "$value": "#05070c",
+      "$value": "#070513",
       "$type": "color",
       "$description": "Primitive. Deepest dark surface."
     },
@@ -14,72 +14,72 @@
       "0": {
         "$value": "#ffffff",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "50": {
-        "$value": "#f9fafd",
+        "$value": "#faf9ff",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "100": {
-        "$value": "#f2f3f6",
+        "$value": "#f3f3f8",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "200": {
-        "$value": "#e6e8eb",
+        "$value": "#e7e7ec",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "300": {
-        "$value": "#d6d9df",
+        "$value": "#d8d8e3",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "400": {
-        "$value": "#b7bbc0",
+        "$value": "#bab9c4",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "500": {
-        "$value": "#8c8f95",
+        "$value": "#8e8e99",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "600": {
-        "$value": "#707378",
+        "$value": "#72727c",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "700": {
-        "$value": "#54585f",
+        "$value": "#575665",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "800": {
-        "$value": "#3c4046",
+        "$value": "#3f3e4c",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "850": {
-        "$value": "#32353b",
+        "$value": "#343341",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263. Between 800 and 900: the dark hover wash on raised surfaces."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289. Between 800 and 900: the dark hover wash on raised surfaces."
       },
       "900": {
-        "$value": "#282b31",
+        "$value": "#2b2937",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "950": {
-        "$value": "#191c22",
+        "$value": "#1b1a26",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       },
       "1000": {
-        "$value": "#0e1116",
+        "$value": "#100f1a",
         "$type": "color",
-        "$description": "Primitive. Cool neutral, OKLCH hue 263."
+        "$description": "Primitive. Violet-tinted neutral, OKLCH hue 289."
       }
     },
     "brand": {
