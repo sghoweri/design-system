@@ -80,10 +80,10 @@
   color: var(--sc-color-accent-text);
 }
 /* horizontal: equal columns, the marker on top, label and meta under it; the connector runs from the marker to the
-   next column's marker. */
+   next column's marker. A column never shrinks below its longest word, so a label can't run into the next step's gap. */
 .sc-stepper[data-orientation='horizontal'] {
   grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-columns: minmax(min-content, 1fr);
 }
 .sc-stepper[data-orientation='horizontal'] > .sc-stepper__step {
   display: grid;
@@ -98,6 +98,7 @@
   block-size: 2px;
 }
 .sc-stepper[data-orientation='horizontal'] .sc-stepper__label {
+  min-inline-size: min-content;
   margin-block-start: var(--sc-spacing-3xs);
 }
 /* vertical: one row per step, marker | label | meta at the end; the connector runs down to the next marker. */
