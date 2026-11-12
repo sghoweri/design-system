@@ -54,4 +54,65 @@ describe('Progress', () => {
     expect(screen.queryByRole('status')).toBeNull();
     await expectNoA11yViolations(container);
   });
+
+  it('marks thresholds with ticks past the track and reads their labels in aria-valuetext', async () => {
+    const { container } = render(
+      <Progress
+        label="Budget"
+        size="sm"
+        value={1.2}
+        max={2}
+        valueText="$1.20 of $2.00 today"
+        marks={[{ value: 1.6, label: 'Haiku only' }, { value: 1 }]}
+      />,
+    );
+    const bar = screen.getByRole('progressbar', { name: 'Budget' });
+    expect(bar).toHaveAttribute('data-marked');
+    expect(bar).toHaveAttribute('aria-valuetext', '$1.20 of $2.00 today; Haiku only at 80%');
+    const ticks = container.querySelectorAll<HTMLElement>('.sc-progress__track > .sc-progress__mark');
+    expect(ticks).toHaveLength(2);
+    expect(ticks[0]?.style.getPropertyValue('--_at')).toBe('80%');
+    expect(ticks[0]).toHaveAttribute('aria-hidden', 'true');
+    expect(ticks[0]).toHaveAttribute('title', 'Haiku only');
+    expect(ticks[1]?.style.getPropertyValue('--_at')).toBe('50%');
+    await expectNoA11yViolations(container);
+  });
+
+  it('marks still read without a valueText, and are left off while indeterminate', () => {
+    const { rerender, container } = render(
+      <Progress aria-label="Budget" value={30} marks={[{ value: 80, label: 'Haiku only' }]} />,
+    );
+    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', '30%; Haiku only at 80%');
+    rerender(<Progress aria-label="Budget" marks={[{ value: 80, label: 'Haiku only' }]} />);
+    expect(container.querySelector('.sc-progress__mark')).toBeNull();
+    expect(screen.getByRole('progressbar')).not.toHaveAttribute('data-marked');
+  });
+
+  it('ring variant is a gauge: the label hidden, the centre decorative, the arc from the value', async () => {
+    const { container } = render(
+      <Progress variant="ring" size="sm" label="Setup" value={2} max={5} valueText="2 of 5 done">
+        2/5
+      </Progress>,
+    );
+    const bar = screen.getByRole('progressbar', { name: 'Setup' });
+    expect(bar).toHaveAttribute('data-variant', 'ring');
+    expect(bar).toHaveAttribute('aria-valuetext', '2 of 5 done');
+    expect(screen.getByText('Setup')).toHaveClass('sc-visually-hidden');
+    expect(container.querySelector('.sc-progress__track')).toBeNull();
+    expect(container.querySelector('.sc-progress__value')).toBeNull();
+    expect(container.querySelector('svg')).toHaveAttribute('viewBox', '0 0 36 36');
+    const arc = container.querySelector<SVGElement>('.sc-progress__ring-arc');
+    expect(arc?.style.getPropertyValue('--_pct')).toBe('40.00');
+    expect(screen.getByText('2/5')).toHaveAttribute('aria-hidden', 'true');
+    await expectNoA11yViolations(container);
+  });
+
+  it('ring paints no arc at 0, and spins a quarter arc while indeterminate', () => {
+    const { container, rerender } = render(<Progress variant="ring" aria-label="Setup" value={0} max={5} />);
+    expect(container.querySelector('.sc-progress__ring-track')).not.toBeNull();
+    expect(container.querySelector('.sc-progress__ring-arc')).toBeNull();
+    expect(container.querySelector('svg')).toHaveAttribute('viewBox', '0 0 48 48');
+    rerender(<Progress variant="ring" aria-label="Setup" />);
+    expect(container.querySelector('.sc-progress__ring-arc')).toHaveAttribute('data-indeterminate', 'true');
+  });
 });

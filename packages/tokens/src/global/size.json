@@ -100,6 +100,28 @@
         "$description": "Stroke of the Score ring track and arc."
       }
     },
+    "progress": {
+      "ring-sm": {
+        "$value": "36px",
+        "$type": "dimension",
+        "$description": "Progress ring sm: beside a card or section title."
+      },
+      "ring-md": {
+        "$value": "48px",
+        "$type": "dimension",
+        "$description": "Progress ring md: a summary with a count in the centre."
+      },
+      "ring-stroke": {
+        "$value": "4px",
+        "$type": "dimension",
+        "$description": "Stroke of the Progress ring track and arc, both sizes."
+      },
+      "mark-overhang": {
+        "$value": "3px",
+        "$type": "dimension",
+        "$description": "How far a Progress mark's tick reaches past the track, above and below."
+      }
+    },
     "dialog": {
       "sm": {
         "$value": "400px",
