@@ -353,16 +353,6 @@ describe('Dialog', () => {
       expect(onOpenChange).toHaveBeenLastCalledWith(false);
     });
 
-    it('measures the threshold on the visible height, not the overhang below the edge', async () => {
-      // 660px box with a 160px bottom border (the overhang, dialog.css): 500px on screen, so 160px is past 30%.
-      vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue(rect(300, 660));
-      render(<Sheet />);
-      const dialog = await screen.findByRole('dialog');
-      dialog.style.borderBottom = '160px solid';
-      drag(screen.getByRole('button', { name: 'Dismiss' }), 160, 800);
-      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
-    });
-
     it('springs back when released short of the threshold, slowly', async () => {
       const onOpenChange = vi.fn();
       render(<Sheet onOpenChange={onOpenChange} />);

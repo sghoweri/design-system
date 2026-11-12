@@ -48,8 +48,22 @@ describe('dialog.css: docked sheet', () => {
     expect(bodiesFor('.sc-dialog__backdrop').join()).toMatch(/inset:\s*0 0 calc\(-1 \* var\(--_overhang\)\)/);
     const sheet = bodiesFor(".sc-dialog__popup[data-variant='sheet']").join();
     expect(sheet).toMatch(/touch-action:\s*none/);
-    expect(sheet).toMatch(/border-block-end:\s*var\(--_overhang\) solid var\(--sc-color-surface-raised\)/);
+    expect(sheet).toMatch(/0 var\(--_overhang\) 0 0 var\(--sc-color-surface-raised\)/);
     expect(sheet).toMatch(/100dvh/);
     expect(sheet).toMatch(/env\(safe-area-inset-bottom, 0px\)/);
+  });
+
+  // iOS 26+ Safari extends a fixed surface's colour under its status bar and toolbar only when the box sits on the
+  // layout viewport's edges; a box pushed past the bottom edge left the page showing above and below it (2026-11-12).
+  it('keeps the sheet and the full-screen surface on the bottom edge; the overhang is a shadow', () => {
+    const docked = [
+      ...bodiesFor(".sc-dialog__popup[data-variant='sheet']"),
+      ...bodiesFor(".sc-dialog__popup[data-variant='fullscreen']"),
+    ].join();
+    expect(docked).not.toMatch(/border-block-end:\s*var\(--_overhang\)/);
+    expect(docked).not.toMatch(/inset[^;]*calc\(-1 \* var\(--_overhang\)\)/);
+    expect(bodiesFor(".sc-dialog__popup[data-variant='fullscreen']").join()).toMatch(
+      /box-shadow:\s*0 var\(--_overhang\) 0 0 var\(--sc-color-surface-default\)/,
+    );
   });
 });
