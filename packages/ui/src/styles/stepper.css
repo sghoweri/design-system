@@ -1,0 +1,124 @@
+/* ---- Stepper --------------------------------------------------------------- */
+/* Steps done, current or upcoming. Markers differ by shape as well as colour: done is a filled disc with a check,
+   current a ring with a halo (pulsing), upcoming a hollow ring. A 2px connector runs from each marker to the next,
+   in the accent once the step before it is done. */
+.sc-stepper {
+  --_m: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  color: var(--sc-color-text-default);
+}
+.sc-stepper__step {
+  position: relative;
+  min-inline-size: 0;
+}
+.sc-stepper__step::before {
+  content: '';
+  position: absolute;
+  background: var(--sc-color-border-default);
+  border-radius: var(--sc-radius-full);
+}
+.sc-stepper__step:last-child::before {
+  display: none;
+}
+.sc-stepper__step[data-state='done']::before {
+  background: var(--sc-color-accent-default);
+}
+.sc-stepper__marker {
+  position: relative;
+  z-index: 1;
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  inline-size: var(--_m);
+  block-size: var(--_m);
+  border-radius: 50%;
+  border: 2px solid var(--sc-color-border-strong);
+  background: var(--sc-color-surface-default);
+  color: var(--sc-color-text-on-accent);
+}
+.sc-stepper__marker .sc-icon {
+  inline-size: 10px;
+  block-size: 10px;
+}
+.sc-stepper__step[data-state='done'] .sc-stepper__marker {
+  border-color: var(--sc-color-accent-default);
+  background: var(--sc-color-accent-default);
+}
+.sc-stepper__step[data-state='current'] .sc-stepper__marker {
+  border-color: var(--sc-color-accent-default);
+  box-shadow: 0 0 0 var(--sc-border-width-halo) var(--sc-color-accent-subtle);
+  animation: sc-stepper-pulse 2.4s ease-in-out infinite;
+}
+@keyframes sc-stepper-pulse {
+  50% {
+    box-shadow: 0 0 0 calc(var(--sc-border-width-halo) + 4px) var(--sc-color-accent-wash);
+  }
+}
+.sc-stepper__label {
+  min-inline-size: 0;
+  font-weight: var(--sc-font-weight-medium);
+}
+.sc-stepper__step[data-state='upcoming'] .sc-stepper__label {
+  color: var(--sc-color-text-muted);
+  font-weight: var(--sc-font-weight-regular);
+}
+.sc-stepper__step[data-state='current'] .sc-stepper__label {
+  font-weight: var(--sc-font-weight-semibold);
+}
+.sc-stepper__meta {
+  font-family: var(--sc-font-family-mono);
+  font-size: var(--sc-font-size-xs);
+  color: var(--sc-color-text-muted);
+}
+.sc-stepper__meta[data-proposed] {
+  color: var(--sc-color-accent-text);
+}
+/* horizontal: equal columns, the marker on top, label and meta under it; the connector runs from the marker to the
+   next column's marker. */
+.sc-stepper[data-orientation='horizontal'] {
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+.sc-stepper[data-orientation='horizontal'] > .sc-stepper__step {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  row-gap: var(--sc-spacing-3xs);
+  padding-inline-end: var(--sc-spacing-sm);
+}
+.sc-stepper[data-orientation='horizontal'] > .sc-stepper__step::before {
+  inset-block-start: calc(var(--_m) / 2 - 1px);
+  inset-inline: calc(var(--_m) + var(--sc-spacing-3xs)) var(--sc-spacing-3xs);
+  block-size: 2px;
+}
+.sc-stepper[data-orientation='horizontal'] .sc-stepper__label {
+  margin-block-start: var(--sc-spacing-3xs);
+}
+/* vertical: one row per step, marker | label | meta at the end; the connector runs down to the next marker. */
+.sc-stepper[data-orientation='vertical'] > .sc-stepper__step {
+  display: grid;
+  grid-template-columns: var(--_m) minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--sc-spacing-sm);
+  padding-block: var(--sc-spacing-xs);
+}
+.sc-stepper[data-orientation='vertical'] > .sc-stepper__step::before {
+  inset-inline-start: calc(var(--_m) / 2 - 1px);
+  inset-block: calc(50% + var(--_m) / 2 + var(--sc-spacing-3xs))
+    calc(-50% + var(--_m) / 2 + var(--sc-spacing-3xs));
+  inline-size: 2px;
+}
+.sc-stepper[data-orientation='vertical'] .sc-stepper__meta {
+  text-align: end;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-stepper__step[data-state='current'] .sc-stepper__marker {
+    animation: none;
+  }
+}

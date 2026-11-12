@@ -91,6 +91,19 @@ export {
   type ToolbarSpacerProps,
 } from './components/Toolbar/Toolbar';
 export { Banner, type BannerProps, type BannerTone } from './components/Banner/Banner';
+export {
+  Callout,
+  type CalloutProps,
+  type CalloutTone,
+  type CalloutVariant,
+} from './components/Callout/Callout';
+export {
+  Stepper,
+  type StepperOrientation,
+  type StepperProps,
+  type StepperStepProps,
+  type StepState,
+} from './components/Stepper/Stepper';
 export { Spinner, type SpinnerProps } from './components/Spinner/Spinner';
 export {
   Progress,
