@@ -57,6 +57,7 @@ export {
   type MenuCheckboxItemProps,
   type MenuContentProps,
   type MenuGroupProps,
+  type MenuHeaderProps,
   type MenuItemProps,
   type MenuItemTone,
   type MenuLinkItemProps,

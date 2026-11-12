@@ -1,5 +1,13 @@
 import { Menu as BaseMenu } from '@base-ui/react/menu';
-import { useId, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useId,
+  useLayoutEffect,
+  useState,
+  type ComponentPropsWithRef,
+  type ReactNode,
+} from 'react';
 import { Button } from '../Button/Button';
 import { CheckIcon, ChevronDownIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
@@ -68,16 +76,26 @@ export interface MenuContentProps extends Omit<BaseMenu.Popup.Props, 'className'
   className?: string | undefined;
 }
 
-/** Portal, positioner and the popup. Items go inside. */
+/** Lets a `Menu.Header` name the popup it sits in. */
+const HeaderIdContext = createContext<((id: string | undefined) => void) | null>(null);
+
+/**
+ * Portal, positioner and the popup. Items go inside. A `Menu.Header` inside names the menu
+ * (`aria-labelledby`) unless `aria-label` or `aria-labelledby` is passed here.
+ */
 function Content({
   side = 'bottom',
   align = 'start',
   sideOffset = 4,
   className,
   children,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
   ...rest
 }: MenuContentProps) {
   const collisionPadding = useSafeAreaPadding();
+  const [headerId, setHeaderId] = useState<string | undefined>(undefined);
+  const labelledBy = ariaLabelledBy ?? (ariaLabel === undefined ? headerId : undefined);
   return (
     <BaseMenu.Portal>
       <BaseMenu.Positioner
@@ -87,8 +105,13 @@ function Content({
         collisionPadding={collisionPadding}
         className="sc-menu__positioner"
       >
-        <BaseMenu.Popup className={cx('sc-menu', className)} {...rest}>
-          {children}
+        <BaseMenu.Popup
+          className={cx('sc-menu', className)}
+          aria-label={ariaLabel}
+          aria-labelledby={labelledBy}
+          {...rest}
+        >
+          <HeaderIdContext.Provider value={setHeaderId}>{children}</HeaderIdContext.Provider>
         </BaseMenu.Popup>
       </BaseMenu.Positioner>
     </BaseMenu.Portal>
@@ -165,7 +188,11 @@ export interface MenuItemProps extends Omit<BaseMenu.Item.Props, 'className'>, I
   className?: string | undefined;
 }
 
-/** One action. Closes the menu when activated. */
+/**
+ * One action. Closes the menu when activated. To submit a form, render it as the form's submit button:
+ * `<form action={signOut}><Menu.Item nativeButton render={<button type="submit" />}>Sign out</Menu.Item></form>`
+ * (or `form="id"` on the button for a form outside the menu). The item drops the native button's chrome.
+ */
 function Item({
   icon,
   description,
@@ -328,6 +355,39 @@ function Group({ label, className, children, ...rest }: MenuGroupProps) {
   );
 }
 
+export interface MenuHeaderProps extends ComponentPropsWithRef<'div'> {
+  /** A muted line above the text: "Signed in as". Part of the menu's name. */
+  caption?: ReactNode | undefined;
+  /** The text: an email or a name. Wraps anywhere, so a long address never widens the menu. */
+  children?: ReactNode | undefined;
+}
+
+/**
+ * A non-interactive block at the top of `Menu.Content` that names the menu: "Signed in as" over an email.
+ * Not an item: arrow keys and type-ahead skip it, and it is `role="none"`. Its text becomes the menu's
+ * accessible name through `aria-labelledby`. Follow it with a `Menu.Separator`.
+ */
+function Header({ caption, className, children, id, ...rest }: MenuHeaderProps) {
+  const autoId = useId();
+  const headerId = id ?? autoId;
+  const setHeaderId = useContext(HeaderIdContext);
+  useLayoutEffect(() => {
+    if (!setHeaderId) return;
+    setHeaderId(headerId);
+    return () => setHeaderId(undefined);
+  }, [setHeaderId, headerId]);
+  return (
+    <div role="none" id={headerId} className={cx('sc-menu__header', className)} {...rest}>
+      {caption !== undefined && caption !== null ? (
+        <>
+          <span className="sc-menu__header-caption">{caption}</span>{' '}
+        </>
+      ) : null}
+      <span className="sc-menu__header-text">{children}</span>
+    </div>
+  );
+}
+
 export interface MenuSeparatorProps extends Omit<BaseMenu.Separator.Props, 'className'> {
   className?: string | undefined;
 }
@@ -348,5 +408,6 @@ export const Menu = {
   RadioGroup,
   RadioItem,
   Group,
+  Header,
   Separator,
 };

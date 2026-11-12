@@ -237,4 +237,99 @@ describe('Menu', () => {
     expect(onOpenChange).toHaveBeenLastCalledWith(true);
     expect(trigger).toHaveAttribute('data-popup-open');
   });
+
+  it('names the menu from Menu.Header, which no key or pointer can reach as an item', async () => {
+    const user = userEvent.setup();
+    render(
+      <Menu.Root>
+        <Menu.Trigger>Account</Menu.Trigger>
+        <Menu.Content>
+          <Menu.Header caption="Signed in as">salem@example.com</Menu.Header>
+          <Menu.Separator />
+          <Menu.Item>Settings</Menu.Item>
+          <Menu.Item>Sign out</Menu.Item>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Account' }));
+    const menu = await screen.findByRole('menu', { name: 'Signed in as salem@example.com' });
+    const header = screen.getByText('salem@example.com').closest('.sc-menu__header')!;
+    expect(header).toHaveAttribute('role', 'none');
+    expect(menu).toHaveAttribute('aria-labelledby', header.id);
+    expect(screen.getAllByRole('menuitem')).toHaveLength(2);
+    await expectNoA11yViolations(document.body);
+
+    await user.keyboard('{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Settings' })).toHaveAttribute('data-highlighted');
+    await user.keyboard('{End}{ArrowDown}');
+    expect(screen.getByRole('menuitem', { name: 'Settings' })).toHaveAttribute('data-highlighted');
+  });
+
+  it("keeps the caller's aria-label or aria-labelledby over the header", async () => {
+    render(
+      <>
+        <span id="outside">Account menu</span>
+        <Menu.Root defaultOpen>
+          <Menu.Trigger>Account</Menu.Trigger>
+          <Menu.Content aria-labelledby="outside">
+            <Menu.Header>salem@example.com</Menu.Header>
+            <Menu.Item>Settings</Menu.Item>
+          </Menu.Content>
+        </Menu.Root>
+      </>,
+    );
+    expect(await screen.findByRole('menu', { name: 'Account menu' })).toBeInTheDocument();
+  });
+
+  it('submits its form from an item rendered as a native submit button, then closes', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
+    render(
+      <Menu.Root>
+        <Menu.Trigger>Account</Menu.Trigger>
+        <Menu.Content>
+          <Menu.Item>Settings</Menu.Item>
+          <form onSubmit={onSubmit}>
+            <Menu.Item nativeButton render={<button type="submit" />}>
+              Sign out
+            </Menu.Item>
+          </form>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    await user.click(screen.getByRole('button', { name: 'Account' }));
+    const item = await screen.findByRole('menuitem', { name: 'Sign out' });
+    expect(item.tagName).toBe('BUTTON');
+    expect(item).toHaveAttribute('type', 'submit');
+    expect(item).toHaveClass('sc-menu__item');
+    await expectNoA11yViolations(document.body);
+
+    await user.click(item);
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(screen.queryByRole('menu')).toBeNull());
+  });
+
+  it('submits from the keyboard too', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
+    render(
+      <Menu.Root>
+        <Menu.Trigger>Account</Menu.Trigger>
+        <Menu.Content>
+          <form onSubmit={onSubmit}>
+            <Menu.Item nativeButton render={<button type="submit" />}>
+              Sign out
+            </Menu.Item>
+          </form>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    screen.getByRole('button', { name: 'Account' }).focus();
+    await user.keyboard('{Enter}');
+    await screen.findByRole('menu');
+    await user.keyboard('{ArrowDown}');
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Sign out' })).toHaveFocus());
+    await user.keyboard('{Enter}');
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
 });

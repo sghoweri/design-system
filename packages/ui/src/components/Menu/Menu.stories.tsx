@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Menu } from './Menu';
 import { Dialog } from '../Dialog/Dialog';
+import { AvatarButton } from '../Avatar/Avatar';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
 import { Inline } from '../Inline/Inline';
@@ -17,6 +18,7 @@ import {
   MoreHorizontalIcon,
   PauseIcon,
   PlayIcon,
+  SettingsIcon,
   StarIcon,
   TrashIcon,
 } from '../../icons/icons.gen';
@@ -207,6 +209,51 @@ export const Selection: Story = {
   render: () => <ViewMenu />,
 };
 
+function AccountMenu({ email = 'salem@example.com' }: { email?: string }) {
+  const [signedOut, setSignedOut] = useState(false);
+  return (
+    <Inline gap="sm" align="center">
+      <Menu.Root modal={false}>
+        <Menu.Trigger render={<AvatarButton label={`Account: ${email}`} name="Salem Cobalt" size="sm" />} />
+        <Menu.Content align="end">
+          <Menu.Header caption="Signed in as">{email}</Menu.Header>
+          <Menu.Separator />
+          <Menu.LinkItem icon={<SettingsIcon />} href="#settings">
+            Settings
+          </Menu.LinkItem>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              setSignedOut(true);
+            }}
+          >
+            <Menu.Item nativeButton render={<button type="submit" />}>
+              Sign out
+            </Menu.Item>
+          </form>
+        </Menu.Content>
+      </Menu.Root>
+      {signedOut ? <span>Form submitted</span> : null}
+    </Inline>
+  );
+}
+
+/**
+ * `Menu.Header` names the menu ("Signed in as salem@example.com, menu") and is skipped by arrow keys and
+ * type-ahead. Sign out is a `Menu.Item` rendered as its form's submit button
+ * (`nativeButton render={<button type="submit" />}`), so a Server Action posts without client code; it
+ * looks like every other item. A long address wraps instead of widening the menu.
+ */
+export const Account: Story = {
+  name: 'Account: header and a form-submit item',
+  render: () => (
+    <Inline gap="2xl">
+      <AccountMenu />
+      <AccountMenu email="salem.cobalt.with.a.very.long.address@subdomain.example.com" />
+    </Inline>
+  ),
+};
+
 export const Placement: Story = {
   render: () => (
     <Inline gap="md">
@@ -241,6 +288,7 @@ export const Dark: Story = {
         <OverflowMenu />
         <ViewMenu />
         <DescribedMenu />
+        <AccountMenu />
       </Inline>
     </DarkTheme>
   ),
