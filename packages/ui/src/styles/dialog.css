@@ -184,6 +184,7 @@
     padding-block-end: calc(var(--sc-spacing-lg) + env(safe-area-inset-bottom, 0px));
     padding-inline: calc(var(--sc-spacing-lg) + env(safe-area-inset-left, 0px))
       calc(var(--sc-spacing-lg) + env(safe-area-inset-right, 0px));
+    border-block-end: 0; /* the popup's hairline would draw a line along the screen's bottom edge */
     border-radius: var(--sc-radius-xl) var(--sc-radius-xl) 0 0;
     box-shadow:
       0 var(--_overhang) 0 0 var(--sc-color-surface-raised),
