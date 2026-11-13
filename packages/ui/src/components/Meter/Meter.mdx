@@ -1,0 +1,43 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as MeterStories from './Meter.stories';
+
+<Meta of={MeterStories} />
+
+# Meter
+
+A static amount on a bar: a count, a share, a funnel step. Use `Progress` for work that is under way and `Meter` for a quantity that just is. `Progress` is `role="progressbar"`, which tells assistive tech something is loading; a count of roles shown is not.
+
+<Canvas of={MeterStories.FunnelRows} />
+
+```tsx
+import { Meter } from '@salemcobalt/ui';
+
+<Meter label="Shown" value={214} max={1204} valueText="214 · 91% kept" />;
+
+<Meter
+  label="7:00 AM"
+  value={40}
+  max={40}
+  valueText="40 found first · 12 strong"
+  mark={{ value: 12, label: '12 strong leads' }}
+/>;
+
+// In a table cell: the column header says what it is; the label still names the meter.
+<Meter layout="inline" size="sm" label="Shown, Greenhouse" value={121} max={121} />;
+```
+
+## Props
+
+- **`label`** (required): what is counted. Names the meter; visually hidden in the `inline` layout.
+- **`value`**, **`max`** (default 100): the amount and the top of the scale. A share is `value={0.28} max={1}`. In a funnel, every row takes the first step's count as `max` so the bars compare.
+- **`valueText`**: the amount as people read it ("340 · 28% kept"). Always shown; a string is also `aria-valuetext`. Default: the value formatted for the locale.
+- **`mark`**: `{ value, label }`, a part of the amount ("12 strong leads" of 40 found first). That part is solid from the start of the bar and the rest of the fill is hatched in the same tone. The label is appended to `aria-valuetext`; say it in `valueText` too, since the hatch alone does not name it. For a threshold (a tick where something changes), use `Progress marks`.
+- **`tone`**: accent (default), success, warning, danger, neutral.
+- **`size`**: `sm` 8px (table cells), `md` 12px (default, funnel rows).
+- **`layout`**: `stacked` (default) puts label and value above a full-width bar, so rows line up without a grid. `inline` puts the value, then the bar, on one line for a table cell. The value column is `4ch`; set `--sc-meter-value-width` on the table for longer numbers so every row's bar starts at the same x.
+
+## Accessibility
+
+- `role="meter"` from Base UI's Meter (ADR 0001), with `aria-valuenow`, `aria-valuemin`, `aria-valuemax`, `aria-valuetext` and `aria-labelledby` pointing at the label. Native `<meter>` was the first choice, but it can't draw the mark, the hatch or the tones across browsers (vendor pseudo-elements, colour set by `low`/`high`/`optimum`), and both map to the same platform role. Screen reader support for either is uneven, so `aria-valuetext` carries the whole sentence and the number is always visible text.
+- Every fill is at least 3:1 against the track and every surface in both themes, row hover and raised washes included (`packages/tokens/test/contrast.test.ts`).
+- The fill moves only when the value changes, with the data motion (`duration.data`, `ease.data`, as Score's ring). The first render draws it in place. Nothing moves under `prefers-reduced-motion`.
