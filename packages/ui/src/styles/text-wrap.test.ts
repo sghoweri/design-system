@@ -48,6 +48,7 @@ const PRETTY = [
   '.sc-banner__body',
   '.sc-tooltip',
   '.sc-reason-list',
+  '.sc-reason-list__empty',
   '.sc-quote',
   '.sc-stat__hint',
   '.sc-table__caption',
