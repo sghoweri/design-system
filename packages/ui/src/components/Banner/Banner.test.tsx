@@ -47,6 +47,29 @@ describe('Banner', () => {
     expect(screen.queryByRole('status')).toBeNull();
   });
 
+  it("puts an inline banner's close button on the corner as a raised round button; a page banner keeps it in the row", async () => {
+    const { rerender, container } = render(
+      <Banner dismissible action={<button type="button">Fix</button>}>
+        Paused.
+      </Banner>,
+    );
+    const banner = screen.getByRole('status');
+    expect(banner).toHaveAttribute('data-dismissible');
+    const close = screen.getByRole('button', { name: 'Dismiss' });
+    expect(close).toHaveAttribute('data-variant', 'secondary');
+    expect(close).toHaveAttribute('data-round');
+    expect(banner.lastElementChild).toBe(close);
+    await expectNoA11yViolations(container);
+    rerender(
+      <Banner dismissible placement="page">
+        Paused.
+      </Banner>,
+    );
+    const pageClose = screen.getByRole('button', { name: 'Dismiss' });
+    expect(pageClose).toHaveAttribute('data-variant', 'ghost');
+    expect(pageClose).not.toHaveAttribute('data-round');
+  });
+
   it('hides the icon with icon={false}, uses a neutral tone, and honours controlled open', () => {
     const { rerender } = render(
       <Banner tone="neutral" icon={false} dismissible open>

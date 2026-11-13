@@ -60,11 +60,37 @@
 }
 .sc-banner__dismiss {
   flex: none;
+}
+/* Inline: a raised round close button on the top-right corner, its centre near the corner, in the system's own
+   secondary look (solid surface, hairline border), so hover, active and focus are Button's. The message keeps clear
+   of it with the end padding. */
+.sc-banner:not([data-placement='page']) {
+  position: relative;
+}
+.sc-banner[data-dismissible]:not([data-placement='page']) {
+  padding-inline-end: var(--sc-spacing-md);
+}
+.sc-banner:not([data-placement='page']) > .sc-banner__dismiss {
+  --_h: var(--sc-size-badge-md);
+  --_icon: var(--sc-size-icon-xs);
+  position: absolute;
+  z-index: 1;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  translate: 40% -40%;
+  box-shadow: var(--sc-elevation-2);
+}
+.sc-banner:not([data-placement='page']) > .sc-banner__dismiss:dir(rtl) {
+  translate: -40% -40%;
+}
+/* Page: the close button is part of the bar, in its colour. */
+.sc-banner[data-placement='page'] > .sc-banner__dismiss {
   color: inherit;
 }
 /* Narrower than 560px (--sc-size-dialog-md; a custom property can't sit in a query): the text takes the full row and
    the action drops under it, at the inline end. The DOM stays message, action, dismiss, so reading and focus order
-   are unchanged; the action is only ordered last visually, so a dismiss button keeps the end of the first row. */
+   are unchanged; the action is only ordered last visually, so a page banner's dismiss keeps the end of the first row
+   (an inline banner's sits on the corner, out of the flow). */
 @container sc-banner (inline-size < 560px) {
   .sc-banner__action {
     order: 1;

@@ -134,7 +134,7 @@ function LongActionBanners() {
             <strong>This version runs to 3 pages.</strong> The template allows 2 for this seat.
           </Banner>
           <Banner tone="info" dismissible action={cut}>
-            Dismissible: the close button keeps the end of the first row.
+            Dismissible: the close button sits on the corner, half outside.
           </Banner>
         </Stack>
       </Stack>
