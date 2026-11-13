@@ -36,6 +36,8 @@
 @import './text-editor.css';
 @import './quote.css';
 @import './avatar.css';
+@import './stepper.css';
+@import './callout.css';
 html {
   background: var(--sc-color-surface-canvas);
   color: var(--sc-color-text-default);
