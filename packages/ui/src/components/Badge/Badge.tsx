@@ -14,6 +14,12 @@ export interface BadgeProps extends ComponentPropsWithRef<'span'> {
   size?: BadgeSize | undefined;
   /** A 6px dot before the label for scannable lists. */
   dot?: boolean | undefined;
+  /**
+   * Fully round ends in the mono face, the homepage's pill (default `true`). Most badges are status or evidence
+   * ("Applied", "2 sources", "CORS · named as a gap"), so this is opt-out: `rounded={false}` gives the 4px corner in
+   * the sans face, for dense tables or a badge that sits beside square controls.
+   */
+  rounded?: boolean | undefined;
 }
 
 /** One or two words of status beside a thing. Text only; never clickable. */
@@ -22,6 +28,7 @@ export function Badge({
   variant = 'soft',
   size = 'md',
   dot = false,
+  rounded = true,
   className,
   children,
   ...rest
@@ -32,6 +39,7 @@ export function Badge({
       data-tone={tone}
       data-variant={variant}
       data-size={size}
+      data-rounded={rounded || undefined}
       {...rest}
     >
       {dot ? <span className="sc-badge__dot" aria-hidden="true" /> : null}
