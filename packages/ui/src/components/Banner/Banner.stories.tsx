@@ -3,6 +3,7 @@ import { Banner } from './Banner';
 import { Button } from '../Button/Button';
 import { Inline } from '../Inline/Inline';
 import { Stack } from '../Stack/Stack';
+import { Text } from '../Text/Text';
 import { PauseIcon } from '../../icons/icons.gen';
 import { Compact, DarkTheme } from '../../stories/helpers';
 
@@ -103,6 +104,84 @@ export const Dark: Story = {
         </Banner>
       </Stack>
     </DarkTheme>
+  ),
+};
+
+function LongActionBanners() {
+  const cut = (
+    <Button variant="ghost" size="sm">
+      Choose what to cut
+    </Button>
+  );
+  return (
+    <Stack gap="lg">
+      <Stack gap="2xs">
+        <Text size="sm" tone="muted">
+          Up to 720px wide: the action sits beside the text
+        </Text>
+        <div style={{ inlineSize: '100%', maxInlineSize: 720 }}>
+          <Banner tone="warning" role="status" action={cut}>
+            <strong>This version runs to 3 pages.</strong> The template allows 2 for this seat.
+          </Banner>
+        </div>
+      </Stack>
+      <Stack gap="2xs">
+        <Text size="sm" tone="muted">
+          In a 360px panel: the action drops under the text, at the end
+        </Text>
+        <Stack gap="sm" style={{ inlineSize: '100%', maxInlineSize: 360 }}>
+          <Banner tone="warning" role="status" action={cut}>
+            <strong>This version runs to 3 pages.</strong> The template allows 2 for this seat.
+          </Banner>
+          <Banner tone="info" dismissible action={cut}>
+            Dismissible: the close button keeps the end of the first row.
+          </Banner>
+        </Stack>
+      </Stack>
+    </Stack>
+  );
+}
+
+/**
+ * The action sits beside the text while the banner is at least 560px wide, and drops under it, at the inline end,
+ * when the banner is narrower. It is the banner's own width (a container query), not the viewport's, so a banner in
+ * a narrow panel on a wide screen wraps too.
+ */
+export const LongAction: Story = {
+  name: 'Long action, wide and narrow',
+  render: () => <LongActionBanners />,
+};
+
+export const LongActionDark: Story = {
+  name: 'Long action, dark',
+  render: () => (
+    <DarkTheme>
+      <LongActionBanners />
+    </DarkTheme>
+  ),
+};
+
+/** `icon={false}`: no icon, e.g. under a button that already carries the warning sign. */
+export const WithoutIcon: Story = {
+  name: 'Without an icon',
+  render: () => (
+    <Stack gap="sm" style={{ maxInlineSize: 720 }}>
+      <Banner
+        tone="warning"
+        role="status"
+        icon={false}
+        action={
+          <Button variant="ghost" size="sm">
+            Choose what to cut
+          </Button>
+        }
+      >
+        <strong>This version runs to 3 pages.</strong> The template allows 2 for this seat.
+      </Banner>
+      <Banner tone="info" icon={false}>
+        3 new postings since you last looked.
+      </Banner>
+    </Stack>
   ),
 };
 

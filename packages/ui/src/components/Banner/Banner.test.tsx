@@ -64,6 +64,61 @@ describe('Banner', () => {
     expect(screen.queryByRole('status')).toBeNull();
   });
 
+  it('keeps message, action, dismiss in DOM order, so reading and focus order hold when the action wraps', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <Banner
+        tone="warning"
+        role="status"
+        dismissible
+        action={
+          <Button variant="ghost" size="sm">
+            Choose what to cut
+          </Button>
+        }
+      >
+        This version runs to 3 pages. The template allows 2 for this seat.
+      </Banner>,
+    );
+    const banner = screen.getByRole('status');
+    expect([...banner.children].map((el) => el.className)).toEqual([
+      'sc-banner__icon',
+      'sc-banner__body',
+      'sc-banner__action',
+      expect.stringContaining('sc-banner__dismiss'),
+    ]);
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Choose what to cut' })).toHaveFocus();
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Dismiss' })).toHaveFocus();
+    await expectNoA11yViolations(container);
+  });
+
+  it('shows no icon with icon={false}, whatever the tone, and keeps its action', async () => {
+    const { container } = render(
+      <Banner
+        tone="warning"
+        role="status"
+        icon={false}
+        action={
+          <Button variant="ghost" size="sm">
+            Choose what to cut
+          </Button>
+        }
+      >
+        This version runs to 3 pages.
+      </Banner>,
+    );
+    const banner = screen.getByRole('status');
+    expect(banner.querySelector('.sc-banner__icon')).toBeNull();
+    expect(banner.querySelector('svg')).toBeNull();
+    expect(banner.firstElementChild).toHaveClass('sc-banner__body');
+    expect(
+      screen.getByRole('button', { name: 'Choose what to cut' }).closest('.sc-banner__action'),
+    ).not.toBeNull();
+    await expectNoA11yViolations(container);
+  });
+
   it('marks the page placement only when asked, and keeps the role it is given', async () => {
     const { container, rerender } = render(<Banner tone="warning">Sweeps are paused.</Banner>);
     expect(screen.getByRole('alert')).not.toHaveAttribute('data-placement');

@@ -3,10 +3,15 @@
   --_bg: var(--sc-color-info-subtle);
   --_fg: var(--sc-color-info-text);
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--sc-spacing-xs);
   box-sizing: border-box;
   min-block-size: var(--sc-size-control-md);
+  /* The action wraps when the banner itself is narrow (below), whatever the viewport. Inline-size containment means
+     the banner takes its width from its parent (block flow, a stretched flex column, a grid track), never from its
+     text: don't put it in a shrink-to-fit box. */
+  container: sc-banner / inline-size;
   padding-block: var(--sc-spacing-2xs);
   padding-inline: var(--sc-spacing-sm) var(--sc-spacing-2xs);
   border-radius: var(--sc-radius-md);
@@ -45,7 +50,8 @@
   flex: none;
 }
 .sc-banner__body {
-  flex: 1 1 auto;
+  /* A zero basis: however long the message, it never pushes the action onto a second row; only the query below does. */
+  flex: 1 1 0%;
   min-inline-size: 0;
   text-wrap: pretty;
 }
@@ -55,6 +61,17 @@
 .sc-banner__dismiss {
   flex: none;
   color: inherit;
+}
+/* Narrower than 560px (--sc-size-dialog-md; a custom property can't sit in a query): the text takes the full row and
+   the action drops under it, at the inline end. The DOM stays message, action, dismiss, so reading and focus order
+   are unchanged; the action is only ordered last visually, so a dismiss button keeps the end of the first row. */
+@container sc-banner (inline-size < 560px) {
+  .sc-banner__action {
+    order: 1;
+    flex-basis: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 .sc-banner > .sc-button[data-variant='ghost'] {
   color: inherit;
