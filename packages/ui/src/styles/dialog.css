@@ -158,6 +158,18 @@
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   overscroll-behavior: contain;
 }
+/* A body that scrolls (sheet, full screen) runs out over the popup's inline padding and pads itself back by the same
+   amount, so its content stays where it was while its scrollbar moves to the popup's edge (still inside the
+   safe-area part of that padding) instead of over the content. The same trick in the block axis leaves room for a
+   focus ring (2px outline, 2px offset) on a first or last field; the scrollport clipped them before. */
+.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__body,
+.sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__body {
+  --_bleed: var(--sc-spacing-lg);
+  --_ring: calc(2 * var(--sc-border-width-focus));
+  margin-inline: calc(-1 * var(--_bleed));
+  margin-block: calc(var(--sc-spacing-md) - var(--_ring)) calc(-1 * var(--_ring));
+  padding: var(--_ring) var(--_bleed);
+}
 /* The sheet's grab handle shows only where the sheet docks. */
 .sc-dialog__handle {
   display: none;
