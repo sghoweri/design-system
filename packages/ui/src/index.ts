@@ -153,7 +153,6 @@ export {
   type StatVariant,
 } from './components/Stat/Stat';
 export { Chip, type ChipProps, type ChipSize, type ChipTone } from './components/Chip/Chip';
-export { EditableChip, type EditableChipProps } from './components/Chip/EditableChip';
 export { Disclosure, type DisclosureProps } from './components/Disclosure/Disclosure';
 export {
   EmptyState,

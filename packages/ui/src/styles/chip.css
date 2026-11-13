@@ -190,11 +190,6 @@
   --_fg-on: var(--sc-color-info-text);
   --_bd-on: var(--sc-color-info-solid);
 }
-/* EditableChip while editing: a one-line auto-sized Textarea that fills its container. */
-.sc-chip-editor {
-  display: block;
-  min-inline-size: 0;
-}
 @media (prefers-reduced-motion: reduce) {
   .sc-chip {
     transition: none;
