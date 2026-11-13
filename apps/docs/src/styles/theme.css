@@ -1,0 +1,53 @@
+/* Starlight's theme, pointed at the design system's semantic tokens. Unlayered, so it beats Starlight's
+   `@layer starlight.*` rules, and declared once on :root because the tokens themselves already switch with
+   Starlight's `data-theme="light|dark"` on <html> (the same attribute @salemcobalt/tokens reads).
+   Starlight's grey scale is contrast-ordered: `white` is the strongest text, `black` the page, and gray-1 to
+   gray-7 step from text towards background in both themes. */
+:root {
+  --sl-color-white: var(--sc-color-text-default);
+  --sl-color-gray-1: var(--sc-color-text-default);
+  --sl-color-gray-2: var(--sc-color-text-default);
+  --sl-color-gray-3: var(--sc-color-text-muted);
+  --sl-color-gray-4: var(--sc-color-border-strong);
+  --sl-color-gray-5: var(--sc-color-border-default);
+  --sl-color-gray-6: var(--sc-color-surface-default);
+  --sl-color-gray-7: var(--sc-color-surface-default);
+  --sl-color-black: var(--sc-color-surface-canvas);
+
+  --sl-color-accent-low: var(--sc-color-accent-subtle);
+  --sl-color-accent: var(--sc-color-accent-default);
+  --sl-color-accent-high: var(--sc-color-accent-text);
+  --sl-color-text-accent: var(--sc-color-text-link);
+  --sl-color-text-invert: var(--sc-color-text-on-accent);
+
+  --sl-color-bg-nav: var(--sc-color-surface-canvas);
+  --sl-color-bg-sidebar: var(--sc-color-surface-canvas);
+  --sl-color-bg-inline-code: var(--sc-color-surface-sunken);
+  --sl-color-hairline-light: var(--sc-color-border-default);
+  --sl-color-hairline: var(--sc-color-border-default);
+  --sl-color-hairline-shade: var(--sc-color-border-default);
+  --sl-color-backdrop-overlay: var(--sc-color-surface-backdrop);
+
+  --sl-font: var(--sc-font-family-sans);
+  --sl-font-mono: var(--sc-font-family-mono);
+}
+
+/* A framed live example. `not-content` opts it out of Starlight's Markdown styles, so the components render
+   exactly as they do in an app and in the workshop. */
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-spacing-sm);
+  align-items: center;
+  margin-block: var(--sc-spacing-md);
+  padding: var(--sc-spacing-lg);
+  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  border-radius: var(--sc-radius-lg);
+  background: var(--sc-color-surface-canvas);
+  color: var(--sc-color-text-default);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+}
+.demo[data-block] {
+  display: block;
+}

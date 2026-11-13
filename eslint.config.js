@@ -6,7 +6,15 @@ import storybook from 'eslint-plugin-storybook';
 import globals from 'globals';
 
 export default tseslint.config(
-  { ignores: ['**/dist/**', '**/storybook-static/**', '**/node_modules/**', '**/.storybook/public/**'] },
+  {
+    ignores: [
+      '**/dist/**',
+      '**/storybook-static/**',
+      '**/node_modules/**',
+      '**/.storybook/public/**',
+      '**/.astro/**',
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,
