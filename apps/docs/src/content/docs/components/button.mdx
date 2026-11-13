@@ -1,0 +1,43 @@
+---
+title: Button
+description: The primary action control, in four variants and three sizes.
+---
+
+import { Badge, Button } from '@salemcobalt/ui';
+
+These examples are the published `@salemcobalt/ui` package rendered on the server by Astro, with no client
+JavaScript: a Button is plain HTML and CSS until it needs behaviour.
+
+## Variants
+
+<div className="demo not-content">
+  <Button variant="primary">Add job</Button>
+  <Button variant="secondary">Cancel</Button>
+  <Button variant="ghost">Snooze</Button>
+  <Button variant="danger">Delete application</Button>
+</div>
+
+Use one `primary` Button per view for the main action. `secondary` is for the alternatives beside it, `ghost` for
+low-emphasis actions in dense UI such as toolbars and rows, and `danger` only for destructive actions.
+
+## Sizes
+
+<div className="demo not-content">
+  <Button size="sm">Small 32</Button>
+  <Button>Medium 40</Button>
+  <Button size="lg">Large 48</Button>
+</div>
+
+Every size keeps a 44px touch target on coarse pointers. <Badge tone="info">md</Badge> is the default.
+
+## States
+
+<div className="demo not-content">
+  <Button disabled>Disabled</Button>
+  <Button loading>Sending</Button>
+</div>
+
+## In the workshop
+
+The workshop has the interactive playground and every state, in both themes and densities:
+[Components/Button](/workshop/?path=/story/components-button--playground).
