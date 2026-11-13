@@ -42,6 +42,7 @@ export const iconNames = [
   'refresh',
   'search',
   'settings',
+  'sparkles',
   'star',
   'sun',
   'thumbs-down',
