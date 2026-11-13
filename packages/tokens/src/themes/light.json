@@ -42,7 +42,7 @@
         "$description": "Pressed wash and neutral fills inside raised surfaces."
       },
       "backdrop": {
-        "$value": "#0b0d1699",
+        "$value": "#0d0a1d99",
         "$type": "color",
         "$description": "Dialog scrim, 60% alpha."
       }
@@ -268,17 +268,17 @@
       "$description": "Flat. Card default, Badge, Button."
     },
     "1": {
-      "$value": "0 1px 2px rgba(14, 17, 22, 0.06), 0 1px 3px rgba(14, 17, 22, 0.1)",
+      "$value": "0 1px 2px rgba(16, 15, 26, 0.06), 0 1px 3px rgba(16, 15, 26, 0.1)",
       "$type": "shadow",
       "$description": "Elevated Card and interactive Card hover."
     },
     "2": {
-      "$value": "0 2px 4px rgba(14, 17, 22, 0.06), 0 6px 16px -4px rgba(14, 17, 22, 0.14)",
+      "$value": "0 2px 4px rgba(16, 15, 26, 0.06), 0 6px 16px -4px rgba(16, 15, 26, 0.14)",
       "$type": "shadow",
       "$description": "Menus, popovers, toasts."
     },
     "3": {
-      "$value": "0 4px 8px rgba(14, 17, 22, 0.08), 0 20px 48px -12px rgba(14, 17, 22, 0.28)",
+      "$value": "0 4px 8px rgba(16, 15, 26, 0.08), 0 20px 48px -12px rgba(16, 15, 26, 0.28)",
       "$type": "shadow",
       "$description": "Dialog."
     }

@@ -118,7 +118,7 @@
         "$description": "Soft accent Badge fill, selected row wash."
       },
       "wash": {
-        "$value": "#232431",
+        "$value": "#242235",
         "$type": "color",
         "$description": "Faint selected-row wash, lighter than accent.subtle: brand.400 at 7% over surface.default, precomputed as an opaque swatch. Pair with accent.border."
       },

@@ -1,0 +1,44 @@
+---
+title: Getting started
+description: Install the tokens and components, import the three entries, and set the theme.
+---
+
+The system is two npm packages: `@salemcobalt/tokens` (CSS custom properties, Sass, TypeScript and JSON from one
+Style Dictionary source) and `@salemcobalt/ui` (React 19 components on Base UI).
+
+## Install
+
+```sh
+pnpm add @salemcobalt/ui @salemcobalt/tokens
+```
+
+## Import the entries
+
+Import these once, at the app entry:
+
+```ts
+import '@salemcobalt/tokens/css'; // custom properties, light + dark
+import '@salemcobalt/ui/fonts'; // self-hosted IBM Plex Sans (variable) and Plex Mono, optional
+import '@salemcobalt/ui/styles.css'; // the components, inside @layer sc
+```
+
+The component styles ship inside `@layer sc`, so any unlayered CSS in your app wins without specificity fights.
+
+## Theme and density
+
+Set `data-theme="light"` or `data-theme="dark"` on `<html>`. With no attribute, the tokens follow
+`prefers-color-scheme`. Set `data-density="compact"` on any ancestor for the compact sizes. This site uses the same
+attribute: the theme switcher in the header flips it.
+
+## Use a component
+
+```tsx
+import { Button } from '@salemcobalt/ui';
+
+export function Save() {
+  return <Button variant="primary">Save</Button>;
+}
+```
+
+Every component and state is in the [workshop](/workshop/); the package README on
+[GitHub](https://github.com/sghoweri/design-system/tree/main/packages/ui#readme) documents each prop.

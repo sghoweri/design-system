@@ -1,0 +1,82 @@
+---
+title: Using the system in Astro
+description: Render @salemcobalt/ui in an Astro site, statically or as hydrated islands. This site is the example.
+---
+
+import { TabsDemo } from '../../../demos/TabsDemo';
+
+This docs site is an Astro app that consumes the published `@salemcobalt/ui` build, so it doubles as the proof that
+the system works in Astro. The setup is the same three imports as any React app, plus `@astrojs/react`.
+
+## Setup
+
+```sh
+pnpm astro add react
+pnpm add @salemcobalt/ui @salemcobalt/tokens
+```
+
+Import the tokens, fonts and component CSS once, in a layout that every page uses:
+
+```astro
+---
+// src/layouts/Base.astro
+import '@salemcobalt/tokens/css';
+import '@salemcobalt/ui/fonts';
+import '@salemcobalt/ui/styles.css';
+---
+
+<html lang="en" data-theme="light">
+  <body><slot /></body>
+</html>
+```
+
+## Static components
+
+Components without behaviour (Button, Badge, Card, Stack, Heading, Text) render to HTML at build time with no
+client JavaScript. Use them in `.astro` or `.mdx` files directly, without a `client:*` directive. The
+[Button page](/components/button/) is built this way.
+
+## Interactive islands
+
+Components whose behaviour comes from Base UI (Tabs, Dialog, Menu, Tooltip, Select, Popover) need JavaScript in
+the browser. Wrap the composition in your own React component and render it with a client directive. Astro
+hydrates only the outermost component, so compound parts such as `Tabs.Tab` have to live inside that wrapper rather
+than being passed from the `.astro` file as children.
+
+```tsx
+// src/components/InboxTabs.tsx
+import { Tabs, Text } from '@salemcobalt/ui';
+
+export function InboxTabs() {
+  return (
+    <Tabs.Root defaultValue="inbox">
+      <Tabs.List aria-label="Inbox sections">
+        <Tabs.Tab value="inbox">Inbox</Tabs.Tab>
+        <Tabs.Tab value="applied">Applied</Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel value="inbox">
+        <Text>Twelve postings ranked by score.</Text>
+      </Tabs.Panel>
+      <Tabs.Panel value="applied">
+        <Text>Seven applications in flight.</Text>
+      </Tabs.Panel>
+    </Tabs.Root>
+  );
+}
+```
+
+```astro
+<InboxTabs client:visible />
+```
+
+The live result, hydrated when it scrolls into view. Click a tab, or focus one and use the arrow keys:
+
+<div className="demo not-content" data-block>
+  <TabsDemo client:visible />
+</div>
+
+## Theme switching
+
+The tokens read `data-theme` on `<html>`, the same attribute Starlight sets, so this site's theme switcher themes
+the components with no extra wiring. In your own Astro site, set the attribute from an inline script in `<head>`
+before first paint to avoid a flash of the wrong theme.

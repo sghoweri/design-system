@@ -1,0 +1,36 @@
+---
+title: Salem Cobalt design system
+description: Tokens and React components for Salem Cobalt’s side projects, with a docs site and a Storybook workshop.
+template: splash
+hero:
+  tagline: Tokens and accessible React components on Base UI, light and dark, comfortable and compact.
+  actions:
+    - text: Get started
+      link: /getting-started/
+      icon: right-arrow
+    - text: Open the workshop
+      link: /workshop/
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <Card title="Getting started" icon="rocket">
+    Install `@salemcobalt/tokens` and `@salemcobalt/ui`, import three entries, and theme with one attribute.
+    [Read the setup](/getting-started/).
+  </Card>
+  <Card title="Foundations" icon="seti:css">
+    Every colour token, rendered from the generated token JSON so the page cannot drift from the CSS. [See
+    colour](/foundations/color/).
+  </Card>
+  <Card title="Components" icon="puzzle">
+    Live examples rendered from the published package, with links into the workshop for every state. [See
+    Button](/components/button/).
+  </Card>
+  <Card title="Workshop" icon="storybook">
+    The Storybook: every component and state in isolation, with theme, density and viewport toolbars. [Open
+    the workshop](/workshop/).
+  </Card>
+</CardGrid>

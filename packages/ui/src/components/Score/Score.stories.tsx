@@ -112,11 +112,11 @@ export const NotScored: Story = {
 };
 
 const jobs = [
-  { score: 94, tone: 'success', title: 'Staff Frontend Engineer, Design Systems', meta: 'Quillstack · 5 h' },
-  { score: 88, tone: 'success', title: 'Principal Engineer, Web Platform', meta: 'Fernpoint Health · 11 h' },
-  { score: 74, tone: 'accent', title: 'Lead UI Engineer', meta: 'Kestrel Mobility · 1 d' },
-  { score: 58, tone: 'warning', title: 'Senior Frontend Engineer, Growth', meta: 'Orbitwise · 2 d' },
-  { score: null, tone: 'neutral', title: 'Frontend Engineer, Maps', meta: 'Lumen Atlas · 3 d' },
+  { score: 94, tone: 'success', title: 'Staff Frontend Engineer, Design Systems', meta: 'Quillstack · 5h' },
+  { score: 88, tone: 'success', title: 'Principal Engineer, Web Platform', meta: 'Fernpoint Health · 11h' },
+  { score: 74, tone: 'accent', title: 'Lead UI Engineer', meta: 'Kestrel Mobility · 1d' },
+  { score: 58, tone: 'warning', title: 'Senior Frontend Engineer, Growth', meta: 'Orbitwise · 2d' },
+  { score: null, tone: 'neutral', title: 'Frontend Engineer, Maps', meta: 'Lumen Atlas · 3d' },
 ] as const;
 
 function InboxRowList() {

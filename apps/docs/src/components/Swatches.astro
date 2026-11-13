@@ -1,0 +1,100 @@
+---
+// Colour swatches read from @salemcobalt/tokens' generated JSON (guideline 13 rule 3: no hand-typed token
+// tables). Each chip is filled with the custom property itself, so it follows the theme switcher; the light and
+// dark values printed beside it come from the same build that writes tokens.css.
+import tokens from '@salemcobalt/tokens/json';
+
+interface Props {
+  /** `palette`: the primitive ramps (neutral-50 … brand-950). `semantic`: the role tokens components read. */
+  kind: 'palette' | 'semantic';
+}
+const { kind } = Astro.props;
+
+// The JSON also carries non-colour tokens (z-index values are numbers), hence the value type.
+const light: Record<string, string | number> = tokens.light;
+const dark: Record<string, string | number> = tokens.dark;
+const colorNames = Object.keys(light).filter((name) => name.startsWith('sc-color-'));
+const isRampStep = (name: string) => /-\d+$/.test(name);
+
+const groups = new Map<string, string[]>();
+for (const name of colorNames) {
+  const rest = name.slice('sc-color-'.length);
+  const inPalette = isRampStep(name) || rest === 'white' || rest === 'black';
+  if ((kind === 'palette') !== inPalette) continue;
+  const group = isRampStep(name) ? rest.replace(/-\d+$/, '') : kind === 'palette' ? 'base' : rest.split('-')[0]!;
+  groups.set(group, [...(groups.get(group) ?? []), name]);
+}
+---
+
+<div class="not-content swatches">
+  {
+    [...groups].map(([group, names]) => (
+      <section aria-labelledby={`swatches-${kind}-${group}`}>
+        <h3 id={`swatches-${kind}-${group}`}>{group}</h3>
+        <ul>
+          {names.map((name) => (
+            <li>
+              <span class="chip" style={`background: var(--${name})`} />
+              <code>--{name}</code>
+              <span class="values">
+                <span title="Light theme">{light[name]}</span>
+                <span title="Dark theme">{dark[name]}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .swatches {
+    display: grid;
+    gap: var(--sc-spacing-xl);
+    margin-block: var(--sc-spacing-lg);
+  }
+  h3 {
+    margin: 0 0 var(--sc-spacing-sm);
+    font-size: var(--sc-font-size-md);
+    font-weight: 600;
+    text-transform: capitalize;
+    color: var(--sc-color-text-default);
+  }
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--sc-spacing-xs) var(--sc-spacing-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    grid-template-rows: auto auto;
+    column-gap: var(--sc-spacing-sm);
+    align-items: center;
+    padding-block: var(--sc-spacing-2xs);
+  }
+  .chip {
+    grid-row: span 2;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+    border-radius: var(--sc-radius-md);
+  }
+  code {
+    font-family: var(--sc-font-family-mono);
+    font-size: var(--sc-font-size-xs);
+    color: var(--sc-color-text-default);
+    overflow-wrap: anywhere;
+  }
+  .values {
+    display: flex;
+    gap: var(--sc-spacing-sm);
+    font-family: var(--sc-font-family-mono);
+    font-size: var(--sc-font-size-xs);
+    color: var(--sc-color-text-muted);
+  }
+</style>

@@ -1,0 +1,20 @@
+---
+title: Colour
+description: The colour tokens, read from the generated token JSON and filled from the live custom properties.
+---
+
+import Swatches from '../../../components/Swatches.astro';
+
+Components read the **semantic** tokens. The **palette** ramps exist to define them; reach for a ramp step directly
+only when no role fits. Each chip below is painted with the custom property itself, so switching the theme in the
+header repaints it; the two values beside it are the light and dark values from the same build that writes
+`tokens.css`. Every text and surface pair is checked against WCAG AA in both themes by a unit test in
+`packages/tokens`.
+
+## Semantic
+
+<Swatches kind="semantic" />
+
+## Palette
+
+<Swatches kind="palette" />

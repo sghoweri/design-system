@@ -10,6 +10,11 @@
         "$value": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
         "$type": "fontFamily",
         "$description": "Code and Kbd."
+      },
+      "display": {
+        "$value": "Unbounded, \"Unbounded Variable\", \"Arial Black\", system-ui, sans-serif",
+        "$type": "fontFamily",
+        "$description": "Brand face for a wordmark and big numerals only (Score md and ring): never body text, never under 14px, never in controls or tables. The variable face is the self-hosted one (@salemcobalt/ui/fonts), downloaded only on a page that draws it."
       }
     },
     "size": {

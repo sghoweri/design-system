@@ -4,7 +4,7 @@ React 19 components for the Salem Cobalt design system: `Button`, `IconButton`, 
 
 ```ts
 import '@salemcobalt/tokens/css'; // custom properties, light + dark
-import '@salemcobalt/ui/fonts'; // self-hosted IBM Plex Sans (variable) and Plex Mono, optional
+import '@salemcobalt/ui/fonts'; // optional: IBM Plex Sans (variable), Plex Mono and Unbounded, committed here, font-display: swap
 import '@salemcobalt/ui/styles.css'; // the components, inside @layer sc
 import {
   Button,

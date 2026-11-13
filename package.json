@@ -15,7 +15,9 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "storybook": "pnpm --filter storybook dev",
-    "build-storybook": "pnpm --filter storybook build"
+    "build-storybook": "pnpm --filter storybook build",
+    "docs": "pnpm --filter docs dev",
+    "build-docs": "pnpm --filter docs build"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.0",

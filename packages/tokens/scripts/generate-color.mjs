@@ -110,26 +110,30 @@ const neutralLadder = {
   600: 0.555,
   700: 0.46,
   800: 0.37,
+  850: 0.328,
   900: 0.29,
   950: 0.225,
   1000: 0.175,
 };
+// The neutrals lean toward the brand violet (2026-11-12, job-radar homepage audit D1): hue 289 is brand's, at a low
+// chroma, so surfaces read as the homepage's tinted greys. Was hue 263 (cool blue-grey) at about half the chroma.
+const NEUTRAL_HUE = 289;
 
 const color = {
   white: { $value: '#ffffff', $type: 'color', $description: 'Primitive.' },
   black: {
-    $value: oklch(0.13, 0.012, 263),
+    $value: oklch(0.13, 0.024 * 1.3, NEUTRAL_HUE),
     $type: 'color',
     $description: 'Primitive. Deepest dark surface.',
   },
 };
 color.neutral = {};
 for (const [step, L] of Object.entries(neutralLadder)) {
-  const c = step === '0' ? 0 : L > 0.9 ? 0.004 : L > 0.5 ? 0.009 : 0.012;
+  const c = step === '0' ? 0 : L > 0.9 ? 0.007 : L > 0.5 ? 0.016 : 0.024;
   color.neutral[step] = {
-    $value: oklch(L, c, 263),
+    $value: oklch(L, c, NEUTRAL_HUE),
     $type: 'color',
-    $description: 'Primitive. Cool neutral, OKLCH hue 263.',
+    $description: `Primitive. Violet-tinted neutral, OKLCH hue ${NEUTRAL_HUE}.`,
   };
 }
 for (const [name, { h, peak, ladder: own, snap }] of Object.entries(hues)) {
@@ -218,17 +222,17 @@ const semantic = {
 const elevation = {
   0: ['none', 'none', 'Flat. Card default, Badge, Button.'],
   1: [
-    '0 1px 2px rgba(14, 17, 22, 0.06), 0 1px 3px rgba(14, 17, 22, 0.1)',
+    '0 1px 2px rgba(16, 15, 26, 0.06), 0 1px 3px rgba(16, 15, 26, 0.1)',
     '0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.5)',
     'Elevated Card and interactive Card hover.',
   ],
   2: [
-    '0 2px 4px rgba(14, 17, 22, 0.06), 0 6px 16px -4px rgba(14, 17, 22, 0.14)',
+    '0 2px 4px rgba(16, 15, 26, 0.06), 0 6px 16px -4px rgba(16, 15, 26, 0.14)',
     '0 2px 4px rgba(0, 0, 0, 0.5), 0 8px 20px -4px rgba(0, 0, 0, 0.6)',
     'Menus, popovers, toasts.',
   ],
   3: [
-    '0 4px 8px rgba(14, 17, 22, 0.08), 0 20px 48px -12px rgba(14, 17, 22, 0.28)',
+    '0 4px 8px rgba(16, 15, 26, 0.08), 0 20px 48px -12px rgba(16, 15, 26, 0.28)',
     '0 4px 8px rgba(0, 0, 0, 0.5), 0 24px 56px -12px rgba(0, 0, 0, 0.7)',
     'Dialog.',
   ],
