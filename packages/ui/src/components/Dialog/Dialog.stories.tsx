@@ -16,7 +16,17 @@ import { Compact, DarkTheme } from '../../stories/helpers';
 const meta = {
   title: 'Components/Dialog',
   component: Dialog.Root,
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A modal on Base UI’s Dialog: a centred `dialog`, a `sheet` that docks to the bottom edge below 640px, or `fullscreen`. ' +
+          'Never open a dialog from inside one of the same variant: no sheet from a sheet, no full-screen dialog from a full-screen one. ' +
+          'Open a Popover or Menu instead, use a different variant (a small centred `dialog` to confirm), or replace the content in place.',
+      },
+    },
+  },
 } satisfies Meta<typeof Dialog.Root>;
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -386,4 +396,42 @@ function FullScreenGuarded() {
 export const FullScreen: Story = {
   name: 'Full screen, asks before closing',
   render: () => <FullScreenGuarded />,
+};
+
+/**
+ * A full-screen body longer than the screen: the scrollbar runs along the popup's edge, outside the content's
+ * padding, and the fields' focus rings have room on every side.
+ */
+export const FullScreenLong: Story = {
+  name: 'Full screen, long content',
+  render: () => (
+    <Dialog.Root>
+      <Dialog.Trigger render={<Button />}>Open job details</Dialog.Trigger>
+      <Dialog.Content variant="fullscreen">
+        <Dialog.Close />
+        <Dialog.Title>Staff Frontend Engineer at Northwind</Dialog.Title>
+        <Dialog.Description>Remote, US · $190,000 – $240,000 · posted 3 days ago</Dialog.Description>
+        <Dialog.Body>
+          <Stack gap="md">
+            <Input
+              label="Posting URL"
+              defaultValue="https://northwind.example/careers/staff-frontend-engineer"
+            />
+            {Array.from({ length: 14 }, (_, i) => (
+              <Text key={i}>
+                Paragraph {i + 1}. The design-system team owns the component library, the tokens pipeline and
+                the docs site, and pairs with product teams on adoption. You would lead the accessibility work
+                and the move to a new headless primitives layer.
+              </Text>
+            ))}
+            <Textarea label="Notes" rows={4} />
+          </Stack>
+        </Dialog.Body>
+        <Dialog.Actions>
+          <Dialog.Close render={<Button variant="secondary" />}>Close</Dialog.Close>
+          <Button>Save</Button>
+        </Dialog.Actions>
+      </Dialog.Content>
+    </Dialog.Root>
+  ),
 };
