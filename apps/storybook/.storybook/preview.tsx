@@ -3,7 +3,7 @@ import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 import { useEffect } from 'react';
 import type React from 'react';
 import '@salemcobalt/tokens/css';
-import '../../../packages/ui/src/fonts';
+import '../../../packages/ui/src/fonts/fonts.css';
 import '../../../packages/ui/src/styles/preview.css';
 
 function ThemeSync({

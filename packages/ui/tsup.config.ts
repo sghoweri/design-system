@@ -11,7 +11,6 @@ const shared: Options = {
     'react-dom',
     'react/jsx-runtime',
     /^@base-ui\/react/,
-    /^@fontsource/,
     /^filepond/,
     // Optional peers of the editor entry.
     /^@codemirror\//,
@@ -45,11 +44,5 @@ export default defineConfig([
     splitting: true,
     banner: { js: "'use client';" },
     treeshake: false,
-  },
-  {
-    ...shared,
-    entry: { fonts: 'src/fonts.ts' },
-    dts: false,
-    clean: false,
   },
 ]);

@@ -1,5 +1,6 @@
 import { createElement, type ComponentPropsWithRef, type ReactNode } from 'react';
 import { cx } from '../../utils/cx';
+import type { HeadingLevel } from '../Heading/Heading';
 
 export type EmptyStateSize = 'sm' | 'md';
 export type EmptyStateElement = 'div' | 'section' | 'li';
@@ -17,6 +18,11 @@ export interface EmptyStateProps extends Omit<ComponentPropsWithRef<'div'>, 'tit
   size?: EmptyStateSize | undefined;
   /** Element to render. Default `div`. */
   as?: EmptyStateElement | undefined;
+  /**
+   * Renders the title as `h1`–`h6` at this outline level, for an empty state that stands in for a view's
+   * content (an empty inbox). The look does not change. Default: none, the title is a `p`.
+   */
+  headingLevel?: HeadingLevel | undefined;
 }
 
 /**
@@ -30,6 +36,7 @@ export function EmptyState({
   children,
   size = 'md',
   as = 'div',
+  headingLevel,
   className,
   ...rest
 }: EmptyStateProps) {
@@ -41,7 +48,7 @@ export function EmptyState({
         {icon}
       </span>
     ) : null,
-    <p className="sc-empty-state__title">{title}</p>,
+    createElement(headingLevel ? `h${headingLevel}` : 'p', { className: 'sc-empty-state__title' }, title),
     description != null ? <p className="sc-empty-state__description">{description}</p> : null,
     children != null ? <div className="sc-empty-state__actions">{children}</div> : null,
   );

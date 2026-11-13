@@ -105,6 +105,75 @@
     translate: 250% 0;
   }
 }
+/* Marks: a 2px tick per threshold, reaching past the track so it reads on any fill (and over the fill's own tone).
+   The track stops clipping while marked; a determinate fill never overflows it. */
+.sc-progress[data-marked] > .sc-progress__track {
+  overflow: visible;
+}
+.sc-progress__mark {
+  position: absolute;
+  inset-block: calc(-1 * var(--sc-size-progress-mark-overhang));
+  inset-inline-start: var(--_at);
+  inline-size: 2px;
+  translate: -1px 0;
+  border-radius: 1px;
+  background: var(--sc-color-warning-solid);
+}
+.sc-progress[data-marked] {
+  padding-block: var(--sc-size-progress-mark-overhang);
+}
+/* ring: a gauge, the arc in the tone's fill, an optional centre (a count). The SVG's viewBox is the diameter and r
+   leaves the stroke inside it (Progress.tsx); the arc length comes from --_pct (0–100, set inline). */
+.sc-progress[data-variant='ring'] {
+  --_d: var(--sc-size-progress-ring-md);
+  position: relative;
+  display: inline-grid;
+  /* one cell the size of the ring: the bar's `1fr auto` columns and gap would put the centre left of middle */
+  grid-template-columns: 1fr;
+  place-items: center;
+  flex: none;
+  inline-size: var(--_d);
+  block-size: var(--_d);
+  font-size: var(--sc-font-size-sm);
+  font-weight: var(--sc-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+.sc-progress[data-variant='ring'][data-size='sm'] {
+  --_d: var(--sc-size-progress-ring-sm);
+  font-size: var(--sc-font-size-xs);
+}
+.sc-progress__ring {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  rotate: -90deg;
+  overflow: visible;
+}
+.sc-progress__ring-track,
+.sc-progress__ring-arc {
+  fill: none;
+  stroke-width: var(--sc-size-progress-ring-stroke);
+}
+.sc-progress__ring-track {
+  stroke: var(--sc-color-surface-active);
+}
+.sc-progress__ring-arc {
+  stroke: var(--_fill);
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - var(--_pct, 0));
+  transition: stroke-dashoffset var(--sc-duration-data) var(--sc-ease-data);
+}
+.sc-progress__ring-arc[data-indeterminate] {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sc-spin 1.4s linear infinite;
+}
+.sc-progress__centre {
+  position: relative;
+  line-height: 1;
+}
 /* inline: spinner + text on one line, no track */
 .sc-progress[data-variant='inline'] {
   display: inline-flex;
@@ -129,8 +198,12 @@
   .sc-spinner > svg {
     animation-duration: 1.6s;
   }
-  .sc-progress__indicator {
+  .sc-progress__indicator,
+  .sc-progress__ring-arc {
     transition: none;
+  }
+  .sc-progress__ring-arc[data-indeterminate] {
+    animation: sc-progress-pulse 2s ease-in-out infinite alternate;
   }
   .sc-progress__indicator[data-indeterminate] {
     inline-size: 100%;

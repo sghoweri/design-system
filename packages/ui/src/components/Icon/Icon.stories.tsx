@@ -99,6 +99,9 @@ export const InContext: Story = {
         <Button variant="ghost" iconEnd={<icons.ExternalLinkIcon />}>
           Open posting
         </Button>
+        <Button variant="ghost" iconStart={<icons.SignOutIcon />}>
+          Sign out
+        </Button>
       </Inline>
       <Inline gap="xs">
         <Badge tone="success">

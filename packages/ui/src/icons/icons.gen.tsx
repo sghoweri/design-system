@@ -401,6 +401,16 @@ export function SettingsIcon(props: IconGlyphProps) {
   );
 }
 
+/** `sign-out` */
+export function SignOutIcon(props: IconGlyphProps) {
+  return (
+    <Icon {...props}>
+      <path d="M6.25 2.75h-2.5a1 1 0 0 0-1 1v8.5a1 1 0 0 0 1 1h2.5" />
+      <path d="M6.75 8h6.5M10.5 5.25 13.25 8 10.5 10.75" />
+    </Icon>
+  );
+}
+
 /** `sparkles` */
 export function SparklesIcon(props: IconGlyphProps) {
   return (

@@ -50,6 +50,12 @@ describe('icon set', () => {
     expect(Object.keys(icons).length).toBe(files.length);
   });
 
+  it('has a sign-out icon for account menus', () => {
+    expect(iconNames).toContain('sign-out');
+    render(<icons.SignOutIcon title="Sign out" />);
+    expect(screen.getByRole('img', { name: 'Sign out' })).toHaveAttribute('viewBox', '0 0 16 16');
+  });
+
   it('renders every icon as a decorative 16×16 svg in currentColor', () => {
     const { container } = render(
       <div>

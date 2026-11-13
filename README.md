@@ -30,7 +30,7 @@ pnpm add @salemcobalt/tokens @salemcobalt/ui
 
 ```ts
 import '@salemcobalt/tokens/css';
-import '@salemcobalt/ui/fonts'; // optional: self-hosted IBM Plex
+import '@salemcobalt/ui/fonts'; // optional: self-hosted IBM Plex and Unbounded
 import '@salemcobalt/ui/styles.css';
 import { Button } from '@salemcobalt/ui';
 ```
