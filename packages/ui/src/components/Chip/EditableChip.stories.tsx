@@ -34,11 +34,10 @@ export const Playground: Story = {
   },
 };
 
-// The list gives an open editor the full row; the chip itself can't reach its container's flex item.
+// A plain wrapping list: an open chip edits where it sits, so the list needs nothing for editing.
 const listCss = `
-.story-chip-list { display: flex; flex-wrap: wrap; gap: var(--sc-spacing-xs); margin: 0; padding: 0; list-style: none; }
+.story-chip-list { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--sc-spacing-xs); margin: 0; padding: 0; list-style: none; }
 .story-chip-list > li { min-inline-size: 0; max-inline-size: 100%; }
-.story-chip-list > li:has(> .sc-chip-editor) { flex-basis: 100%; }
 `;
 
 function JobTitles() {
@@ -74,8 +73,8 @@ function JobTitles() {
 }
 
 /**
- * Click a title, or focus it and press Enter or F2. Enter or clicking away saves, Escape cancels, an empty
- * save removes the chip. Renaming one to another's title is refused with an announced error. The list keys
+ * Click a title, or focus it and press Enter or F2: the chip itself becomes the field, the width of its text, with
+ * a clear × at the end. Enter or clicking away saves, Escape cancels, an empty save removes the chip. Renaming one to another's title is refused with an announced error. The list keys
  * chips by id, so focus comes back to the chip after a save even though its text changed.
  */
 export const List: Story = {

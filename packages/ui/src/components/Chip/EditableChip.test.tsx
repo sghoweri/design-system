@@ -31,18 +31,42 @@ describe('EditableChip', () => {
     await expectNoA11yViolations(container);
   });
 
-  it('opens on click into a focused, auto-sized one-line field with the caret at the end', async () => {
+  it('edits in place: the same chip holds a focused field with the caret at the end, sized by its text', async () => {
     const user = userEvent.setup();
-    const { container } = render(<Controlled />);
+    const { container } = render(<Controlled tone="accent" />);
     await user.click(screen.getByRole('button', { name: 'Edit “frontend architect”' }));
-    const field = screen.getByRole('textbox', { name: 'Edit job title' }) as HTMLTextAreaElement;
+    const field = screen.getByRole('textbox', { name: 'Edit job title' }) as HTMLInputElement;
+    expect(field.tagName).toBe('INPUT');
     expect(field).toHaveFocus();
     expect(field).toHaveValue('frontend architect');
     expect(field.selectionStart).toBe('frontend architect'.length);
-    expect(field).toHaveAttribute('rows', '1');
-    expect(field).toHaveAttribute('data-autosize');
-    expect(container.firstElementChild).toHaveAttribute('data-editing');
+    expect(field).toHaveAttribute('enterkeyhint', 'done');
+    const chip = field.closest('.sc-chip')!;
+    expect(chip).toHaveAttribute('data-editing');
+    expect(chip).toHaveAttribute('data-tone', 'accent');
+    expect(field.parentElement).toHaveAttribute('data-value', 'frontend architect');
+    expect(container.firstElementChild).toHaveClass('sc-chip-editor');
+    await user.type(field, 's');
+    expect(field.parentElement).toHaveAttribute('data-value', 'frontend architects');
     await expectNoA11yViolations(container);
+  });
+
+  it('clears with the × at the far end without leaving the field, and hides it when empty', async () => {
+    const user = userEvent.setup();
+    const onValueChange = vi.fn();
+    render(<Controlled onValueChange={onValueChange} clearLabel="Clear title" />);
+    await user.click(screen.getByRole('button', { name: 'Edit “frontend architect”' }));
+    const field = screen.getByRole('textbox', { name: 'Edit job title' });
+    const clear = screen.getByRole('button', { name: 'Clear title' });
+    expect(clear).toHaveAttribute('tabindex', '-1');
+    expect(field.closest('.sc-chip')!.lastElementChild).toBe(clear);
+    await user.click(clear);
+    expect(field).toHaveValue('');
+    expect(field).toHaveFocus();
+    expect(onValueChange).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: 'Clear title' })).toBeNull();
+    await user.type(field, 'design engineer{Enter}');
+    expect(onValueChange).toHaveBeenCalledExactlyOnceWith('design engineer');
   });
 
   it('opens on Enter or F2 without typing a newline, saves on Enter and puts focus back on the chip', async () => {
@@ -105,7 +129,7 @@ describe('EditableChip', () => {
     expect(onValueChange).not.toHaveBeenCalled();
   });
 
-  it('refuses a save that validate rejects, with the message as the field’s announced error', async () => {
+  it('refuses a save that validate rejects, marking the chip and announcing the message under it', async () => {
     const user = userEvent.setup();
     const onValueChange = vi.fn();
     const { container } = render(
@@ -121,7 +145,8 @@ describe('EditableChip', () => {
     expect(onValueChange).not.toHaveBeenCalled();
     expect(field).toHaveAttribute('aria-invalid', 'true');
     expect(field).toHaveAccessibleDescription('“staff engineer” is already in this list.');
-    expect(container.querySelector('.sc-field__error-region')).toHaveAttribute('aria-live', 'polite');
+    expect(container.querySelector('.sc-chip-editor__error')).toHaveAttribute('aria-live', 'polite');
+    expect(field.closest('.sc-chip')).toHaveAttribute('data-invalid');
     await expectNoA11yViolations(container);
 
     await user.type(field, 's');

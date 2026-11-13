@@ -105,7 +105,8 @@
 .sc-chip[data-removable] > .sc-chip__label {
   padding-inline-end: var(--sc-spacing-2xs);
 }
-.sc-chip__remove {
+.sc-chip__remove,
+.sc-chip__clear {
   flex: none;
   display: inline-grid;
   place-items: center;
@@ -121,7 +122,8 @@
   opacity: 0.7;
   cursor: pointer;
 }
-.sc-chip__remove:hover:not(:disabled) {
+.sc-chip__remove:hover:not(:disabled),
+.sc-chip__clear:hover {
   opacity: 1;
   background: var(--_bg-hover);
 }
@@ -136,7 +138,8 @@
 /* 44px hit area on touch without changing layout. */
 @media (pointer: coarse) {
   .sc-chip__action::after,
-  .sc-chip__remove::after {
+  .sc-chip__remove::after,
+  .sc-chip__clear::after {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
@@ -145,7 +148,8 @@
     block-size: max(100%, var(--sc-size-touch-target));
   }
   .sc-chip__action,
-  .sc-chip__remove {
+  .sc-chip__remove,
+  .sc-chip__clear {
     position: relative;
   }
 }
@@ -190,10 +194,76 @@
   --_fg-on: var(--sc-color-info-text);
   --_bd-on: var(--sc-color-info-solid);
 }
-/* EditableChip while editing: a one-line auto-sized Textarea that fills its container. */
+/* EditableChip while editing: the same chip, its text a field the width of the text (the grid cell is sized by a
+   hidden copy of the value, so it works without field-sizing), a ring for focus, and a clear × at the far end.
+   The chip and its error stack, so the message sits under the chip it belongs to. */
 .sc-chip-editor {
-  display: block;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-inline-size: 100%;
   min-inline-size: 0;
+}
+.sc-chip[data-editing] {
+  cursor: text;
+}
+.sc-chip[data-editing]:focus-within {
+  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+  outline-offset: 0;
+}
+.sc-chip[data-invalid] {
+  --_bd: var(--sc-color-danger-text);
+}
+.sc-chip__field {
+  display: inline-grid;
+  min-inline-size: 0;
+  padding-inline: var(--_px);
+}
+.sc-chip > .sc-chip__icon + .sc-chip__field {
+  padding-inline-start: var(--sc-spacing-2xs);
+}
+.sc-chip__field:has(+ .sc-chip__clear) {
+  padding-inline-end: var(--sc-spacing-2xs);
+}
+.sc-chip__field::after,
+.sc-chip__input {
+  grid-area: 1 / 1;
+  font: inherit;
+  line-height: var(--sc-font-line-height-ui);
+  letter-spacing: inherit;
+}
+.sc-chip__field::after {
+  content: attr(data-value) ' ';
+  visibility: hidden;
+  white-space: pre;
+  overflow: hidden;
+}
+.sc-chip__input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 1ch;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  outline: none;
+}
+.sc-chip-editor__error {
+  font-size: var(--sc-font-size-xs);
+  line-height: var(--sc-font-line-height-ui);
+  color: var(--sc-color-danger-text);
+}
+.sc-chip-editor__error:not(:empty) {
+  margin-block-start: var(--sc-spacing-3xs);
+}
+/* Touch: 16px text while editing so iOS doesn't zoom into the field; the chip grows to fit. */
+@media (pointer: coarse) {
+  .sc-chip[data-editing] {
+    --_fs: max(16px, var(--sc-font-size-sm));
+    block-size: auto;
+    min-block-size: var(--_h);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .sc-chip {
