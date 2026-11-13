@@ -150,6 +150,8 @@ export function Select<Value extends string = string>({
             sideOffset={4}
             collisionPadding={collisionPadding}
             alignItemWithTrigger={false}
+            // A popup wider than the trigger grows from the trigger's start edge rather than overhanging both sides.
+            align="start"
           >
             <BaseSelect.Popup className="sc-select__popup">
               <BaseSelect.List>

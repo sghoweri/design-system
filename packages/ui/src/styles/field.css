@@ -278,9 +278,12 @@
   z-index: var(--sc-z-dropdown);
   outline: 0;
 }
+/* At least as wide as the trigger; at most the text measure or the room the positioner reports, whichever is less,
+   so long options wrap instead of stretching the popup across the page. */
 .sc-select__popup {
   box-sizing: border-box;
   min-inline-size: var(--anchor-width);
+  max-inline-size: min(var(--available-width), var(--sc-font-measure));
   max-block-size: var(--available-height);
   overflow: auto;
   padding: var(--sc-spacing-2xs);
@@ -306,10 +309,13 @@
   opacity: 0;
   scale: 0.97;
 }
+/* The row track centres in the item's min height; the check and the text start at its top, so on an option that
+   wraps the check sits on the first line. */
 .sc-select__item {
   display: grid;
   grid-template-columns: var(--sc-size-icon-md) 1fr;
-  align-items: center;
+  align-content: center;
+  align-items: start;
   column-gap: var(--sc-spacing-xs);
   box-sizing: border-box;
   min-block-size: var(--sc-size-control-sm);
@@ -330,10 +336,15 @@
 .sc-select__indicator {
   grid-column: 1;
   display: inline-flex;
+  align-items: center;
+  block-size: 1lh;
   color: var(--sc-color-accent-text);
 }
 .sc-select__item-text {
   grid-column: 2;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  text-wrap-style: pretty;
 }
 .sc-select__group-label {
   padding: var(--sc-spacing-2xs) var(--sc-spacing-xs);

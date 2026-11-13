@@ -131,3 +131,23 @@ export const ClearableStory: Story = {
   name: 'Nullable and clearable',
   render: () => <Clearable />,
 };
+
+const versions = [
+  { value: 'v3', label: 'v3 · Sent · edited · 11/13/2026, 10:30:35 AM · edited by hand' },
+  {
+    value: 'v2',
+    label:
+      'v2 · edited · 11/12/2026, 9:06:02 PM · restored 13 bullets (Pypestream, Knapsack, Pegasystems and Genuine Interactive)',
+  },
+  { value: 'v1', label: 'v1 · claude-sonnet-5-5 · 11/12/2026, 9:01:50 PM · first draft' },
+];
+
+/**
+ * Long options wrap instead of widening the popup. The popup is at least as wide as the trigger and at most the
+ * text measure (`--sc-font-measure`) or the room the positioner reports, whichever is less; the check sits on the
+ * first line. The trigger keeps the chosen value on one line with an ellipsis.
+ */
+export const LongOptions: Story = {
+  name: 'Long options wrap',
+  render: () => <Select label="Version" options={versions} defaultValue="v3" fullWidth />,
+};
