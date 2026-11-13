@@ -90,6 +90,10 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
    * inline end, keeps clear of the safe areas, and lets `Dialog.Body` scroll between a pinned title and
    * actions; `size` is ignored. It is the surface of `FullScreenFlow`. Pair it with `onRequestClose` on
    * the Root when leaving needs a confirmation.
+   *
+   * Never open a dialog from inside one of the same variant: no sheet from a sheet, no full-screen dialog
+   * from a full-screen one. Open a Popover or Menu instead, use a different variant (a small centred
+   * `dialog` to confirm), or replace the content in place.
    */
   variant?: DialogVariant | undefined;
   /**

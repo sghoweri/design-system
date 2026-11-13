@@ -16,7 +16,17 @@ import { Compact, DarkTheme } from '../../stories/helpers';
 const meta = {
   title: 'Components/Dialog',
   component: Dialog.Root,
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'A modal on Base UI’s Dialog: a centred `dialog`, a `sheet` that docks to the bottom edge below 640px, or `fullscreen`. ' +
+          'Never open a dialog from inside one of the same variant: no sheet from a sheet, no full-screen dialog from a full-screen one. ' +
+          'Open a Popover or Menu instead, use a different variant (a small centred `dialog` to confirm), or replace the content in place.',
+      },
+    },
+  },
 } satisfies Meta<typeof Dialog.Root>;
 export default meta;
 type Story = StoryObj<typeof meta>;
