@@ -144,6 +144,73 @@ export const Compact: Story = {
   ),
 };
 
+const EMPTY = { for: 'No pros flagged.', against: 'No cons flagged.', gap: 'No gaps flagged.' } as const;
+const LABEL = { for: 'For', against: 'Against', gap: 'Gaps' } as const;
+
+/** One column: an overline heading naming the list, then the list (or its `empty` line). */
+function Column({
+  tone,
+  size,
+  items = [],
+}: {
+  tone: 'for' | 'against' | 'gap';
+  size?: 'sm' | 'md';
+  items?: string[];
+}) {
+  const id = useId();
+  return (
+    <Stack gap="xs">
+      <Heading level={3} size="overline" id={id}>
+        {LABEL[tone]}
+      </Heading>
+      <ReasonList tone={tone} size={size} empty={EMPTY[tone]} aria-labelledby={id}>
+        {items.map((r) => (
+          <ReasonList.Item key={r}>{r}</ReasonList.Item>
+        ))}
+      </ReasonList>
+    </Stack>
+  );
+}
+
+/**
+ * The posting pane in Job Sweep: For has reasons, the scorer flagged nothing against and no gaps. `empty` replaces the
+ * `<ul>` with one muted line, so the heading never sits over nothing. Against and Gaps lead with a check by default
+ * (nothing against a job is good news); For stays plain.
+ */
+export const Empty: Story = {
+  render: () => (
+    <div style={columns}>
+      <Column
+        tone="for"
+        items={[
+          'Builds and evolves the components and APIs every product team depends on',
+          'Range tops well above your target',
+        ]}
+      />
+      <Column tone="against" />
+      <Column tone="gap" />
+    </div>
+  ),
+};
+
+/** Each tone empty, at `md` and at `size="sm"`. The line takes the list's type size; the check follows it. */
+export const EmptyTones: Story = {
+  render: () => (
+    <Stack gap="lg">
+      <div style={columns}>
+        <Column tone="for" />
+        <Column tone="against" />
+        <Column tone="gap" />
+      </div>
+      <div style={columns}>
+        <Column tone="for" size="sm" />
+        <Column tone="against" size="sm" />
+        <Column tone="gap" size="sm" />
+      </div>
+    </Stack>
+  ),
+};
+
 export const Dark: Story = {
   render: () => (
     <DarkTheme>

@@ -20,7 +20,8 @@
   gap: var(--sc-spacing-2xs);
   font-size: var(--sc-font-size-xs);
 }
-.sc-reason-list[data-divider] {
+.sc-reason-list[data-divider],
+.sc-reason-list__empty[data-divider] {
   padding-block-start: var(--sc-spacing-xs);
   border-block-start: var(--sc-border-width-hairline) dashed var(--sc-color-border-default);
 }
@@ -61,4 +62,27 @@
 .sc-reason-list__item :where(strong, b) {
   font-weight: var(--sc-font-weight-semibold);
   color: var(--sc-color-text-default);
+}
+
+/* The `empty` line in place of the list: the list's type, muted, with an optional decorative icon centred on the
+   first line the way the markers are. */
+.sc-reason-list__empty {
+  display: flex;
+  align-items: start;
+  gap: var(--sc-spacing-2xs);
+  margin: 0;
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  color: var(--sc-color-text-muted);
+  text-wrap-style: pretty;
+}
+.sc-reason-list__empty[data-size='sm'] {
+  font-size: var(--sc-font-size-xs);
+}
+.sc-reason-list__empty-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  block-size: 1lh;
 }
