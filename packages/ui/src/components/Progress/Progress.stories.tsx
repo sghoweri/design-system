@@ -24,7 +24,7 @@ const meta: Meta<typeof Progress> = {
   argTypes: {
     tone: { control: 'radio', options: ['accent', 'success', 'warning', 'danger', 'neutral'] },
     size: { control: 'radio', options: ['sm', 'md'] },
-    variant: { control: 'radio', options: ['bar', 'inline'] },
+    variant: { control: 'radio', options: ['bar', 'inline', 'ring'] },
   },
   decorators: [(Story) => <div style={{ maxWidth: 420 }}>{Story()}</div>],
 };
@@ -103,6 +103,75 @@ export const InlineVariant: Story = {
   ),
 };
 
+function BudgetMarks() {
+  return (
+    <Stack gap="lg">
+      {[0.6, 1.7, 2].map((spent) => (
+        <Progress
+          key={spent}
+          label="Today's budget"
+          size="sm"
+          value={spent}
+          max={2}
+          tone={spent >= 2 ? 'danger' : spent >= 1.6 ? 'warning' : 'accent'}
+          valueText={`$${spent.toFixed(2)} of $2.00`}
+          marks={[{ value: 1.6, label: 'Haiku only' }]}
+        />
+      ))}
+      <Progress label="Medium bar" value={45} showValue marks={[{ value: 80, label: 'Limit' }]} />
+    </Stack>
+  );
+}
+
+/** Threshold marks: a tick past the track where something changes; its label is read in aria-valuetext. */
+export const Marks: Story = {
+  name: 'Marks (thresholds)',
+  render: () => <BudgetMarks />,
+};
+
+function Rings() {
+  return (
+    <Stack gap="md">
+      {(['sm', 'md'] as const).map((size) => (
+        <Inline key={size} gap="md" align="center">
+          <Progress variant="ring" size={size} aria-label="Setup, none done" value={0} max={5} />
+          <Progress variant="ring" size={size} label="Setup" value={2} max={5} valueText="2 of 5 done">
+            2/5
+          </Progress>
+          <Progress
+            variant="ring"
+            size={size}
+            label="Setup"
+            value={4}
+            max={5}
+            valueText="4 of 5 done"
+            tone="warning"
+          >
+            4/5
+          </Progress>
+          <Progress
+            variant="ring"
+            size={size}
+            label="Setup"
+            value={5}
+            max={5}
+            valueText="All done"
+            tone="success"
+          >
+            5/5
+          </Progress>
+          <Progress variant="ring" size={size} aria-label="Loading" />
+        </Inline>
+      ))}
+    </Stack>
+  );
+}
+
+/** A gauge beside a title, sizes sm (36) and md (48): no arc at 0, a quarter spinning while indeterminate. */
+export const Ring: Story = {
+  render: () => <Rings />,
+};
+
 export const CompactDensity: Story = {
   name: 'Compact density',
   render: () => (
@@ -124,6 +193,8 @@ export const Dark: Story = {
         <Progress label="Fetching" />
         <Progress label="Scored" value={100} tone="success" showValue />
         <Progress variant="inline" label="Queued" tone="neutral" />
+        <BudgetMarks />
+        <Rings />
       </Stack>
     </DarkTheme>
   ),
