@@ -1,4 +1,5 @@
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Stepper } from './Stepper';
 import { expectNoA11yViolations } from '../../../test/axe';
 
@@ -53,4 +54,59 @@ describe('Stepper', () => {
     expect(screen.getByText('Nov 3')).not.toHaveAttribute('data-proposed');
     await expectNoA11yViolations(container);
   });
+});
+
+const FULL = 'Nov 14, 2026, 2:00 PM ET';
+const dated = (orientation: 'horizontal' | 'vertical', editor?: boolean) => (
+  <Stepper aria-label="Application status" orientation={orientation}>
+    <Stepper.Step state="current" meta="Nov 9">
+      Screen
+    </Stepper.Step>
+    <Stepper.Step
+      state="upcoming"
+      proposed
+      meta={
+        <Stepper.Date label={FULL} short="Nov 14, 2pm">
+          {editor ? (
+            <label>
+              When <input type="datetime-local" />
+            </label>
+          ) : null}
+        </Stepper.Date>
+      }
+    >
+      Interview
+    </Stepper.Step>
+  </Stepper>
+);
+
+describe('Stepper.Date', () => {
+  it('horizontal: the word, then a calendar button named with the full date that opens it on tap', async () => {
+    const { container } = render(dated('horizontal'));
+    const step = screen.getAllByRole('listitem')[1]!;
+    expect(step.querySelector('.sc-stepper__meta')).toHaveTextContent('proposed');
+    expect(step).not.toHaveTextContent('Nov 14, 2pm');
+    const button = within(step).getByRole('button', { name: `proposed: ${FULL}` });
+    await expectNoA11yViolations(container);
+    await userEvent.click(button);
+    expect(await screen.findByText(`proposed · ${FULL}`, { selector: 'p' })).toBeInTheDocument();
+  });
+
+  it('vertical: the short date inline and no button when there is nothing to edit', async () => {
+    const { container } = render(dated('vertical'));
+    const step = screen.getAllByRole('listitem')[1]!;
+    expect(step).toHaveTextContent('proposed · Nov 14, 2pm');
+    expect(within(step).queryByRole('button')).toBeNull();
+    await expectNoA11yViolations(container);
+  });
+
+  it.each(['horizontal', 'vertical'] as const)(
+    '%s: with an editor, the button says it changes the date and opens the editor',
+    async (orientation) => {
+      render(dated(orientation, true));
+      const button = screen.getByRole('button', { name: `Change date, proposed: ${FULL}` });
+      await userEvent.click(button);
+      expect(await screen.findByLabelText('When')).toBeInTheDocument();
+    },
+  );
 });

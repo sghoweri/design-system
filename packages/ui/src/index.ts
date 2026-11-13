@@ -99,6 +99,7 @@ export {
 } from './components/Callout/Callout';
 export {
   Stepper,
+  type StepperDateProps,
   type StepperOrientation,
   type StepperProps,
   type StepperStepProps,

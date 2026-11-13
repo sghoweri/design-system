@@ -79,3 +79,50 @@ export const Dark: Story = {
     </DarkTheme>
   ),
 };
+
+/**
+ * `Stepper.Date` for a date longer than a column: horizontal shows "proposed" and a calendar button whose tooltip
+ * (hover, focus) and popover (tap) carry the full date; vertical shows the short date inline. With an editor, the
+ * button opens it in both.
+ */
+export const Dates: Story = {
+  render: () => {
+    const steps = (orientation: 'horizontal' | 'vertical', editor: boolean) => (
+      <Stepper aria-label="Application status" orientation={orientation}>
+        <Stepper.Step state="done" meta="Oct 28">
+          Materials ready
+        </Stepper.Step>
+        <Stepper.Step state="done" meta="Nov 3">
+          Applied
+        </Stepper.Step>
+        <Stepper.Step state="current" meta="Nov 9">
+          Screen
+        </Stepper.Step>
+        <Stepper.Step
+          state="upcoming"
+          proposed
+          meta={
+            <Stepper.Date label="Nov 14, 2026, 2:00 PM ET" short="Nov 14, 2pm">
+              {editor ? (
+                <label style={{ display: 'grid', gap: 4 }}>
+                  When
+                  <input type="datetime-local" defaultValue="2026-11-14T14:00" />
+                </label>
+              ) : null}
+            </Stepper.Date>
+          }
+        >
+          Interview
+        </Stepper.Step>
+        <Stepper.Step state="upcoming">Offer</Stepper.Step>
+      </Stepper>
+    );
+    return (
+      <Stack gap="xl" style={{ maxInlineSize: 520 }}>
+        {steps('horizontal', false)}
+        {steps('vertical', false)}
+        {steps('horizontal', true)}
+      </Stack>
+    );
+  },
+};

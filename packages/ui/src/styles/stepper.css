@@ -118,6 +118,30 @@
 .sc-stepper[data-orientation='vertical'] .sc-stepper__meta {
   text-align: end;
 }
+/* Stepper.Date: the word and a 24px calendar button on one line. The button keeps the meta's colour (accent on a
+   proposed step) and meets the 24px target size without making the row taller than the label. */
+.sc-stepper__date {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-spacing-3xs);
+}
+.sc-stepper__date .sc-stepper__date-button {
+  inline-size: 24px;
+  block-size: 24px;
+  min-inline-size: 24px;
+  min-block-size: 24px;
+  padding: 0;
+  color: inherit;
+}
+.sc-stepper__date .sc-stepper__date-button .sc-icon {
+  inline-size: 14px;
+  block-size: 14px;
+}
+.sc-stepper__date-full {
+  margin: 0;
+  font-family: var(--sc-font-family-mono);
+  font-size: var(--sc-font-size-sm);
+}
 @media (prefers-reduced-motion: reduce) {
   .sc-stepper__step[data-state='current'] .sc-stepper__marker {
     animation: none;
