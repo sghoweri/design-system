@@ -47,6 +47,29 @@ describe('Banner', () => {
     expect(screen.queryByRole('status')).toBeNull();
   });
 
+  it("puts an inline banner's close button on the corner as a raised round button; a page banner keeps it in the row", async () => {
+    const { rerender, container } = render(
+      <Banner dismissible action={<button type="button">Fix</button>}>
+        Paused.
+      </Banner>,
+    );
+    const banner = screen.getByRole('status');
+    expect(banner).toHaveAttribute('data-dismissible');
+    const close = screen.getByRole('button', { name: 'Dismiss' });
+    expect(close).toHaveAttribute('data-variant', 'secondary');
+    expect(close).toHaveAttribute('data-round');
+    expect(banner.lastElementChild).toBe(close);
+    await expectNoA11yViolations(container);
+    rerender(
+      <Banner dismissible placement="page">
+        Paused.
+      </Banner>,
+    );
+    const pageClose = screen.getByRole('button', { name: 'Dismiss' });
+    expect(pageClose).toHaveAttribute('data-variant', 'ghost');
+    expect(pageClose).not.toHaveAttribute('data-round');
+  });
+
   it('hides the icon with icon={false}, uses a neutral tone, and honours controlled open', () => {
     const { rerender } = render(
       <Banner tone="neutral" icon={false} dismissible open>
@@ -62,6 +85,61 @@ describe('Banner', () => {
       </Banner>,
     );
     expect(screen.queryByRole('status')).toBeNull();
+  });
+
+  it('keeps message, action, dismiss in DOM order, so reading and focus order hold when the action wraps', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <Banner
+        tone="warning"
+        role="status"
+        dismissible
+        action={
+          <Button variant="ghost" size="sm">
+            Choose what to cut
+          </Button>
+        }
+      >
+        This version runs to 3 pages. The template allows 2 for this seat.
+      </Banner>,
+    );
+    const banner = screen.getByRole('status');
+    expect([...banner.children].map((el) => el.className)).toEqual([
+      'sc-banner__icon',
+      'sc-banner__body',
+      'sc-banner__action',
+      expect.stringContaining('sc-banner__dismiss'),
+    ]);
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Choose what to cut' })).toHaveFocus();
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Dismiss' })).toHaveFocus();
+    await expectNoA11yViolations(container);
+  });
+
+  it('shows no icon with icon={false}, whatever the tone, and keeps its action', async () => {
+    const { container } = render(
+      <Banner
+        tone="warning"
+        role="status"
+        icon={false}
+        action={
+          <Button variant="ghost" size="sm">
+            Choose what to cut
+          </Button>
+        }
+      >
+        This version runs to 3 pages.
+      </Banner>,
+    );
+    const banner = screen.getByRole('status');
+    expect(banner.querySelector('.sc-banner__icon')).toBeNull();
+    expect(banner.querySelector('svg')).toBeNull();
+    expect(banner.firstElementChild).toHaveClass('sc-banner__body');
+    expect(
+      screen.getByRole('button', { name: 'Choose what to cut' }).closest('.sc-banner__action'),
+    ).not.toBeNull();
+    await expectNoA11yViolations(container);
   });
 
   it('marks the page placement only when asked, and keeps the role it is given', async () => {
