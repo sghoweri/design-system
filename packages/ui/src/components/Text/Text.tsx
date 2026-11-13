@@ -34,7 +34,7 @@ export interface TextProps extends ComponentPropsWithRef<'p'> {
   truncate?: boolean | number | undefined;
   /** Tabular figures, for numbers that line up in columns. */
   numeric?: boolean | undefined;
-  /** `sans` (default) or `mono` for data next to prose: row metadata, dates, counts ("Quillstack · 5 h"). */
+  /** `sans` (default) or `mono` for data next to prose: row metadata, dates, counts ("Quillstack · 5h"). */
   family?: TextFamily | undefined;
 }
 

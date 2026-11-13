@@ -42,12 +42,12 @@ describe('Text', () => {
     render(
       <>
         <Text family="mono" size="xs" tone="muted" truncate>
-          Quillstack · 5 h
+          Quillstack · 5h
         </Text>
         <Text>Prose</Text>
       </>,
     );
-    expect(screen.getByText('Quillstack · 5 h')).toHaveAttribute('data-family', 'mono');
+    expect(screen.getByText('Quillstack · 5h')).toHaveAttribute('data-family', 'mono');
     expect(screen.getByText('Prose')).not.toHaveAttribute('data-family');
   });
 });
