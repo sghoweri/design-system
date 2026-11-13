@@ -42,6 +42,7 @@ export const iconNames = [
   'refresh',
   'search',
   'settings',
+  'sign-out',
   'star',
   'sun',
   'thumbs-down',
