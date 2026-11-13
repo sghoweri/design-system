@@ -73,6 +73,9 @@ function ShortcutRow() {
       <Button variant="ghost" size="sm" shortcut={<Kbd>E</Kbd>} aria-keyshortcuts="e">
         Archive
       </Button>
+      <Button variant="danger" shortcut={<Kbd>D</Kbd>} aria-keyshortcuts="d">
+        Delete
+      </Button>
       <Button
         variant="secondary"
         shortcut={
@@ -89,7 +92,7 @@ function ShortcutRow() {
   );
 }
 
-/** `shortcut` shows a Kbd hint after the label, tinted to the button. It is hidden from the accessible name; announce the key with `aria-keyshortcuts`. */
+/** `shortcut` shows a Kbd hint after the label, tinted to the button: dimmed on secondary and ghost, full strength on the primary and danger fills (4.5:1, `button-shortcut.test.ts`). It is hidden from the accessible name; announce the key with `aria-keyshortcuts`. */
 export const Shortcut: Story = {
   name: 'Shortcut hint',
   render: () => (
