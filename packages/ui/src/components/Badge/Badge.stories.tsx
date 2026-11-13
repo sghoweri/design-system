@@ -22,7 +22,7 @@ const meta = {
     tone: { control: 'radio', options: tones },
     variant: { control: 'radio', options: ['soft', 'solid', 'outline'] },
     size: { control: 'radio', options: ['sm', 'md'] },
-    shape: { control: 'radio', options: ['rounded', 'pill'] },
+    rounded: { control: 'boolean' },
   },
 } satisfies Meta<typeof Badge>;
 export default meta;
@@ -62,45 +62,57 @@ export const SmallWithDot: Story = {
   ),
 };
 
-/** `shape="pill"`: full radius in the mono face, for status and evidence (the homepage's pills). */
-export const Pill: Story = {
+/** Rounded (the default): full radius in the mono face, for status and evidence (the homepage's pills). */
+export const Rounded: Story = {
   render: () => (
     <Stack gap="md">
       {(['soft', 'solid', 'outline'] as const).map((variant) => (
         <Inline key={variant} gap="xs">
           {tones.map((tone) => (
-            <Badge key={tone} tone={tone} variant={variant} shape="pill">
+            <Badge key={tone} tone={tone} variant={variant}>
               {labels[tone]}
             </Badge>
           ))}
         </Inline>
       ))}
       <Inline gap="xs">
-        <Badge shape="pill" size="sm" tone="success" dot>
+        <Badge size="sm" tone="success" dot>
           Applied
         </Badge>
-        <Badge shape="pill" size="sm" tone="warning">
+        <Badge size="sm" tone="warning">
           CORS · named as a gap
         </Badge>
-        <Badge shape="pill" size="sm">
-          2 sources
-        </Badge>
+        <Badge size="sm">2 sources</Badge>
       </Inline>
     </Stack>
   ),
 };
 
-export const PillDark: Story = {
-  name: 'Pill, dark theme',
+export const RoundedDark: Story = {
+  name: 'Rounded, dark theme',
   render: () => (
     <DarkTheme>
       <Inline gap="xs">
         {tones.map((tone) => (
-          <Badge key={tone} tone={tone} shape="pill" dot>
+          <Badge key={tone} tone={tone} dot>
             {labels[tone]}
           </Badge>
         ))}
       </Inline>
     </DarkTheme>
+  ),
+};
+
+/** `rounded={false}`: the 4px corner in the sans face, for dense tables or beside square controls. */
+export const SquareCorners: Story = {
+  name: 'Square corners (rounded={false})',
+  render: () => (
+    <Inline gap="xs">
+      {tones.map((tone) => (
+        <Badge key={tone} tone={tone} rounded={false}>
+          {labels[tone]}
+        </Badge>
+      ))}
+    </Inline>
   ),
 };

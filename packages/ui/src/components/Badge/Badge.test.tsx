@@ -33,18 +33,18 @@ describe('Badge info tone', () => {
   });
 });
 
-describe('Badge shape', () => {
-  it('is rounded by default and pill on request', async () => {
+describe('Badge rounded', () => {
+  it('is rounded by default and square-cornered on request', async () => {
     const { container } = render(
       <>
-        <Badge>Draft</Badge>
-        <Badge shape="pill" tone="success" dot>
+        <Badge tone="success" dot>
           Applied
         </Badge>
+        <Badge rounded={false}>Draft</Badge>
       </>,
     );
-    expect(screen.getByText('Draft')).toHaveAttribute('data-shape', 'rounded');
-    expect(screen.getByText('Applied')).toHaveAttribute('data-shape', 'pill');
+    expect(screen.getByText('Applied')).toHaveAttribute('data-rounded', 'true');
+    expect(screen.getByText('Draft')).not.toHaveAttribute('data-rounded');
     await expectNoA11yViolations(container);
   });
 });
