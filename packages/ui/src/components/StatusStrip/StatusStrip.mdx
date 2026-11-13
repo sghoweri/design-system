@@ -1,0 +1,43 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as StatusStripStories from './StatusStrip.stories';
+
+<Meta of={StatusStripStories} />
+
+# StatusStrip
+
+A compact row of status cells, oldest first, newest at the end: the last 30 sweep runs, so a failed one stands out without reading 30 cards.
+
+<Canvas of={StatusStripStories.InACard} />
+
+```tsx
+import { StatusStrip } from '@salemcobalt/ui';
+
+<StatusStrip
+  aria-label="Last 30 sweeps, oldest first"
+  items={runs.map((run) => ({
+    id: run.id,
+    tone: run.failed ? 'danger' : 'success',
+    label: `${run.failed ? 'Failed' : 'Finished'} · ${run.when} · ${run.summary}`,
+    href: `#run-${run.id}`,
+    tooltip: `${run.when} · ${run.summary}`,
+  }))}
+/>;
+```
+
+## Props
+
+- **`aria-label`** (required): names the list. Say the order: "Last 30 sweeps, oldest first".
+- **`items`**: in time order, oldest first. Each is `{ id?, tone, label, href?, tooltip? }`.
+  - **`tone`**: `success` solid, `warning` solid with `!`, `danger` solid with `×`, `neutral` hollow, `running` hollow with a pulsing dot.
+  - **`label`** (required): the cell's whole name, outcome first ("Failed · Tue 7:00 AM · Greenhouse didn't answer").
+  - **`href`**: makes the cell a link. Without it the cell is a plain list item.
+  - **`tooltip`**: a hint on hover and keyboard focus. Supplementary: say the same thing in `label`.
+
+## Accessibility
+
+- An `ol` named by `aria-label`. A cell with `href` is an `a` named by its label, which is visually hidden text inside it, not `aria-label`. A cell without one is an `li` whose label is in the accessibility tree and that takes no focus.
+- **Colour is never alone (1.4.1):** each tone has its own shape, and the label says the outcome in words. Every fill and ring is at least 3:1 on every surface in both themes. The glyphs are `text.on-status` on the solid fill.
+- **Touch:** Tooltips never open on touch, so the label must hold everything the tooltip says. A tap on a linked cell navigates.
+- **Target size:** cells are 20px on a 24px pitch, which meets WCAG 2.5.8 through its spacing exception. They are smaller than the system's 44px touch target. On a phone the same runs should also be listed full size (Recent runs below the strip).
+- **Narrow screens:** the row wraps rather than scrolls, so every cell stays visible and the newest is last on the last row. At 390px inside a Card, 30 cells make rows of 13, 13 and 4.
+- Linked cells show `cursor: pointer` (ADR 0003), a ring on hover and the focus ring on keyboard focus. The running dot's pulse stops under `prefers-reduced-motion`.

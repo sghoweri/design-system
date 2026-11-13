@@ -17,6 +17,8 @@ broom-icon.css
 toolbar.css
 banner.css
 progress.css
+meter.css
+status-strip.css
 table.css
 selection-bar.css
 toast.css
