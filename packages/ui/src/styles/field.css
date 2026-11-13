@@ -41,6 +41,10 @@
   font-size: var(--sc-font-size-xs);
   text-wrap-style: pretty;
 }
+/* The error's live region is always in the tree; empty, it leaves the flex flow so the field's gap stays as it was. */
+.sc-field__error-region:empty {
+  position: absolute;
+}
 .sc-field__error {
   margin: 0;
   color: var(--sc-color-danger-text);
@@ -153,6 +157,15 @@
 }
 .sc-textarea[data-resize='none'] {
   resize: none;
+}
+/* autoSize: as tall as the content, never shorter than `rows` lines (--_rows, set inline). */
+.sc-textarea[data-autosize] {
+  field-sizing: content;
+  min-block-size: max(
+    var(--_h),
+    calc(var(--_rows, 1) * 1lh + 2 * var(--sc-spacing-xs) + 2 * var(--sc-border-width-hairline))
+  );
+  overflow-y: hidden;
 }
 .sc-textarea[data-variant='code'] {
   font-family: var(--sc-font-family-mono);

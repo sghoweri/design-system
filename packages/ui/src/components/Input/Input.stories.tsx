@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { useState } from 'react';
 import { Input } from './Input';
 import { Stack } from '../Stack/Stack';
 import { Inline } from '../Inline/Inline';
@@ -100,4 +101,33 @@ export const Datalist: Story = {
       </datalist>
     </Stack>
   ),
+};
+
+function ValidatedOnBlur() {
+  const [error, setError] = useState<string | undefined>(undefined);
+  return (
+    <Input
+      label="Posting URL"
+      type="url"
+      description="Leave the field to check it."
+      error={error}
+      onBlur={(event) =>
+        setError(
+          event.currentTarget.value && !URL.canParse(event.currentTarget.value)
+            ? 'That is not a URL.'
+            : undefined,
+        )
+      }
+      onValueChange={() => setError(undefined)}
+    />
+  );
+}
+
+/**
+ * The error renders in a live region that is always there, so a message that appears after the field
+ * loads (here on blur) is announced, politely, as well as described on the field.
+ */
+export const ErrorAnnounced: Story = {
+  name: 'Error that appears later',
+  render: () => <ValidatedOnBlur />,
 };

@@ -10,6 +10,7 @@ const meta: Meta<typeof Textarea> = {
   argTypes: {
     resize: { control: 'radio', options: ['vertical', 'none'] },
     variant: { control: 'radio', options: ['default', 'code'] },
+    autoSize: { control: 'boolean' },
   },
   decorators: [(Story) => <div style={{ maxWidth: 420 }}>{Story()}</div>],
 };
@@ -82,6 +83,25 @@ export const Code: Story = {
         )}
         description='wrap="off": long lines scroll sideways.'
       />
+    </Stack>
+  ),
+};
+
+/**
+ * `autoSize` grows the field with its text and shrinks it back, from `rows` lines up, with no resize handle.
+ * One row for a short phrase that may wrap (an inline editor); more for notes.
+ */
+export const AutoSize: Story = {
+  name: 'Auto-size',
+  render: () => (
+    <Stack gap="md">
+      <Textarea
+        label="Job title"
+        autoSize
+        rows={1}
+        defaultValue="Staff frontend engineer, design systems and web platform"
+      />
+      <Textarea label="Notes" autoSize placeholder="Type a few lines; the field grows with them." />
     </Stack>
   ),
 };
