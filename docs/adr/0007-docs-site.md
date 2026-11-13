@@ -93,7 +93,8 @@ Vercel's commands (`pnpm install --frozen-lockfile && pnpm build && pnpm build-s
 `workshop-button-*.png`); the Tabs island hydrates, changes panel on click and moves focus with the arrow keys;
 the Storybook loads and renders stories under `/workshop/`; no console errors.
 
-**Not verified locally:** the three `vercel.json` redirects. `has` conditions do not run under `vercel dev`, and
-Vercel's `vercel.json` reference does not state whether a redirect keeps the incoming query string. Check on the
-pull request's preview deployment that `/?path=/story/components-button--variants` lands on the same story under
-`/workshop/`; if the query is dropped, capture it in the `has` value and write it into the destination.
+**Redirects, checked on the preview deployment:** `has` conditions do not run under `vercel dev`, and Vercel's
+`vercel.json` reference does not state whether a redirect keeps the incoming query string, so the three redirects
+could not be checked locally. Salem confirmed on pull request 61's preview deployment (2026-11-12) that old
+Storybook links land on the same story under `/workshop/`. Preview deployments in this project sit behind Vercel
+Authentication (a project setting, the same on every pull request), so that check needs a signed-in browser.
