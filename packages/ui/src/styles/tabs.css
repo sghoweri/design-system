@@ -5,14 +5,21 @@
   min-inline-size: 0;
   font-family: var(--sc-font-family-sans);
 }
+/* Scrolls sideways only. With `overflow-x: auto` alone, `overflow-y` computes to `auto` as well, so a pixel past the
+   bottom made the row scroll vertically; `hidden` stops that (`clip` would compute to `hidden` here anyway). Nothing
+   overflows in the block axis either: the baseline is an inset shadow in the list's own 1px bottom padding, where the
+   indicator covers it from inside. As a border it sat outside the scrollport, so the indicator laid over it overflowed
+   and showed half its height. Focus rings are drawn inside the tab. */
 .sc-tabs__list {
   position: relative;
   display: flex;
   gap: var(--sc-spacing-2xs);
   min-inline-size: 0;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
-  border-block-end: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  padding-block-end: var(--sc-border-width-hairline);
+  box-shadow: inset 0 calc(-1 * var(--sc-border-width-hairline)) 0 var(--sc-color-border-default);
 }
 .sc-tabs__list[data-fill] > .sc-tabs__tab {
   flex: 1 1 0;
@@ -72,7 +79,7 @@
 }
 .sc-tabs__indicator {
   position: absolute;
-  inset-block-end: calc(-1 * var(--sc-border-width-hairline));
+  inset-block-end: 0;
   inset-inline-start: 0;
   inline-size: var(--active-tab-width);
   block-size: var(--sc-border-width-focus);
@@ -99,7 +106,7 @@
   max-inline-size: 100%;
   gap: var(--sc-spacing-3xs);
   padding: var(--sc-spacing-3xs);
-  border-block-end: 0;
+  box-shadow: none;
   border-radius: var(--sc-radius-md);
   background: var(--sc-color-surface-sunken);
   isolation: isolate;
