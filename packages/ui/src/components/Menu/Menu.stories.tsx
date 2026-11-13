@@ -209,46 +209,38 @@ export const Selection: Story = {
   render: () => <ViewMenu />,
 };
 
-function AccountMenu({ email = 'salem@example.com' }: { email?: string }) {
-  const [signedOut, setSignedOut] = useState(false);
+function AccountMenu({ email = 'salem@example.com', detail }: { email?: string; detail?: string }) {
+  const [last, setLast] = useState<string | null>(null);
   return (
     <Inline gap="sm" align="center">
       <Menu.Root modal={false}>
         <Menu.Trigger render={<AvatarButton label={`Account: ${email}`} name="Salem Cobalt" size="sm" />} />
         <Menu.Content align="end">
-          <Menu.Header caption="Signed in as">{email}</Menu.Header>
+          <Menu.Header caption="Signed in as" detail={detail}>
+            {email}
+          </Menu.Header>
           <Menu.Separator />
           <Menu.LinkItem icon={<SettingsIcon />} href="#settings">
             Settings
           </Menu.LinkItem>
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              setSignedOut(true);
-            }}
-          >
-            <Menu.Item nativeButton render={<button type="submit" />}>
-              Sign out
-            </Menu.Item>
-          </form>
+          <Menu.Item onClick={() => setLast('Sign out')}>Sign out</Menu.Item>
         </Menu.Content>
       </Menu.Root>
-      {signedOut ? <span>Form submitted</span> : null}
+      {last ? <span>Chose: {last}</span> : null}
     </Inline>
   );
 }
 
 /**
  * `Menu.Header` names the menu ("Signed in as salem@example.com, menu") and is skipped by arrow keys and
- * type-ahead. Sign out is a `Menu.Item` rendered as its form's submit button
- * (`nativeButton render={<button type="submit" />}`), so a Server Action posts without client code; it
- * looks like every other item. A long address wraps instead of widening the menu.
+ * type-ahead. `detail` adds a muted line under it that describes the menu without joining its name. Sign out is
+ * an ordinary item: the app decides what it does (`onClick`). A long address wraps instead of widening the menu.
  */
 export const Account: Story = {
-  name: 'Account: header and a form-submit item',
+  name: 'Account: header with a detail line',
   render: () => (
     <Inline gap="2xl">
-      <AccountMenu />
+      <AccountMenu detail="Trial · ends Nov 30" />
       <AccountMenu email="salem.cobalt.with.a.very.long.address@subdomain.example.com" />
     </Inline>
   ),

@@ -6,7 +6,9 @@ import {
   useLayoutEffect,
   useState,
   type ComponentPropsWithRef,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
 } from 'react';
 import { Button } from '../Button/Button';
 import { CheckIcon, ChevronDownIcon } from '../../icons/icons.gen';
@@ -76,12 +78,19 @@ export interface MenuContentProps extends Omit<BaseMenu.Popup.Props, 'className'
   className?: string | undefined;
 }
 
-/** Lets a `Menu.Header` name the popup it sits in. */
-const HeaderIdContext = createContext<((id: string | undefined) => void) | null>(null);
+/** What a `Menu.Header` registers: who it is, and the ids that name and describe the popup. */
+interface HeaderRefs {
+  owner: string;
+  labelledBy: string;
+  describedBy: string | undefined;
+}
+
+/** Lets a `Menu.Header` name (and describe) the popup it sits in. */
+const HeaderIdContext = createContext<Dispatch<SetStateAction<HeaderRefs | undefined>> | null>(null);
 
 /**
  * Portal, positioner and the popup. Items go inside. A `Menu.Header` inside names the menu
- * (`aria-labelledby`) unless `aria-label` or `aria-labelledby` is passed here.
+ * (`aria-labelledby`) unless `aria-label` or `aria-labelledby` is passed here, and its `detail` line describes it.
  */
 function Content({
   side = 'bottom',
@@ -91,11 +100,13 @@ function Content({
   children,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
   ...rest
 }: MenuContentProps) {
   const collisionPadding = useSafeAreaPadding();
-  const [headerId, setHeaderId] = useState<string | undefined>(undefined);
-  const labelledBy = ariaLabelledBy ?? (ariaLabel === undefined ? headerId : undefined);
+  const [header, setHeader] = useState<HeaderRefs | undefined>(undefined);
+  const labelledBy = ariaLabelledBy ?? (ariaLabel === undefined ? header?.labelledBy : undefined);
+  const describedBy = [ariaDescribedBy, header?.describedBy].filter(Boolean).join(' ') || undefined;
   return (
     <BaseMenu.Portal>
       <BaseMenu.Positioner
@@ -109,9 +120,10 @@ function Content({
           className={cx('sc-menu', className)}
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}
+          aria-describedby={describedBy}
           {...rest}
         >
-          <HeaderIdContext.Provider value={setHeaderId}>{children}</HeaderIdContext.Provider>
+          <HeaderIdContext.Provider value={setHeader}>{children}</HeaderIdContext.Provider>
         </BaseMenu.Popup>
       </BaseMenu.Positioner>
     </BaseMenu.Portal>
@@ -189,9 +201,10 @@ export interface MenuItemProps extends Omit<BaseMenu.Item.Props, 'className'>, I
 }
 
 /**
- * One action. Closes the menu when activated. To submit a form, render it as the form's submit button:
- * `<form action={signOut}><Menu.Item nativeButton render={<button type="submit" />}>Sign out</Menu.Item></form>`
- * (or `form="id"` on the button for a form outside the menu). The item drops the native button's chrome.
+ * One action. Closes the menu when activated; usually `onClick` does the work. It can also render as a native
+ * button, a form's submit button included (`nativeButton render={<button type="submit" />}`, or `form="id"` for a
+ * form outside the menu), and keeps the item's look. The menu closes and unmounts its contents as the item is
+ * activated, so a form inside the menu has nowhere to show pending or error state: keep that state outside it.
  */
 function Item({
   icon,
@@ -358,8 +371,10 @@ function Group({ label, className, children, ...rest }: MenuGroupProps) {
 export interface MenuHeaderProps extends ComponentPropsWithRef<'div'> {
   /** A muted line above the text: "Signed in as". Part of the menu's name. */
   caption?: ReactNode | undefined;
-  /** The text: an email or a name. Wraps anywhere, so a long address never widens the menu. */
+  /** The text: an email or a name. Wraps anywhere, so a long address never widens the menu. Part of the name. */
   children?: ReactNode | undefined;
+  /** A muted line under the text: "Trial · ends Nov 30". The menu's description, not part of its name. */
+  detail?: ReactNode | undefined;
 }
 
 /**
@@ -367,23 +382,35 @@ export interface MenuHeaderProps extends ComponentPropsWithRef<'div'> {
  * Not an item: arrow keys and type-ahead skip it, and it is `role="none"`. Its text becomes the menu's
  * accessible name through `aria-labelledby`. Follow it with a `Menu.Separator`.
  */
-function Header({ caption, className, children, id, ...rest }: MenuHeaderProps) {
+function Header({ caption, detail, className, children, id, ...rest }: MenuHeaderProps) {
   const autoId = useId();
   const headerId = id ?? autoId;
-  const setHeaderId = useContext(HeaderIdContext);
+  const setHeader = useContext(HeaderIdContext);
+  const hasCaption = caption !== undefined && caption !== null;
+  const hasDetail = detail !== undefined && detail !== null;
+  const labelledBy = hasCaption ? `${headerId}-caption ${headerId}-text` : `${headerId}-text`;
+  const describedBy = hasDetail ? `${headerId}-detail` : undefined;
   useLayoutEffect(() => {
-    if (!setHeaderId) return;
-    setHeaderId(headerId);
-    return () => setHeaderId(undefined);
-  }, [setHeaderId, headerId]);
+    if (!setHeader) return;
+    setHeader({ owner: headerId, labelledBy, describedBy });
+    // Clear only our own registration: another header may have registered since.
+    return () => setHeader((current) => (current?.owner === headerId ? undefined : current));
+  }, [setHeader, headerId, labelledBy, describedBy]);
   return (
     <div role="none" id={headerId} className={cx('sc-menu__header', className)} {...rest}>
-      {caption !== undefined && caption !== null ? (
-        <>
-          <span className="sc-menu__header-caption">{caption}</span>{' '}
-        </>
+      {hasCaption ? (
+        <span id={`${headerId}-caption`} className="sc-menu__header-caption">
+          {caption}
+        </span>
       ) : null}
-      <span className="sc-menu__header-text">{children}</span>
+      <span id={`${headerId}-text`} className="sc-menu__header-text">
+        {children}
+      </span>
+      {hasDetail ? (
+        <span id={`${headerId}-detail`} className="sc-menu__header-detail">
+          {detail}
+        </span>
+      ) : null}
     </div>
   );
 }

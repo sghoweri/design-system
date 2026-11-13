@@ -141,7 +141,8 @@
   gap: var(--sc-spacing-3xs);
   padding: var(--sc-spacing-2xs) var(--sc-spacing-xs);
 }
-.sc-menu__header-caption {
+.sc-menu__header-caption,
+.sc-menu__header-detail {
   color: var(--sc-color-text-muted);
   font-size: var(--sc-font-size-xs);
 }

@@ -255,7 +255,8 @@ describe('Menu', () => {
     const menu = await screen.findByRole('menu', { name: 'Signed in as salem@example.com' });
     const header = screen.getByText('salem@example.com').closest('.sc-menu__header')!;
     expect(header).toHaveAttribute('role', 'none');
-    expect(menu).toHaveAttribute('aria-labelledby', header.id);
+    expect(menu).toHaveAttribute('aria-labelledby', `${header.id}-caption ${header.id}-text`);
+    expect(menu).not.toHaveAttribute('aria-describedby');
     expect(screen.getAllByRole('menuitem')).toHaveLength(2);
     await expectNoA11yViolations(document.body);
 
@@ -263,6 +264,43 @@ describe('Menu', () => {
     expect(screen.getByRole('menuitem', { name: 'Settings' })).toHaveAttribute('data-highlighted');
     await user.keyboard('{End}{ArrowDown}');
     expect(screen.getByRole('menuitem', { name: 'Settings' })).toHaveAttribute('data-highlighted');
+  });
+
+  it("describes the menu with the header's detail line, which is not part of its name", async () => {
+    render(
+      <Menu.Root defaultOpen>
+        <Menu.Trigger>Account</Menu.Trigger>
+        <Menu.Content aria-describedby="extra">
+          <Menu.Header caption="Signed in as" detail="Trial · ends Nov 30">
+            salem@example.com
+          </Menu.Header>
+          <Menu.Item>Settings</Menu.Item>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    const menu = await screen.findByRole('menu', { name: 'Signed in as salem@example.com' });
+    const detail = screen.getByText('Trial · ends Nov 30');
+    expect(detail).toHaveClass('sc-menu__header-detail');
+    expect(menu.getAttribute('aria-describedby')).toBe(`extra ${detail.id}`);
+  });
+
+  it("keeps the newest header's name when an older one unmounts", async () => {
+    function Swap({ second }: { second: boolean }) {
+      return (
+        <Menu.Root defaultOpen>
+          <Menu.Trigger>Account</Menu.Trigger>
+          <Menu.Content>
+            {second ? null : <Menu.Header>first@example.com</Menu.Header>}
+            <Menu.Header>second@example.com</Menu.Header>
+            <Menu.Item>Settings</Menu.Item>
+          </Menu.Content>
+        </Menu.Root>
+      );
+    }
+    const { rerender } = render(<Swap second={false} />);
+    expect(await screen.findByRole('menu', { name: 'second@example.com' })).toBeInTheDocument();
+    rerender(<Swap second />);
+    expect(await screen.findByRole('menu', { name: 'second@example.com' })).toBeInTheDocument();
   });
 
   it("keeps the caller's aria-label or aria-labelledby over the header", async () => {
