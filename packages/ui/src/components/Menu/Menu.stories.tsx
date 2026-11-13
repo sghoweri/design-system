@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 import { Menu } from './Menu';
 import { Dialog } from '../Dialog/Dialog';
+import { AvatarButton } from '../Avatar/Avatar';
 import { Button } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
 import { Inline } from '../Inline/Inline';
@@ -17,6 +18,7 @@ import {
   MoreHorizontalIcon,
   PauseIcon,
   PlayIcon,
+  SettingsIcon,
   StarIcon,
   TrashIcon,
 } from '../../icons/icons.gen';
@@ -207,6 +209,43 @@ export const Selection: Story = {
   render: () => <ViewMenu />,
 };
 
+function AccountMenu({ email = 'salem@example.com', detail }: { email?: string; detail?: string }) {
+  const [last, setLast] = useState<string | null>(null);
+  return (
+    <Inline gap="sm" align="center">
+      <Menu.Root modal={false}>
+        <Menu.Trigger render={<AvatarButton label={`Account: ${email}`} name="Salem Cobalt" size="sm" />} />
+        <Menu.Content align="end">
+          <Menu.Header caption="Signed in as" detail={detail}>
+            {email}
+          </Menu.Header>
+          <Menu.Separator />
+          <Menu.LinkItem icon={<SettingsIcon />} href="#settings">
+            Settings
+          </Menu.LinkItem>
+          <Menu.Item onClick={() => setLast('Sign out')}>Sign out</Menu.Item>
+        </Menu.Content>
+      </Menu.Root>
+      {last ? <span>Chose: {last}</span> : null}
+    </Inline>
+  );
+}
+
+/**
+ * `Menu.Header` names the menu ("Signed in as salem@example.com, menu") and is skipped by arrow keys and
+ * type-ahead. `detail` adds a muted line under it that describes the menu without joining its name. Sign out is
+ * an ordinary item: the app decides what it does (`onClick`). A long address wraps instead of widening the menu.
+ */
+export const Account: Story = {
+  name: 'Account: header with a detail line',
+  render: () => (
+    <Inline gap="2xl">
+      <AccountMenu detail="Trial · ends Nov 30" />
+      <AccountMenu email="salem.cobalt.with.a.very.long.address@subdomain.example.com" />
+    </Inline>
+  ),
+};
+
 export const Placement: Story = {
   render: () => (
     <Inline gap="md">
@@ -241,6 +280,7 @@ export const Dark: Story = {
         <OverflowMenu />
         <ViewMenu />
         <DescribedMenu />
+        <AccountMenu />
       </Inline>
     </DarkTheme>
   ),

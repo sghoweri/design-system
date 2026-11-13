@@ -55,6 +55,15 @@
   user-select: none;
   outline: 0;
 }
+/* A Menu.Item rendered as a native button (`nativeButton render={<button type="submit" />}`) keeps the item's look. */
+.sc-menu__item:where(button) {
+  inline-size: 100%;
+  margin: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
+}
 .sc-menu__item[data-highlighted] {
   background: var(--sc-color-surface-hover);
 }
@@ -125,6 +134,22 @@
   font-weight: var(--sc-font-weight-medium);
   letter-spacing: var(--sc-font-tracking-wide);
   text-transform: uppercase;
+}
+/* Menu.Header: who or what the menu is about. Not an item: no hover wash, no pointer, and its text selects. */
+.sc-menu__header {
+  display: grid;
+  gap: var(--sc-spacing-3xs);
+  padding: var(--sc-spacing-2xs) var(--sc-spacing-xs);
+}
+.sc-menu__header-caption,
+.sc-menu__header-detail {
+  color: var(--sc-color-text-muted);
+  font-size: var(--sc-font-size-xs);
+}
+.sc-menu__header-text {
+  min-inline-size: 0;
+  font-weight: var(--sc-font-weight-medium);
+  overflow-wrap: anywhere;
 }
 .sc-menu__separator {
   block-size: var(--sc-border-width-hairline);
