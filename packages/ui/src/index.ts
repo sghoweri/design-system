@@ -105,6 +105,7 @@ export {
   type StepperProps,
   type StepperStepProps,
   type StepState,
+  type StepEndedTone,
 } from './components/Stepper/Stepper';
 export { Spinner, type SpinnerProps } from './components/Spinner/Spinner';
 export {

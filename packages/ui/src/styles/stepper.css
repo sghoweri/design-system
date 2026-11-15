@@ -1,6 +1,6 @@
 /* ---- Stepper --------------------------------------------------------------- */
-/* Steps done, current or upcoming. Markers differ by shape as well as colour: done is a filled disc with a check,
-   current a ring with a halo (pulsing), upcoming a hollow ring. A 2px connector runs from each marker to the next,
+/* Steps done, current, upcoming or ended. Markers differ by shape as well as colour: done is a filled disc with a
+   check, current a ring with a halo (pulsing), upcoming a hollow ring, ended a filled disc with a cross in its tone. A 2px connector runs from each marker to the next,
    in the accent once the step before it is done. */
 .sc-stepper {
   --_m: 16px;
@@ -54,6 +54,27 @@
   border-color: var(--sc-color-accent-default);
   box-shadow: 0 0 0 var(--sc-border-width-halo) var(--sc-color-accent-subtle);
   animation: sc-stepper-pulse 2.4s ease-in-out infinite;
+}
+/* ended: where the path stopped short. A cross on the tone's solid fill, still; neutral is an ending in the past. */
+.sc-stepper__step[data-state='ended'] .sc-stepper__marker {
+  --_end: var(--sc-color-danger-solid);
+  border-color: var(--_end);
+  background: var(--_end);
+  color: var(--sc-color-text-on-status);
+}
+.sc-stepper__step[data-state='ended'][data-tone='warning'] .sc-stepper__marker {
+  --_end: var(--sc-color-warning-solid);
+}
+.sc-stepper__step[data-state='ended'][data-tone='neutral'] .sc-stepper__marker {
+  --_end: var(--sc-color-text-muted);
+  color: var(--sc-color-surface-default);
+}
+.sc-stepper__step[data-state='ended'][data-tone='neutral'] .sc-stepper__label {
+  color: var(--sc-color-text-muted);
+  font-weight: var(--sc-font-weight-regular);
+}
+.sc-stepper__step[data-state='ended']:not([data-tone='neutral']) .sc-stepper__label {
+  font-weight: var(--sc-font-weight-semibold);
 }
 @keyframes sc-stepper-pulse {
   50% {

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Stepper } from './Stepper';
 import { expectNoA11yViolations } from '../../../test/axe';
@@ -56,6 +56,50 @@ describe('Stepper', () => {
   });
 });
 
+describe('Stepper ended', () => {
+  const ended = (
+    <Stepper aria-label="Application status">
+      <Stepper.Step state="done" meta="Nov 3">
+        Applied
+      </Stepper.Step>
+      <Stepper.Step state="upcoming">Offer</Stepper.Step>
+      <Stepper.Step state="ended" tone="neutral" aria-current={undefined}>
+        Closed
+      </Stepper.Step>
+      <Stepper.Step state="ended" meta="Nov 14">
+        Rejected
+      </Stepper.Step>
+    </Stepper>
+  );
+
+  it('draws a cross in its tone, is the current step, and an ending in the past can drop aria-current', async () => {
+    const { container } = render(ended);
+    const items = screen.getAllByRole('listitem');
+    const past = items[2]!;
+    const now = items[3]!;
+    expect(now).toHaveAttribute('data-state', 'ended');
+    expect(now).toHaveAttribute('data-tone', 'danger');
+    expect(now).toHaveAttribute('aria-current', 'step');
+    expect(now.querySelector('.sc-stepper__marker svg')).not.toBeNull();
+    expect(now).not.toHaveTextContent('done');
+    expect(past).toHaveAttribute('data-tone', 'neutral');
+    expect(past).not.toHaveAttribute('aria-current');
+    expect(items.filter((i) => i.getAttribute('aria-current') === 'step')).toEqual([now]);
+    await expectNoA11yViolations(container);
+  });
+
+  it('ignores tone on the other states', () => {
+    render(
+      <Stepper aria-label="Steps">
+        <Stepper.Step state="done" tone="warning">
+          One
+        </Stepper.Step>
+      </Stepper>,
+    );
+    expect(screen.getByRole('listitem')).not.toHaveAttribute('data-tone');
+  });
+});
+
 const FULL = 'Nov 14, 2026, 2:00 PM ET';
 const dated = (orientation: 'horizontal' | 'vertical', editor?: boolean) => (
   <Stepper aria-label="Application status" orientation={orientation}>
@@ -109,4 +153,40 @@ describe('Stepper.Date', () => {
       expect(await screen.findByLabelText('When')).toBeInTheDocument();
     },
   );
+
+  it('can be controlled, so an editor closes it once its date is saved', async () => {
+    const changes: boolean[] = [];
+    const { rerender } = render(
+      <Stepper aria-label="Application status">
+        <Stepper.Step
+          state="current"
+          meta={
+            <Stepper.Date label={FULL} open onOpenChange={(o) => changes.push(o)}>
+              <p>Editor</p>
+            </Stepper.Date>
+          }
+        >
+          Screen
+        </Stepper.Step>
+      </Stepper>,
+    );
+    expect(await screen.findByText('Editor')).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    expect(changes).toEqual([false]);
+    rerender(
+      <Stepper aria-label="Application status">
+        <Stepper.Step
+          state="current"
+          meta={
+            <Stepper.Date label={FULL} open={false}>
+              <p>Editor</p>
+            </Stepper.Date>
+          }
+        >
+          Screen
+        </Stepper.Step>
+      </Stepper>,
+    );
+    await waitFor(() => expect(screen.queryByText('Editor')).toBeNull());
+  });
 });
