@@ -12,7 +12,10 @@ export interface FieldProps {
   hideLabel?: boolean | undefined;
   /** Help text under the control, wired with `aria-describedby`. */
   description?: ReactNode | undefined;
-  /** The error message. When given the control is invalid and the message is announced. */
+  /**
+   * The error message. When given the control is invalid, the message is its description, and it is
+   * announced politely when it appears or changes (it renders in an always-present live region).
+   */
   error?: ReactNode | undefined;
   /** Marks the control invalid without a message. */
   invalid?: boolean | undefined;
@@ -65,11 +68,15 @@ export function FieldShell({
       {description != null ? (
         <Field.Description className="sc-field__description">{description}</Field.Description>
       ) : null}
-      {error != null ? (
-        <Field.Error className="sc-field__error" match>
-          {error}
-        </Field.Error>
-      ) : null}
+      {/* Always rendered, so the message is announced when it appears: a live region added together with
+          its text is not reliably read. Empty, it takes no space (field.css). */}
+      <div className="sc-field__error-region" aria-live="polite">
+        {error != null ? (
+          <Field.Error className="sc-field__error" match>
+            {error}
+          </Field.Error>
+        ) : null}
+      </div>
     </Field.Root>
   );
 }
