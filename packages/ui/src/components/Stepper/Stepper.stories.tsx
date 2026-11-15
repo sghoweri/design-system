@@ -66,6 +66,47 @@ export const States: Story = {
   ),
 };
 
+/**
+ * A path that stopped short: the steps it never reached stay hollow, and the ending is a cross in its tone (danger by
+ * default, warning, or neutral for an ending in the past), still, and the current step.
+ */
+export const Ended: Story = {
+  decorators: [(Story) => <div style={{ maxWidth: 760 }}>{Story()}</div>],
+  render: () => {
+    const ended = (orientation: 'horizontal' | 'vertical', tone: 'danger' | 'warning', label: string) => (
+      <Stepper aria-label="Application status" orientation={orientation}>
+        <Stepper.Step state="done" meta="Oct 28">
+          Materials ready
+        </Stepper.Step>
+        <Stepper.Step state="done" meta="Nov 3">
+          Applied
+        </Stepper.Step>
+        <Stepper.Step state="upcoming">Screen</Stepper.Step>
+        <Stepper.Step state="upcoming">Offer</Stepper.Step>
+        <Stepper.Step state="ended" tone="neutral" aria-current={undefined} meta="Nov 5">
+          Closed
+        </Stepper.Step>
+        <Stepper.Step state="ended" tone={tone} meta="Nov 14">
+          {label}
+        </Stepper.Step>
+      </Stepper>
+    );
+    return (
+      <Stack gap="xl">
+        {ended('horizontal', 'danger', 'Rejected')}
+        {ended('horizontal', 'warning', 'Ghosted')}
+        <div style={{ maxWidth: 360 }}>{ended('vertical', 'danger', 'Rejected')}</div>
+        <DarkTheme>
+          <Stack gap="xl">
+            {ended('horizontal', 'danger', 'Rejected')}
+            {ended('horizontal', 'warning', 'Ghosted')}
+          </Stack>
+        </DarkTheme>
+      </Stack>
+    );
+  },
+};
+
 export const Dark: Story = {
   name: 'Dark theme',
   render: () => (

@@ -56,6 +56,50 @@ describe('Stepper', () => {
   });
 });
 
+describe('Stepper ended', () => {
+  const ended = (
+    <Stepper aria-label="Application status">
+      <Stepper.Step state="done" meta="Nov 3">
+        Applied
+      </Stepper.Step>
+      <Stepper.Step state="upcoming">Offer</Stepper.Step>
+      <Stepper.Step state="ended" tone="neutral" aria-current={undefined}>
+        Closed
+      </Stepper.Step>
+      <Stepper.Step state="ended" meta="Nov 14">
+        Rejected
+      </Stepper.Step>
+    </Stepper>
+  );
+
+  it('draws a cross in its tone, is the current step, and an ending in the past can drop aria-current', async () => {
+    const { container } = render(ended);
+    const items = screen.getAllByRole('listitem');
+    const past = items[2]!;
+    const now = items[3]!;
+    expect(now).toHaveAttribute('data-state', 'ended');
+    expect(now).toHaveAttribute('data-tone', 'danger');
+    expect(now).toHaveAttribute('aria-current', 'step');
+    expect(now.querySelector('.sc-stepper__marker svg')).not.toBeNull();
+    expect(now).not.toHaveTextContent('done');
+    expect(past).toHaveAttribute('data-tone', 'neutral');
+    expect(past).not.toHaveAttribute('aria-current');
+    expect(items.filter((i) => i.getAttribute('aria-current') === 'step')).toEqual([now]);
+    await expectNoA11yViolations(container);
+  });
+
+  it('ignores tone on the other states', () => {
+    render(
+      <Stepper aria-label="Steps">
+        <Stepper.Step state="done" tone="warning">
+          One
+        </Stepper.Step>
+      </Stepper>,
+    );
+    expect(screen.getByRole('listitem')).not.toHaveAttribute('data-tone');
+  });
+});
+
 const FULL = 'Nov 14, 2026, 2:00 PM ET';
 const dated = (orientation: 'horizontal' | 'vertical', editor?: boolean) => (
   <Stepper aria-label="Application status" orientation={orientation}>

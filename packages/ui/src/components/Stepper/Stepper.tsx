@@ -1,11 +1,12 @@
 import { createContext, useContext, type ComponentPropsWithRef, type ReactNode } from 'react';
-import { CalendarIcon, CheckIcon } from '../../icons/icons.gen';
+import { CalendarIcon, CheckIcon, XIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
 import { IconButton } from '../IconButton/IconButton';
 import { Popover } from '../Popover/Popover';
 
 export type StepperOrientation = 'horizontal' | 'vertical';
-export type StepState = 'done' | 'current' | 'upcoming';
+export type StepState = 'done' | 'current' | 'upcoming' | 'ended';
+export type StepEndedTone = 'danger' | 'warning' | 'neutral';
 
 export interface StepperProps extends ComponentPropsWithRef<'ol'> {
   /**
@@ -20,7 +21,8 @@ export interface StepperProps extends ComponentPropsWithRef<'ol'> {
 /**
  * Steps in order, each done, current or upcoming: an application's pipeline, a setup's chapters. Display only; a step
  * can hold its own control in `meta` (a date button). The markers differ by shape as well as colour: a check, a
- * haloed ring, a hollow ring. The current step is `aria-current="step"` and pulses unless motion is reduced.
+ * haloed ring, a hollow ring, and a cross for a path that ended (rejected, closed). The current step is
+ * `aria-current="step"` and pulses unless motion is reduced; an ended step is `aria-current="step"` and still.
  */
 const OrientationContext = createContext<StepperOrientation>('horizontal');
 const ProposedContext = createContext(false);
@@ -36,7 +38,14 @@ function Root({ orientation = 'horizontal', className, children, ...rest }: Step
 }
 
 export interface StepperStepProps extends Omit<ComponentPropsWithRef<'li'>, 'children'> {
+  /**
+   * `done`, `current`, `upcoming`, or `ended`: where the path stopped short (Rejected, Closed). An ended step has a
+   * cross in a `tone` disc, no pulse, and is `aria-current="step"`; pass `aria-current={undefined}` for an ending that
+   * is in the past (it was rejected, then reopened).
+   */
   state: StepState;
+  /** An ended step's colour: `danger` (default), `warning`, or `neutral` for one in the past. Other states ignore it. */
+  tone?: StepEndedTone | undefined;
   /** The step's name: "Applied". */
   children: ReactNode;
   /** A date, or a control that sets one. Mono xs, muted. */
@@ -49,6 +58,7 @@ export interface StepperStepProps extends Omit<ComponentPropsWithRef<'li'>, 'chi
 
 function Step({
   state,
+  tone = 'danger',
   children,
   meta,
   proposed = false,
@@ -60,11 +70,12 @@ function Step({
     <li
       className={cx('sc-stepper__step', className)}
       data-state={state}
-      aria-current={state === 'current' ? 'step' : undefined}
+      data-tone={state === 'ended' ? tone : undefined}
+      aria-current={state === 'current' || state === 'ended' ? 'step' : undefined}
       {...rest}
     >
       <span className="sc-stepper__marker" aria-hidden="true">
-        {state === 'done' ? <CheckIcon size="xs" /> : null}
+        {state === 'done' ? <CheckIcon size="xs" /> : state === 'ended' ? <XIcon size="xs" /> : null}
       </span>
       <span className="sc-stepper__label">
         {children}
