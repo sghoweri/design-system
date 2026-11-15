@@ -61,9 +61,10 @@
 .sc-banner__dismiss {
   flex: none;
 }
-/* Inline: a raised round close button on the top-right corner, its centre near the corner, in the system's own
-   secondary look (solid surface, hairline border), so hover, active and focus are Button's. The message keeps clear
-   of it with the end padding. */
+/* Inline: a raised round close button on the top-right corner, its centre near the corner. Half of it hangs over the
+   page, so its fill is opaque: surface.raised (white in light), with the raised washes for hover and pressed, which
+   stay visible in dark (surface.hover equals surface.raised there). Focus is the system ring. The message keeps
+   clear of it with the end padding. */
 .sc-banner:not([data-placement='page']) {
   position: relative;
 }
@@ -79,6 +80,15 @@
   inset-inline-end: 0;
   translate: 40% -40%;
   box-shadow: var(--sc-elevation-2);
+  background: var(--sc-color-surface-raised);
+  color: var(--sc-color-text-default);
+  border-color: var(--sc-color-border-strong);
+}
+.sc-banner:not([data-placement='page']) > .sc-banner__dismiss:hover:where(:not(:disabled)) {
+  background: var(--sc-color-surface-raised-hover);
+}
+.sc-banner:not([data-placement='page']) > .sc-banner__dismiss:active:where(:not(:disabled)) {
+  background: var(--sc-color-surface-raised-active);
 }
 .sc-banner:not([data-placement='page']) > .sc-banner__dismiss:dir(rtl) {
   translate: -40% -40%;
