@@ -36,6 +36,16 @@ describe('Select', () => {
     expect(screen.getByRole('combobox', { name: 'Sort by' })).toHaveTextContent('Date posted');
   });
 
+  it('opens below the trigger, start-aligned, so a popup wider than the trigger lines up with it', async () => {
+    const user = userEvent.setup();
+    render(<Select label="Sort by" options={options} />);
+    await user.click(screen.getByRole('combobox', { name: 'Sort by' }));
+    const listbox = await screen.findByRole('listbox');
+    const positioner = listbox.closest('.sc-select__positioner');
+    expect(positioner).toHaveAttribute('data-side', 'bottom');
+    expect(positioner).toHaveAttribute('data-align', 'start');
+  });
+
   it('renders the selected label for a controlled value and groups with headings', async () => {
     const user = userEvent.setup();
     render(
