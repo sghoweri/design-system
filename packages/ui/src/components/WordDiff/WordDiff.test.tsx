@@ -69,9 +69,9 @@ describe('WordDiff', () => {
       />,
     );
     expect(container.querySelector('.c-proto-word-diff')).toHaveAttribute('data-family', 'mono');
-    expect(render(<WordDiff parts={parts} />).container.querySelector('.c-proto-word-diff')).not.toHaveAttribute(
-      'data-family',
-    );
+    expect(
+      render(<WordDiff parts={parts} />).container.querySelector('.c-proto-word-diff'),
+    ).not.toHaveAttribute('data-family');
     await expectNoA11yViolations(container);
   });
 

@@ -1,7 +1,7 @@
 {
   "name": "@protokit/tokens",
   "version": "0.1.0",
-  "description": "Design tokens for the Salem Cobalt design system: CSS custom properties, Sass, TypeScript and JSON from one Style Dictionary source.",
+  "description": "Design tokens for Protokit: CSS custom properties, Sass, TypeScript and JSON from one Style Dictionary source.",
   "license": "MIT",
   "repository": {
     "type": "git",

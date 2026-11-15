@@ -45,7 +45,9 @@ describe('dialog.css: docked sheet', () => {
 
   it('runs past the bottom edge and never pans the page behind it', () => {
     expect(bodiesFor('.c-proto-dialog__backdrop').join()).toMatch(/touch-action:\s*none/);
-    expect(bodiesFor('.c-proto-dialog__backdrop').join()).toMatch(/inset:\s*0 0 calc\(-1 \* var\(--_overhang\)\)/);
+    expect(bodiesFor('.c-proto-dialog__backdrop').join()).toMatch(
+      /inset:\s*0 0 calc\(-1 \* var\(--_overhang\)\)/,
+    );
     const sheet = bodiesFor(".c-proto-dialog__popup[data-variant='sheet']").join();
     expect(sheet).toMatch(/touch-action:\s*none/);
     expect(sheet).toMatch(/0 var\(--_overhang\) 0 0 var\(--proto-color-surface-raised\)/);

@@ -48,7 +48,11 @@ export function EmptyState({
         {icon}
       </span>
     ) : null,
-    createElement(headingLevel ? `h${headingLevel}` : 'p', { className: 'c-proto-empty-state__title' }, title),
+    createElement(
+      headingLevel ? `h${headingLevel}` : 'p',
+      { className: 'c-proto-empty-state__title' },
+      title,
+    ),
     description != null ? <p className="c-proto-empty-state__description">{description}</p> : null,
     children != null ? <div className="c-proto-empty-state__actions">{children}</div> : null,
   );

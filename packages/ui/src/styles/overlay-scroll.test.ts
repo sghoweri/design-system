@@ -29,7 +29,7 @@ const prop = (css: string, name: string) =>
 function px(value: string, local: string): number {
   const expr = value
     .replace(/var\((--_[\w-]+)\)/g, (_, name: string) => `(${px(prop(local, name)!, local)})`)
-    .replace(/var\(--(sc-[\w-]+)\)/g, (_, name: string) => tokens.light[name]!)
+    .replace(/var\(--(proto-[\w-]+)\)/g, (_, name: string) => tokens.light[name]!)
     .replace(/calc\(/g, '(')
     .replace(/px/g, '');
   if (!/^[\d\s.+\-*/()]+$/.test(expr)) throw new Error(`unresolved: ${value} → ${expr}`);
@@ -105,6 +105,8 @@ describe.each([
 
 describe('Popover with an arrow', () => {
   it('still does not clip the arrow; the wrapper inside scrolls instead', () => {
-    expect(prop(body('popover.css', '.c-proto-popover:has(> .c-proto-popover__arrow)'), 'overflow')).toBe('visible');
+    expect(prop(body('popover.css', '.c-proto-popover:has(> .c-proto-popover__arrow)'), 'overflow')).toBe(
+      'visible',
+    );
   });
 });

@@ -131,7 +131,10 @@
   z-index: var(--proto-z-sticky);
 }
 .c-proto-table[data-divided] .c-proto-table__body .c-proto-table__row:not(:last-child) > .c-proto-table__cell,
-.c-proto-table[data-divided] .c-proto-table__body .c-proto-table__row:not(:last-child) > .c-proto-table__header {
+.c-proto-table[data-divided]
+  .c-proto-table__body
+  .c-proto-table__row:not(:last-child)
+  > .c-proto-table__header {
   border-block-end: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
 }
 .c-proto-table__foot .c-proto-table__cell,

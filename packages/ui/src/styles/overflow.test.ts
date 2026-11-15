@@ -32,7 +32,9 @@ describe('tab row', () => {
     // A border sits outside the scrollport, so an indicator laid over it overflowed by a pixel and was cut in half.
     expect(list).not.toMatch(/border-block-end:\s*var/);
     expect(prop(list, 'padding-block-end')).toBe('var(--proto-border-width-hairline)');
-    expect(prop(list, 'box-shadow')).toMatch(/^inset 0 calc\(-1 \* var\(--proto-border-width-hairline\)\) 0 /);
+    expect(prop(list, 'box-shadow')).toMatch(
+      /^inset 0 calc\(-1 \* var\(--proto-border-width-hairline\)\) 0 /,
+    );
     expect(prop(body('tabs.css', '.c-proto-tabs__indicator'), 'inset-block-end')).toBe('0');
   });
 
@@ -63,7 +65,10 @@ describe('scrolling dialog body', () => {
   it.each(['sheet', 'fullscreen'])(
     '%s: pads inside the scroller and runs out by the same amount',
     (variant) => {
-      const css = body('dialog.css', `.c-proto-dialog__popup[data-variant='${variant}'] > .c-proto-dialog__body`);
+      const css = body(
+        'dialog.css',
+        `.c-proto-dialog__popup[data-variant='${variant}'] > .c-proto-dialog__body`,
+      );
       expect(prop(css, 'overflow')).toBe('hidden auto');
       expect(prop(css, 'margin-inline')).toBe('calc(-1 * var(--_bleed))');
       expect(prop(css, 'padding')).toBe('var(--_ring) var(--_bleed)');

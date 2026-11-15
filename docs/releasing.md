@@ -53,8 +53,9 @@ feature branch ──PR──▶ main ──PR──▶ release
 
 ### 1. npm: Trusted Publisher for each package
 
-Both packages exist on npm (`0.1.0` was published by hand as `sghoweri` on 2026-11-03), so this can be
-done now. For **each** of `@protokit/tokens` and `@protokit/ui`: package page on npmjs.com →
+npm attaches a Trusted Publisher only to a package that already exists, so each `@protokit` package got one
+hand-published placeholder (`0.0.0-placeholder`, deprecated) before the first release run
+(docs/protokit-rename-plan.md, S1). For **each** of `@protokit/tokens` and `@protokit/ui`: package page on npmjs.com →
 **Settings** → **Trusted Publisher** → **GitHub Actions**:
 
 - Organization or user: `sghoweri`

@@ -168,7 +168,9 @@ describe('FullScreenFlow', () => {
         finish();
         await finished;
       });
-      await waitFor(() => expect(document.querySelector('.c-proto-flow__frame[data-phase="exit"]')).toBeNull());
+      await waitFor(() =>
+        expect(document.querySelector('.c-proto-flow__frame[data-phase="exit"]')).toBeNull(),
+      );
     } finally {
       HTMLElement.prototype.getAnimations = original;
     }

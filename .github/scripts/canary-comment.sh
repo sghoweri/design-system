@@ -8,7 +8,7 @@ $marker
 **Canary published:** \`$VERSION\` (npm dist-tag \`canary\`)
 
 \`\`\`sh
-pnpm add @salemcobalt/tokens@$VERSION @salemcobalt/ui@$VERSION
+pnpm add @protokit/tokens@$VERSION @protokit/ui@$VERSION
 \`\`\`
 
 Updated on every push while the \`canary\` label is on this PR. Nothing is tagged or released.

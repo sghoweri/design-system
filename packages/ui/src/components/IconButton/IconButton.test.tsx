@@ -128,7 +128,9 @@ describe('IconButton', () => {
         <PauseIcon />
       </IconButton>,
     );
-    const dot = screen.getByRole('button', { name: 'Alerts: 2 new' }).querySelector('.c-proto-icon-button__dot');
+    const dot = screen
+      .getByRole('button', { name: 'Alerts: 2 new' })
+      .querySelector('.c-proto-icon-button__dot');
     expect(dot).toHaveAttribute('data-tone', 'danger');
     expect(dot).toHaveAttribute('aria-hidden', 'true');
   });

@@ -79,7 +79,7 @@ const theme = EditorView.theme({
     minBlockSize: 'calc(var(--_rows, 3) * 1lh)',
     caretColor: 'var(--proto-color-text-default)',
   },
-  '.cm-line, .cm-sc-removed-lines': { paddingInline: 'var(--proto-spacing-sm)' },
+  '.cm-line, .cm-proto-removed-lines': { paddingInline: 'var(--proto-spacing-sm)' },
   // Touch: iOS zooms the page into a focused field under 16px (as in field.css). Room under the last line, so a tap
   // there isn't near Safari's collapsed toolbar, which takes taps at the bottom edge of the screen.
   '@media (pointer: coarse)': {
@@ -93,7 +93,11 @@ const theme = EditorView.theme({
 
 const highlight = HighlightStyle.define([
   { tag: [t.propertyName, t.definition(t.propertyName)], color: 'var(--proto-color-accent-text)' },
-  { tag: t.heading, color: 'var(--proto-color-accent-text)', fontWeight: 'var(--proto-font-weight-semibold)' },
+  {
+    tag: t.heading,
+    color: 'var(--proto-color-accent-text)',
+    fontWeight: 'var(--proto-font-weight-semibold)',
+  },
   { tag: [t.string, t.special(t.string)], color: 'var(--proto-color-info-text)' },
   { tag: [t.number, t.bool, t.null, t.atom], color: 'var(--proto-color-warning-text)' },
   {

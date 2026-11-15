@@ -8,7 +8,9 @@
 .c-proto-toast-viewport {
   --_gutter: var(--proto-spacing-lg);
   --_side: max(var(--_gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
-  --_bottom: calc(var(--_gutter) + var(--proto-toast-offset-block-end, 0px) + env(safe-area-inset-bottom, 0px));
+  --_bottom: calc(
+    var(--_gutter) + var(--proto-toast-offset-block-end, 0px) + env(safe-area-inset-bottom, 0px)
+  );
   position: fixed;
   inset-block-end: var(--_bottom);
   inset-inline-end: var(--_side);

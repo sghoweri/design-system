@@ -122,7 +122,9 @@ export const Padding: Story = {
   render: () => (
     <Stack gap="md">
       <Card padding="none">
-        <div style={{ padding: 'var(--proto-spacing-xs)' }}>padding="none" (content supplies its own edges)</div>
+        <div style={{ padding: 'var(--proto-spacing-xs)' }}>
+          padding="none" (content supplies its own edges)
+        </div>
       </Card>
       <Card padding="sm">padding="sm", radius-lg</Card>
       <Card padding="lg">padding="lg"</Card>

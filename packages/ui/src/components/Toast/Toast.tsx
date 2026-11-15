@@ -69,10 +69,17 @@ function Viewport() {
   return (
     <BaseToast.Viewport className="c-proto-toast-viewport">
       {toasts.map((toast) => (
-        <BaseToast.Root key={toast.id} toast={toast} className="c-proto-toast" data-tone={toast.type ?? 'neutral'}>
+        <BaseToast.Root
+          key={toast.id}
+          toast={toast}
+          className="c-proto-toast"
+          data-tone={toast.type ?? 'neutral'}
+        >
           <BaseToast.Content className="c-proto-toast__content">
             <BaseToast.Title className="c-proto-toast__title" />
-            {toast.description != null ? <BaseToast.Description className="c-proto-toast__description" /> : null}
+            {toast.description != null ? (
+              <BaseToast.Description className="c-proto-toast__description" />
+            ) : null}
           </BaseToast.Content>
           {toast.actionProps ? (
             <BaseToast.Action
@@ -81,11 +88,21 @@ function Viewport() {
             />
           ) : null}
           {toast.data?.dismissLabel ? (
-            <Button variant="ghost" size="sm" className="c-proto-toast__close" onClick={() => close(toast.id)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="c-proto-toast__close"
+              onClick={() => close(toast.id)}
+            >
               {toast.data.dismissLabel}
             </Button>
           ) : (
-            <IconButton label="Dismiss" size="sm" className="c-proto-toast__close" onClick={() => close(toast.id)}>
+            <IconButton
+              label="Dismiss"
+              size="sm"
+              className="c-proto-toast__close"
+              onClick={() => close(toast.id)}
+            >
               <XIcon />
             </IconButton>
           )}

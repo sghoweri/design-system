@@ -69,7 +69,9 @@ describe('Progress', () => {
     const bar = screen.getByRole('progressbar', { name: 'Budget' });
     expect(bar).toHaveAttribute('data-marked');
     expect(bar).toHaveAttribute('aria-valuetext', '$1.20 of $2.00 today; Haiku only at 80%');
-    const ticks = container.querySelectorAll<HTMLElement>('.c-proto-progress__track > .c-proto-progress__mark');
+    const ticks = container.querySelectorAll<HTMLElement>(
+      '.c-proto-progress__track > .c-proto-progress__mark',
+    );
     expect(ticks).toHaveLength(2);
     expect(ticks[0]?.style.getPropertyValue('--_at')).toBe('80%');
     expect(ticks[0]).toHaveAttribute('aria-hidden', 'true');
@@ -113,6 +115,9 @@ describe('Progress', () => {
     expect(container.querySelector('.c-proto-progress__ring-arc')).toBeNull();
     expect(container.querySelector('svg')).toHaveAttribute('viewBox', '0 0 48 48');
     rerender(<Progress variant="ring" aria-label="Setup" />);
-    expect(container.querySelector('.c-proto-progress__ring-arc')).toHaveAttribute('data-indeterminate', 'true');
+    expect(container.querySelector('.c-proto-progress__ring-arc')).toHaveAttribute(
+      'data-indeterminate',
+      'true',
+    );
   });
 });

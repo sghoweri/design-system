@@ -48,7 +48,7 @@ export function Logo({
   className,
   ...rest
 }: LogoProps) {
-  const mask = `sc-logo-${useId().replace(/[^\w-]/g, '')}`;
+  const mask = `proto-logo-${useId().replace(/[^\w-]/g, '')}`;
   const small = SMALL.has(size);
   return (
     <span

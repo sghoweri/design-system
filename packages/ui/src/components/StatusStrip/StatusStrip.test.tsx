@@ -37,7 +37,9 @@ describe('StatusStrip', () => {
   it('gives each tone a shape: glyphs for warning, danger and running, none for success and neutral', () => {
     const { container } = render(<StatusStrip aria-label="Runs" items={items} />);
     const glyph = (tone: string) =>
-      container.querySelector(`.c-proto-status-strip__cell[data-tone='${tone}'] > .c-proto-status-strip__glyph`);
+      container.querySelector(
+        `.c-proto-status-strip__cell[data-tone='${tone}'] > .c-proto-status-strip__glyph`,
+      );
     expect(glyph('success')).toBeNull();
     expect(glyph('neutral')).toBeNull();
     for (const tone of ['warning', 'danger', 'running']) {

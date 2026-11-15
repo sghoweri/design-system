@@ -53,7 +53,7 @@ class RemovedWidget extends WidgetType {
     // Like WordDiff's Change: edge whitespace outside the <del>, so the tint hugs the words.
     const [, lead = '', core = '', trail = ''] = edges.exec(this.text) ?? [];
     const wrap = document.createElement(this.block ? 'div' : 'span');
-    wrap.className = this.block ? 'cm-sc-removed-lines' : 'cm-sc-removed';
+    wrap.className = this.block ? 'cm-proto-removed-lines' : 'cm-proto-removed';
     const del = document.createElement('del');
     del.className = 'c-proto-word-diff__removed';
     del.append(hidden(`[${this.label}: `), core, hidden(']'));
@@ -192,7 +192,7 @@ const debounce = ViewPlugin.fromClass(
 );
 
 const theme = EditorView.theme({
-  '.cm-sc-removed-lines': { paddingInline: 'var(--proto-spacing-sm)', whiteSpace: 'pre-wrap' },
+  '.cm-proto-removed-lines': { paddingInline: 'var(--proto-spacing-sm)', whiteSpace: 'pre-wrap' },
 });
 
 /**

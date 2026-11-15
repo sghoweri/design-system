@@ -98,7 +98,11 @@ const badgeTextOf = (item: PriorityNavItem): string | null => {
 /** The visible badge: a count pill or a dot. Decorative; its meaning is in visually hidden text beside it. */
 function Badge({ value }: { value: number | 'dot' }) {
   return (
-    <span className="c-proto-priority-nav__badge" data-kind={value === 'dot' ? 'dot' : 'count'} aria-hidden="true">
+    <span
+      className="c-proto-priority-nav__badge"
+      data-kind={value === 'dot' ? 'dot' : 'count'}
+      aria-hidden="true"
+    >
       {value === 'dot' ? null : value}
     </span>
   );
@@ -420,13 +424,19 @@ export function PriorityNav({
       data-measuring={measuring || undefined}
       data-overflowing={fit.overflowing || undefined}
       // A per-instance anchor name, so two navs on a page never anchor to each other's toggle.
-      style={{ ...style, '--_anchor': `--proto-priority-nav${panelId.replace(/[^\w-]/g, '')}` } as CSSProperties}
+      style={
+        { ...style, '--_anchor': `--proto-priority-nav${panelId.replace(/[^\w-]/g, '')}` } as CSSProperties
+      }
       {...rest}
     >
       <ul ref={listRef} className="c-proto-priority-nav__list">
         {items.map((item, i) =>
           flags && !flags[i] ? null : (
-            <li key={keyOf(item)} className="c-proto-priority-nav__item" data-current={item.current || undefined}>
+            <li
+              key={keyOf(item)}
+              className="c-proto-priority-nav__item"
+              data-current={item.current || undefined}
+            >
               {link(item, false)}
             </li>
           ),

@@ -73,7 +73,9 @@ export function Score({
           {/* r = (64 - ring stroke 6) / 2, so the stroke sits inside the 64px box. */}
           <circle className="c-proto-score__track" cx="32" cy="32" r="29" pathLength={100} />
           {/* No arc at 0: a zero-length dash with round caps would still paint a dot. */}
-          {fraction > 0 ? <circle className="c-proto-score__arc" cx="32" cy="32" r="29" pathLength={100} /> : null}
+          {fraction > 0 ? (
+            <circle className="c-proto-score__arc" cx="32" cy="32" r="29" pathLength={100} />
+          ) : null}
         </svg>
       ) : null}
       <span className="c-proto-score__body" aria-hidden="true">

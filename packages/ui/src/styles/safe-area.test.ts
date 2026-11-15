@@ -51,7 +51,10 @@ describe('safe areas', () => {
     const full = body('dialog.css', ".c-proto-dialog__popup[data-variant='fullscreen']");
     for (const edge of ['top', 'bottom', 'left', 'right'])
       expect(full).toContain(`env(safe-area-inset-${edge}, 0px)`);
-    const close = body('dialog.css', ".c-proto-dialog__popup[data-variant='fullscreen'] .c-proto-dialog__close");
+    const close = body(
+      'dialog.css',
+      ".c-proto-dialog__popup[data-variant='fullscreen'] .c-proto-dialog__close",
+    );
     expect(close).toMatch(/inset-block-start:[^;]*env\(safe-area-inset-top, 0px\)/);
     expect(close).toMatch(/inset-inline-end:[^;]*env\(safe-area-inset-right, 0px\)/);
   });

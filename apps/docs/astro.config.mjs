@@ -10,7 +10,7 @@ export default defineConfig({
   site: 'https://designsystem.salemcobalt.com',
   integrations: [
     starlight({
-      title: 'Salem Cobalt',
+      title: 'Protokit',
       description: 'Tokens and React components for Salem Cobalt’s side projects.',
       favicon: '/favicon.svg',
       social: [

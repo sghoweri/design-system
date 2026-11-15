@@ -1,6 +1,6 @@
 # design-system
 
-Salem Cobalt: a personal design system. Publishes `@protokit/tokens` and `@protokit/ui`, with a public docs site and Storybook. Read `DESIGN_SYSTEM_BRIEF.md` first.
+Protokit: a design system by Salem Cobalt. Publishes `@protokit/tokens` and `@protokit/ui`, with a public docs site and Storybook. Read `DESIGN_SYSTEM_BRIEF.md` first.
 
 ```
 packages/tokens   @protokit/tokens   Style Dictionary source → CSS custom properties, Sass, TypeScript, JSON

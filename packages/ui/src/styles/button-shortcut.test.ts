@@ -61,7 +61,9 @@ const backdrops = (background: string) =>
     : [token(background)!, ...(RAISED[token(background)!] ? [RAISED[token(background)!]!] : [])];
 
 const DIM = '.c-proto-button__shortcut .c-proto-kbd';
-const variants = [...new Set([...css.matchAll(/\.c-proto-button\[data-variant='(\w+)'\]/g)].map((m) => m[1]!))];
+const variants = [
+  ...new Set([...css.matchAll(/\.c-proto-button\[data-variant='(\w+)'\]/g)].map((m) => m[1]!)),
+];
 
 type Case = { name: string; fg: string; backgrounds: string[]; opacity: number; brightness: number };
 const cases: Case[] = [];

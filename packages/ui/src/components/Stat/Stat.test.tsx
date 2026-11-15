@@ -47,8 +47,8 @@ describe('Stat', () => {
 
   it('reads "unchanged" for a flat trend', () => {
     render(<Stat label="Stale" value="24" delta="same as last week" trend="flat" />);
-    expect(screen.getByText('Stale').closest('.c-proto-stat')!.querySelector('.c-proto-stat__delta')).toHaveTextContent(
-      'unchanged same as last week',
-    );
+    expect(
+      screen.getByText('Stale').closest('.c-proto-stat')!.querySelector('.c-proto-stat__delta'),
+    ).toHaveTextContent('unchanged same as last week');
   });
 });

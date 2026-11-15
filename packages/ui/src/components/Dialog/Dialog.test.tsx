@@ -143,7 +143,11 @@ describe('Dialog', () => {
         const dialog = await screen.findByRole('dialog', { name: 'Edit application' });
         expect(dialog.querySelector('.c-proto-dialog__scroll')).toBeNull();
         expect(classes(dialog)).toEqual(
-          expect.arrayContaining(['c-proto-dialog__title', 'c-proto-dialog__body', 'c-proto-dialog__actions']),
+          expect.arrayContaining([
+            'c-proto-dialog__title',
+            'c-proto-dialog__body',
+            'c-proto-dialog__actions',
+          ]),
         );
       },
     );

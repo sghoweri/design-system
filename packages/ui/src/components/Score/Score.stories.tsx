@@ -122,7 +122,9 @@ const jobs = [
 function InboxRowList() {
   const [selected, setSelected] = useState(0);
   return (
-    <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 'var(--proto-spacing-3xs)' }}>
+    <ul
+      style={{ listStyle: 'none', margin: 0, padding: 0, display: 'grid', gap: 'var(--proto-spacing-3xs)' }}
+    >
       {jobs.map((job, i) => (
         <li key={job.title}>
           <Card

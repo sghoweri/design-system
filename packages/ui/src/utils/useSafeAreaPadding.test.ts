@@ -8,7 +8,7 @@ const insets = (top: number, right: number, bottom: number, left: number) => {
   const real = window.getComputedStyle.bind(window);
   return vi.spyOn(window, 'getComputedStyle').mockImplementation((el, pseudo) => {
     const style = real(el, pseudo);
-    if (!el.hasAttribute('data-sc-safe-area-probe')) return style;
+    if (!el.hasAttribute('data-proto-safe-area-probe')) return style;
     return {
       ...style,
       paddingTop: `${top}px`,

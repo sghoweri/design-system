@@ -86,7 +86,8 @@
 }
 .c-proto-logo[data-sweep] .c-proto-logo__dust circle {
   opacity: calc(
-    var(--proto-logo-sweep-amp, 0) * var(--proto-logo-sweep-amp, 0) * (1 - var(--proto-logo-sweep-dust, 0) * 0.65)
+    var(--proto-logo-sweep-amp, 0) * var(--proto-logo-sweep-amp, 0) *
+      (1 - var(--proto-logo-sweep-dust, 0) * 0.65)
   );
   transform: translate(
     calc(var(--proto-logo-sweep-dust, 0) * -1.4px),
@@ -106,7 +107,9 @@
     transition-duration: 0.3s;
     transition-timing-function: ease-out;
   }
-  :is(a, button):is(:hover, :focus-visible) .c-proto-logo[data-sweep] :is(.c-proto-logo__broom, .c-proto-logo__dust circle) {
+  :is(a, button):is(:hover, :focus-visible)
+    .c-proto-logo[data-sweep]
+    :is(.c-proto-logo__broom, .c-proto-logo__dust circle) {
     animation-play-state: running;
   }
 }
