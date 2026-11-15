@@ -11,7 +11,11 @@ export interface LogoProps extends Omit<ComponentPropsWithRef<'span'>, 'children
    * no bristle cuts). For a one-off size, set `--sc-logo-size` (any length) on the element.
    */
   size?: LogoSize | undefined;
-  /** Shows the name beside the mark in the surrounding font. The visible text is then the accessible name. */
+  /**
+   * Shows the name beside the mark in the surrounding font. The visible text is then the accessible name. The mark is
+   * centred on the name's cap height (baseline to cap top, the CSS `cap` unit), not its line box, so it sits level
+   * with the letters in any font and at any size.
+   */
   wordmark?: boolean | undefined;
   /** The accessible name of the mark alone (`role="img"`). Default "Job Sweep". Ignored with `wordmark`. */
   label?: string | undefined;
@@ -36,6 +40,7 @@ export function Logo({ size = 'lg', wordmark = false, label = NAME, className, .
     <span
       className={cx('sc-logo', className)}
       data-size={size}
+      data-wordmark={wordmark || undefined}
       role={wordmark ? undefined : 'img'}
       aria-label={wordmark ? undefined : label}
       {...rest}

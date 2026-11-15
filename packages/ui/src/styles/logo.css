@@ -36,6 +36,20 @@
 .sc-logo__wordmark {
   font-weight: var(--sc-font-weight-semibold);
 }
+/* With the wordmark, the mark is centred on the name's cap band (baseline to cap top), not its line box, whose centre
+   moves with each face's ascent and descent and each engine's rounding: measured from 0.9px high to 0.8px low before
+   (Salem, 2026-11-15). The mark sits on the baseline, then drops half its excess over the cap height; the margins
+   move its layout box with it, so the row is as tall as what is drawn. `1cap` is the mark's own font, which it
+   inherits from the name's. */
+.sc-logo[data-wordmark] {
+  align-items: baseline;
+}
+.sc-logo[data-wordmark] > .sc-logo__mark {
+  --_drop: calc((var(--_s) - 1cap) / 2);
+  position: relative;
+  inset-block-start: var(--_drop);
+  margin-block: calc(-1 * var(--_drop)) var(--_drop);
+}
 @media (forced-colors: active) {
   .sc-logo__mark {
     color: CanvasText;

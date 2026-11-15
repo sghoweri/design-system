@@ -74,3 +74,33 @@ export const InAHeader: Story = {
     </a>
   ),
 };
+
+/**
+ * The mark is centred on the wordmark's cap height in whatever face it is set in: a face whose ascent and descent sit
+ * unevenly (a display face, a serif) would otherwise pull the line box, and a centred mark with it, below the letters.
+ */
+export const AcrossFaces: Story = {
+  name: 'Across faces',
+  render: () => (
+    <Stack gap="md">
+      {[
+        'var(--sc-font-family-sans)',
+        'var(--sc-font-family-mono)',
+        'Georgia, "Times New Roman", serif',
+        '"Arial Black", Impact, system-ui, sans-serif',
+      ].map((fontFamily) => (
+        <Inline key={fontFamily} gap="lg" align="center">
+          <span style={{ fontFamily, fontSize: 16 }}>
+            <Logo wordmark style={{ '--sc-logo-size': '30px' } as CSSProperties} />
+          </span>
+          <span style={{ fontFamily, fontSize: 24 }}>
+            <Logo size="xl" wordmark />
+          </span>
+          <span style={{ fontFamily, fontSize: 12 }}>
+            <Logo size="md" wordmark />
+          </span>
+        </Inline>
+      ))}
+    </Stack>
+  ),
+};

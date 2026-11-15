@@ -38,6 +38,14 @@ describe('Logo', () => {
     expect(screen.getByRole('link', { name: 'Job Sweep' })).toBeInTheDocument();
     expect(container.querySelector('.sc-logo__wordmark')).toHaveTextContent('Job Sweep');
     expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('.sc-logo')).toHaveAttribute('data-wordmark', 'true');
+  });
+
+  it('centres the mark on the cap height of the wordmark, not its line box', () => {
+    expect(css).toMatch(/\.sc-logo\[data-wordmark\] \{\s*align-items: baseline;/);
+    expect(css).toMatch(
+      /\.sc-logo\[data-wordmark\] > \.sc-logo__mark \{[^}]*--_drop: calc\(\(var\(--_s\) - 1cap\) \/ 2\);[^}]*inset-block-start: var\(--_drop\);[^}]*margin-block: calc\(-1 \* var\(--_drop\)\) var\(--_drop\);/,
+    );
   });
 
   it('gives each instance its own mask id', () => {
