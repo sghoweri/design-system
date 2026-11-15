@@ -104,6 +104,10 @@ export interface StepperDateProps {
   proposedLabel?: string | undefined;
   /** Names the button when it opens an editor: "Change date, Nov 14, …". Default "Change date". */
   editLabel?: string | undefined;
+  /** Controlled popover state, so an editor can close it once its date is saved. Uncontrolled by default. */
+  open?: boolean | undefined;
+  /** Called when the popover opens or closes. */
+  onOpenChange?: ((open: boolean) => void) | undefined;
 }
 
 /**
@@ -118,6 +122,8 @@ function DateMeta({
   children,
   proposedLabel = 'proposed',
   editLabel = 'Change date',
+  open,
+  onOpenChange,
 }: StepperDateProps) {
   const orientation = useContext(OrientationContext);
   const proposed = useContext(ProposedContext);
@@ -125,7 +131,7 @@ function DateMeta({
   const spoken = proposed ? `${proposedLabel}: ${label}` : label;
   const name = editable ? `${editLabel}, ${spoken}` : spoken;
   const button = (
-    <Popover.Root>
+    <Popover.Root open={open} onOpenChange={onOpenChange}>
       <Popover.Trigger
         render={
           <IconButton label={name} tooltip={label} size="sm" className="sc-stepper__date-button">

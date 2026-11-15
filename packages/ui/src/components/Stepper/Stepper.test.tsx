@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Stepper } from './Stepper';
 import { expectNoA11yViolations } from '../../../test/axe';
@@ -153,4 +153,40 @@ describe('Stepper.Date', () => {
       expect(await screen.findByLabelText('When')).toBeInTheDocument();
     },
   );
+
+  it('can be controlled, so an editor closes it once its date is saved', async () => {
+    const changes: boolean[] = [];
+    const { rerender } = render(
+      <Stepper aria-label="Application status">
+        <Stepper.Step
+          state="current"
+          meta={
+            <Stepper.Date label={FULL} open onOpenChange={(o) => changes.push(o)}>
+              <p>Editor</p>
+            </Stepper.Date>
+          }
+        >
+          Screen
+        </Stepper.Step>
+      </Stepper>,
+    );
+    expect(await screen.findByText('Editor')).toBeInTheDocument();
+    await userEvent.keyboard('{Escape}');
+    expect(changes).toEqual([false]);
+    rerender(
+      <Stepper aria-label="Application status">
+        <Stepper.Step
+          state="current"
+          meta={
+            <Stepper.Date label={FULL} open={false}>
+              <p>Editor</p>
+            </Stepper.Date>
+          }
+        >
+          Screen
+        </Stepper.Step>
+      </Stepper>,
+    );
+    await waitFor(() => expect(screen.queryByText('Editor')).toBeNull());
+  });
 });
