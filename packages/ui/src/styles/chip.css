@@ -29,6 +29,7 @@
   transition:
     background-color var(--sc-duration-fast) var(--sc-ease-standard),
     border-color var(--sc-duration-fast) var(--sc-ease-standard),
+    box-shadow var(--sc-duration-fast) var(--sc-ease-standard),
     color var(--sc-duration-fast) var(--sc-ease-standard);
 }
 .sc-chip[data-size='sm'] {
@@ -206,6 +207,7 @@
 }
 .sc-chip[data-editing] {
   cursor: text;
+  transition-duration: var(--sc-duration-base);
 }
 /* The focus ring is drawn inside the chip's edge: the border takes the focus colour and an inset shadow thickens it to
    the focus width, so the chip keeps its outer size between editing and not (an outline grew it by 2px a side).
@@ -216,6 +218,25 @@
     var(--sc-color-border-focus);
   outline: var(--sc-border-width-focus) solid transparent;
   outline-offset: calc(-1 * var(--sc-border-width-focus));
+}
+/* Editing mounts a new chip, so the ring and the clear × ease in from the resting look (@starting-style) rather than
+   snapping on: the border from its resting colour, the shadow from nothing, the × faded and slightly small. Leaving
+   editing swaps the chip back at once. Off under reduced motion (below). */
+@starting-style {
+  .sc-chip[data-editing]:focus-within {
+    border-color: var(--_bd);
+    box-shadow: inset 0 0 0 0 var(--sc-color-border-focus);
+  }
+  .sc-chip[data-editing] .sc-chip__clear {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+.sc-chip[data-editing] .sc-chip__clear {
+  transition:
+    opacity var(--sc-duration-base) var(--sc-ease-enter),
+    scale var(--sc-duration-base) var(--sc-ease-enter),
+    background-color var(--sc-duration-fast) var(--sc-ease-standard);
 }
 .sc-chip[data-invalid] {
   --_bd: var(--sc-color-danger-text);
@@ -272,7 +293,8 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-chip {
+  .sc-chip,
+  .sc-chip[data-editing] .sc-chip__clear {
     transition: none;
   }
 }
