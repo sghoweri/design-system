@@ -102,9 +102,11 @@
   text-overflow: ellipsis;
   line-height: var(--sc-font-line-height-ui);
 }
+/* With a ×, the text keeps a little more room on its right (visible as the hover fill's edge), and the × pulls back by
+   the same amount, so the chip is no wider. */
 .sc-chip[data-removable] > .sc-chip__action,
 .sc-chip[data-removable] > .sc-chip__label {
-  padding-inline-end: var(--sc-spacing-2xs);
+  padding-inline-end: var(--sc-spacing-xs);
 }
 .sc-chip__remove,
 .sc-chip__clear {
@@ -114,7 +116,7 @@
   box-sizing: border-box;
   inline-size: calc(var(--_h) - 2 * var(--sc-spacing-2xs) - 2px);
   block-size: calc(var(--_h) - 2 * var(--sc-spacing-2xs) - 2px);
-  margin-inline-end: var(--sc-spacing-2xs);
+  margin-inline: calc(var(--sc-spacing-2xs) - var(--sc-spacing-xs)) var(--sc-spacing-2xs);
   padding: 0;
   border: 0;
   border-radius: var(--sc-radius-full);
@@ -213,29 +215,49 @@
   cursor: text;
   transition-duration: var(--sc-duration-base);
 }
-/* The focus ring is drawn inside the chip's edge: the border takes the focus colour and an inset shadow thickens it to
-   the focus width, so the chip keeps its outer size between editing and not (an outline grew it by 2px a side).
-   A transparent outline stays for forced colours, where box-shadows are dropped and the outline is painted. */
+/* From keyboard focus the chip was already ringed, so the ring must not animate: focusing the field forces a style
+   before focus lands, and a border or shadow transition would run from that unfocused style (a grey dip). */
+.sc-chip[data-editing][data-entry='ring'] {
+  transition-property: background-color, color;
+}
+/* The focus ring: the border takes the focus colour and a shadow outside it makes up the focus width. Nothing is drawn
+   inside the border, so a hover fill inside the chip can't cover part of the ring, and the ring is the same 2px all
+   the way round (an inset layer made it 3px where no fill covered it). No layout change between states. Forced
+   colours drop box-shadows, so an outline stands in there. */
 .sc-chip[data-editing]:focus-within,
 .sc-chip:has(> .sc-chip__action:focus-visible) {
   border-color: var(--sc-color-border-focus);
-  box-shadow: inset 0 0 0 calc(var(--sc-border-width-focus) - var(--sc-border-width-hairline))
+  box-shadow: 0 0 0 calc(var(--sc-border-width-focus) - var(--sc-border-width-hairline))
     var(--sc-color-border-focus);
-  outline: var(--sc-border-width-focus) solid transparent;
-  outline-offset: calc(-1 * var(--sc-border-width-focus));
 }
-/* Editing mounts a new chip, so the ring and the clear × ease in from the resting look (@starting-style) rather than
-   snapping on: the border from its resting colour, the shadow from nothing, the × faded and slightly small. Leaving
-   editing swaps the chip back at once. Off under reduced motion (below). */
-@starting-style {
-  .sc-chip[data-editing]:focus-within {
-    border-color: var(--_bd);
-    box-shadow: inset 0 0 0 0 var(--sc-color-border-focus);
+@media (forced-colors: active) {
+  .sc-chip[data-editing]:focus-within,
+  .sc-chip:has(> .sc-chip__action:focus-visible) {
+    outline: var(--sc-border-width-focus) solid transparent;
   }
-  .sc-chip[data-editing] .sc-chip__clear {
+}
+/* Editing mounts a new chip, so it starts from how the chip looked a moment before (`data-entry`, set when editing
+   starts) and eases to the editing look (@starting-style):
+   - ring (keyboard focus): already ringed, so nothing changes but the text becoming a field;
+   - hover (a click): the ring eases in from the resting border, and the hover fill fades out of the field;
+   - plain: the ring eases in.
+   A clear × takes the remove ×'s place as it was; it only fades and grows in on a chip that had no ×. Leaving editing
+   swaps the chip back at once. Off under reduced motion (below). */
+@starting-style {
+  .sc-chip[data-editing]:not([data-entry='ring']):focus-within {
+    border-color: var(--_bd);
+    box-shadow: 0 0 0 0 var(--sc-color-border-focus);
+  }
+  .sc-chip[data-editing][data-entry='hover'] > .sc-chip__field {
+    background-color: var(--_bg-hover);
+  }
+  .sc-chip[data-editing]:not([data-removable]) .sc-chip__clear {
     opacity: 0;
     scale: 0.6;
   }
+}
+.sc-chip[data-editing] > .sc-chip__field {
+  transition: background-color var(--sc-duration-base) var(--sc-ease-standard);
 }
 .sc-chip[data-editing] .sc-chip__clear {
   transition:
@@ -252,14 +274,17 @@
 .sc-chip__field {
   --_caret: 1px;
   display: inline-grid;
+  align-content: center;
+  align-self: stretch;
   min-inline-size: 0;
   padding-inline: var(--_px) calc(var(--_px) - var(--_caret));
+  border-radius: inherit;
 }
 .sc-chip > .sc-chip__icon + .sc-chip__field {
   padding-inline-start: var(--sc-spacing-2xs);
 }
 .sc-chip__field:has(+ .sc-chip__clear) {
-  padding-inline-end: calc(var(--sc-spacing-2xs) - var(--_caret));
+  padding-inline-end: calc(var(--sc-spacing-xs) - var(--_caret));
 }
 .sc-chip__field::after,
 .sc-chip__input {
@@ -304,6 +329,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .sc-chip,
+  .sc-chip[data-editing] > .sc-chip__field,
   .sc-chip[data-editing] .sc-chip__clear {
     transition: none;
   }

@@ -1,5 +1,5 @@
 import {
-  useEffect,
+  useLayoutEffect,
   useId,
   useRef,
   useState,
@@ -70,6 +70,8 @@ export function EditableChip({
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(value);
   const [error, setError] = useState<ReactNode>(null);
+  // How the chip looked when editing started, so the editing chip begins from the same look (chip.css).
+  const [entry, setEntry] = useState<'ring' | 'hover' | 'plain'>('plain');
   const button = useRef<HTMLButtonElement>(null);
   const field = useRef<HTMLInputElement>(null);
   // Set when Enter or Escape closes the field, so focus goes back to the chip; a save on blur leaves it be.
@@ -78,7 +80,9 @@ export function EditableChip({
   const done = useRef(false);
   const errorId = useId();
 
-  useEffect(() => {
+  // A layout effect, so focus is in the field before the editing chip first paints: it shows its ring from the first
+  // frame rather than painting once unfocused (a grey frame between the resting ring and the editing one).
+  useLayoutEffect(() => {
     if (editing) {
       // The caret goes at the end: an edit is more often a tweak than a retype.
       const el = field.current;
@@ -92,6 +96,13 @@ export function EditableChip({
   }, [editing]);
 
   const start = () => {
+    setEntry(
+      matches(button.current, ':focus-visible')
+        ? 'ring'
+        : matches(button.current, ':hover')
+          ? 'hover'
+          : 'plain',
+    );
     setText(value);
     setError(null);
     done.current = false;
@@ -135,8 +146,17 @@ export function EditableChip({
 
   if (editing) {
     return (
-      <span className={cx('sc-chip-editor', className)} data-editing="">
-        <span className="sc-chip" {...shared} data-editing="" data-invalid={error ? '' : undefined}>
+      // Distinct keys: otherwise React reuses the resting chip's span as this wrapper, and the chip's focus ring
+      // transitions out on it as a square box.
+      <span key="editor" className={cx('sc-chip-editor', className)} data-editing="">
+        <span
+          className="sc-chip"
+          {...shared}
+          data-editing=""
+          data-entry={entry}
+          data-removable={onRemove ? '' : undefined}
+          data-invalid={error ? '' : undefined}
+        >
           {iconEl}
           <span className="sc-chip__field" data-value={text}>
             <input
@@ -202,6 +222,7 @@ export function EditableChip({
   };
   return (
     <span
+      key="chip"
       className={cx('sc-chip', className)}
       {...shared}
       data-removable={onRemove ? '' : undefined}
@@ -238,4 +259,13 @@ export function EditableChip({
       ) : null}
     </span>
   );
+}
+
+/** `element.matches`, false where the selector isn't supported (older engines, jsdom). */
+function matches(element: Element | null, selector: string) {
+  try {
+    return element?.matches(selector) ?? false;
+  } catch {
+    return false;
+  }
 }
