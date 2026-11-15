@@ -1,0 +1,122 @@
+/* ---- Logo ------------------------------------------------------------------ */
+/* The Job Sweep mark ("Tile cut-out", picked 2026-11-15): an accent tile with the broom masked out, so the
+   surface behind shows through. Sized like an icon; the wordmark takes the surrounding font. */
+.sc-logo {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-lg));
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--_s) * 0.4);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.sc-logo[data-size='xs'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-xs));
+}
+.sc-logo[data-size='sm'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-sm));
+}
+.sc-logo[data-size='md'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-md));
+}
+.sc-logo[data-size='xl'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-xl));
+}
+.sc-logo[data-size='em'] {
+  --_s: var(--sc-logo-size, 1em);
+}
+.sc-logo__mark {
+  display: block;
+  flex: none;
+  inline-size: var(--_s);
+  block-size: var(--_s);
+  color: var(--sc-color-accent-default);
+  /* The mask's black and white are luminance, not colour: forced colours must not repaint them. */
+  forced-color-adjust: none;
+}
+.sc-logo__wordmark {
+  font-weight: var(--sc-font-weight-semibold);
+}
+/* With the wordmark, the mark is centred on the name's cap band (baseline to cap top), not its line box, whose centre
+   moves with each face's ascent and descent and each engine's rounding: measured from 0.9px high to 0.8px low before
+   (Salem, 2026-11-15). The mark sits on the baseline, then drops half its excess over the cap height; the margins
+   move its layout box with it, so the row is as tall as what is drawn. `1cap` is the mark's own font, which it
+   inherits from the name's. */
+.sc-logo[data-wordmark] {
+  align-items: baseline;
+}
+.sc-logo[data-wordmark] > .sc-logo__mark {
+  --_drop: calc((var(--_s) - 1cap) / 2);
+  position: relative;
+  inset-block-start: var(--_drop);
+  margin-block: calc(-1 * var(--_drop)) var(--_drop);
+}
+@media (forced-colors: active) {
+  .sc-logo__mark {
+    color: CanvasText;
+  }
+}
+/* sweep: the broom swings up to 9° about its handle's top and three specks puff off the bristles while the link or
+   button around the logo is hovered or keyboard-focused. The motion is phase × amplitude: the phase loops (paused at
+   rest, so nothing ticks), and the amplitude is a registered number that eases 0 → 1 in and 1 → 0 out, so leaving
+   mid-sweep eases back to the static tile instead of snapping (removing a CSS animation never transitions, in any
+   engine). The specks take amplitude² so they fade in from nothing. Without @property the amplitude flips, a snap,
+   and the resting state is still the static tile. */
+@property --sc-logo-sweep-amp {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+@property --sc-logo-sweep-phase {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+@property --sc-logo-sweep-dust {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+.sc-logo[data-sweep] {
+  transition: --sc-logo-sweep-amp 0.5s ease-in-out;
+}
+.sc-logo[data-sweep] .sc-logo__broom {
+  transform-origin: 19.2px 4.8px;
+  transform: rotate(calc(var(--sc-logo-sweep-amp, 0) * var(--sc-logo-sweep-phase, 0) * -9deg));
+  animation: sc-logo-sweep 1.6s ease-in-out infinite paused;
+}
+.sc-logo[data-sweep] .sc-logo__dust circle {
+  opacity: calc(
+    var(--sc-logo-sweep-amp, 0) * var(--sc-logo-sweep-amp, 0) * (1 - var(--sc-logo-sweep-dust, 0) * 0.65)
+  );
+  transform: translate(
+    calc(var(--sc-logo-sweep-dust, 0) * -1.4px),
+    calc(var(--sc-logo-sweep-dust, 0) * 0.8px)
+  );
+  animation: sc-logo-dust 1.6s ease-out infinite paused;
+}
+.sc-logo[data-sweep] .sc-logo__dust circle:nth-child(2) {
+  animation-delay: 0.25s;
+}
+.sc-logo[data-sweep] .sc-logo__dust circle:nth-child(3) {
+  animation-delay: 0.5s;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is(a, button):is(:hover, :focus-visible) .sc-logo[data-sweep] {
+    --sc-logo-sweep-amp: 1;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+  }
+  :is(a, button):is(:hover, :focus-visible) .sc-logo[data-sweep] :is(.sc-logo__broom, .sc-logo__dust circle) {
+    animation-play-state: running;
+  }
+}
+@keyframes sc-logo-sweep {
+  50% {
+    --sc-logo-sweep-phase: 1;
+  }
+}
+@keyframes sc-logo-dust {
+  70% {
+    --sc-logo-sweep-dust: 1;
+  }
+}
