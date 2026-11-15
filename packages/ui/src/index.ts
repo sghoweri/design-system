@@ -57,6 +57,7 @@ export {
   type MenuCheckboxItemProps,
   type MenuContentProps,
   type MenuGroupProps,
+  type MenuHeaderProps,
   type MenuItemProps,
   type MenuItemTone,
   type MenuLinkItemProps,
@@ -91,6 +92,20 @@ export {
   type ToolbarSpacerProps,
 } from './components/Toolbar/Toolbar';
 export { Banner, type BannerProps, type BannerTone } from './components/Banner/Banner';
+export {
+  Callout,
+  type CalloutProps,
+  type CalloutTone,
+  type CalloutVariant,
+} from './components/Callout/Callout';
+export {
+  Stepper,
+  type StepperDateProps,
+  type StepperOrientation,
+  type StepperProps,
+  type StepperStepProps,
+  type StepState,
+} from './components/Stepper/Stepper';
 export { Spinner, type SpinnerProps } from './components/Spinner/Spinner';
 export {
   Progress,
@@ -99,6 +114,20 @@ export {
   type ProgressTone,
   type ProgressVariant,
 } from './components/Progress/Progress';
+export {
+  Meter,
+  type MeterLayout,
+  type MeterMark,
+  type MeterProps,
+  type MeterSize,
+  type MeterTone,
+} from './components/Meter/Meter';
+export {
+  StatusStrip,
+  type StatusStripItem,
+  type StatusStripProps,
+  type StatusStripTone,
+} from './components/StatusStrip/StatusStrip';
 export {
   Heading,
   type HeadingElement,

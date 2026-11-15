@@ -31,9 +31,11 @@ const BALANCE = [
   '.sc-toast__title',
   '.sc-empty-state__title',
   '.sc-flow__step-title',
+  '.sc-callout__title',
 ];
 const PRETTY = [
   '.sc-text',
+  '.sc-callout__body',
   '.sc-dialog__description',
   '.sc-dialog__body',
   '.sc-popover__description',
@@ -45,6 +47,7 @@ const PRETTY = [
   '.sc-field__error',
   '.sc-choice__description',
   '.sc-menu__description',
+  '.sc-select__item-text',
   '.sc-banner__body',
   '.sc-tooltip',
   '.sc-reason-list',

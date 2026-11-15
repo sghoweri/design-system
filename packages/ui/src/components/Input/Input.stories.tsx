@@ -103,6 +103,30 @@ export const Datalist: Story = {
   ),
 };
 
+/** A value longer than the field ends in an ellipsis until the field has focus; then it scrolls as you type. */
+export const LongValue: Story = {
+  render: () => (
+    <Stack gap="md">
+      <Input
+        label="Posting URL"
+        type="url"
+        defaultValue="https://wd5.myworkdayjobs.com/en-US/zillow/job/Remote-USA/Principal-Software-Development-Engineer--Design-Systems--Web-_P748123"
+      />
+      <Input
+        label="Search"
+        hideLabel
+        iconStart={<SearchIcon />}
+        defaultValue="Principal design systems engineer remote with a component library and token pipeline"
+      />
+      <Input
+        label="Title"
+        defaultValue="Staff Software Engineer, Frontend Platform Architecture and Infrastructure"
+        disabled
+      />
+    </Stack>
+  ),
+};
+
 function ValidatedOnBlur() {
   const [error, setError] = useState<string | undefined>(undefined);
   return (

@@ -15,7 +15,9 @@
   inline-size: max-content;
   max-inline-size: min(100vw - 2 * var(--sc-spacing-md), 360px);
   max-block-size: var(--available-height);
-  overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* `.sc-popover__scroll` scrolls */
   padding: var(--sc-spacing-md);
   border-radius: var(--sc-radius-lg);
   background: var(--sc-color-surface-raised);
@@ -36,6 +38,27 @@
 /* With an arrow the popup must not clip it. */
 .sc-popover:has(> .sc-popover__arrow) {
   overflow: visible;
+}
+/* The popup's content scrolls in `.sc-popover__scroll`, which Popover renders around the children (the arrow stays
+   outside it), so a panel with an arrow scrolls too. As in the default Dialog (dialog.css), it runs out over the
+   popup's padding (all of it in the block axis, the bleed in the inline axis) and pads itself back by the same
+   amounts: the content stays where it was and an overlay thumb (about 6px, drawn about 2px in) is centred in the 16px
+   side padding, 8px from the popup's edge. */
+.sc-popover__scroll {
+  --_thumb: 6px;
+  --_thumb-inset: 2px;
+  --_bleed: calc(var(--sc-spacing-md) / 2 + var(--_thumb) / 2 + var(--_thumb-inset));
+  position: relative; /* the × is placed against it, so it scrolls away with the title as it did */
+  flex: 1 1 auto;
+  min-block-size: 0;
+  margin: calc(-1 * var(--sc-spacing-md)) calc(-1 * var(--_bleed));
+  padding: var(--sc-spacing-md) var(--_bleed);
+  overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
+  overscroll-behavior: contain;
+}
+/* The scroller's inline end is the bleed short of the popup's padding edge, so the × keeps its corner. */
+.sc-popover__scroll > .sc-popover__close {
+  inset-inline-end: calc(var(--sc-spacing-xs) - var(--sc-spacing-md) + var(--_bleed));
 }
 .sc-popover[data-starting-style],
 .sc-popover[data-ending-style] {

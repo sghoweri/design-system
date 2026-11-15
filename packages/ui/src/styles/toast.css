@@ -65,7 +65,7 @@
 }
 /* Filled; the fill, text and button states come from the .sc-on-accent scope (base.css). */
 .sc-toast[data-tone='accent'] {
-  border-color: var(--sc-color-accent-default);
+  border-color: var(--sc-color-accent-strong);
 }
 .sc-toast[data-starting-style],
 .sc-toast[data-ending-style] {

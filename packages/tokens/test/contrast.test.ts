@@ -42,6 +42,11 @@ const pairs: Array<[string, string[], number]> = [
   // The .sc-on-accent scope (accent Toast): text, button labels in every state, and the ring, borders and focus rings
   // drawn in text.on-accent on the fill; the fill's own focus ring (accent.default) on the page outside it.
   ['text-on-accent', ['accent-active'], 4.5],
+  // The .sc-on-accent scope's fill is accent.strong, white text on it in both themes, in every state; its main action
+  // is an inverse Button (dark text on white), which must also stand off the fill.
+  ['text-on-accent-strong', ['accent-strong', 'accent-strong-hover', 'accent-strong-active'], 4.5],
+  ['text-on-inverse', ['inverse-default', 'inverse-hover', 'inverse-active'], 4.5],
+  ['inverse-default', ['accent-strong'], 3],
   ['accent-default', ['surface-raised'], 3],
   ['accent-text', ['accent-subtle', 'surface-default'], 4.5],
   ['success-text', ['success-subtle', 'surface-default'], 4.5],
@@ -73,6 +78,11 @@ const pairs: Array<[string, string[], number]> = [
   ['warning-solid', ['surface-active'], 3],
   ['danger-solid', ['surface-active'], 3],
   ['text-muted', ['surface-active'], 3],
+  // Meter fills and StatusStrip cells (solids, the neutral and running rings): the bar is data, so 3:1 against its
+  // surface.active track and every surface it can sit on, row hover and raised washes included.
+  ...['accent-default', 'success-solid', 'warning-solid', 'danger-solid', 'text-muted'].map(
+    (fill): [string, string[], number] => [fill, [...surfaces, 'accent-wash'], 3],
+  ),
   // Word diff: text on the tints, and the underline and strike-through (the non-colour cue) on their tint.
   ['text-default', ['diff-added-wash', 'diff-removed-wash'], 4.5],
   ['text-muted', ['diff-removed-wash'], 4.5],
@@ -112,6 +122,10 @@ const washes: Array<[string, string]> = [
   ['accent-default', 'accent-hover'],
   ['accent-hover', 'accent-active'],
   ['success-solid', 'success-hover'],
+  ['accent-strong', 'accent-strong-hover'],
+  ['accent-strong-hover', 'accent-strong-active'],
+  ['inverse-default', 'inverse-hover'],
+  ['inverse-hover', 'inverse-active'],
 ];
 describe.each(['light', 'dark'] as const)('%s theme state washes', (theme) => {
   const t = json[theme];

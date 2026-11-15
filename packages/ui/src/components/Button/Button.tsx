@@ -1,8 +1,11 @@
 import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
 import { cx } from '../../utils/cx';
 
-/** `success` is for the positive decision (Approve), beside a neutral or danger counterpart. */
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success';
+/**
+ * `success` is for the positive decision (Approve), beside a neutral or danger counterpart. `inverse` is a white button
+ * for a dark or coloured fill (the accent Toast's action); elsewhere use the others.
+ */
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'success' | 'inverse';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ComponentPropsWithRef<'button'> {
