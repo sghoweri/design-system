@@ -241,16 +241,20 @@
 .sc-chip[data-invalid] {
   --_bd: var(--sc-color-danger-text);
 }
+/* The field is exactly as wide as the label button it replaces, so the chips around it don't move when editing
+   starts: the hidden copy is the text plus 1px for the caret (not a trailing space, which added about 3px), and that
+   1px comes off the field's end padding. */
 .sc-chip__field {
+  --_caret: 1px;
   display: inline-grid;
   min-inline-size: 0;
-  padding-inline: var(--_px);
+  padding-inline: var(--_px) calc(var(--_px) - var(--_caret));
 }
 .sc-chip > .sc-chip__icon + .sc-chip__field {
   padding-inline-start: var(--sc-spacing-2xs);
 }
 .sc-chip__field:has(+ .sc-chip__clear) {
-  padding-inline-end: var(--sc-spacing-2xs);
+  padding-inline-end: calc(var(--sc-spacing-2xs) - var(--_caret));
 }
 .sc-chip__field::after,
 .sc-chip__input {
@@ -260,7 +264,8 @@
   letter-spacing: inherit;
 }
 .sc-chip__field::after {
-  content: attr(data-value) ' ';
+  content: attr(data-value);
+  padding-inline-end: var(--_caret);
   visibility: hidden;
   white-space: pre;
   overflow: hidden;
