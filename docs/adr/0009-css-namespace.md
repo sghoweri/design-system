@@ -6,26 +6,26 @@ migration follows [the Protokit rename plan](../protokit-rename-plan.md).
 
 ## Decisions (Salem, 2026-11-15)
 
-ADR 0008 decided the name: Protokit, prefix `pk`. Against that name, Salem answered this ADR's calls as follows.
+ADR 0008 decided the name: Protokit. The prefix is `proto` (decision 9, which supersedes `pk`). Against that name, Salem answered this ADR's calls as follows.
 Where an answer differs from the recommendation, it says so.
 
 1. **Brand + BEMIT** (option 2).
-2. **Order: BEMIT first, then brand**: `.c-pk-button`, following Bolt's `c-bolt-button`. This goes against the
-   recommendation (brand first, `.pk-c-button`). What it changes:
+2. **Order: BEMIT first, then brand**: `.c-proto-button`, following Bolt's `c-bolt-button`. This goes against the
+   recommendation (brand first, `.proto-c-button`). What it changes:
    - Class names start with their ITCSS role (`c-`, `o-`, `u-`, `t-`), so source and devtools group them by role.
-   - Custom properties, the layer and any future tag still start with the brand (`--pk-*`, `@layer pk`,
-     `<pk-button>`), so classes no longer share one leading prefix with everything else. A devtools or grep filter
-     uses the substring `pk-`, which matches both.
-   - One Stylelint pattern still covers every class: `^(c|o|u|t)-pk-[a-z0-9-]+(__[a-z0-9-]+)?$`.
-3. **Layout namespace: `o-` (objects)**, as ITCSS and the brief write it: `.o-pk-stack`, `.o-pk-inline`. This goes
+   - Custom properties, the layer and any future tag still start with the brand (`--proto-*`, `@layer proto`,
+     `<proto-button>`), so classes no longer share one leading prefix with everything else. A devtools or grep filter
+     uses the substring `proto-`, which matches both.
+   - One Stylelint pattern still covers every class: `^(c|o|u|t)-proto-[a-z0-9-]+(__[a-z0-9-]+)?$`.
+3. **Layout namespace: `o-` (objects)**, as ITCSS and the brief write it: `.o-proto-stack`, `.o-proto-inline`. This goes
    against the recommendation and **deviates from guideline 01 decision B13** (`l-` in `@layer layout`, 2026-11-03).
    The deviation is this system's. Whether guideline 01 follows it is a separate change in the guidelines repo.
-4. **Every `--sc-*` becomes `--pk-*`, and `@layer sc` becomes `@layer pk`, with no aliases.** That covers tokens,
+4. **Every `--sc-*` becomes `--proto-*`, and `@layer sc` becomes `@layer proto`, with no aliases.** That covers tokens,
    component knobs and anchor names. No `legacy.css` ships. It is one breaking release, and the codemod migrates Job
    Sweep in the same window. While the 0.2.0 rc line is open, the release label is ignored (docs/releasing.md). So the
    rename lands as the next `0.2.0-rc.N`, `@protokit/*` starts there, and its first stable is 0.2.0 (ADR 0008,
    decision 6).
-5. **Stylelint in both repos: accepted.** That means the class pattern, the custom-property pattern (`^pk-`, private
+5. **Stylelint in both repos: accepted.** That means the class pattern, the custom-property pattern (`^proto-`, private
    `--_*` allowed) and the `var()` usage check.
 6. **When: soon, before portfolio links.** The rename and the class migration land before any portfolio or resume
    link to the site goes out, ahead of ADR 0008's docs-site work. This goes against the recommendation (after the
@@ -45,13 +45,32 @@ Where an answer differs from the recommendation, it says so.
    exclude `docs/design/`; a leftover-`sc-` check covers it instead. The rename plan has the detail.
 
 8. **No hybrid: classes and custom properties are both branded** (call 8; Salem, 2026-11-15: "Let's run with branded
-   for now"). Classes are `.c-pk-button`, custom properties `--pk-*`, the layer `@layer pk`. This matches the
+   for now"). Classes are `.c-proto-button`, custom properties `--proto-*`, the layer `@layer proto`. This matches the
    recommendation.
    - "For now" leaves room to revisit after the rename. Moving to bare classes (`.c-button`) later would be a second
      class-only breaking change: about 2,100 class references in this repo and 150 in Job Sweep, about half a day
      with the same codemod and a new map. The custom properties and the layer would not change.
    - Inside shadow roots, if the system ever moves to web components, bare classes remain the guideline's default
      (section 2).
+
+9. **Prefix: `proto`, superseding `pk`** (Salem, 2026-11-15: "Instead of c-pk-button, can we go with
+   c-proto-button?"). One prefix still covers everything, so the custom properties follow the classes:
+   - classes: `.c-proto-button`, `.o-proto-stack`, `.u-proto-visually-hidden`, `.t-proto-on-accent`;
+   - custom properties: `--proto-*`;
+   - the layer: `@layer proto`;
+   - the token build's `PREFIX`: `'proto'`;
+   - any future tag: `<proto-button>`.
+
+   The migration cost is unchanged, because every name is rewritten anyway. Names grow by three characters
+   (`--proto-color-text-default`).
+
+   **Collision check** (2026-11-15): Tailwind v4, Bootstrap (`--bs-*`), Open Props and Starlight (`--sl-*`) declare
+   no `proto-` names. GitHub code search finds `--proto-` in about 390 CSS files and `.proto-` in about 4,000, all
+   one-off projects (prototype pages, protobuf and gRPC viewers), none in a shared library. For comparison, `--pk-`
+   appears in about 3,000.
+
+   Every example in this ADR now shows `proto`. Where the proposal compared prefixes, the text keeps `pk` as it was
+   proposed.
 
 Every call is now answered.
 
@@ -63,22 +82,22 @@ Every class and custom property today carries a brand-only prefix: `.sc-button`,
 only block and element names are in play.
 
 Brand-only (`.bds-button`) was rejected before this ADR and is not reconsidered here. That leaves two options, each
-weighed against ADR 0008's three name outcomes (keep `@salemcobalt` → `sc`, Protokit → `pk`, Bit → `bds`). The table
+weighed against ADR 0008's three name outcomes (keep `@salemcobalt` → `sc`, Protokit → `pk`, Bit → `bds`; Protokit's prefix later became `proto`, decision 9). The table
 shows the decided form of option 2 (Protokit, BEMIT first, `o-` for layout). The proposal compared the other
 prefixes and the brand-first order, which the sections below still discuss:
 
 | Thing                      | Today                                              | Option 1: bare BEMIT       | Option 2, as decided: BEMIT + brand |
 | -------------------------- | -------------------------------------------------- | -------------------------- | ----------------------------------- |
-| Component                  | `.sc-button`                                       | `.c-button`                | `.c-pk-button`                      |
-| Element                    | `.sc-dialog__close`                                | `.c-dialog__close`         | `.c-pk-dialog__close`               |
-| Layout primitive (object)  | `.sc-stack`                                        | `.o-stack`                 | `.o-pk-stack`                       |
-| Utility                    | `.sc-visually-hidden`                              | `.u-visually-hidden`       | `.u-pk-visually-hidden`             |
-| Theme scope                | `.sc-on-accent`                                    | `.t-on-accent`             | `.t-pk-on-accent`                   |
-| Token                      | `--sc-color-text-default`                          | `--color-text-default`     | `--pk-color-text-default`           |
-| Component knob             | `--sc-toast-offset-block-end`, `--sc-broom-stroke` | `--toast-offset-block-end` | `--pk-toast-offset-block-end`       |
-| Anchor name (dashed ident) | `--sc-bottom-bar` (consumer API, in the README)    | `--bottom-bar`             | `--pk-bottom-bar`                   |
+| Component                  | `.sc-button`                                       | `.c-button`                | `.c-proto-button`                   |
+| Element                    | `.sc-dialog__close`                                | `.c-dialog__close`         | `.c-proto-dialog__close`            |
+| Layout primitive (object)  | `.sc-stack`                                        | `.o-stack`                 | `.o-proto-stack`                    |
+| Utility                    | `.sc-visually-hidden`                              | `.u-visually-hidden`       | `.u-proto-visually-hidden`          |
+| Theme scope                | `.sc-on-accent`                                    | `.t-on-accent`             | `.t-proto-on-accent`                |
+| Token                      | `--sc-color-text-default`                          | `--color-text-default`     | `--proto-color-text-default`        |
+| Component knob             | `--sc-toast-offset-block-end`, `--sc-broom-stroke` | `--toast-offset-block-end` | `--proto-toast-offset-block-end`    |
+| Anchor name (dashed ident) | `--sc-bottom-bar` (consumer API, in the README)    | `--bottom-bar`             | `--proto-bottom-bar`                |
 | Private value              | `--_bg`                                            | `--_bg`                    | `--_bg`                             |
-| Cascade layer              | `@layer sc`                                        | (see below)                | `@layer pk`                         |
+| Cascade layer              | `@layer sc`                                        | (see below)                | `@layer proto`                      |
 
 **Layout prefix.** The brief's example `.o-wrapper` uses ITCSS's `o-`. Salem's guideline 01 settled on `l-` in
 `@layer layout` (decision B13, 2026-11-03), so the proposal wrote `l-`. Salem chose `o-` (decision 3), and the
@@ -122,14 +141,14 @@ None is an exact match for a token today, but apps write bare names by default.
 inside it. Third-party widgets, a CMS theme or a Starlight plugin could all do that by accident. With a brand prefix,
 re-theming is something a consumer opts into.
 
-**Option 2 is collision-free in practice.** `--pk-*` and `--bds-*` are clear of every common framework vocabulary
+**Option 2 is collision-free in practice.** `--proto-*` and `--bds-*` are clear of every common framework vocabulary
 (Tailwind, Open Props, Starlight's `--sl-*`, Bootstrap's `--bs-*`). `--sc-*` is as well, though `sc-` as a _class_
 prefix shares a namespace with styled-components' generated `sc-<hash>` classes and Stencil's scoped-CSS classes.
 That is noisy in devtools, but no exact match is plausible.
 
 **Cascade layer names collide too.** Option 1 has no brand to name the layer after. A neutral name like
 `@layer components` would merge with a consumer's own `components` layer, because same-name layers merge, which
-makes the order unpredictable. Option 2 keeps one brand layer with sublayers (`@layer pk.components, pk.utilities`).
+makes the order unpredictable. Option 2 keeps one brand layer with sublayers (`@layer proto.components, proto.utilities`).
 That fits Job Sweep's `@layer base, sc;` contract with a one-word change.
 
 ## 2. Shadow DOM and web components
@@ -142,8 +161,8 @@ so the choice should survive that move.
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | Classes now (light DOM)             | Global and unbranded; `.c-card` meets any consumer or third-party `.c-card`. Job Sweep's own ~430 block classes are bare BEM (`.banner`, `.alert`), so they would not clash today, but nothing stops an app adopting `c-` | Branded and global; safe beside any CSS                                                                                       |
 | Classes later (inside shadow roots) | Ideal: encapsulated, so short is right (guideline 01 rule 5: "Classes inside shadow roots don't need it")                                                                                                                 | The brand becomes noise inside shadow roots; a WC rewrite can drop it there and keep it only in light-DOM and pre-upgrade CSS |
-| Custom properties now and later     | A hazard in both worlds: custom properties are the one thing that crosses the shadow boundary (guideline 01 rule 9; Gold Standard index belief 6)                                                                         | Correct in both worlds; the public theming API of a future `<pk-button>` is exactly `--pk-*`                                  |
-| Tag names (future)                  | Need a prefix anyway (`<?-button>`); the brand appears in tags but not in tokens, which is inconsistent                                                                                                                   | `<pk-button>`, `--pk-button-bg`, `.c-pk-button` (pre-upgrade): one brand everywhere                                           |
+| Custom properties now and later     | A hazard in both worlds: custom properties are the one thing that crosses the shadow boundary (guideline 01 rule 9; Gold Standard index belief 6)                                                                         | Correct in both worlds; the public theming API of a future `<proto-button>` is exactly `--proto-*`                            |
+| Tag names (future)                  | Need a prefix anyway (`<?-button>`); the brand appears in tags but not in tokens, which is inconsistent                                                                                                                   | `<proto-button>`, `--proto-button-bg`, `.c-proto-button` (pre-upgrade): one brand everywhere                                  |
 | `::part()` names                    | Unaffected                                                                                                                                                                                                                | Unaffected                                                                                                                    |
 
 The two halves of the choice point different ways once there are shadow roots. Classes want to be bare inside shadow
@@ -172,11 +191,11 @@ snapshot. Rewriting 14,000 lines of archived design artifacts buys nothing.
 
 What changes, per option and name:
 
-| Option × name                    | Custom properties                               | Classes                                     | Layer                        | Rough effort with a codemod                           |
-| -------------------------------- | ----------------------------------------------- | ------------------------------------------- | ---------------------------- | ----------------------------------------------------- |
-| **2 × keep `sc`**                | **none** (`--sc-*` is already brand + category) | `.sc-x` → `.sc-c-x` / `-l-` / `-u-` / `-t-` | unchanged                    | ~half a day; Job Sweep: 148 class refs, 0 var refs    |
-| **2 × Protokit (`pk`), decided** | all 1,798 + 2,159 rewritten                     | all, as above, with the new prefix          | renamed                      | ~1 day, mostly review                                 |
-| 1 × any name                     | all 1,798 + 2,159 rewritten (prefix dropped)    | all, as above, prefix dropped               | renamed to something neutral | ~1 day, plus the Tailwind exposure above, permanently |
+| Option × name                       | Custom properties                               | Classes                                     | Layer                        | Rough effort with a codemod                           |
+| ----------------------------------- | ----------------------------------------------- | ------------------------------------------- | ---------------------------- | ----------------------------------------------------- |
+| **2 × keep `sc`**                   | **none** (`--sc-*` is already brand + category) | `.sc-x` → `.sc-c-x` / `-l-` / `-u-` / `-t-` | unchanged                    | ~half a day; Job Sweep: 148 class refs, 0 var refs    |
+| **2 × Protokit (`proto`), decided** | all 1,798 + 2,159 rewritten                     | all, as above, with the new prefix          | renamed                      | ~1 day, mostly review                                 |
+| 1 × any name                        | all 1,798 + 2,159 rewritten (prefix dropped)    | all, as above, prefix dropped               | renamed to something neutral | ~1 day, plus the Tailwind exposure above, permanently |
 
 Classifying blocks into `c-`, `o-` (proposed: `l-`), `u-` and `t-` is the same work in every row. The real cost driver is whether the
 custom properties change, and only "option 2, keep `sc`" leaves them alone.
@@ -203,7 +222,7 @@ The codemod ships in the DS repo, so Job Sweep runs it with `node ../design-syst
 **Prove it with lints that stay afterwards** (guideline 01 lint rules; guideline 02 rule 13):
 
 - Stylelint `selector-class-pattern` built from the namespace table. As proposed (brand first, `l-`):
-  `^<p>-(c|l|u|t)-[a-z0-9-]+(__[a-z0-9-]+)?$`. As decided: `^(c|o|u|t)-pk-[a-z0-9-]+(__[a-z0-9-]+)?$`.
+  `^<p>-(c|l|u|t)-[a-z0-9-]+(__[a-z0-9-]+)?$`. As decided: `^(c|o|u|t)-proto-[a-z0-9-]+(__[a-z0-9-]+)?$`.
 - `custom-property-pattern` for `^<p>-` (private `--_*` allowed).
 - A usage check: every `var(--<p>-*)` must exist in `tokens.json` or be a documented knob. Job Sweep shipped an
   undefined `--sc-color-text-on-solid` this autumn (its backlog F2), which is exactly what this check catches.
@@ -241,14 +260,14 @@ the new names, and `legacy.css` is not shipped: decision 4.)
 - **Note**: the guideline's literal default, bare classes with branded properties, is neither briefed option. It is
   recorded here because it is where a web-component rewrite would land, not proposed for the light-DOM system.
 - **Guideline 01 decision B13, `l-` for layout**: the proposal used `l-`. **Salem chose `o-` (decision 3), a
-  deliberate deviation from B13** recorded here: `.o-pk-stack` and `.o-pk-inline`.
+  deliberate deviation from B13** recorded here: `.o-proto-stack` and `.o-proto-inline`.
 - **Guideline 02 rules 4 and 13**: components read `var(--<p>-*)`, and usage is linted against declarations. Option 2
   keeps the token build's `prefix` setting, and option 1 removes it.
 - **Bolt precedent** (guideline 01 rule 5 origin): `c-bolt-button`, which is BEMIT first, then brand. Option 2 as
-  briefed is brand first (`pk-c-button`). Brand first wins here because one prefix starts every class, custom
-  property, layer and future tag. That makes one lint pattern and one devtools filter (`pk-`), and the namespace
-  letter still reads immediately after it. **Salem chose BEMIT first, following Bolt (decision 2): `.c-pk-button`.**
-  The lint pattern stays single (`^(c|o|u|t)-pk-…`), and the substring filter `pk-` still finds classes, custom
+  briefed is brand first (`proto-c-button`). Brand first wins here because one prefix starts every class, custom
+  property, layer and future tag. That makes one lint pattern and one devtools filter (`proto-`), and the namespace
+  letter still reads immediately after it. **Salem chose BEMIT first, following Bolt (decision 2): `.c-proto-button`.**
+  The lint pattern stays single (`^(c|o|u|t)-proto-…`), and the substring filter `proto-` still finds classes, custom
   properties and the layer.
 
 ## Recommendation (as proposed)
@@ -271,7 +290,7 @@ breaks every class, so it should land as 0.3.0 once the site work is done, likel
 land between 0.2.0's rc and stable.
 
 The cost is that `sc-c-` stutters. If that bothers Salem more than half a day of extra migration, it is a reason to
-take the Protokit name (`pk-c-button`), not a reason to drop the brand.
+take the Protokit name (`proto-c-button`), not a reason to drop the brand.
 
 ## Second opinion (Fable 5.2)
 
@@ -317,12 +336,12 @@ Answered 2026-11-15. The answers are recorded under Decisions at the top.
 
 1. **Option 1 (bare BEMIT) or option 2 (brand + BEMIT)?** _Recommend: option 2._ **Salem: brand + BEMIT.**
 2. **Prefix**: follows ADR 0008 (`sc` / `pk` / `bds`). _Recommend: `sc`, which leaves custom properties untouched._
-   **Salem: `pk` (ADR 0008 renamed to Protokit).**
+   **Salem: `pk` (ADR 0008 renamed to Protokit), then `proto` (decision 9).**
 3. **Order**: brand first (`sc-c-button`, as briefed) or BEMIT first like Bolt (`c-sc-button`)? _Recommend: brand
-   first._ **Salem: BEMIT first, `c-pk-button`.**
+   first._ **Salem: BEMIT first, `c-proto-button`.**
 4. **Layout namespace**: `l-` per guideline 01 (B13) or the brief's `o-`? _Recommend: `l-`._ **Salem: `o-`.**
 5. **Release shape**: one breaking minor with a codemod, with no dual class names? _Recommend: yes. Add
-   `legacy.css` aliases only if custom properties change._ **Salem: one breaking release, `--sc-*` → `--pk-*`, no
+   `legacy.css` aliases only if custom properties change._ **Salem: one breaking release, `--sc-*` → `--proto-*`, no
    aliases; the codemod covers Job Sweep.**
 6. **Job Sweep design mockups** (`docs/design/`, about 14,000 occurrences): leave as frozen snapshots?
    _Recommend: yes._ **Salem: migrate them** (decision 7).

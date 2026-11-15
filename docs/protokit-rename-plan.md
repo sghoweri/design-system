@@ -2,7 +2,7 @@
 
 Date: 2026-11-15
 Status: planned; nothing has started. This plan carries out ADR 0008 (decisions 1 and 6) and ADR 0009 (decisions
-1–8). It keeps the GitHub repository and the site's domain (Salem, 2026-11-15: "Keep for now, we'll
+1–9; the prefix is `proto`, decision 9). It keeps the GitHub repository and the site's domain (Salem, 2026-11-15: "Keep for now, we'll
 figure out the repo and domain name later").
 
 The rename and the class migration land before any portfolio or resume link to the site goes out, and before ADR
@@ -11,19 +11,19 @@ listed separately at the end and referenced in the sequence as **S1–S4**. A re
 
 ## What changes
 
-| Thing                     | Today                                                              | After                                                                            |
-| ------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------- |
-| npm packages              | `@salemcobalt/tokens`, `@salemcobalt/ui`                           | `@protokit/tokens`, `@protokit/ui` (subpath exports unchanged)                   |
-| Component classes         | `.sc-button`, `.sc-dialog__close`                                  | `.c-pk-button`, `.c-pk-dialog__close`                                            |
-| Object, utility and theme | `.sc-stack`, `.sc-inline`, `.sc-visually-hidden`, `.sc-on-accent`  | `.o-pk-stack`, `.o-pk-inline`, `.u-pk-visually-hidden`, `.t-pk-on-accent`        |
-| Custom properties         | `--sc-*`: tokens, knobs, anchor names                              | `--pk-*`, with no aliases                                                        |
-| Token build               | `PREFIX = 'sc'` in `packages/tokens/build.mjs`; JS export `prefix` | `'pk'` (the `prefix` export's value changes, which is public API)                |
-| Cascade layer             | `@layer sc`; Job Sweep declares `@layer base, sc;`                 | `@layer pk`; `@layer base, pk;`                                                  |
-| Product name              | "Salem Cobalt design system" (READMEs, descriptions, site title)   | "Protokit"                                                                       |
-| Homepage copy             | stack list                                                         | ADR 0008 copy C, with type option A, in ADR 0008's homepage step (not this plan) |
-| GitHub repository         | `sghoweri/design-system`                                           | unchanged for now ("Later (Salem)" below)                                        |
-| Site URL                  | `designsystem.salemcobalt.com`                                     | unchanged for now ("Later (Salem)" below)                                        |
-| Versions                  | `latest` 0.1.1, `next` 0.2.0-rc.52                                 | `@protokit/*` starts at the next 0.2.0 rc; its first stable is 0.2.0             |
+| Thing                     | Today                                                              | After                                                                                 |
+| ------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| npm packages              | `@salemcobalt/tokens`, `@salemcobalt/ui`                           | `@protokit/tokens`, `@protokit/ui` (subpath exports unchanged)                        |
+| Component classes         | `.sc-button`, `.sc-dialog__close`                                  | `.c-proto-button`, `.c-proto-dialog__close`                                           |
+| Object, utility and theme | `.sc-stack`, `.sc-inline`, `.sc-visually-hidden`, `.sc-on-accent`  | `.o-proto-stack`, `.o-proto-inline`, `.u-proto-visually-hidden`, `.t-proto-on-accent` |
+| Custom properties         | `--sc-*`: tokens, knobs, anchor names                              | `--proto-*`, with no aliases                                                          |
+| Token build               | `PREFIX = 'sc'` in `packages/tokens/build.mjs`; JS export `prefix` | `'proto'` (the `prefix` export's value changes, which is public API)                  |
+| Cascade layer             | `@layer sc`; Job Sweep declares `@layer base, sc;`                 | `@layer proto`; `@layer base, proto;`                                                 |
+| Product name              | "Salem Cobalt design system" (READMEs, descriptions, site title)   | "Protokit"                                                                            |
+| Homepage copy             | stack list                                                         | ADR 0008 copy C, with type option A, in ADR 0008's homepage step (not this plan)      |
+| GitHub repository         | `sghoweri/design-system`                                           | unchanged for now ("Later (Salem)" below)                                             |
+| Site URL                  | `designsystem.salemcobalt.com`                                     | unchanged for now ("Later (Salem)" below)                                             |
+| Versions                  | `latest` 0.1.1, `next` 0.2.0-rc.52                                 | `@protokit/*` starts at the next 0.2.0 rc; its first stable is 0.2.0                  |
 
 **Why the first `@protokit` version is a 0.2.0 rc.** While an rc line is open, the release label is ignored and only
 the rc number moves (docs/releasing.md). The rename therefore lands as the next `0.2.0-rc.N` under the new names,
@@ -82,8 +82,8 @@ Label `skip-release`. Nothing published changes. About a day, tests included.
   - an HTML fixture with a `<style>` block, `style` and `class` attributes, and markup escaped inside JSON;
   - no false positives on `sc-` inside other words.
 - The Stylelint config, ready but not yet enforced:
-  - `selector-class-pattern` `^(c|o|u|t)-pk-[a-z0-9-]+(__[a-z0-9-]+)?$`;
-  - `custom-property-pattern` `^(pk-|_)`;
+  - `selector-class-pattern` `^(c|o|u|t)-proto-[a-z0-9-]+(__[a-z0-9-]+)?$`;
+  - `custom-property-pattern` `^(proto-|_)`;
   - a `var()` usage check against `tokens.json` and the documented knobs.
 
 ### S1 (Salem), when PR 2 is green
@@ -99,7 +99,7 @@ then review. Three commits, so review reads the hand-written diff apart from the
 1. **Codemod output only**: the whole repo except the history listed above.
 2. **Hand edits:**
    - package `name`s and `description`s;
-   - `PREFIX = 'pk'`;
+   - `PREFIX = 'proto'`;
    - `repository.url` stays `https://github.com/sghoweri/design-system.git` in both packages;
    - READMEs, install lines and import examples;
    - `docs/releasing.md` (package names, the Trusted Publisher section for `@protokit/*`);
@@ -125,7 +125,7 @@ About half a day.
 - Run the codemod over `apps/web` and `apps/extension`. That is 2,159 custom-property references, 23 CSS overrides
   and 125 class strings, mostly in DOM tests, at `f7b5bc56`. Re-count at the time.
 - Swap the dependencies to `@protokit/*` at PR 2's rc.
-- Change `layers.css` to `@layer base, pk;` and update its test.
+- Change `layers.css` to `@layer base, proto;` and update its test.
 - Add the same Stylelint patterns and usage check (ADR 0009, decision 5). Both exclude `docs/design/` for good
   (see PR 4).
 - Verify with Job Sweep's tests and builds, plus a look at the inbox, tracker, stepper and file flows in light and

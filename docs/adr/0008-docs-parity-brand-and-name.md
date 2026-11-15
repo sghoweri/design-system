@@ -8,7 +8,8 @@ Status: accepted (Salem, 2026-11-15). Nothing is renamed by this ADR; the rename
 
 Salem answered the calls at the end of this ADR. Where an answer differs from the recommendation, it says so.
 
-1. **Name: rename to Protokit.** Scope `@protokit` (`@protokit/ui`, `@protokit/tokens`), prefix `pk`. This goes
+1. **Name: rename to Protokit.** Scope `@protokit` (`@protokit/ui`, `@protokit/tokens`), prefix `proto`
+   (first decided as `pk`; ADR 0009, decision 9). This goes
    against the recommendation in section 5 (keep `@salemcobalt`). The rename lands before any portfolio or resume
    link to the site goes out, and before the docs-site work in section 3 (ADR 0009, decision 6).
 2. **Homepage copy: C, name-led.** "Protokit. Production parts for side projects." followed by copy A's subcopy.
@@ -342,7 +343,7 @@ Answered 2026-11-15. The answers are recorded under Decisions at the top.
 
 1. **Name**: keep `@salemcobalt`; keep the scope but give the site a product name (Fable's option); rename to
    Protokit; or rename to Bit? _Recommend: keep `@salemcobalt`, name and scope, through 2026-12-31._
-   **Salem: rename to Protokit (`@protokit`, prefix `pk`).**
+   **Salem: rename to Protokit (`@protokit`, prefix `pk`, then `proto`).**
 2. **Homepage copy**: A ("A design system with a day job"), B or C? _Recommend: A._ **Salem: C, name-led, with A's
    subcopy.**
 3. **Display type**: A (Plex, tuned, Unbounded for wordmark and numerals), B (Unbounded headline) or C (editorial
