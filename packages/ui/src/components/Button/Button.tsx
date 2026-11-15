@@ -1,5 +1,6 @@
-import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { cx } from '../../utils/cx';
+import { guardPressWhileLoading } from '../../utils/loadingGuard';
 
 /**
  * `success` is for the positive decision (Approve), beside a neutral or danger counterpart. `inverse` is a white button
@@ -17,7 +18,7 @@ export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   iconStart?: ReactNode | undefined;
   /** A 16px icon after the label. */
   iconEnd?: ReactNode | undefined;
-  /** Keeps the width, hides the label, shows a spinner, sets `aria-busy` and ignores clicks. */
+  /** Keeps the width, hides the label, shows a spinner, sets `aria-busy` and ignores presses (the click, mousedown, pointerdown and keydown handlers don't run). */
   loading?: boolean | undefined;
   /** Stretches to the container. */
   fullWidth?: boolean | undefined;
@@ -41,15 +42,12 @@ export function Button({
   className,
   children,
   onClick,
+  onMouseDown,
+  onPointerDown,
+  onKeyDown,
   ...rest
 }: ButtonProps) {
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    if (loading) {
-      event.preventDefault();
-      return;
-    }
-    onClick?.(event);
-  };
+  const press = guardPressWhileLoading(loading, { onClick, onMouseDown, onPointerDown, onKeyDown });
   return (
     <button
       type={type}
@@ -60,8 +58,8 @@ export function Button({
       data-full-width={fullWidth || undefined}
       data-icon-only={iconOnly || undefined}
       aria-busy={loading || undefined}
-      onClick={handleClick}
       {...rest}
+      {...press}
     >
       {iconStart ? (
         <span className="sc-button__icon" aria-hidden="true">

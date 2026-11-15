@@ -1,8 +1,9 @@
 import { useRender } from '@base-ui/react/use-render';
-import type { MouseEvent, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { Tooltip, type TooltipSide } from '../Tooltip/Tooltip';
 import type { ButtonSize, ButtonVariant } from '../Button/Button';
 import { cx } from '../../utils/cx';
+import { guardPressWhileLoading } from '../../utils/loadingGuard';
 
 export type IconButtonDotTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
 
@@ -21,7 +22,7 @@ export interface IconButtonProps extends Omit<useRender.ComponentProps<'button'>
   tooltipSide?: TooltipSide | undefined;
   /** Fully round, for avatars and floating actions. */
   round?: boolean | undefined;
-  /** Shows a spinner, sets `aria-busy` and ignores clicks. */
+  /** Shows a spinner, sets `aria-busy` and ignores presses (the click, mousedown, pointerdown and keydown handlers don't run), including a popup trigger's merged in through `render`. */
   loading?: boolean | undefined;
   /** A status dot in the top-left corner, ringed in `--sc-icon-button-dot-ring` (default `surface-default`). Decorative: put the status in `label` too ("Sweeps: paused"). */
   dot?: IconButtonDotTone | undefined;
@@ -45,17 +46,14 @@ export function IconButton({
   type,
   className,
   onClick,
+  onMouseDown,
+  onPointerDown,
+  onKeyDown,
   render,
   ref,
   ...rest
 }: IconButtonProps) {
-  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    if (loading) {
-      event.preventDefault();
-      return;
-    }
-    onClick?.(event);
-  };
+  const press = guardPressWhileLoading(loading, { onClick, onMouseDown, onPointerDown, onKeyDown });
   const button = useRender({
     render,
     ref,
@@ -70,8 +68,8 @@ export function IconButton({
       'data-loading': loading || undefined,
       'aria-busy': loading || undefined,
       'aria-label': label,
-      onClick: handleClick,
       ...rest,
+      ...press,
       children: (
         <>
           <span className="sc-button__icon" aria-hidden="true">

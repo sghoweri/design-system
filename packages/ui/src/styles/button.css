@@ -63,7 +63,7 @@
 .sc-button[data-variant='primary']:hover:where(:not(:disabled)) {
   background: var(--sc-color-accent-hover);
 }
-.sc-button[data-variant='primary']:active:where(:not(:disabled)) {
+.sc-button[data-variant='primary']:active:where(:not(:disabled):not([data-loading])) {
   background: var(--sc-color-accent-active);
 }
 /* Inverse: a white button with dark text, for the main action on a dark or coloured fill (the accent Toast), where
@@ -75,7 +75,7 @@
 .sc-button[data-variant='inverse']:hover:where(:not(:disabled)) {
   background: var(--sc-color-inverse-hover);
 }
-.sc-button[data-variant='inverse']:active:where(:not(:disabled)) {
+.sc-button[data-variant='inverse']:active:where(:not(:disabled):not([data-loading])) {
   background: var(--sc-color-inverse-active);
 }
 .sc-button[data-variant='secondary'] {
@@ -86,7 +86,7 @@
 .sc-button[data-variant='secondary']:hover:where(:not(:disabled)) {
   background: var(--sc-color-surface-hover);
 }
-.sc-button[data-variant='secondary']:active:where(:not(:disabled)) {
+.sc-button[data-variant='secondary']:active:where(:not(:disabled):not([data-loading])) {
   background: var(--sc-color-surface-active);
 }
 .sc-button[data-variant='ghost'] {
@@ -96,7 +96,7 @@
 .sc-button[data-variant='ghost']:hover:where(:not(:disabled)) {
   background: var(--sc-color-surface-hover);
 }
-.sc-button[data-variant='ghost']:active:where(:not(:disabled)) {
+.sc-button[data-variant='ghost']:active:where(:not(:disabled):not([data-loading])) {
   background: var(--sc-color-surface-active);
 }
 /* Success: the positive decision (the inbox's Approve), green where danger is red. Use one per view at most, beside
@@ -108,7 +108,7 @@
 .sc-button[data-variant='success']:hover:where(:not(:disabled)) {
   background: var(--sc-color-success-hover);
 }
-.sc-button[data-variant='success']:active:where(:not(:disabled)) {
+.sc-button[data-variant='success']:active:where(:not(:disabled):not([data-loading])) {
   background: var(--sc-color-success-hover);
   filter: brightness(0.95);
 }
@@ -119,7 +119,7 @@
 .sc-button[data-variant='danger']:hover:where(:not(:disabled)) {
   background: var(--sc-color-danger-hover);
 }
-.sc-button[data-variant='danger']:active:where(:not(:disabled)) {
+.sc-button[data-variant='danger']:active:where(:not(:disabled):not([data-loading])) {
   background: var(--sc-color-danger-hover);
   filter: brightness(0.95);
 }

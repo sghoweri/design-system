@@ -238,6 +238,32 @@ describe('Menu', () => {
     expect(trigger).toHaveAttribute('data-popup-open');
   });
 
+  it('stays shut when its IconButton trigger is loading, by mouse or keyboard', async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    render(
+      <Menu.Root onOpenChange={onOpenChange}>
+        <Menu.Trigger render={<IconButton label="More actions" loading />}>
+          <MoreHorizontalIcon />
+        </Menu.Trigger>
+        <Menu.Content align="end">
+          <Menu.Item>Snooze</Menu.Item>
+        </Menu.Content>
+      </Menu.Root>,
+    );
+    const trigger = screen.getByRole('button', { name: 'More actions' });
+    await user.pointer({ keys: '[MouseLeft>]', target: trigger });
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    await user.pointer({ keys: '[/MouseLeft]', target: trigger });
+    await user.click(trigger);
+    trigger.focus();
+    await user.keyboard('{Enter}');
+    await user.keyboard(' ');
+    await user.keyboard('{ArrowDown}');
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
   it('names the menu from Menu.Header, which no key or pointer can reach as an item', async () => {
     const user = userEvent.setup();
     render(
