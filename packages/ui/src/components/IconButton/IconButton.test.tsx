@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IconButton } from './IconButton';
 import { PauseIcon } from '../../icons/icons.gen';
@@ -51,6 +51,30 @@ describe('IconButton', () => {
     expect(button).toHaveAttribute('aria-busy', 'true');
     await userEvent.click(button);
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('ignores mousedown, pointerdown and keydown while loading', () => {
+    const onMouseDown = vi.fn();
+    const onPointerDown = vi.fn();
+    const onKeyDown = vi.fn();
+    render(
+      <IconButton
+        label="Refresh"
+        loading
+        onMouseDown={onMouseDown}
+        onPointerDown={onPointerDown}
+        onKeyDown={onKeyDown}
+      >
+        <PauseIcon />
+      </IconButton>,
+    );
+    const button = screen.getByRole('button', { name: 'Refresh' });
+    fireEvent.pointerDown(button);
+    expect(fireEvent.mouseDown(button)).toBe(false);
+    fireEvent.keyDown(button, { key: 'ArrowDown' });
+    expect(onMouseDown).not.toHaveBeenCalled();
+    expect(onPointerDown).not.toHaveBeenCalled();
+    expect(onKeyDown).not.toHaveBeenCalled();
   });
 
   it('shows the label as a tooltip on focus when tooltip is true', async () => {
