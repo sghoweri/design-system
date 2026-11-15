@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from './Button';
 import { Kbd } from '../Kbd/Kbd';
@@ -49,6 +49,44 @@ describe('Button', () => {
     expect(button).toHaveAttribute('data-loading');
     await userEvent.click(button);
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('ignores mousedown, pointerdown and keydown while loading; a cancelled mousedown moves no focus', () => {
+    const onMouseDown = vi.fn();
+    const onPointerDown = vi.fn();
+    const onKeyDown = vi.fn();
+    render(
+      <Button loading onMouseDown={onMouseDown} onPointerDown={onPointerDown} onKeyDown={onKeyDown}>
+        Sending
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Sending' });
+    fireEvent.pointerDown(button);
+    // fireEvent returns false when the default was cancelled.
+    expect(fireEvent.mouseDown(button)).toBe(false);
+    // Keydown keeps its default, so Tab still leaves the button.
+    expect(fireEvent.keyDown(button, { key: 'ArrowDown' })).toBe(true);
+    expect(onMouseDown).not.toHaveBeenCalled();
+    expect(onPointerDown).not.toHaveBeenCalled();
+    expect(onKeyDown).not.toHaveBeenCalled();
+  });
+
+  it('passes mousedown, pointerdown and keydown through when not loading', () => {
+    const onMouseDown = vi.fn();
+    const onPointerDown = vi.fn();
+    const onKeyDown = vi.fn();
+    render(
+      <Button onMouseDown={onMouseDown} onPointerDown={onPointerDown} onKeyDown={onKeyDown}>
+        Send
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Send' });
+    fireEvent.pointerDown(button);
+    expect(fireEvent.mouseDown(button)).toBe(true);
+    fireEvent.keyDown(button, { key: 'ArrowDown' });
+    expect(onMouseDown).toHaveBeenCalledTimes(1);
+    expect(onPointerDown).toHaveBeenCalledTimes(1);
+    expect(onKeyDown).toHaveBeenCalledTimes(1);
   });
 
   it('is disabled natively', () => {

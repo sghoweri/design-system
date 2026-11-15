@@ -9,6 +9,14 @@ describe('fitCount', () => {
     expect(fitCount({ widths, current: 2, available: 600, more: 72, gap: 0 })).toBe(5);
   });
 
+  it('with keepMore, reserves room for "More" even when every item fits (it holds panelEnd)', () => {
+    // 496 fits in 500 alone, but not beside More (568): the last item collapses.
+    expect(fitCount({ widths, current: -1, available: 500, more: 72, gap: 0, keepMore: true })).toBe(5);
+    // Room for both: every item stays inline and More is still reserved.
+    expect(fitCount({ widths, current: -1, available: 568, more: 72, gap: 0, keepMore: true })).toBe(6);
+    expect(fitCount({ widths, current: -1, available: 500, more: 72, gap: 0, keepMore: false })).toBe(6);
+  });
+
   it('keeps an exact fit inline, allowing for float noise only', () => {
     expect(fitCount({ widths, current: -1, available: 496 - 1e-9, more: 72, gap: 0 })).toBe(6);
   });

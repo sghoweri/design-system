@@ -87,7 +87,8 @@
 .sc-banner:not([data-placement='page']) > .sc-banner__dismiss:hover:where(:not(:disabled)) {
   background: var(--sc-color-surface-raised-hover);
 }
-.sc-banner:not([data-placement='page']) > .sc-banner__dismiss:active:where(:not(:disabled)) {
+.sc-banner:not([data-placement='page'])
+  > .sc-banner__dismiss:active:where(:not(:disabled):not([data-loading])) {
   background: var(--sc-color-surface-raised-active);
 }
 .sc-banner:not([data-placement='page']) > .sc-banner__dismiss:dir(rtl) {
@@ -113,6 +114,6 @@
   color: inherit;
 }
 .sc-banner > .sc-button[data-variant='ghost']:hover:where(:not(:disabled)),
-.sc-banner > .sc-button[data-variant='ghost']:active:where(:not(:disabled)) {
+.sc-banner > .sc-button[data-variant='ghost']:active:where(:not(:disabled):not([data-loading])) {
   background: rgb(from var(--_fg) r g b / 0.1);
 }

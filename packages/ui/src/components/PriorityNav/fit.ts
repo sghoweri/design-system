@@ -11,6 +11,8 @@ export interface FitInput {
   more: number;
   /** Gap between items, px. */
   gap: number;
+  /** Reserve room for "More" even when every item fits (it is holding `panelEnd` while the row overflows). */
+  keepMore?: boolean | undefined;
 }
 
 /**
@@ -34,11 +36,11 @@ export function rowWidth(widths: readonly number[], gap: number): number {
   return widths.length > 1 ? total + gap * (widths.length - 1) : total;
 }
 
-export function fitCount({ widths, current, available, more, gap }: FitInput): number {
+export function fitCount({ widths, current, available, more, gap, keepMore = false }: FitInput): number {
   const n = widths.length;
   const hasCurrent = current >= 0 && current < n;
   const others = hasCurrent ? n - 1 : n;
-  if (rowWidth(widths, gap) <= available + EPSILON) return others;
+  if (!keepMore && rowWidth(widths, gap) <= available + EPSILON) return others;
 
   let used = more + (hasCurrent ? widths[current]! + gap : 0);
   let count = 0;

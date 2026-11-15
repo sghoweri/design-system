@@ -73,7 +73,7 @@ for (const v of variants) {
   const states: Array<[string, string]> = [
     ['rest', base],
     ['hover', `${base}:hover:where(:not(:disabled))`],
-    ['active', `${base}:active:where(:not(:disabled))`],
+    ['active', `${base}:active:where(:not(:disabled):not([data-loading]))`],
     ['popup open', `${base}[data-popup-open]`],
   ];
   for (const [state, selector] of states) {
