@@ -45,6 +45,7 @@ const ACTIVATABLE = [
   '.sc-priority-nav__toggle',
   '.sc-popover__close',
   '.sc-flow__rail-item',
+  'a.sc-status-strip__cell',
 ];
 const DISABLED = [
   '.sc-button:disabled',

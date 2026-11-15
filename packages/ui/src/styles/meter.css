@@ -1,0 +1,98 @@
+/* ---- Meter ----------------------------------------------------------------- */
+/* A static amount on a bar (role="meter"). Every tone's fill is ≥ 3:1 against the surface.active track and every
+   surface, washes included, in both themes (tokens contrast test). The value text is always drawn, so the bar is
+   never the only carrier of the number. */
+.sc-meter {
+  --_fill: var(--sc-color-accent-default);
+  --_h: 12px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: var(--sc-spacing-sm);
+  row-gap: var(--sc-spacing-2xs);
+  align-items: baseline;
+  min-inline-size: 0;
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+  color: var(--sc-color-text-default);
+}
+.sc-meter[data-size='sm'] {
+  --_h: 8px;
+}
+.sc-meter[data-tone='success'] {
+  --_fill: var(--sc-color-success-solid);
+}
+.sc-meter[data-tone='warning'] {
+  --_fill: var(--sc-color-warning-solid);
+}
+.sc-meter[data-tone='danger'] {
+  --_fill: var(--sc-color-danger-solid);
+}
+.sc-meter[data-tone='neutral'] {
+  --_fill: var(--sc-color-text-muted);
+}
+.sc-meter__label {
+  grid-column: 1;
+  min-inline-size: 0;
+  font-weight: var(--sc-font-weight-medium);
+}
+.sc-meter__value {
+  grid-column: 2;
+  color: var(--sc-color-text-muted);
+  font-size: var(--sc-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+  white-space: nowrap;
+}
+.sc-meter__track {
+  grid-column: 1 / -1;
+  position: relative;
+  block-size: var(--_h);
+  overflow: hidden;
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-surface-active);
+}
+.sc-meter__fill {
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--_fill);
+  /* Moves only when the value changes; the first render draws it in place (the data motion, as Score's ring). */
+  transition: width var(--sc-duration-data) var(--sc-ease-data);
+}
+/* With a mark the part is solid from the start and the rest of the fill is hatched in the same tone: the stripes
+   keep 3:1 on the track, and the solid/hatched difference, not a second colour, tells the two apart. */
+.sc-meter[data-marked] .sc-meter__fill {
+  background: repeating-linear-gradient(135deg, var(--_fill) 0 2px, transparent 2px 4px);
+}
+.sc-meter__mark {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--_mark);
+  border-radius: inherit;
+  background: var(--_fill);
+  transition: inline-size var(--sc-duration-data) var(--sc-ease-data);
+}
+/* inline: value then bar on one line, for a table cell. The value column has a set width so the bars in a column
+   start at the same x and compare; set --sc-meter-value-width on the table for longer numbers. */
+.sc-meter[data-layout='inline'] {
+  grid-template-columns: var(--sc-meter-value-width, 4ch) minmax(3rem, 1fr);
+  align-items: center;
+}
+.sc-meter[data-layout='inline'] > .sc-meter__value {
+  grid-column: 1;
+  grid-row: 1;
+  color: inherit;
+  font-size: inherit;
+}
+.sc-meter[data-layout='inline'] > .sc-meter__track {
+  grid-column: 2;
+  grid-row: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sc-meter__fill,
+  .sc-meter__mark {
+    transition: none;
+  }
+}

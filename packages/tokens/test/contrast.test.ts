@@ -71,6 +71,11 @@ const pairs: Array<[string, string[], number]> = [
   ['warning-solid', ['surface-active'], 3],
   ['danger-solid', ['surface-active'], 3],
   ['text-muted', ['surface-active'], 3],
+  // Meter fills and StatusStrip cells (solids, the neutral and running rings): the bar is data, so 3:1 against its
+  // surface.active track and every surface it can sit on, row hover and raised washes included.
+  ...['accent-default', 'success-solid', 'warning-solid', 'danger-solid', 'text-muted'].map(
+    (fill): [string, string[], number] => [fill, [...surfaces, 'accent-wash'], 3],
+  ),
   // Word diff: text on the tints, and the underline and strike-through (the non-colour cue) on their tint.
   ['text-default', ['diff-added-wash', 'diff-removed-wash'], 4.5],
   ['text-muted', ['diff-removed-wash'], 4.5],
