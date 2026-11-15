@@ -1,4 +1,4 @@
-# Versions, tags and publishes @salemcobalt/tokens and @salemcobalt/ui.
+# Versions, tags and publishes @protokit/tokens and @protokit/ui.
 #
 #   push to main      -> rc prerelease  (vX.Y.Z-rc.N, npm dist-tag `next`, GitHub prerelease, no commit)
 #   push to release   -> stable release (vX.Y.Z, dist-tag `latest`, GitHub release, version commit, merge back to main)
@@ -186,13 +186,13 @@ jobs:
 
       # Dependency order: ui has a peer dependency on tokens. A version already on the
       # registry is skipped, so re-running after a partial failure publishes what is missing.
-      - name: Publish @salemcobalt/tokens
+      - name: Publish @protokit/tokens
         if: steps.version.outputs.version != ''
         run: .github/scripts/publish-if-new.sh packages/tokens
         env:
           DIST_TAG: ${{ steps.version.outputs.dist-tag }}
           DRY_RUN: ${{ steps.mode.outputs.dry }}
-      - name: Publish @salemcobalt/ui
+      - name: Publish @protokit/ui
         if: steps.version.outputs.version != ''
         run: .github/scripts/publish-if-new.sh packages/ui
         env:

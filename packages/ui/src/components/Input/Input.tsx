@@ -50,23 +50,23 @@ export function Input({
       className={className}
     >
       <span
-        className="sc-input-wrap"
+        className="c-proto-input-wrap"
         data-icon-start={iconStart ? '' : undefined}
         data-icon-end={iconEnd ? '' : undefined}
       >
         {iconStart ? (
-          <span className="sc-input__icon" data-side="start" aria-hidden="true">
+          <span className="c-proto-input__icon" data-side="start" aria-hidden="true">
             {iconStart}
           </span>
         ) : null}
         <Field.Control
-          className="sc-input"
+          className="c-proto-input"
           required={required}
           onValueChange={onValueChange ? (value) => onValueChange(value) : undefined}
           {...rest}
         />
         {iconEnd ? (
-          <span className="sc-input__icon" data-side="end" aria-hidden="true">
+          <span className="c-proto-input__icon" data-side="end" aria-hidden="true">
             {iconEnd}
           </span>
         ) : null}

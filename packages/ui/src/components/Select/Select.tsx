@@ -47,11 +47,11 @@ function isGroup<V extends string>(entry: SelectOption<V> | SelectGroup<V>): ent
 
 function Option<V extends string>({ option }: { option: SelectOption<V> }) {
   return (
-    <BaseSelect.Item value={option.value} disabled={option.disabled} className="sc-select__item">
-      <BaseSelect.ItemIndicator className="sc-select__indicator">
+    <BaseSelect.Item value={option.value} disabled={option.disabled} className="c-proto-select__item">
+      <BaseSelect.ItemIndicator className="c-proto-select__indicator">
         <CheckIcon size="sm" />
       </BaseSelect.ItemIndicator>
-      <BaseSelect.ItemText className="sc-select__item-text">{option.label}</BaseSelect.ItemText>
+      <BaseSelect.ItemText className="c-proto-select__item-text">{option.label}</BaseSelect.ItemText>
     </BaseSelect.Item>
   );
 }
@@ -119,24 +119,24 @@ export function Select<Value extends string = string>({
         required={required}
         readOnly={readOnly}
       >
-        <span className="sc-select__wrap" data-full-width={fullWidth || undefined}>
+        <span className="c-proto-select__wrap" data-full-width={fullWidth || undefined}>
           <BaseSelect.Trigger
             id={id}
-            className="sc-select"
+            className="c-proto-select"
             data-size={size}
             data-full-width={fullWidth || undefined}
             data-clearable={canClear || undefined}
             onKeyDown={onTriggerKeyDown}
           >
-            <BaseSelect.Value className="sc-select__value" placeholder={placeholder} />
-            <BaseSelect.Icon className="sc-select__icon">
+            <BaseSelect.Value className="c-proto-select__value" placeholder={placeholder} />
+            <BaseSelect.Icon className="c-proto-select__icon">
               <ChevronDownIcon />
             </BaseSelect.Icon>
           </BaseSelect.Trigger>
           {canClear ? (
             <button
               type="button"
-              className="sc-select__clear"
+              className="c-proto-select__clear"
               aria-label={clearLabel}
               onClick={() => setValue(null)}
             >
@@ -146,19 +146,19 @@ export function Select<Value extends string = string>({
         </span>
         <BaseSelect.Portal>
           <BaseSelect.Positioner
-            className="sc-select__positioner"
+            className="c-proto-select__positioner"
             sideOffset={4}
             collisionPadding={collisionPadding}
             alignItemWithTrigger={false}
             // A popup wider than the trigger grows from the trigger's start edge rather than overhanging both sides.
             align="start"
           >
-            <BaseSelect.Popup className="sc-select__popup">
+            <BaseSelect.Popup className="c-proto-select__popup">
               <BaseSelect.List>
                 {options.map((entry, i) =>
                   isGroup(entry) ? (
-                    <BaseSelect.Group key={i} className="sc-select__group">
-                      <BaseSelect.GroupLabel className="sc-select__group-label">
+                    <BaseSelect.Group key={i} className="c-proto-select__group">
+                      <BaseSelect.GroupLabel className="c-proto-select__group-label">
                         {entry.label}
                       </BaseSelect.GroupLabel>
                       {entry.options.map((option) => (

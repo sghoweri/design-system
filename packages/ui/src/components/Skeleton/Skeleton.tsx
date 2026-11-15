@@ -38,11 +38,11 @@ export function Skeleton({
   };
   if (variant === 'text' && lines > 1) {
     return (
-      <span className={cx('sc-skeleton-lines', className)} aria-hidden="true" style={style} {...rest}>
+      <span className={cx('c-proto-skeleton-lines', className)} aria-hidden="true" style={style} {...rest}>
         {Array.from({ length: lines }, (_, i) => (
           <span
             key={i}
-            className="sc-skeleton"
+            className="c-proto-skeleton"
             data-variant="text"
             data-still={still || undefined}
             data-last={i === lines - 1 || undefined}
@@ -54,7 +54,7 @@ export function Skeleton({
   }
   return (
     <span
-      className={cx('sc-skeleton', className)}
+      className={cx('c-proto-skeleton', className)}
       data-variant={variant}
       data-still={still || undefined}
       aria-hidden="true"

@@ -12,7 +12,7 @@ const ladder = ['base', 'raised', 'sticky', 'backdrop', 'dialog', 'dropdown', 't
 
 describe('z-index layers', () => {
   it('ascend in the documented order: page chrome < backdrop < dialog < dropdown < toast < tooltip', () => {
-    const values = ladder.map((name) => json.light[`sc-z-${name}`]);
+    const values = ladder.map((name) => json.light[`proto-z-${name}`]);
     values.forEach((v) => expect(typeof v).toBe('number'));
     for (let i = 1; i < values.length; i += 1) {
       expect(values[i]!, `${ladder[i]} must be above ${ladder[i - 1]}`).toBeGreaterThan(values[i - 1]!);

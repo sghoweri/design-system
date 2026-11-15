@@ -63,19 +63,19 @@ export function Banner({
   return (
     <div
       role={role ?? (tone === 'warning' || tone === 'danger' ? 'alert' : 'status')}
-      className={cx('sc-banner', className)}
+      className={cx('c-proto-banner', className)}
       data-tone={tone}
       data-placement={placement === 'page' ? 'page' : undefined}
       data-dismissible={dismissible || undefined}
       {...rest}
     >
       {glyph ? (
-        <span className="sc-banner__icon" aria-hidden="true">
+        <span className="c-proto-banner__icon" aria-hidden="true">
           {glyph}
         </span>
       ) : null}
-      <div className="sc-banner__body">{children}</div>
-      {action ? <div className="sc-banner__action">{action}</div> : null}
+      <div className="c-proto-banner__body">{children}</div>
+      {action ? <div className="c-proto-banner__action">{action}</div> : null}
       {dismissible ? (
         // Inline: a raised round button on the top-right corner. Page: in the row, as part of the bar.
         <IconButton
@@ -83,7 +83,7 @@ export function Banner({
           size="sm"
           variant={placement === 'page' ? 'ghost' : 'secondary'}
           round={placement !== 'page'}
-          className="sc-banner__dismiss"
+          className="c-proto-banner__dismiss"
           onClick={() => {
             setDismissed(true);
             onDismiss?.();

@@ -35,7 +35,7 @@ export default defineConfig([
     treeshake: false,
   },
   {
-    // `@salemcobalt/ui/editor`, its own entry so CodeMirror never reaches the main one (Gold Standard 04 rule 21).
+    // `@protokit/ui/editor`, its own entry so CodeMirror never reaches the main one (Gold Standard 04 rule 21).
     // Splitting keeps the dynamic import('./codemirror') a separate chunk the consumer's bundler loads on mount.
     ...shared,
     entry: { editor: 'src/components/TextEditor/index.ts' },

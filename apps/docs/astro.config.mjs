@@ -15,12 +15,12 @@ export default defineConfig({
       favicon: '/favicon.svg',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/sghoweri/design-system' },
-        { icon: 'npm', label: 'npm', href: 'https://www.npmjs.com/package/@salemcobalt/ui' },
+        { icon: 'npm', label: 'npm', href: 'https://www.npmjs.com/package/@protokit/ui' },
         { icon: 'storybook', label: 'Workshop (Storybook)', href: '/workshop/' },
       ],
       editLink: { baseUrl: 'https://github.com/sghoweri/design-system/edit/main/apps/docs/' },
-      // Tokens, then the component layer (@layer sc), then the Starlight mapping, which is unlayered and so wins.
-      customCss: ['@salemcobalt/tokens/css', '@salemcobalt/ui/styles.css', './src/styles/theme.css'],
+      // Tokens, then the component layer (@layer proto), then the Starlight mapping, which is unlayered and so wins.
+      customCss: ['@protokit/tokens/css', '@protokit/ui/styles.css', './src/styles/theme.css'],
       components: { Head: './src/components/Head.astro' },
       sidebar: [
         { label: 'Getting started', slug: 'getting-started' },

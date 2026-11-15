@@ -11,11 +11,11 @@ describe('EmptyState', () => {
         <Button>Add a job</Button>
       </EmptyState>,
     );
-    expect(screen.getByText('No applications yet')).toHaveClass('sc-empty-state__title');
-    expect(screen.getByText('Postings show up here.')).toHaveClass('sc-empty-state__description');
-    expect(container.querySelector('.sc-empty-state__icon')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('No applications yet')).toHaveClass('c-proto-empty-state__title');
+    expect(screen.getByText('Postings show up here.')).toHaveClass('c-proto-empty-state__description');
+    expect(container.querySelector('.c-proto-empty-state__icon')).toHaveAttribute('aria-hidden', 'true');
     expect(
-      screen.getByRole('button', { name: 'Add a job' }).closest('.sc-empty-state__actions'),
+      screen.getByRole('button', { name: 'Add a job' }).closest('.c-proto-empty-state__actions'),
     ).not.toBeNull();
     expect(container.firstElementChild).toHaveAttribute('data-size', 'md');
     await expectNoA11yViolations(container);
@@ -28,9 +28,9 @@ describe('EmptyState', () => {
     const root = container.firstElementChild!;
     expect(root.tagName).toBe('SECTION');
     expect(root).toHaveAttribute('data-size', 'sm');
-    expect(root.querySelector('.sc-empty-state__icon')).toBeNull();
-    expect(root.querySelector('.sc-empty-state__description')).toBeNull();
-    expect(root.querySelector('.sc-empty-state__actions')).toBeNull();
+    expect(root.querySelector('.c-proto-empty-state__icon')).toBeNull();
+    expect(root.querySelector('.c-proto-empty-state__description')).toBeNull();
+    expect(root.querySelector('.c-proto-empty-state__actions')).toBeNull();
   });
 
   it('renders the title as a heading at headingLevel, a p without it', async () => {
@@ -39,7 +39,7 @@ describe('EmptyState', () => {
     );
     const heading = screen.getByRole('heading', { level: 2, name: 'Your inbox is clear' });
     expect(heading.tagName).toBe('H2');
-    expect(heading).toHaveClass('sc-empty-state__title');
+    expect(heading).toHaveClass('c-proto-empty-state__title');
     await expectNoA11yViolations(container);
 
     rerender(<EmptyState title="Your inbox is clear" />);

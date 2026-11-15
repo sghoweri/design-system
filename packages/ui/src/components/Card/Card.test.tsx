@@ -7,7 +7,7 @@ describe('Card', () => {
     render(<Card data-testid="card">Body</Card>);
     const card = screen.getByTestId('card');
     expect(card.tagName).toBe('DIV');
-    expect(card).toHaveClass('sc-card');
+    expect(card).toHaveClass('c-proto-card');
     expect(card).toHaveAttribute('data-variant', 'outlined');
     expect(card).toHaveAttribute('data-padding', 'md');
     expect(card).not.toHaveAttribute('data-interactive');
@@ -32,7 +32,7 @@ describe('Card', () => {
     );
     const nav = screen.getByRole('navigation', { name: 'Your files' });
     expect(nav.tagName).toBe('NAV');
-    expect(nav).toHaveClass('sc-card');
+    expect(nav).toHaveClass('c-proto-card');
   });
 
   it('composes through `render` and keeps its class and state attributes', () => {
@@ -44,7 +44,7 @@ describe('Card', () => {
     );
     const link = screen.getByRole('link', { name: 'Open job' });
     expect(link).toHaveAttribute('href', '#job');
-    expect(link).toHaveClass('sc-card');
+    expect(link).toHaveClass('c-proto-card');
     expect(link).toHaveAttribute('data-interactive');
     expect(link).toHaveAttribute('data-selected');
   });

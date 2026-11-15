@@ -19,8 +19,8 @@
     "live": null,
     "storybook": null,
     "npm": [
-      "https://www.npmjs.com/package/@salemcobalt/tokens",
-      "https://www.npmjs.com/package/@salemcobalt/ui"
+      "https://www.npmjs.com/package/@protokit/tokens",
+      "https://www.npmjs.com/package/@protokit/ui"
     ]
   },
   "highlights": [

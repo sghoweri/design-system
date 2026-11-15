@@ -8,9 +8,9 @@ describe('Banner', () => {
   it('is a status strip with the info tone and icon by default', async () => {
     const { container } = render(<Banner>3 new postings since you looked.</Banner>);
     const banner = screen.getByRole('status');
-    expect(banner).toHaveClass('sc-banner');
+    expect(banner).toHaveClass('c-proto-banner');
     expect(banner).toHaveAttribute('data-tone', 'info');
-    expect(banner.querySelector('.sc-banner__icon svg')).not.toBeNull();
+    expect(banner.querySelector('.c-proto-banner__icon svg')).not.toBeNull();
     expect(banner).toHaveTextContent('3 new postings since you looked.');
     await expectNoA11yViolations(container);
   });
@@ -30,7 +30,7 @@ describe('Banner', () => {
     );
     const banner = screen.getByRole('alert');
     expect(banner).toHaveAttribute('data-tone', 'warning');
-    expect(screen.getByRole('button', { name: 'Resume' }).closest('.sc-banner__action')).not.toBeNull();
+    expect(screen.getByRole('button', { name: 'Resume' }).closest('.c-proto-banner__action')).not.toBeNull();
     await expectNoA11yViolations(container);
   });
 
@@ -77,7 +77,7 @@ describe('Banner', () => {
       </Banner>,
     );
     const banner = screen.getByRole('status');
-    expect(banner.querySelector('.sc-banner__icon')).toBeNull();
+    expect(banner.querySelector('.c-proto-banner__icon')).toBeNull();
     expect(banner).toHaveAttribute('data-tone', 'neutral');
     rerender(
       <Banner tone="neutral" dismissible open={false}>
@@ -105,10 +105,10 @@ describe('Banner', () => {
     );
     const banner = screen.getByRole('status');
     expect([...banner.children].map((el) => el.className)).toEqual([
-      'sc-banner__icon',
-      'sc-banner__body',
-      'sc-banner__action',
-      expect.stringContaining('sc-banner__dismiss'),
+      'c-proto-banner__icon',
+      'c-proto-banner__body',
+      'c-proto-banner__action',
+      expect.stringContaining('c-proto-banner__dismiss'),
     ]);
     await user.tab();
     expect(screen.getByRole('button', { name: 'Choose what to cut' })).toHaveFocus();
@@ -133,11 +133,11 @@ describe('Banner', () => {
       </Banner>,
     );
     const banner = screen.getByRole('status');
-    expect(banner.querySelector('.sc-banner__icon')).toBeNull();
+    expect(banner.querySelector('.c-proto-banner__icon')).toBeNull();
     expect(banner.querySelector('svg')).toBeNull();
-    expect(banner.firstElementChild).toHaveClass('sc-banner__body');
+    expect(banner.firstElementChild).toHaveClass('c-proto-banner__body');
     expect(
-      screen.getByRole('button', { name: 'Choose what to cut' }).closest('.sc-banner__action'),
+      screen.getByRole('button', { name: 'Choose what to cut' }).closest('.c-proto-banner__action'),
     ).not.toBeNull();
     await expectNoA11yViolations(container);
   });

@@ -1,6 +1,6 @@
 /* ---- Icon ------------------------------------------------------------------ */
-.sc-icon {
-  --_s: var(--sc-size-icon-md);
+.c-proto-icon {
+  --_s: var(--proto-size-icon-md);
   display: inline-block;
   inline-size: var(--_s);
   block-size: var(--_s);
@@ -9,18 +9,18 @@
   color: inherit;
   overflow: visible;
 }
-.sc-icon[data-size='xs'] {
-  --_s: var(--sc-size-icon-xs);
+.c-proto-icon[data-size='xs'] {
+  --_s: var(--proto-size-icon-xs);
 }
-.sc-icon[data-size='sm'] {
-  --_s: var(--sc-size-icon-sm);
+.c-proto-icon[data-size='sm'] {
+  --_s: var(--proto-size-icon-sm);
 }
-.sc-icon[data-size='lg'] {
-  --_s: var(--sc-size-icon-lg);
+.c-proto-icon[data-size='lg'] {
+  --_s: var(--proto-size-icon-lg);
 }
-.sc-icon[data-size='xl'] {
-  --_s: var(--sc-size-icon-xl);
+.c-proto-icon[data-size='xl'] {
+  --_s: var(--proto-size-icon-xl);
 }
-.sc-icon[data-size='em'] {
+.c-proto-icon[data-size='em'] {
   --_s: 1em;
 }

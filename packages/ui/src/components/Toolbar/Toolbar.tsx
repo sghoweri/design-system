@@ -19,7 +19,7 @@ export interface ToolbarRootProps extends Omit<BaseToolbar.Root.Props, 'classNam
 function Root({ wrap = true, gap = 'xs', className, ...rest }: ToolbarRootProps) {
   return (
     <BaseToolbar.Root
-      className={cx('sc-toolbar', className)}
+      className={cx('c-proto-toolbar', className)}
       data-wrap={wrap || undefined}
       data-gap={gap}
       {...rest}
@@ -37,7 +37,7 @@ export interface ToolbarGroupProps extends Omit<BaseToolbar.Group.Props, 'classN
 
 /** Keeps related controls together with a tighter gap. */
 function Group({ gap = '2xs', className, ...rest }: ToolbarGroupProps) {
-  return <BaseToolbar.Group className={cx('sc-toolbar__group', className)} data-gap={gap} {...rest} />;
+  return <BaseToolbar.Group className={cx('c-proto-toolbar__group', className)} data-gap={gap} {...rest} />;
 }
 
 export interface ToolbarSeparatorProps extends Omit<BaseToolbar.Separator.Props, 'className'> {
@@ -46,7 +46,7 @@ export interface ToolbarSeparatorProps extends Omit<BaseToolbar.Separator.Props,
 
 /** A hairline between groups. */
 function Separator({ className, ...rest }: ToolbarSeparatorProps) {
-  return <BaseToolbar.Separator className={cx('sc-toolbar__separator', className)} {...rest} />;
+  return <BaseToolbar.Separator className={cx('c-proto-toolbar__separator', className)} {...rest} />;
 }
 
 export interface ToolbarButtonProps extends Omit<BaseToolbar.Button.Props, 'className'> {
@@ -77,7 +77,7 @@ export interface ToolbarSpacerProps {
 
 /** Pushes what follows to the far end. */
 function Spacer({ className }: ToolbarSpacerProps) {
-  return <div className={cx('sc-toolbar__spacer', className)} aria-hidden="true" />;
+  return <div className={cx('c-proto-toolbar__spacer', className)} aria-hidden="true" />;
 }
 
 /** A horizontal container of controls. Built on Base UI's Toolbar. */

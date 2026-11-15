@@ -19,7 +19,7 @@ export interface TabsRootProps extends Omit<
 function Root({ className, onValueChange, ...rest }: TabsRootProps) {
   return (
     <BaseTabs.Root
-      className={cx('sc-tabs', className)}
+      className={cx('c-proto-tabs', className)}
       onValueChange={onValueChange ? (value) => onValueChange(String(value)) : undefined}
       {...rest}
     />
@@ -42,13 +42,13 @@ export interface TabsListProps extends Omit<BaseTabs.List.Props, 'className'> {
 function List({ fill = false, variant = 'line', className, children, ...rest }: TabsListProps) {
   return (
     <BaseTabs.List
-      className={cx('sc-tabs__list', className)}
+      className={cx('c-proto-tabs__list', className)}
       data-fill={fill || undefined}
       data-variant={variant}
       {...rest}
     >
       {children}
-      <BaseTabs.Indicator className="sc-tabs__indicator" />
+      <BaseTabs.Indicator className="c-proto-tabs__indicator" />
     </BaseTabs.List>
   );
 }
@@ -65,17 +65,17 @@ export interface TabsTabProps extends Omit<BaseTabs.Tab.Props, 'className' | 'va
 /** One tab. */
 function Tab({ icon, count, className, children, ...rest }: TabsTabProps) {
   return (
-    <BaseTabs.Tab className={cx('sc-tabs__tab', className)} {...rest}>
+    <BaseTabs.Tab className={cx('c-proto-tabs__tab', className)} {...rest}>
       {icon ? (
-        <span className="sc-tabs__icon" aria-hidden="true">
+        <span className="c-proto-tabs__icon" aria-hidden="true">
           {icon}
         </span>
       ) : null}
-      <span className="sc-tabs__label">{children}</span>
+      <span className="c-proto-tabs__label">{children}</span>
       {count != null ? (
         <>
           {' '}
-          <span className="sc-tabs__count">{count}</span>
+          <span className="c-proto-tabs__count">{count}</span>
         </>
       ) : null}
     </BaseTabs.Tab>
@@ -89,7 +89,7 @@ export interface TabsPanelProps extends Omit<BaseTabs.Panel.Props, 'className' |
 
 /** The content of one tab. Unmounted while hidden unless `keepMounted`. */
 function Panel({ className, ...rest }: TabsPanelProps) {
-  return <BaseTabs.Panel className={cx('sc-tabs__panel', className)} {...rest} />;
+  return <BaseTabs.Panel className={cx('c-proto-tabs__panel', className)} {...rest} />;
 }
 
 /** Switches between sections of one view. Built on Base UI's Tabs. */

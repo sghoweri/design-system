@@ -1,4 +1,4 @@
-/* @salemcobalt/ui/fonts: every face the design system uses, served from the consumer's own origin (the files sit
+/* @protokit/ui/fonts: every face the design system uses, served from the consumer's own origin (the files sit
    next to this stylesheet; nothing is fetched from a font CDN). Every face is font-display: swap, so text renders at
    once in the fallback and the face swaps in when it arrives; and each subset has a unicode-range, so a browser only
    downloads the subsets a page actually draws, and a face no text uses is never downloaded at all.

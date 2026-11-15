@@ -54,7 +54,7 @@ export function Chip({
     }
   };
   const shared = {
-    className: cx('sc-chip', className),
+    className: cx('c-proto-chip', className),
     'data-tone': tone,
     'data-size': size,
     'data-selected': selected || undefined,
@@ -64,11 +64,11 @@ export function Chip({
   const body = (
     <>
       {icon ? (
-        <span className="sc-chip__icon" aria-hidden="true">
+        <span className="c-proto-chip__icon" aria-hidden="true">
           {icon}
         </span>
       ) : null}
-      <span className="sc-chip__label">{children}</span>
+      <span className="c-proto-chip__label">{children}</span>
     </>
   );
   const remove = onRemove ? (
@@ -80,7 +80,7 @@ export function Chip({
       <span {...shared} {...rest}>
         <button
           type="button"
-          className="sc-chip__action"
+          className="c-proto-chip__action"
           aria-pressed={selected}
           disabled={disabled}
           onClick={onClick}
@@ -115,7 +115,7 @@ export function ChipRemove({
   return (
     <button
       type="button"
-      className="sc-chip__remove"
+      className="c-proto-chip__remove"
       aria-label={label}
       disabled={disabled}
       onClick={(event) => {

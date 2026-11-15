@@ -6,12 +6,12 @@ import { expectNoA11yViolations } from '../../../test/axe';
 describe('Stat', () => {
   it('renders label and value, outlined and md by default', async () => {
     const { container } = render(<Stat label="Applications" value="1,204" />);
-    const stat = screen.getByText('Applications').closest('.sc-stat')!;
+    const stat = screen.getByText('Applications').closest('.c-proto-stat')!;
     expect(stat.tagName).toBe('DIV');
     expect(stat).toHaveAttribute('data-variant', 'outlined');
     expect(stat).toHaveAttribute('data-size', 'md');
-    expect(screen.getByText('1,204')).toHaveClass('sc-stat__value');
-    expect(stat.querySelector('.sc-stat__delta')).toBeNull();
+    expect(screen.getByText('1,204')).toHaveClass('c-proto-stat__value');
+    expect(stat.querySelector('.c-proto-stat__delta')).toBeNull();
     await expectNoA11yViolations(container);
   });
 
@@ -32,22 +32,22 @@ describe('Stat', () => {
         />
       </ul>,
     );
-    const stat = screen.getByText('Reply rate').closest('.sc-stat')!;
+    const stat = screen.getByText('Reply rate').closest('.c-proto-stat')!;
     expect(stat.tagName).toBe('LI');
     expect(stat).toHaveAttribute('data-variant', 'filled');
     expect(stat).toHaveAttribute('data-size', 'sm');
-    const delta = stat.querySelector('.sc-stat__delta')!;
+    const delta = stat.querySelector('.c-proto-stat__delta')!;
     expect(delta).toHaveAttribute('data-tone', 'positive');
     expect(delta).toHaveTextContent('up +3.1 pts');
-    expect(delta.querySelector('.sc-stat__trend')).toHaveAttribute('aria-hidden', 'true');
-    expect(screen.getByText('last 7 days')).toHaveClass('sc-stat__hint');
-    expect(stat.querySelector('.sc-stat__icon')).toHaveAttribute('aria-hidden', 'true');
+    expect(delta.querySelector('.c-proto-stat__trend')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('last 7 days')).toHaveClass('c-proto-stat__hint');
+    expect(stat.querySelector('.c-proto-stat__icon')).toHaveAttribute('aria-hidden', 'true');
     await expectNoA11yViolations(container);
   });
 
   it('reads "unchanged" for a flat trend', () => {
     render(<Stat label="Stale" value="24" delta="same as last week" trend="flat" />);
-    expect(screen.getByText('Stale').closest('.sc-stat')!.querySelector('.sc-stat__delta')).toHaveTextContent(
+    expect(screen.getByText('Stale').closest('.c-proto-stat')!.querySelector('.c-proto-stat__delta')).toHaveTextContent(
       'unchanged same as last week',
     );
   });

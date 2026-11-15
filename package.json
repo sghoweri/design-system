@@ -2,7 +2,7 @@
   "name": "design-system",
   "private": true,
   "version": "0.0.0",
-  "description": "Salem Cobalt: a personal design system. Publishes @salemcobalt/tokens and @salemcobalt/ui.",
+  "description": "Salem Cobalt: a personal design system. Publishes @protokit/tokens and @protokit/ui.",
   "type": "module",
   "packageManager": "pnpm@10.34.7",
   "engines": {

@@ -1,18 +1,18 @@
 ---
 title: Using the system in Astro
-description: Render @salemcobalt/ui in an Astro site, statically or as hydrated islands. This site is the example.
+description: Render @protokit/ui in an Astro site, statically or as hydrated islands. This site is the example.
 ---
 
 import { TabsDemo } from '../../../demos/TabsDemo';
 
-This docs site is an Astro app that consumes the published `@salemcobalt/ui` build, so it doubles as the proof that
+This docs site is an Astro app that consumes the published `@protokit/ui` build, so it doubles as the proof that
 the system works in Astro. The setup is the same three imports as any React app, plus `@astrojs/react`.
 
 ## Setup
 
 ```sh
 pnpm astro add react
-pnpm add @salemcobalt/ui @salemcobalt/tokens
+pnpm add @protokit/ui @protokit/tokens
 ```
 
 Import the tokens, fonts and component CSS once, in a layout that every page uses:
@@ -20,9 +20,9 @@ Import the tokens, fonts and component CSS once, in a layout that every page use
 ```astro
 ---
 // src/layouts/Base.astro
-import '@salemcobalt/tokens/css';
-import '@salemcobalt/ui/fonts';
-import '@salemcobalt/ui/styles.css';
+import '@protokit/tokens/css';
+import '@protokit/ui/fonts';
+import '@protokit/ui/styles.css';
 ---
 
 <html lang="en" data-theme="light">
@@ -45,7 +45,7 @@ than being passed from the `.astro` file as children.
 
 ```tsx
 // src/components/InboxTabs.tsx
-import { Tabs, Text } from '@salemcobalt/ui';
+import { Tabs, Text } from '@protokit/ui';
 
 export function InboxTabs() {
   return (

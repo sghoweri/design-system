@@ -14,25 +14,25 @@ const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({
 const bodiesFor = (selector: string) =>
   rules.filter((r) => r.selectors.includes(selector)).map((r) => r.body);
 
-const SHEET_OUT = ".sc-dialog__popup[data-variant='sheet'][data-ending-style]";
-const SCRIM_OUT = ".sc-dialog__backdrop[data-variant='sheet'][data-ending-style]";
+const SHEET_OUT = ".c-proto-dialog__popup[data-variant='sheet'][data-ending-style]";
+const SCRIM_OUT = ".c-proto-dialog__backdrop[data-variant='sheet'][data-ending-style]";
 
 describe('dialog.css: docked sheet', () => {
   it('leaves with its scrim on one duration and the exit curve', () => {
     const shared = rules.find(
       (r) => r.selectors.includes(SHEET_OUT) && r.selectors.includes(SCRIM_OUT) && /ease-exit/.test(r.body),
     );
-    expect(shared?.body).toMatch(/transition-duration:\s*calc\(var\(--sc-duration-slow\) \* 0\.75\)/);
-    expect(shared?.body).toMatch(/transition-timing-function:\s*var\(--sc-ease-exit\)/);
+    expect(shared?.body).toMatch(/transition-duration:\s*calc\(var\(--proto-duration-slow\) \* 0\.75\)/);
+    expect(shared?.body).toMatch(/transition-timing-function:\s*var\(--proto-ease-exit\)/);
   });
 
   it('enters with its scrim on the slow duration and the standard curve', () => {
-    expect(bodiesFor(".sc-dialog__popup[data-variant='sheet']").join()).toMatch(
-      /translate var\(--sc-duration-slow\) var\(--sc-ease-standard\)/,
+    expect(bodiesFor(".c-proto-dialog__popup[data-variant='sheet']").join()).toMatch(
+      /translate var\(--proto-duration-slow\) var\(--proto-ease-standard\)/,
     );
-    const scrim = bodiesFor(".sc-dialog__backdrop[data-variant='sheet']").join();
-    expect(scrim).toMatch(/transition-duration:\s*var\(--sc-duration-slow\)/);
-    expect(scrim).toMatch(/transition-timing-function:\s*var\(--sc-ease-standard\)/);
+    const scrim = bodiesFor(".c-proto-dialog__backdrop[data-variant='sheet']").join();
+    expect(scrim).toMatch(/transition-duration:\s*var\(--proto-duration-slow\)/);
+    expect(scrim).toMatch(/transition-timing-function:\s*var\(--proto-ease-standard\)/);
   });
 
   it('has no motion under reduced motion, exit included', () => {
@@ -44,11 +44,11 @@ describe('dialog.css: docked sheet', () => {
   });
 
   it('runs past the bottom edge and never pans the page behind it', () => {
-    expect(bodiesFor('.sc-dialog__backdrop').join()).toMatch(/touch-action:\s*none/);
-    expect(bodiesFor('.sc-dialog__backdrop').join()).toMatch(/inset:\s*0 0 calc\(-1 \* var\(--_overhang\)\)/);
-    const sheet = bodiesFor(".sc-dialog__popup[data-variant='sheet']").join();
+    expect(bodiesFor('.c-proto-dialog__backdrop').join()).toMatch(/touch-action:\s*none/);
+    expect(bodiesFor('.c-proto-dialog__backdrop').join()).toMatch(/inset:\s*0 0 calc\(-1 \* var\(--_overhang\)\)/);
+    const sheet = bodiesFor(".c-proto-dialog__popup[data-variant='sheet']").join();
     expect(sheet).toMatch(/touch-action:\s*none/);
-    expect(sheet).toMatch(/0 var\(--_overhang\) 0 0 var\(--sc-color-surface-raised\)/);
+    expect(sheet).toMatch(/0 var\(--_overhang\) 0 0 var\(--proto-color-surface-raised\)/);
     expect(sheet).toMatch(/100dvh/);
     expect(sheet).toMatch(/env\(safe-area-inset-bottom, 0px\)/);
   });
@@ -57,13 +57,13 @@ describe('dialog.css: docked sheet', () => {
   // layout viewport's edges; a box pushed past the bottom edge left the page showing above and below it (2026-11-12).
   it('keeps the sheet and the full-screen surface on the bottom edge; the overhang is a shadow', () => {
     const docked = [
-      ...bodiesFor(".sc-dialog__popup[data-variant='sheet']"),
-      ...bodiesFor(".sc-dialog__popup[data-variant='fullscreen']"),
+      ...bodiesFor(".c-proto-dialog__popup[data-variant='sheet']"),
+      ...bodiesFor(".c-proto-dialog__popup[data-variant='fullscreen']"),
     ].join();
     expect(docked).not.toMatch(/border-block-end:\s*var\(--_overhang\)/);
     expect(docked).not.toMatch(/inset[^;]*calc\(-1 \* var\(--_overhang\)\)/);
-    expect(bodiesFor(".sc-dialog__popup[data-variant='fullscreen']").join()).toMatch(
-      /box-shadow:\s*0 var\(--_overhang\) 0 0 var\(--sc-color-surface-default\)/,
+    expect(bodiesFor(".c-proto-dialog__popup[data-variant='fullscreen']").join()).toMatch(
+      /box-shadow:\s*0 var\(--_overhang\) 0 0 var\(--proto-color-surface-default\)/,
     );
   });
 });

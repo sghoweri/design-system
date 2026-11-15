@@ -72,7 +72,7 @@ export function Disclosure({
         if (typeof ref === 'function') ref(node);
         else if (ref) ref.current = node;
       }}
-      className={cx('sc-disclosure', className)}
+      className={cx('c-proto-disclosure', className)}
       open={isOpen}
       onToggle={onToggle}
       data-summary-position={position}
@@ -80,13 +80,13 @@ export function Disclosure({
       style={previewLines ? ({ ...style, '--_lines': previewLines } as CSSProperties) : style}
       {...rest}
     >
-      <summary className="sc-disclosure__summary">
-        <ChevronDownIcon className="sc-disclosure__chevron" />
-        <span className="sc-disclosure__summary-text">
+      <summary className="c-proto-disclosure__summary">
+        <ChevronDownIcon className="c-proto-disclosure__chevron" />
+        <span className="c-proto-disclosure__summary-text">
           {isOpen && summaryOpen != null ? summaryOpen : summary}
         </span>
       </summary>
-      <div className="sc-disclosure__content">{children}</div>
+      <div className="c-proto-disclosure__content">{children}</div>
     </details>
   );
 }

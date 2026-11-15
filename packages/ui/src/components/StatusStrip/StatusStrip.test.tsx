@@ -16,7 +16,7 @@ describe('StatusStrip', () => {
     const { container } = render(<StatusStrip aria-label="Last 5 sweeps, oldest first" items={items} />);
     const list = screen.getByRole('list', { name: 'Last 5 sweeps, oldest first' });
     expect(list.tagName).toBe('OL');
-    expect(list).toHaveClass('sc-status-strip');
+    expect(list).toHaveClass('c-proto-status-strip');
     const cells = within(list).getAllByRole('listitem');
     expect(cells).toHaveLength(5);
     const links = within(list).getAllByRole('link');
@@ -37,7 +37,7 @@ describe('StatusStrip', () => {
   it('gives each tone a shape: glyphs for warning, danger and running, none for success and neutral', () => {
     const { container } = render(<StatusStrip aria-label="Runs" items={items} />);
     const glyph = (tone: string) =>
-      container.querySelector(`.sc-status-strip__cell[data-tone='${tone}'] > .sc-status-strip__glyph`);
+      container.querySelector(`.c-proto-status-strip__cell[data-tone='${tone}'] > .c-proto-status-strip__glyph`);
     expect(glyph('success')).toBeNull();
     expect(glyph('neutral')).toBeNull();
     for (const tone of ['warning', 'danger', 'running']) {
@@ -53,7 +53,7 @@ describe('StatusStrip', () => {
     expect(screen.queryAllByRole('link')).toHaveLength(0);
     const cell = screen.getAllByRole('listitem')[2]!;
     expect(cell).toHaveTextContent("Failed · Mon 5:00 PM · Greenhouse didn't answer");
-    expect(cell.querySelector('.sc-status-strip__cell')?.tagName).toBe('SPAN');
+    expect(cell.querySelector('.c-proto-status-strip__cell')?.tagName).toBe('SPAN');
     expect(cell.querySelector('[tabindex]')).toBeNull();
     await expectNoA11yViolations(container);
   });

@@ -11,8 +11,8 @@ describe('Input', () => {
     expect(input.tagName).toBe('INPUT');
     expect(input).toHaveAttribute('name', 'company');
     expect(input).toHaveAttribute('placeholder', 'Linear');
-    expect(input).toHaveClass('sc-input');
-    expect(input.closest('.sc-field')).toHaveAttribute('data-size', 'md');
+    expect(input).toHaveClass('c-proto-input');
+    expect(input.closest('.c-proto-field')).toHaveAttribute('data-size', 'md');
     await expectNoA11yViolations(container);
   });
 
@@ -25,18 +25,18 @@ describe('Input', () => {
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(input).toHaveAttribute('data-invalid');
     expect(input).toBeRequired();
-    expect(screen.getByText('Not a URL.')).toHaveClass('sc-field__error');
+    expect(screen.getByText('Not a URL.')).toHaveClass('c-proto-field__error');
     await expectNoA11yViolations(container);
   });
 
   it('renders the error inside a live region that is there before the error is', async () => {
     const { container, rerender } = render(<Input label="Job title" />);
-    const region = container.querySelector('.sc-field__error-region')!;
+    const region = container.querySelector('.c-proto-field__error-region')!;
     expect(region).toHaveAttribute('aria-live', 'polite');
     expect(region).toBeEmptyDOMElement();
 
     rerender(<Input label="Job title" error="“Frontend” is already in this list." />);
-    expect(container.querySelector('.sc-field__error-region')).toBe(region);
+    expect(container.querySelector('.c-proto-field__error-region')).toBe(region);
     expect(region).toHaveTextContent('“Frontend” is already in this list.');
     const input = screen.getByLabelText('Job title');
     expect(input).toHaveAccessibleDescription('“Frontend” is already in this list.');
@@ -51,10 +51,10 @@ describe('Input', () => {
   it('hides the label visually but keeps the name, and shows icons', async () => {
     const { container } = render(<Input label="Search" hideLabel iconStart={<SearchIcon />} size="sm" />);
     const input = screen.getByRole('textbox', { name: 'Search' });
-    expect(screen.getByText('Search')).toHaveClass('sc-visually-hidden');
-    expect(input.closest('.sc-input-wrap')).toHaveAttribute('data-icon-start');
-    expect(input.closest('.sc-field')).toHaveAttribute('data-size', 'sm');
-    expect(container.querySelector('.sc-input__icon')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByText('Search')).toHaveClass('u-proto-visually-hidden');
+    expect(input.closest('.c-proto-input-wrap')).toHaveAttribute('data-icon-start');
+    expect(input.closest('.c-proto-field')).toHaveAttribute('data-size', 'sm');
+    expect(container.querySelector('.c-proto-input__icon')).toHaveAttribute('aria-hidden', 'true');
     await expectNoA11yViolations(container);
   });
 

@@ -4,7 +4,7 @@
       "sans": {
         "$value": "\"IBM Plex Sans Variable\", \"IBM Plex Sans\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, sans-serif",
         "$type": "fontFamily",
-        "$description": "Everything. The variable face is the self-hosted one (@salemcobalt/ui/fonts); the static name covers a system install."
+        "$description": "Everything. The variable face is the self-hosted one (@protokit/ui/fonts); the static name covers a system install."
       },
       "mono": {
         "$value": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
@@ -14,7 +14,7 @@
       "display": {
         "$value": "Unbounded, \"Unbounded Variable\", \"Arial Black\", system-ui, sans-serif",
         "$type": "fontFamily",
-        "$description": "Brand face for a wordmark and big numerals only (Score md and ring): never body text, never under 14px, never in controls or tables. The variable face is the self-hosted one (@salemcobalt/ui/fonts), downloaded only on a page that draws it."
+        "$description": "Brand face for a wordmark and big numerals only (Score md and ring): never body text, never under 14px, never in controls or tables. The variable face is the self-hosted one (@protokit/ui/fonts), downloaded only on a page that draws it."
       }
     },
     "size": {

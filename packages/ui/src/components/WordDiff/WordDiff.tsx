@@ -38,10 +38,10 @@ function Change({ kind, text, label }: { kind: 'added' | 'removed'; text: string
   return (
     <>
       {lead}
-      <Tag className={`sc-word-diff__${kind}`}>
-        <span className="sc-visually-hidden">[{label}: </span>
+      <Tag className={`c-proto-word-diff__${kind}`}>
+        <span className="u-proto-visually-hidden">[{label}: </span>
         {core}
-        <span className="sc-visually-hidden">]</span>
+        <span className="u-proto-visually-hidden">]</span>
       </Tag>
       {trail}
     </>
@@ -78,7 +78,7 @@ export function WordDiff({
   return createElement(
     as,
     {
-      className: cx('sc-word-diff', className),
+      className: cx('c-proto-word-diff', className),
       'data-size': size,
       ...(family === 'mono' ? { 'data-family': 'mono' } : {}),
       ...rest,

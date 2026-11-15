@@ -145,7 +145,7 @@
       "strong": {
         "$value": "{color.brand.700}",
         "$type": "color",
-        "$description": "Filled notice (the .sc-on-accent scope: accent Toast). Darker than accent.default in dark, so text.on-accent-strong is white in both themes."
+        "$description": "Filled notice (the .t-proto-on-accent scope: accent Toast). Darker than accent.default in dark, so text.on-accent-strong is white in both themes."
       },
       "strong-hover": {
         "$value": "{color.brand.800}",

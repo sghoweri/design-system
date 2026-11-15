@@ -2,34 +2,34 @@
 /* Steps done, current, upcoming or ended. Markers differ by shape as well as colour: done is a filled disc with a
    check, current a ring with a halo (pulsing), upcoming a hollow ring, ended a filled disc with a cross in its tone. A 2px connector runs from each marker to the next,
    in the accent once the step before it is done. */
-.sc-stepper {
+.c-proto-stepper {
   --_m: 16px;
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  font-family: var(--sc-font-family-sans);
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-ui);
-  color: var(--sc-color-text-default);
+  font-family: var(--proto-font-family-sans);
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-ui);
+  color: var(--proto-color-text-default);
 }
-.sc-stepper__step {
+.c-proto-stepper__step {
   position: relative;
   min-inline-size: 0;
 }
-.sc-stepper__step::before {
+.c-proto-stepper__step::before {
   content: '';
   position: absolute;
-  background: var(--sc-color-border-default);
-  border-radius: var(--sc-radius-full);
+  background: var(--proto-color-border-default);
+  border-radius: var(--proto-radius-full);
 }
-.sc-stepper__step:last-child::before {
+.c-proto-stepper__step:last-child::before {
   display: none;
 }
-.sc-stepper__step[data-state='done']::before {
-  background: var(--sc-color-accent-default);
+.c-proto-stepper__step[data-state='done']::before {
+  background: var(--proto-color-accent-default);
 }
-.sc-stepper__marker {
+.c-proto-stepper__marker {
   position: relative;
   z-index: 1;
   display: inline-grid;
@@ -38,123 +38,123 @@
   inline-size: var(--_m);
   block-size: var(--_m);
   border-radius: 50%;
-  border: 2px solid var(--sc-color-border-strong);
-  background: var(--sc-color-surface-default);
-  color: var(--sc-color-text-on-accent);
+  border: 2px solid var(--proto-color-border-strong);
+  background: var(--proto-color-surface-default);
+  color: var(--proto-color-text-on-accent);
 }
-.sc-stepper__marker .sc-icon {
+.c-proto-stepper__marker .c-proto-icon {
   inline-size: 10px;
   block-size: 10px;
 }
-.sc-stepper__step[data-state='done'] .sc-stepper__marker {
-  border-color: var(--sc-color-accent-default);
-  background: var(--sc-color-accent-default);
+.c-proto-stepper__step[data-state='done'] .c-proto-stepper__marker {
+  border-color: var(--proto-color-accent-default);
+  background: var(--proto-color-accent-default);
 }
-.sc-stepper__step[data-state='current'] .sc-stepper__marker {
-  border-color: var(--sc-color-accent-default);
-  box-shadow: 0 0 0 var(--sc-border-width-halo) var(--sc-color-accent-subtle);
-  animation: sc-stepper-pulse 2.4s ease-in-out infinite;
+.c-proto-stepper__step[data-state='current'] .c-proto-stepper__marker {
+  border-color: var(--proto-color-accent-default);
+  box-shadow: 0 0 0 var(--proto-border-width-halo) var(--proto-color-accent-subtle);
+  animation: proto-stepper-pulse 2.4s ease-in-out infinite;
 }
 /* ended: where the path stopped short. A cross on the tone's solid fill, still; neutral is an ending in the past. */
-.sc-stepper__step[data-state='ended'] .sc-stepper__marker {
-  --_end: var(--sc-color-danger-solid);
+.c-proto-stepper__step[data-state='ended'] .c-proto-stepper__marker {
+  --_end: var(--proto-color-danger-solid);
   border-color: var(--_end);
   background: var(--_end);
-  color: var(--sc-color-text-on-status);
+  color: var(--proto-color-text-on-status);
 }
-.sc-stepper__step[data-state='ended'][data-tone='warning'] .sc-stepper__marker {
-  --_end: var(--sc-color-warning-solid);
+.c-proto-stepper__step[data-state='ended'][data-tone='warning'] .c-proto-stepper__marker {
+  --_end: var(--proto-color-warning-solid);
 }
-.sc-stepper__step[data-state='ended'][data-tone='neutral'] .sc-stepper__marker {
-  --_end: var(--sc-color-text-muted);
-  color: var(--sc-color-surface-default);
+.c-proto-stepper__step[data-state='ended'][data-tone='neutral'] .c-proto-stepper__marker {
+  --_end: var(--proto-color-text-muted);
+  color: var(--proto-color-surface-default);
 }
-.sc-stepper__step[data-state='ended'][data-tone='neutral'] .sc-stepper__label {
-  color: var(--sc-color-text-muted);
-  font-weight: var(--sc-font-weight-regular);
+.c-proto-stepper__step[data-state='ended'][data-tone='neutral'] .c-proto-stepper__label {
+  color: var(--proto-color-text-muted);
+  font-weight: var(--proto-font-weight-regular);
 }
-.sc-stepper__step[data-state='ended']:not([data-tone='neutral']) .sc-stepper__label {
-  font-weight: var(--sc-font-weight-semibold);
+.c-proto-stepper__step[data-state='ended']:not([data-tone='neutral']) .c-proto-stepper__label {
+  font-weight: var(--proto-font-weight-semibold);
 }
-@keyframes sc-stepper-pulse {
+@keyframes proto-stepper-pulse {
   50% {
-    box-shadow: 0 0 0 calc(var(--sc-border-width-halo) + 4px) var(--sc-color-accent-wash);
+    box-shadow: 0 0 0 calc(var(--proto-border-width-halo) + 4px) var(--proto-color-accent-wash);
   }
 }
-.sc-stepper__label {
+.c-proto-stepper__label {
   min-inline-size: 0;
-  font-weight: var(--sc-font-weight-medium);
+  font-weight: var(--proto-font-weight-medium);
 }
-.sc-stepper__step[data-state='upcoming'] .sc-stepper__label {
-  color: var(--sc-color-text-muted);
-  font-weight: var(--sc-font-weight-regular);
+.c-proto-stepper__step[data-state='upcoming'] .c-proto-stepper__label {
+  color: var(--proto-color-text-muted);
+  font-weight: var(--proto-font-weight-regular);
 }
-.sc-stepper__step[data-state='current'] .sc-stepper__label {
-  font-weight: var(--sc-font-weight-semibold);
+.c-proto-stepper__step[data-state='current'] .c-proto-stepper__label {
+  font-weight: var(--proto-font-weight-semibold);
 }
-.sc-stepper__meta {
+.c-proto-stepper__meta {
   /* As tall as Stepper.Date's 24px button, centred: a plain date ("Oct 28") lines up with a date in a button, and a
      step with a control is no taller than one without. */
   display: inline-flex;
   align-items: center;
   min-block-size: 24px;
-  font-family: var(--sc-font-family-mono);
-  font-size: var(--sc-font-size-xs);
-  color: var(--sc-color-text-muted);
+  font-family: var(--proto-font-family-mono);
+  font-size: var(--proto-font-size-xs);
+  color: var(--proto-color-text-muted);
 }
-.sc-stepper__meta[data-proposed] {
-  color: var(--sc-color-accent-text);
+.c-proto-stepper__meta[data-proposed] {
+  color: var(--proto-color-accent-text);
 }
 /* horizontal: equal columns, the marker on top, label and meta under it; the connector runs from the marker to the
    next column's marker. A column never shrinks below its longest word, so a label can't run into the next step's gap. */
-.sc-stepper[data-orientation='horizontal'] {
+.c-proto-stepper[data-orientation='horizontal'] {
   grid-auto-flow: column;
   grid-auto-columns: minmax(min-content, 1fr);
 }
-.sc-stepper[data-orientation='horizontal'] > .sc-stepper__step {
+.c-proto-stepper[data-orientation='horizontal'] > .c-proto-stepper__step {
   display: grid;
   justify-items: start;
   align-content: start;
-  row-gap: var(--sc-spacing-3xs);
-  padding-inline-end: var(--sc-spacing-sm);
+  row-gap: var(--proto-spacing-3xs);
+  padding-inline-end: var(--proto-spacing-sm);
 }
-.sc-stepper[data-orientation='horizontal'] > .sc-stepper__step::before {
+.c-proto-stepper[data-orientation='horizontal'] > .c-proto-stepper__step::before {
   inset-block-start: calc(var(--_m) / 2 - 1px);
-  inset-inline: calc(var(--_m) + var(--sc-spacing-3xs)) var(--sc-spacing-3xs);
+  inset-inline: calc(var(--_m) + var(--proto-spacing-3xs)) var(--proto-spacing-3xs);
   block-size: 2px;
 }
-.sc-stepper[data-orientation='horizontal'] .sc-stepper__label {
+.c-proto-stepper[data-orientation='horizontal'] .c-proto-stepper__label {
   min-inline-size: min-content;
-  margin-block-start: var(--sc-spacing-3xs);
+  margin-block-start: var(--proto-spacing-3xs);
 }
 /* vertical: one row per step, marker | label | meta at the end; the connector runs down to the next marker. */
-.sc-stepper[data-orientation='vertical'] > .sc-stepper__step {
+.c-proto-stepper[data-orientation='vertical'] > .c-proto-stepper__step {
   display: grid;
   grid-template-columns: var(--_m) minmax(0, 1fr) auto;
   /* Every row as tall as one holding a 24px date button, so the column's rhythm is even with or without a meta. */
   grid-auto-rows: minmax(24px, auto);
   align-items: center;
-  column-gap: var(--sc-spacing-sm);
-  padding-block: var(--sc-spacing-xs);
+  column-gap: var(--proto-spacing-sm);
+  padding-block: var(--proto-spacing-xs);
 }
-.sc-stepper[data-orientation='vertical'] > .sc-stepper__step::before {
+.c-proto-stepper[data-orientation='vertical'] > .c-proto-stepper__step::before {
   inset-inline-start: calc(var(--_m) / 2 - 1px);
-  inset-block: calc(50% + var(--_m) / 2 + var(--sc-spacing-3xs))
-    calc(-50% + var(--_m) / 2 + var(--sc-spacing-3xs));
+  inset-block: calc(50% + var(--_m) / 2 + var(--proto-spacing-3xs))
+    calc(-50% + var(--_m) / 2 + var(--proto-spacing-3xs));
   inline-size: 2px;
 }
-.sc-stepper[data-orientation='vertical'] .sc-stepper__meta {
+.c-proto-stepper[data-orientation='vertical'] .c-proto-stepper__meta {
   justify-content: flex-end;
   text-align: end;
 }
 /* Stepper.Date: the word and a 24px calendar button on one line. The button keeps the meta's colour (accent on a
    proposed step) and meets the 24px target size without making the row taller than the label. */
-.sc-stepper__date {
+.c-proto-stepper__date {
   display: inline-flex;
   align-items: center;
-  gap: var(--sc-spacing-3xs);
+  gap: var(--proto-spacing-3xs);
 }
-.sc-stepper__date .sc-stepper__date-button {
+.c-proto-stepper__date .c-proto-stepper__date-button {
   inline-size: 24px;
   block-size: 24px;
   min-inline-size: 24px;
@@ -162,17 +162,17 @@
   padding: 0;
   color: inherit;
 }
-.sc-stepper__date .sc-stepper__date-button .sc-icon {
+.c-proto-stepper__date .c-proto-stepper__date-button .c-proto-icon {
   inline-size: 14px;
   block-size: 14px;
 }
-.sc-stepper__date-full {
+.c-proto-stepper__date-full {
   margin: 0;
-  font-family: var(--sc-font-family-mono);
-  font-size: var(--sc-font-size-sm);
+  font-family: var(--proto-font-family-mono);
+  font-size: var(--proto-font-size-sm);
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-stepper__step[data-state='current'] .sc-stepper__marker {
+  .c-proto-stepper__step[data-state='current'] .c-proto-stepper__marker {
     animation: none;
   }
 }

@@ -98,7 +98,7 @@ const badgeTextOf = (item: PriorityNavItem): string | null => {
 /** The visible badge: a count pill or a dot. Decorative; its meaning is in visually hidden text beside it. */
 function Badge({ value }: { value: number | 'dot' }) {
   return (
-    <span className="sc-priority-nav__badge" data-kind={value === 'dot' ? 'dot' : 'count'} aria-hidden="true">
+    <span className="c-proto-priority-nav__badge" data-kind={value === 'dot' ? 'dot' : 'count'} aria-hidden="true">
       {value === 'dot' ? null : value}
     </span>
   );
@@ -217,7 +217,7 @@ export function PriorityNav({
     if (!list || !more) return;
     if (measuring) {
       const widths = Array.from(
-        list.querySelectorAll<HTMLElement>(':scope > .sc-priority-nav__item'),
+        list.querySelectorAll<HTMLElement>(':scope > .c-proto-priority-nav__item'),
         (el) => el.getBoundingClientRect().width,
       );
       measured.current = {
@@ -349,8 +349,8 @@ export function PriorityNav({
         anchor,
         panel: { width: box.width, height: box.height },
         viewport: { width: document.documentElement.clientWidth, height: window.innerHeight },
-        gutter: parseFloat(css.getPropertyValue('--sc-spacing-md')) || 16,
-        offset: parseFloat(css.getPropertyValue('--sc-spacing-2xs')) || 4,
+        gutter: parseFloat(css.getPropertyValue('--proto-spacing-md')) || 16,
+        offset: parseFloat(css.getPropertyValue('--proto-spacing-2xs')) || 4,
         rtl: css.direction === 'rtl',
       });
       panel.style.left = `${left}px`;
@@ -399,14 +399,14 @@ export function PriorityNav({
     return renderLink(
       {
         href: item.href,
-        className: 'sc-priority-nav__link',
+        className: 'c-proto-priority-nav__link',
         'aria-current': item.current ? 'page' : undefined,
         onClick: inPanel ? () => setOpen(false) : undefined,
         children: (
           <>
-            <span className="sc-priority-nav__label">{item.label}</span>
+            <span className="c-proto-priority-nav__label">{item.label}</span>
             {badge !== null ? <Badge value={badge} /> : null}
-            {badgeText !== null ? <span className="sc-visually-hidden">, {badgeText}</span> : null}
+            {badgeText !== null ? <span className="u-proto-visually-hidden">, {badgeText}</span> : null}
           </>
         ),
       },
@@ -416,48 +416,48 @@ export function PriorityNav({
 
   return (
     <nav
-      className={cx('sc-priority-nav', className)}
+      className={cx('c-proto-priority-nav', className)}
       data-measuring={measuring || undefined}
       data-overflowing={fit.overflowing || undefined}
       // A per-instance anchor name, so two navs on a page never anchor to each other's toggle.
-      style={{ ...style, '--_anchor': `--sc-priority-nav${panelId.replace(/[^\w-]/g, '')}` } as CSSProperties}
+      style={{ ...style, '--_anchor': `--proto-priority-nav${panelId.replace(/[^\w-]/g, '')}` } as CSSProperties}
       {...rest}
     >
-      <ul ref={listRef} className="sc-priority-nav__list">
+      <ul ref={listRef} className="c-proto-priority-nav__list">
         {items.map((item, i) =>
           flags && !flags[i] ? null : (
-            <li key={keyOf(item)} className="sc-priority-nav__item" data-current={item.current || undefined}>
+            <li key={keyOf(item)} className="c-proto-priority-nav__item" data-current={item.current || undefined}>
               {link(item, false)}
             </li>
           ),
         )}
-        <li ref={moreRef} className="sc-priority-nav__more" hidden={!showMore} onBlur={onBlur}>
+        <li ref={moreRef} className="c-proto-priority-nav__more" hidden={!showMore} onBlur={onBlur}>
           <button
             ref={toggleRef}
             type="button"
-            className="sc-priority-nav__toggle"
+            className="c-proto-priority-nav__toggle"
             aria-expanded={expanded}
             aria-controls={panelId}
             onClick={() => setOpen((o) => !o)}
           >
             {/* Narrow navs (a container query) show only the ellipsis; the label stays in the name. */}
-            <MoreHorizontalIcon className="sc-priority-nav__ellipsis" />
-            <span className="sc-priority-nav__toggle-label">{moreLabel}</span>
+            <MoreHorizontalIcon className="c-proto-priority-nav__ellipsis" />
+            <span className="c-proto-priority-nav__toggle-label">{moreLabel}</span>
             {overflow.length > 0 ? (
-              <span className="sc-visually-hidden">
+              <span className="u-proto-visually-hidden">
                 , {moreCountLabel(overflow.length)}
                 {moreBadgeText}
               </span>
             ) : null}
             {moreBadge !== null ? <Badge value={moreBadge} /> : null}
-            <ChevronDownIcon size="sm" className="sc-priority-nav__chevron" />
+            <ChevronDownIcon size="sm" className="c-proto-priority-nav__chevron" />
           </button>
-          <ul ref={panelRef} id={panelId} className="sc-priority-nav__panel" hidden={!expanded}>
+          <ul ref={panelRef} id={panelId} className="c-proto-priority-nav__panel" hidden={!expanded}>
             {overflow.map((item) => (
               <li key={keyOf(item)}>{link(item, true)}</li>
             ))}
             {panelEnd != null && panelEnd !== false ? (
-              <li className="sc-priority-nav__panel-end">{panelEnd}</li>
+              <li className="c-proto-priority-nav__panel-end">{panelEnd}</li>
             ) : null}
           </ul>
         </li>

@@ -180,7 +180,7 @@ export function TextEditor({
   const prose = isProse(language);
   return (
     <Field.Root
-      className={cx('sc-field', className)}
+      className={cx('c-proto-field', className)}
       disabled={disabled}
       invalid={invalid}
       data-size="md"
@@ -190,7 +190,7 @@ export function TextEditor({
       <Field.Label
         id={labelId}
         htmlFor={id}
-        className="sc-field__label"
+        className="c-proto-field__label"
         onClick={() => handleRef.current?.focus()}
       >
         {label}
@@ -212,7 +212,7 @@ export function TextEditor({
               autoCapitalize={prose ? 'sentences' : 'off'}
             />
           }
-          className="sc-input sc-textarea"
+          className="c-proto-input c-proto-textarea"
           data-variant="code"
           data-resize="none"
           value={value}
@@ -220,12 +220,12 @@ export function TextEditor({
         />
       )}
       {description != null ? (
-        <Field.Description id={descriptionId} className="sc-field__description">
+        <Field.Description id={descriptionId} className="c-proto-field__description">
           {description}
         </Field.Description>
       ) : null}
       {invalid ? (
-        <Field.Error id={errorId} className="sc-field__error" match>
+        <Field.Error id={errorId} className="c-proto-field__error" match>
           {error}
         </Field.Error>
       ) : null}

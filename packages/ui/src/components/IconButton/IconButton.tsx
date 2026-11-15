@@ -24,7 +24,7 @@ export interface IconButtonProps extends Omit<useRender.ComponentProps<'button'>
   round?: boolean | undefined;
   /** Shows a spinner, sets `aria-busy` and ignores presses (the click, mousedown, pointerdown and keydown handlers don't run), including a popup trigger's merged in through `render`. */
   loading?: boolean | undefined;
-  /** A status dot in the top-left corner, ringed in `--sc-icon-button-dot-ring` (default `surface-default`). Decorative: put the status in `label` too ("Sweeps: paused"). */
+  /** A status dot in the top-left corner, ringed in `--proto-icon-button-dot-ring` (default `surface-default`). Decorative: put the status in `label` too ("Sweeps: paused"). */
   dot?: IconButtonDotTone | undefined;
 }
 
@@ -61,7 +61,7 @@ export function IconButton({
     props: {
       // `type` only means something on a real button; a rendered link keeps its own attributes.
       type: render ? type : (type ?? 'button'),
-      className: cx('sc-button', 'sc-icon-button', className),
+      className: cx('c-proto-button', 'c-proto-icon-button', className),
       'data-variant': variant,
       'data-size': size,
       'data-round': round || undefined,
@@ -72,11 +72,11 @@ export function IconButton({
       ...press,
       children: (
         <>
-          <span className="sc-button__icon" aria-hidden="true">
+          <span className="c-proto-button__icon" aria-hidden="true">
             {children}
           </span>
-          {loading ? <span className="sc-button__spinner" aria-hidden="true" /> : null}
-          {dot ? <span className="sc-icon-button__dot" data-tone={dot} aria-hidden="true" /> : null}
+          {loading ? <span className="c-proto-button__spinner" aria-hidden="true" /> : null}
+          {dot ? <span className="c-proto-icon-button__dot" data-tone={dot} aria-hidden="true" /> : null}
         </>
       ),
     },

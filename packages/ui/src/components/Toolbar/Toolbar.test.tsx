@@ -41,12 +41,12 @@ describe('Toolbar', () => {
   it('is a labelled toolbar with a group, a separator, and wraps by default', async () => {
     const { container } = render(<Example />);
     const toolbar = screen.getByRole('toolbar', { name: 'Inbox actions' });
-    expect(toolbar).toHaveClass('sc-toolbar');
+    expect(toolbar).toHaveClass('c-proto-toolbar');
     expect(toolbar).toHaveAttribute('data-wrap');
     expect(toolbar).toHaveAttribute('data-gap', 'xs');
-    expect(screen.getByRole('group', { name: 'Sweeps' })).toHaveClass('sc-toolbar__group');
-    expect(screen.getByRole('separator')).toHaveClass('sc-toolbar__separator');
-    expect(screen.getByRole('button', { name: 'Pause' })).toHaveClass('sc-icon-button');
+    expect(screen.getByRole('group', { name: 'Sweeps' })).toHaveClass('c-proto-toolbar__group');
+    expect(screen.getByRole('separator')).toHaveClass('c-proto-toolbar__separator');
+    expect(screen.getByRole('button', { name: 'Pause' })).toHaveClass('c-proto-icon-button');
     await expectNoA11yViolations(container);
   });
 
@@ -93,7 +93,7 @@ describe('Toolbar', () => {
     );
     const link = screen.getByRole('link', { name: 'Settings' });
     expect(link).toHaveAttribute('href', '/settings');
-    expect(link).toHaveClass('sc-icon-button');
+    expect(link).toHaveClass('c-proto-icon-button');
     await user.tab();
     expect(screen.getByRole('button', { name: 'Pause' })).toHaveFocus();
     await user.keyboard('{ArrowRight}');

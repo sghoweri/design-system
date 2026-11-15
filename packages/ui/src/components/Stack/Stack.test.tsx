@@ -6,7 +6,7 @@ describe('Stack', () => {
     render(<Stack data-testid="stack">x</Stack>);
     const el = screen.getByTestId('stack');
     expect(el.tagName).toBe('DIV');
-    expect(el).toHaveClass('sc-stack');
+    expect(el).toHaveClass('o-proto-stack');
     expect(el).toHaveAttribute('data-gap', 'sm');
     expect(el).toHaveAttribute('data-align', 'stretch');
     expect(el).toHaveAttribute('data-justify', 'start');

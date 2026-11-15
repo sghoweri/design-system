@@ -1,21 +1,21 @@
 /* Shared: focus ring, reduced motion. Component files follow. */
-.sc-focus-ring:focus-visible,
-.sc-button:focus-visible,
-.sc-avatar-button:focus-visible,
-.sc-card[data-interactive]:focus-visible,
-.sc-dialog__close:focus-visible,
-.sc-dialog__handle:focus-visible,
-.sc-menu__item:focus-visible,
-.sc-input:focus-visible,
-.sc-select:focus-visible,
-.sc-select__item:focus-visible,
-.sc-select__clear:focus-visible,
-.sc-checkbox:focus-visible,
-.sc-switch:focus-visible,
-.sc-tabs__tab:focus-visible,
-.sc-tabs__panel:focus-visible {
-  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
-  outline-offset: var(--sc-border-width-focus);
+.u-proto-focus-ring:focus-visible,
+.c-proto-button:focus-visible,
+.c-proto-avatar-button:focus-visible,
+.c-proto-card[data-interactive]:focus-visible,
+.c-proto-dialog__close:focus-visible,
+.c-proto-dialog__handle:focus-visible,
+.c-proto-menu__item:focus-visible,
+.c-proto-input:focus-visible,
+.c-proto-select:focus-visible,
+.c-proto-select__item:focus-visible,
+.c-proto-select__clear:focus-visible,
+.c-proto-checkbox:focus-visible,
+.c-proto-switch:focus-visible,
+.c-proto-tabs__tab:focus-visible,
+.c-proto-tabs__panel:focus-visible {
+  outline: var(--proto-border-width-focus) solid var(--proto-color-border-focus);
+  outline-offset: var(--proto-border-width-focus);
 }
 /* Controls on an accent fill. The scope repoints the semantic tokens its descendants read, the way raised surfaces
    repoint the washes (docs/adr/0003), so secondary and ghost Buttons, IconButtons, muted text and focus rings inside
@@ -23,23 +23,23 @@
    accent.strong-hover and accent.strong-active. The fill is accent.strong, which is darker than accent.default in dark
    so the text is white in both themes; its main action is an inverse Button. The element's own focus ring is outside
    the fill, so it keeps its colour by setting it again. Contrast: packages/tokens/test/contrast.test.ts. */
-.sc-on-accent,
-.sc-toast[data-tone='accent'] {
-  --sc-color-text-default: var(--sc-color-text-on-accent-strong);
-  --sc-color-text-muted: var(--sc-color-text-on-accent-strong);
-  --sc-color-border-strong: var(--sc-color-text-on-accent-strong);
-  --sc-color-border-focus: var(--sc-color-text-on-accent-strong);
-  --sc-color-surface-hover: var(--sc-color-accent-strong-hover);
-  --sc-color-surface-active: var(--sc-color-accent-strong-active);
-  background: var(--sc-color-accent-strong);
-  color: var(--sc-color-text-on-accent-strong);
+.t-proto-on-accent,
+.c-proto-toast[data-tone='accent'] {
+  --proto-color-text-default: var(--proto-color-text-on-accent-strong);
+  --proto-color-text-muted: var(--proto-color-text-on-accent-strong);
+  --proto-color-border-strong: var(--proto-color-text-on-accent-strong);
+  --proto-color-border-focus: var(--proto-color-text-on-accent-strong);
+  --proto-color-surface-hover: var(--proto-color-accent-strong-hover);
+  --proto-color-surface-active: var(--proto-color-accent-strong-active);
+  background: var(--proto-color-accent-strong);
+  color: var(--proto-color-text-on-accent-strong);
 }
-.sc-on-accent:focus-visible,
-.sc-toast[data-tone='accent']:focus-visible {
-  outline-color: var(--sc-color-accent-default);
+.t-proto-on-accent:focus-visible,
+.c-proto-toast[data-tone='accent']:focus-visible {
+  outline-color: var(--proto-color-accent-default);
 }
 /* Keeps content for assistive tech only. */
-.sc-visually-hidden {
+.u-proto-visually-hidden {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;

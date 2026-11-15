@@ -77,17 +77,17 @@ export const WithBody: Story = {
         <Dialog.Title>Add a job</Dialog.Title>
         <Dialog.Description>Paste a posting URL or fill in the details.</Dialog.Description>
         <Dialog.Body>
-          <label style={{ display: 'grid', gap: 'var(--sc-spacing-2xs)' }}>
+          <label style={{ display: 'grid', gap: 'var(--proto-spacing-2xs)' }}>
             Posting URL
             <input
               type="url"
               placeholder="https://"
               style={{
                 font: 'inherit',
-                padding: 'var(--sc-spacing-xs) var(--sc-spacing-sm)',
-                border: '1px solid var(--sc-color-border-strong)',
-                borderRadius: 'var(--sc-radius-md)',
-                background: 'var(--sc-color-surface-default)',
+                padding: 'var(--proto-spacing-xs) var(--proto-spacing-sm)',
+                border: '1px solid var(--proto-color-border-strong)',
+                borderRadius: 'var(--proto-radius-md)',
+                background: 'var(--proto-color-surface-default)',
                 color: 'inherit',
               }}
             />
@@ -359,7 +359,7 @@ function PopupsInside() {
   );
 }
 
-/** A Select, a Menu and a Tooltip inside a Dialog: `--sc-z-dropdown` and `--sc-z-tooltip` sit above `--sc-z-dialog`. */
+/** A Select, a Menu and a Tooltip inside a Dialog: `--proto-z-dropdown` and `--proto-z-tooltip` sit above `--proto-z-dialog`. */
 export const PopupsInsideDialog: Story = {
   name: 'Menu, Select and Tooltip inside',
   render: () => <PopupsInside />,

@@ -33,12 +33,12 @@ export function Callout({
   ...rest
 }: CalloutProps) {
   return (
-    <div className={cx('sc-callout', className)} data-tone={tone} data-variant={variant} {...rest}>
+    <div className={cx('c-proto-callout', className)} data-tone={tone} data-variant={variant} {...rest}>
       {title != null
-        ? createElement(headingLevel ? `h${headingLevel}` : 'p', { className: 'sc-callout__title' }, title)
+        ? createElement(headingLevel ? `h${headingLevel}` : 'p', { className: 'c-proto-callout__title' }, title)
         : null}
-      {children != null ? <div className="sc-callout__body">{children}</div> : null}
-      {actions != null ? <div className="sc-callout__actions">{actions}</div> : null}
+      {children != null ? <div className="c-proto-callout__body">{children}</div> : null}
+      {actions != null ? <div className="c-proto-callout__actions">{actions}</div> : null}
     </div>
   );
 }

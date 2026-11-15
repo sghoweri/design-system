@@ -7,7 +7,7 @@ describe('Meter', () => {
     const { container } = render(<Meter label="Shown" value={214} max={1204} valueText="214 of 1,204" />);
     const meter = screen.getByRole('meter', { name: 'Shown' });
     expect(screen.queryByRole('progressbar')).toBeNull();
-    expect(meter).toHaveClass('sc-meter');
+    expect(meter).toHaveClass('c-proto-meter');
     expect(meter).toHaveAttribute('aria-valuenow', '214');
     expect(meter).toHaveAttribute('aria-valuemin', '0');
     expect(meter).toHaveAttribute('aria-valuemax', '1204');
@@ -15,16 +15,16 @@ describe('Meter', () => {
     expect(meter).toHaveAttribute('data-tone', 'accent');
     expect(meter).toHaveAttribute('data-size', 'md');
     expect(meter).toHaveAttribute('data-layout', 'stacked');
-    expect(screen.getByText('214 of 1,204')).toHaveClass('sc-meter__value');
-    expect(screen.getByText('Shown')).toHaveClass('sc-meter__label');
-    expect((container.querySelector('.sc-meter__fill') as HTMLElement).style.width).toMatch(/^17\.77/);
+    expect(screen.getByText('214 of 1,204')).toHaveClass('c-proto-meter__value');
+    expect(screen.getByText('Shown')).toHaveClass('c-proto-meter__label');
+    expect((container.querySelector('.c-proto-meter__fill') as HTMLElement).style.width).toMatch(/^17\.77/);
     await expectNoA11yViolations(container);
   });
 
   it('defaults the value text to the formatted count, and takes a share as value over max 1', () => {
     const { rerender } = render(<Meter label="Fetched" value={1204} max={2000} />);
     expect(screen.getByRole('meter')).toHaveAttribute('aria-valuetext', '1,204');
-    expect(screen.getByText('1,204')).toHaveClass('sc-meter__value');
+    expect(screen.getByText('1,204')).toHaveClass('c-proto-meter__value');
     rerender(<Meter label="Kept" value={0.28} max={1} valueText="28%" />);
     const meter = screen.getByRole('meter', { name: 'Kept' });
     expect(meter).toHaveAttribute('aria-valuenow', '0.28');
@@ -46,7 +46,7 @@ describe('Meter', () => {
     expect(meter).toHaveAttribute('data-marked');
     expect(meter).toHaveAttribute('aria-valuetext', '40 found first; 12 strong leads');
     expect(meter.style.getPropertyValue('--_mark')).toBe('15%');
-    const mark = container.querySelector('.sc-meter__track > .sc-meter__mark');
+    const mark = container.querySelector('.c-proto-meter__track > .c-proto-meter__mark');
     expect(mark).toHaveAttribute('aria-hidden', 'true');
     expect(mark).toHaveAttribute('title', '12 strong leads');
     await expectNoA11yViolations(container);
@@ -72,14 +72,14 @@ describe('Meter', () => {
     const meter = screen.getByRole('meter', { name: 'Shown, Greenhouse' });
     expect(meter).toHaveAttribute('data-layout', 'inline');
     expect(meter).toHaveAttribute('data-size', 'sm');
-    expect(screen.getByText('Shown, Greenhouse')).toHaveClass('sc-visually-hidden');
-    expect(screen.getByText('121')).toHaveClass('sc-meter__value');
+    expect(screen.getByText('Shown, Greenhouse')).toHaveClass('u-proto-visually-hidden');
+    expect(screen.getByText('121')).toHaveClass('c-proto-meter__value');
     await expectNoA11yViolations(container);
   });
 
   it('clamps out-of-range values for the fill and aria-valuenow', () => {
     const { container } = render(<Meter label="Over" value={150} max={100} valueText="150" />);
     expect(screen.getByRole('meter')).toHaveAttribute('aria-valuenow', '100');
-    expect((container.querySelector('.sc-meter__fill') as HTMLElement).style.width).toBe('100%');
+    expect((container.querySelector('.c-proto-meter__fill') as HTMLElement).style.width).toBe('100%');
   });
 });

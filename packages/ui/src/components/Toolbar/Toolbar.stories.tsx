@@ -76,8 +76,8 @@ export const Narrow: Story = {
     <div
       style={{
         maxWidth: 320,
-        border: '1px dashed var(--sc-color-border-default)',
-        padding: 'var(--sc-spacing-xs)',
+        border: '1px dashed var(--proto-color-border-default)',
+        padding: 'var(--proto-spacing-xs)',
       }}
     >
       <InboxToolbar />
@@ -91,8 +91,8 @@ export const NoWrap: Story = {
     <div
       style={{
         maxWidth: 320,
-        border: '1px dashed var(--sc-color-border-default)',
-        padding: 'var(--sc-spacing-xs)',
+        border: '1px dashed var(--proto-color-border-default)',
+        padding: 'var(--proto-spacing-xs)',
       }}
     >
       <InboxToolbar wrap={false} />
@@ -134,7 +134,7 @@ export const WithLink: Story = {
         <Toolbar.Link render={<IconButton label="Settings" tooltip render={settingsLink} />}>
           <SettingsIcon />
         </Toolbar.Link>
-        <Toolbar.Link href="#help" className="sc-button" data-variant="ghost" data-size="sm">
+        <Toolbar.Link href="#help" className="c-proto-button" data-variant="ghost" data-size="sm">
           Help
         </Toolbar.Link>
       </Toolbar.Root>

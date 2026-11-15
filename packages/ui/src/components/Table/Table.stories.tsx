@@ -59,7 +59,7 @@ function Example(props: React.ComponentProps<typeof Table.Root>) {
           <Table.Header numeric>Score</Table.Header>
           <Table.Header numeric>Days</Table.Header>
           <Table.Header width="48px">
-            <span className="sc-visually-hidden">Actions</span>
+            <span className="u-proto-visually-hidden">Actions</span>
           </Table.Header>
         </Table.Row>
       </Table.Head>

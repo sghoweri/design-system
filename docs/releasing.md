@@ -1,6 +1,6 @@
 # Releasing
 
-`@salemcobalt/tokens` and `@salemcobalt/ui` share one version and are released by
+`@protokit/tokens` and `@protokit/ui` share one version and are released by
 [`.github/workflows/release.yml`](../.github/workflows/release.yml). Versions come from
 [nx release](https://nx.dev/docs/guides/nx-release) in fixed mode (configuration in
 [`nx.json`](../nx.json)); the bump is decided by a label on the merged PR, Auto style; npm authentication is
@@ -54,7 +54,7 @@ feature branch ──PR──▶ main ──PR──▶ release
 ### 1. npm: Trusted Publisher for each package
 
 Both packages exist on npm (`0.1.0` was published by hand as `sghoweri` on 2026-11-03), so this can be
-done now. For **each** of `@salemcobalt/tokens` and `@salemcobalt/ui`: package page on npmjs.com →
+done now. For **each** of `@protokit/tokens` and `@protokit/ui`: package page on npmjs.com →
 **Settings** → **Trusted Publisher** → **GitHub Actions**:
 
 - Organization or user: `sghoweri`
@@ -83,7 +83,7 @@ git push -u origin release
 The workflow refuses to run until a `v*` tag exists. From then on both packages move together: the next
 rc after `v0.1.1` is `0.1.2-rc.0` for `tokens` as well as `ui`, even though `tokens` never shipped a
 `0.1.1`. (The stray `0.0.0-stage` on npm can be hidden with
-`npm deprecate @salemcobalt/tokens@0.0.0-stage "staging artefact"`, same for `ui`.)
+`npm deprecate @protokit/tokens@0.0.0-stage "staging artefact"`, same for `ui`.)
 
 ### 3. GitHub App for the stable path
 
@@ -113,7 +113,7 @@ variable; nothing is published half-way.
 2. Merge. The `release` run under **Actions** publishes `X.Y.Z-rc.N` to `next` within a few minutes:
 
    ```sh
-   pnpm add @salemcobalt/tokens@next @salemcobalt/ui@next
+   pnpm add @protokit/tokens@next @protokit/ui@next
    ```
 
    **Stacked PRs: merge one at a time and wait for GitHub to retarget the next.** A PR whose base is

@@ -1,6 +1,6 @@
 /* ---- Spinner --------------------------------------------------------------- */
-.sc-spinner {
-  --_s: var(--sc-size-icon-md);
+.c-proto-spinner {
+  --_s: var(--proto-size-icon-md);
   display: inline-block;
   inline-size: var(--_s);
   block-size: var(--_s);
@@ -8,96 +8,96 @@
   vertical-align: -0.125em;
   color: inherit;
 }
-.sc-spinner[data-size='xs'] {
-  --_s: var(--sc-size-icon-xs);
+.c-proto-spinner[data-size='xs'] {
+  --_s: var(--proto-size-icon-xs);
 }
-.sc-spinner[data-size='sm'] {
-  --_s: var(--sc-size-icon-sm);
+.c-proto-spinner[data-size='sm'] {
+  --_s: var(--proto-size-icon-sm);
 }
-.sc-spinner[data-size='lg'] {
-  --_s: var(--sc-size-icon-lg);
+.c-proto-spinner[data-size='lg'] {
+  --_s: var(--proto-size-icon-lg);
 }
-.sc-spinner[data-size='xl'] {
-  --_s: var(--sc-size-icon-xl);
+.c-proto-spinner[data-size='xl'] {
+  --_s: var(--proto-size-icon-xl);
 }
-.sc-spinner[data-size='em'] {
+.c-proto-spinner[data-size='em'] {
   --_s: 1em;
 }
-.sc-spinner > svg {
+.c-proto-spinner > svg {
   display: block;
   inline-size: 100%;
   block-size: 100%;
-  animation: sc-spin 0.8s linear infinite;
+  animation: proto-spin 0.8s linear infinite;
 }
-.sc-spinner__track {
+.c-proto-spinner__track {
   opacity: 0.25;
 }
-.sc-spinner__arc {
+.c-proto-spinner__arc {
   stroke-dasharray: 28 12;
 }
 /* ---- Progress -------------------------------------------------------------- */
-.sc-progress {
-  --_fill: var(--sc-color-accent-default);
+.c-proto-progress {
+  --_fill: var(--proto-color-accent-default);
   --_h: 8px;
   display: grid;
   grid-template-columns: 1fr auto;
-  column-gap: var(--sc-spacing-sm);
-  row-gap: var(--sc-spacing-2xs);
+  column-gap: var(--proto-spacing-sm);
+  row-gap: var(--proto-spacing-2xs);
   align-items: baseline;
   min-inline-size: 0;
-  font-family: var(--sc-font-family-sans);
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-ui);
-  color: var(--sc-color-text-default);
+  font-family: var(--proto-font-family-sans);
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-ui);
+  color: var(--proto-color-text-default);
 }
-.sc-progress[data-size='sm'] {
+.c-proto-progress[data-size='sm'] {
   --_h: 4px;
 }
-.sc-progress[data-tone='success'] {
-  --_fill: var(--sc-color-success-solid);
+.c-proto-progress[data-tone='success'] {
+  --_fill: var(--proto-color-success-solid);
 }
-.sc-progress[data-tone='warning'] {
-  --_fill: var(--sc-color-warning-solid);
+.c-proto-progress[data-tone='warning'] {
+  --_fill: var(--proto-color-warning-solid);
 }
-.sc-progress[data-tone='danger'] {
-  --_fill: var(--sc-color-danger-solid);
+.c-proto-progress[data-tone='danger'] {
+  --_fill: var(--proto-color-danger-solid);
 }
-.sc-progress[data-tone='neutral'] {
-  --_fill: var(--sc-color-text-muted);
+.c-proto-progress[data-tone='neutral'] {
+  --_fill: var(--proto-color-text-muted);
 }
-.sc-progress__label {
+.c-proto-progress__label {
   grid-column: 1;
-  font-weight: var(--sc-font-weight-medium);
+  font-weight: var(--proto-font-weight-medium);
 }
-.sc-progress__value {
+.c-proto-progress__value {
   grid-column: 2;
-  color: var(--sc-color-text-muted);
-  font-size: var(--sc-font-size-xs);
+  color: var(--proto-color-text-muted);
+  font-size: var(--proto-font-size-xs);
   font-variant-numeric: tabular-nums;
   text-align: end;
   white-space: nowrap;
 }
-.sc-progress__track {
+.c-proto-progress__track {
   grid-column: 1 / -1;
   position: relative;
   block-size: var(--_h);
   overflow: hidden;
-  border-radius: var(--sc-radius-full);
-  background: var(--sc-color-surface-active);
+  border-radius: var(--proto-radius-full);
+  background: var(--proto-color-surface-active);
 }
-.sc-progress__indicator {
+.c-proto-progress__indicator {
   block-size: 100%;
   border-radius: inherit;
   background: var(--_fill);
-  transition: width var(--sc-duration-slow) var(--sc-ease-standard);
+  transition: width var(--proto-duration-slow) var(--proto-ease-standard);
 }
-.sc-progress__indicator[data-indeterminate] {
+.c-proto-progress__indicator[data-indeterminate] {
   position: absolute;
   inset-block: 0;
   inline-size: 40%;
-  animation: sc-progress-slide 1.4s var(--sc-ease-standard) infinite;
+  animation: proto-progress-slide 1.4s var(--proto-ease-standard) infinite;
 }
-@keyframes sc-progress-slide {
+@keyframes proto-progress-slide {
   from {
     translate: -100% 0;
   }
@@ -107,25 +107,25 @@
 }
 /* Marks: a 2px tick per threshold, reaching past the track so it reads on any fill (and over the fill's own tone).
    The track stops clipping while marked; a determinate fill never overflows it. */
-.sc-progress[data-marked] > .sc-progress__track {
+.c-proto-progress[data-marked] > .c-proto-progress__track {
   overflow: visible;
 }
-.sc-progress__mark {
+.c-proto-progress__mark {
   position: absolute;
-  inset-block: calc(-1 * var(--sc-size-progress-mark-overhang));
+  inset-block: calc(-1 * var(--proto-size-progress-mark-overhang));
   inset-inline-start: var(--_at);
   inline-size: 2px;
   translate: -1px 0;
   border-radius: 1px;
-  background: var(--sc-color-warning-solid);
+  background: var(--proto-color-warning-solid);
 }
-.sc-progress[data-marked] {
-  padding-block: var(--sc-size-progress-mark-overhang);
+.c-proto-progress[data-marked] {
+  padding-block: var(--proto-size-progress-mark-overhang);
 }
 /* ring: a gauge, the arc in the tone's fill, an optional centre (a count). The SVG's viewBox is the diameter and r
    leaves the stroke inside it (Progress.tsx); the arc length comes from --_pct (0–100, set inline). */
-.sc-progress[data-variant='ring'] {
-  --_d: var(--sc-size-progress-ring-md);
+.c-proto-progress[data-variant='ring'] {
+  --_d: var(--proto-size-progress-ring-md);
   position: relative;
   display: inline-grid;
   /* one cell the size of the ring: the bar's `1fr auto` columns and gap would put the centre left of middle */
@@ -134,15 +134,15 @@
   flex: none;
   inline-size: var(--_d);
   block-size: var(--_d);
-  font-size: var(--sc-font-size-sm);
-  font-weight: var(--sc-font-weight-semibold);
+  font-size: var(--proto-font-size-sm);
+  font-weight: var(--proto-font-weight-semibold);
   font-variant-numeric: tabular-nums;
 }
-.sc-progress[data-variant='ring'][data-size='sm'] {
-  --_d: var(--sc-size-progress-ring-sm);
-  font-size: var(--sc-font-size-xs);
+.c-proto-progress[data-variant='ring'][data-size='sm'] {
+  --_d: var(--proto-size-progress-ring-sm);
+  font-size: var(--proto-font-size-xs);
 }
-.sc-progress__ring {
+.c-proto-progress__ring {
   position: absolute;
   inset: 0;
   inline-size: 100%;
@@ -150,66 +150,66 @@
   rotate: -90deg;
   overflow: visible;
 }
-.sc-progress__ring-track,
-.sc-progress__ring-arc {
+.c-proto-progress__ring-track,
+.c-proto-progress__ring-arc {
   fill: none;
-  stroke-width: var(--sc-size-progress-ring-stroke);
+  stroke-width: var(--proto-size-progress-ring-stroke);
 }
-.sc-progress__ring-track {
-  stroke: var(--sc-color-surface-active);
+.c-proto-progress__ring-track {
+  stroke: var(--proto-color-surface-active);
 }
-.sc-progress__ring-arc {
+.c-proto-progress__ring-arc {
   stroke: var(--_fill);
   stroke-linecap: round;
   stroke-dasharray: 100;
   stroke-dashoffset: calc(100 - var(--_pct, 0));
-  transition: stroke-dashoffset var(--sc-duration-data) var(--sc-ease-data);
+  transition: stroke-dashoffset var(--proto-duration-data) var(--proto-ease-data);
 }
-.sc-progress__ring-arc[data-indeterminate] {
+.c-proto-progress__ring-arc[data-indeterminate] {
   transform-box: fill-box;
   transform-origin: center;
-  animation: sc-spin 1.4s linear infinite;
+  animation: proto-spin 1.4s linear infinite;
 }
-.sc-progress__centre {
+.c-proto-progress__centre {
   position: relative;
   line-height: 1;
 }
 /* inline: spinner + text on one line, no track */
-.sc-progress[data-variant='inline'] {
+.c-proto-progress[data-variant='inline'] {
   display: inline-flex;
   align-items: center;
-  gap: var(--sc-spacing-2xs);
+  gap: var(--proto-spacing-2xs);
 }
-.sc-progress[data-variant='inline'] > .sc-progress__spinner {
+.c-proto-progress[data-variant='inline'] > .c-proto-progress__spinner {
   color: var(--_fill);
 }
-.sc-progress[data-variant='inline'] > .sc-progress__value {
+.c-proto-progress[data-variant='inline'] > .c-proto-progress__value {
   font-size: inherit;
   text-align: start;
 }
-.sc-progress[data-variant='inline'] > .sc-progress__value::before {
+.c-proto-progress[data-variant='inline'] > .c-proto-progress__value::before {
   content: '·';
-  margin-inline-end: var(--sc-spacing-2xs);
+  margin-inline-end: var(--proto-spacing-2xs);
 }
-.sc-progress[data-variant='inline'] > .sc-progress__label + .sc-progress__value {
+.c-proto-progress[data-variant='inline'] > .c-proto-progress__label + .c-proto-progress__value {
   margin-inline-start: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-spinner > svg {
+  .c-proto-spinner > svg {
     animation-duration: 1.6s;
   }
-  .sc-progress__indicator,
-  .sc-progress__ring-arc {
+  .c-proto-progress__indicator,
+  .c-proto-progress__ring-arc {
     transition: none;
   }
-  .sc-progress__ring-arc[data-indeterminate] {
-    animation: sc-progress-pulse 2s ease-in-out infinite alternate;
+  .c-proto-progress__ring-arc[data-indeterminate] {
+    animation: proto-progress-pulse 2s ease-in-out infinite alternate;
   }
-  .sc-progress__indicator[data-indeterminate] {
+  .c-proto-progress__indicator[data-indeterminate] {
     inline-size: 100%;
-    animation: sc-progress-pulse 2s ease-in-out infinite alternate;
+    animation: proto-progress-pulse 2s ease-in-out infinite alternate;
   }
-  @keyframes sc-progress-pulse {
+  @keyframes proto-progress-pulse {
     from {
       opacity: 0.35;
     }

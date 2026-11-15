@@ -3,13 +3,13 @@ title: Getting started
 description: Install the tokens and components, import the three entries, and set the theme.
 ---
 
-The system is two npm packages: `@salemcobalt/tokens` (CSS custom properties, Sass, TypeScript and JSON from one
-Style Dictionary source) and `@salemcobalt/ui` (React 19 components on Base UI).
+The system is two npm packages: `@protokit/tokens` (CSS custom properties, Sass, TypeScript and JSON from one
+Style Dictionary source) and `@protokit/ui` (React 19 components on Base UI).
 
 ## Install
 
 ```sh
-pnpm add @salemcobalt/ui @salemcobalt/tokens
+pnpm add @protokit/ui @protokit/tokens
 ```
 
 ## Import the entries
@@ -17,12 +17,12 @@ pnpm add @salemcobalt/ui @salemcobalt/tokens
 Import these once, at the app entry:
 
 ```ts
-import '@salemcobalt/tokens/css'; // custom properties, light + dark
-import '@salemcobalt/ui/fonts'; // self-hosted IBM Plex Sans (variable) and Plex Mono, optional
-import '@salemcobalt/ui/styles.css'; // the components, inside @layer sc
+import '@protokit/tokens/css'; // custom properties, light + dark
+import '@protokit/ui/fonts'; // self-hosted IBM Plex Sans (variable) and Plex Mono, optional
+import '@protokit/ui/styles.css'; // the components, inside @layer proto
 ```
 
-The component styles ship inside `@layer sc`, so any unlayered CSS in your app wins without specificity fights.
+The component styles ship inside `@layer proto`, so any unlayered CSS in your app wins without specificity fights.
 
 ## Theme and density
 
@@ -33,7 +33,7 @@ attribute: the theme switcher in the header flips it.
 ## Use a component
 
 ```tsx
-import { Button } from '@salemcobalt/ui';
+import { Button } from '@protokit/ui';
 
 export function Save() {
   return <Button variant="primary">Save</Button>;

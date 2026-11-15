@@ -26,7 +26,7 @@ function JobCardSkeleton() {
           <Skeleton variant="circle" width={40} />
           <Stack gap="2xs" style={{ flex: 1 }}>
             <Skeleton width="60%" />
-            <Skeleton width="40%" style={{ fontSize: 'var(--sc-font-size-xs)' }} />
+            <Skeleton width="40%" style={{ fontSize: 'var(--proto-font-size-xs)' }} />
           </Stack>
         </Inline>
         <Skeleton lines={3} />

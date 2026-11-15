@@ -99,7 +99,7 @@ describe('FileInput', () => {
   it('server-renders a static drop zone without FilePond, then hydrates without warnings', async () => {
     const ui = <FileInput label="Document" description="PDF up to 10 MB." accept=".pdf" />;
     const html = renderToString(ui);
-    expect(html).toContain('sc-file-input__placeholder');
+    expect(html).toContain('c-proto-file-input__placeholder');
     expect(html).not.toContain('filepond');
     const container = document.createElement('div');
     container.innerHTML = html;
@@ -124,7 +124,7 @@ describe('FileInput', () => {
     expect(input).not.toHaveAttribute('multiple');
     expect(input).toHaveAccessibleDescription(/PDF up to 10 MB\./);
     expect(screen.getByText('Document').closest('label')).toHaveAttribute('for', input.id);
-    expect(container.querySelector('.sc-file-input__placeholder')).toBeNull();
+    expect(container.querySelector('.c-proto-file-input__placeholder')).toBeNull();
     // One tab stop: FilePond's focusable "browse" text is made plain text.
     expect(container.querySelector('.filepond--label-action')).not.toHaveAttribute('tabindex');
     await expectNoA11yViolations(container);
@@ -161,7 +161,7 @@ describe('FileInput', () => {
       {},
       slow,
     );
-    expect(message).toHaveClass('sc-field__error');
+    expect(message).toHaveClass('c-proto-field__error');
     expect(message.parentElement).toHaveAttribute('aria-live', 'polite');
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(input).toHaveAccessibleDescription(/not an accepted file type/);
@@ -223,7 +223,7 @@ describe('FileInput', () => {
   it('shows a form error in the same slot', async () => {
     const { container } = render(<FileInput label="Document" error="Choose a document." />);
     const input = await control();
-    expect(screen.getByText('Choose a document.')).toHaveClass('sc-field__error');
+    expect(screen.getByText('Choose a document.')).toHaveClass('c-proto-field__error');
     expect(input).toHaveAttribute('aria-invalid', 'true');
     expect(input).toHaveAccessibleDescription(/Choose a document\./);
     await expectNoA11yViolations(container);
@@ -275,14 +275,14 @@ describe('FileInput', () => {
       () => expect(document.querySelector('button[aria-label="Remove a.pdf"]')).not.toBeNull(),
       slow,
     );
-    expect(document.querySelector('.sc-file-input__preview')).toBeNull();
+    expect(document.querySelector('.c-proto-file-input__preview')).toBeNull();
     rerender(<FileInput label="Document" defaultFiles={[pdf('a.pdf')]} />);
     await waitFor(
       () => expect(document.querySelector('button[aria-label="Preview a.pdf"]')).not.toBeNull(),
       slow,
     );
     rerender(<FileInput label="Document" defaultFiles={[pdf('a.pdf')]} disabled />);
-    await waitFor(() => expect(document.querySelector('.sc-file-input__preview')).toBeNull(), slow);
+    await waitFor(() => expect(document.querySelector('.c-proto-file-input__preview')).toBeNull(), slow);
   });
 
   it('disables: FilePond removes its file input, so nothing is focusable and the label has no target', async () => {
@@ -294,7 +294,7 @@ describe('FileInput', () => {
       () => expect(container.querySelector('.filepond--root')).toHaveAttribute('data-disabled'),
       slow,
     );
-    expect(container.querySelector('.sc-file-input')).toHaveAttribute('data-disabled');
+    expect(container.querySelector('.c-proto-file-input')).toHaveAttribute('data-disabled');
     expect(container.querySelector('.filepond--browser')).toBeNull();
     expect(screen.getByText('Document')).not.toHaveAttribute('for');
     await waitFor(

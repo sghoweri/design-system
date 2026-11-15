@@ -35,14 +35,14 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={cx('sc-badge', className)}
+      className={cx('c-proto-badge', className)}
       data-tone={tone}
       data-variant={variant}
       data-size={size}
       data-rounded={rounded || undefined}
       {...rest}
     >
-      {dot ? <span className="sc-badge__dot" aria-hidden="true" /> : null}
+      {dot ? <span className="c-proto-badge__dot" aria-hidden="true" /> : null}
       {children}
     </span>
   );

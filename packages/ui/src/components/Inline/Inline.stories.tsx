@@ -44,8 +44,8 @@ export const Actions: Story = {
 export const Baseline: Story = {
   render: () => (
     <Inline align="baseline" gap="xs">
-      <span style={{ fontSize: 'var(--sc-font-size-xl)', fontWeight: 600 }}>12</span>
-      <span style={{ color: 'var(--sc-color-text-muted)' }}>applications</span>
+      <span style={{ fontSize: 'var(--proto-font-size-xl)', fontWeight: 600 }}>12</span>
+      <span style={{ color: 'var(--proto-color-text-muted)' }}>applications</span>
     </Inline>
   ),
 };

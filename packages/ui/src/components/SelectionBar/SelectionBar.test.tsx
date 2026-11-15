@@ -74,6 +74,6 @@ describe('SelectionBar', () => {
     expect(screen.getByRole('toolbar', { name: 'Application actions' })).toHaveTextContent('3 applications');
     expect(screen.getByRole('button', { name: 'Deselect' })).toBeInTheDocument();
     expect(screen.getByRole('toolbar').parentElement).toHaveAttribute('data-open');
-    expect(container.querySelector('.sc-selection-bar__spacer')).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('.c-proto-selection-bar__spacer')).toHaveAttribute('aria-hidden', 'true');
   });
 });

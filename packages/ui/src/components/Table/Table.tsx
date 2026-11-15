@@ -107,7 +107,7 @@ function Root({
   };
   return (
     <div
-      className={cx('sc-table-wrap', wrapperClassName)}
+      className={cx('c-proto-table-wrap', wrapperClassName)}
       data-sticky-header={stickyHeader || undefined}
       data-scroll={maxHeight ? '' : undefined}
       style={maxHeight ? { ...wrapperStyle, maxBlockSize: maxHeight } : wrapperStyle}
@@ -115,7 +115,7 @@ function Root({
       {/* Selection shortcuts are delegated from the focusable controls inside (checkboxes, links, sort buttons). */}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
       <table
-        className={cx('sc-table', className)}
+        className={cx('c-proto-table', className)}
         data-density={density}
         data-divided={divided || undefined}
         data-layout={layout}
@@ -133,22 +133,22 @@ export type TableCaptionProps = ComponentPropsWithRef<'caption'>;
 
 /** Names the table for assistive tech; visually a muted line above it. */
 function Caption({ className, ...rest }: TableCaptionProps) {
-  return <caption className={cx('sc-table__caption', className)} {...rest} />;
+  return <caption className={cx('c-proto-table__caption', className)} {...rest} />;
 }
 
 export type TableHeadProps = ComponentPropsWithRef<'thead'>;
 function Head({ className, ...rest }: TableHeadProps) {
-  return <thead className={cx('sc-table__head', className)} {...rest} />;
+  return <thead className={cx('c-proto-table__head', className)} {...rest} />;
 }
 
 export type TableBodyProps = ComponentPropsWithRef<'tbody'>;
 function Body({ className, ...rest }: TableBodyProps) {
-  return <tbody className={cx('sc-table__body', className)} {...rest} />;
+  return <tbody className={cx('c-proto-table__body', className)} {...rest} />;
 }
 
 export type TableFootProps = ComponentPropsWithRef<'tfoot'>;
 function Foot({ className, ...rest }: TableFootProps) {
-  return <tfoot className={cx('sc-table__foot', className)} {...rest} />;
+  return <tfoot className={cx('c-proto-table__foot', className)} {...rest} />;
 }
 
 export interface TableRowProps extends ComponentPropsWithRef<'tr'> {
@@ -178,7 +178,7 @@ function Row({
   const isSelected = selected ?? (selectable && selection.isSelected(selectionId));
   const row = (
     <tr
-      className={cx('sc-table__row', className)}
+      className={cx('c-proto-table__row', className)}
       data-selected={isSelected || undefined}
       data-interactive={interactive || undefined}
       aria-selected={selectable ? isSelected : isSelected || undefined}
@@ -219,10 +219,10 @@ function SelectionBox({
   ...rest
 }: { label: string } & Omit<BaseCheckbox.Root.Props, 'className' | 'render'>) {
   return (
-    <BaseCheckbox.Root className="sc-checkbox" aria-label={label} {...rest}>
-      <BaseCheckbox.Indicator className="sc-checkbox__indicator">
-        <CheckIcon size="sm" className="sc-checkbox__check" />
-        <MinusIcon size="sm" className="sc-checkbox__dash" />
+    <BaseCheckbox.Root className="c-proto-checkbox" aria-label={label} {...rest}>
+      <BaseCheckbox.Indicator className="c-proto-checkbox__indicator">
+        <CheckIcon size="sm" className="c-proto-checkbox__check" />
+        <MinusIcon size="sm" className="c-proto-checkbox__dash" />
       </BaseCheckbox.Indicator>
     </BaseCheckbox.Root>
   );
@@ -252,7 +252,7 @@ function SelectionHeader({
   return (
     <th
       scope="col"
-      className={cx('sc-table__header', 'sc-table__select', className)}
+      className={cx('c-proto-table__header', 'c-proto-table__select', className)}
       data-disabled={disabled || undefined}
       onClick={(event) => {
         onClick?.(event);
@@ -287,7 +287,7 @@ function SelectionCell({ label, className, onClick, onClickCapture, ...rest }: T
   if (id === undefined) throw new Error('Table.SelectionCell goes inside a Table.Row with selectionId');
   return (
     <td
-      className={cx('sc-table__cell', 'sc-table__select', className)}
+      className={cx('c-proto-table__cell', 'c-proto-table__select', className)}
       onClickCapture={(event) => {
         onClickCapture?.(event);
         // Shift+click, and Shift+Space (Base UI turns the keyup into a click that keeps the modifiers), take the
@@ -355,7 +355,7 @@ function Header({
   return (
     <th
       scope={scope}
-      className={cx('sc-table__header', className)}
+      className={cx('c-proto-table__header', className)}
       data-align={align ?? (numeric ? 'end' : undefined)}
       data-numeric={numeric || undefined}
       data-nowrap={nowrap || undefined}
@@ -369,11 +369,11 @@ function Header({
       {sortable ? (
         <button
           type="button"
-          className="sc-table__sort"
+          className="c-proto-table__sort"
           onClick={() => onSort?.(sortDirection === 'ascending' ? 'descending' : 'ascending')}
         >
-          <span className="sc-table__sort-label">{children}</span>
-          <span className="sc-table__sort-icon" aria-hidden="true">
+          <span className="c-proto-table__sort-label">{children}</span>
+          <span className="c-proto-table__sort-icon" aria-hidden="true">
             {sortDirection === 'descending' ? <ArrowDownIcon size="xs" /> : <ArrowUpIcon size="xs" />}
           </span>
         </button>
@@ -398,7 +398,7 @@ function Cell({
 }: TableCellProps) {
   return (
     <td
-      className={cx('sc-table__cell', className)}
+      className={cx('c-proto-table__cell', className)}
       data-align={align ?? (numeric ? 'end' : undefined)}
       data-numeric={numeric || undefined}
       data-nowrap={nowrap || undefined}

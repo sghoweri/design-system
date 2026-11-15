@@ -2,13 +2,13 @@
  * Inline word diffs inside CodeMirror 6 (job-radar docs/design/word-diff-editor.md, option (b), phase 2).
  *
  * The current document is diffed against a `base` string (`diffParts`), and the parts become decorations:
- * - added text is a mark (`<ins class="sc-word-diff__added">`) over the document range, between visually hidden
+ * - added text is a mark (`<ins class="c-proto-word-diff__added">`) over the document range, between visually hidden
  *   "[added: " and "]", as WordDiff reads;
  * - each removed run is a widget, so it isn't part of the document: the caret steps over it, and it can't be edited
  *   or copied. Inside a line it's an inline `<del>` at the position it was removed from. A run that holds a line
  *   break is a block of `<del>` lines above the line it was removed from, so it never breaks a line in two.
- * The classes are WordDiff's, and the content carries `class="sc-word-diff" data-family="mono"`, so it looks the
- * same as WordDiff from `@salemcobalt/ui/styles.css`. Not `@codemirror/merge` (see the design doc).
+ * The classes are WordDiff's, and the content carries `class="c-proto-word-diff" data-family="mono"`, so it looks the
+ * same as WordDiff from `@protokit/ui/styles.css`. Not `@codemirror/merge` (see the design doc).
  *
  * With `live` off (the default) the diff hides while the editor has focus, so nothing moves under the caret, and
  * shows again on blur. With `live` on it stays, mapped through each edit, and recomputes `DEBOUNCE_MS` after the
@@ -36,7 +36,7 @@ import { diffParts } from './diffParts';
 const edges = /^(\s*)([\s\S]*?)(\s*)$/;
 
 const hidden = (text: string) =>
-  Object.assign(document.createElement('span'), { className: 'sc-visually-hidden', textContent: text });
+  Object.assign(document.createElement('span'), { className: 'u-proto-visually-hidden', textContent: text });
 
 class RemovedWidget extends WidgetType {
   constructor(
@@ -55,7 +55,7 @@ class RemovedWidget extends WidgetType {
     const wrap = document.createElement(this.block ? 'div' : 'span');
     wrap.className = this.block ? 'cm-sc-removed-lines' : 'cm-sc-removed';
     const del = document.createElement('del');
-    del.className = 'sc-word-diff__removed';
+    del.className = 'c-proto-word-diff__removed';
     del.append(hidden(`[${this.label}: `), core, hidden(']'));
     wrap.append(lead, del, trail);
     return wrap;
@@ -82,7 +82,7 @@ export interface DiffLabels {
   removed?: string | undefined;
 }
 
-const addedMark = Decoration.mark({ tagName: 'ins', class: 'sc-word-diff__added' });
+const addedMark = Decoration.mark({ tagName: 'ins', class: 'c-proto-word-diff__added' });
 
 /** The decorations for `doc` against `base`: added marks with their labels, and removed widgets, sorted. */
 export function diffDecorations(doc: Text, base: string, labels: DiffLabels = {}): DecorationSet {
@@ -192,7 +192,7 @@ const debounce = ViewPlugin.fromClass(
 );
 
 const theme = EditorView.theme({
-  '.cm-sc-removed-lines': { paddingInline: 'var(--sc-spacing-sm)', whiteSpace: 'pre-wrap' },
+  '.cm-sc-removed-lines': { paddingInline: 'var(--proto-spacing-sm)', whiteSpace: 'pre-wrap' },
 });
 
 /**

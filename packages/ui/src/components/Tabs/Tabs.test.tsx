@@ -26,7 +26,7 @@ function Example({ onValueChange }: { onValueChange?: (v: string) => void }) {
 describe('Tabs', () => {
   it('renders a labelled tablist with the default tab active and only its panel shown', async () => {
     const { container } = render(<Example />);
-    expect(screen.getByRole('tablist', { name: 'Inbox sections' })).toHaveClass('sc-tabs__list');
+    expect(screen.getByRole('tablist', { name: 'Inbox sections' })).toHaveClass('c-proto-tabs__list');
     const inbox = screen.getByRole('tab', { name: 'Inbox 12' });
     expect(inbox).toHaveAttribute('aria-selected', 'true');
     expect(inbox).toHaveAttribute('data-active');

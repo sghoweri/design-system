@@ -2,7 +2,7 @@ import type { Decorator, Preview } from '@storybook/react-vite';
 import { MINIMAL_VIEWPORTS } from 'storybook/viewport';
 import { useEffect } from 'react';
 import type React from 'react';
-import '@salemcobalt/tokens/css';
+import '@protokit/tokens/css';
 import '../../../packages/ui/src/fonts/fonts.css';
 import '../../../packages/ui/src/styles/preview.css';
 

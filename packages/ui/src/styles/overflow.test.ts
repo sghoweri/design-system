@@ -20,7 +20,7 @@ const prop = (css: string, name: string) =>
   [...css.matchAll(new RegExp(`(?:^|[;\\s])${name}:\\s*([^;]+);`, 'g'))].map((m) => m[1]!.trim()).at(-1);
 
 describe('tab row', () => {
-  const list = body('tabs.css', '.sc-tabs__list');
+  const list = body('tabs.css', '.c-proto-tabs__list');
 
   it('scrolls sideways and never vertically', () => {
     expect(prop(list, 'overflow-x')).toBe('auto');
@@ -31,31 +31,31 @@ describe('tab row', () => {
   it('keeps the baseline and the active indicator inside the scrollport', () => {
     // A border sits outside the scrollport, so an indicator laid over it overflowed by a pixel and was cut in half.
     expect(list).not.toMatch(/border-block-end:\s*var/);
-    expect(prop(list, 'padding-block-end')).toBe('var(--sc-border-width-hairline)');
-    expect(prop(list, 'box-shadow')).toMatch(/^inset 0 calc\(-1 \* var\(--sc-border-width-hairline\)\) 0 /);
-    expect(prop(body('tabs.css', '.sc-tabs__indicator'), 'inset-block-end')).toBe('0');
+    expect(prop(list, 'padding-block-end')).toBe('var(--proto-border-width-hairline)');
+    expect(prop(list, 'box-shadow')).toMatch(/^inset 0 calc\(-1 \* var\(--proto-border-width-hairline\)\) 0 /);
+    expect(prop(body('tabs.css', '.c-proto-tabs__indicator'), 'inset-block-end')).toBe('0');
   });
 
   it('draws the tab focus ring inside the tab', () => {
-    expect(prop(body('tabs.css', '.sc-tabs__tab:focus-visible'), 'outline-offset')).toBe(
-      'calc(-1 * var(--sc-border-width-focus))',
+    expect(prop(body('tabs.css', '.c-proto-tabs__tab:focus-visible'), 'outline-offset')).toBe(
+      'calc(-1 * var(--proto-border-width-focus))',
     );
   });
 });
 
 describe('select popup', () => {
   it('is at least the trigger wide and at most the measure or the room available', () => {
-    const popup = body('field.css', '.sc-select__popup');
+    const popup = body('field.css', '.c-proto-select__popup');
     expect(prop(popup, 'min-inline-size')).toBe('var(--anchor-width)');
-    expect(prop(popup, 'max-inline-size')).toBe('min(var(--available-width), var(--sc-font-measure))');
+    expect(prop(popup, 'max-inline-size')).toBe('min(var(--available-width), var(--proto-font-measure))');
   });
 
   it('wraps long option text with the check on the first line', () => {
-    const text = body('field.css', '.sc-select__item-text');
+    const text = body('field.css', '.c-proto-select__item-text');
     expect(prop(text, 'overflow-wrap')).toBe('anywhere');
     expect(prop(text, 'text-wrap-style')).toBe('pretty');
-    expect(prop(body('field.css', '.sc-select__item'), 'align-items')).toBe('start');
-    expect(prop(body('field.css', '.sc-select__indicator'), 'block-size')).toBe('1lh');
+    expect(prop(body('field.css', '.c-proto-select__item'), 'align-items')).toBe('start');
+    expect(prop(body('field.css', '.c-proto-select__indicator'), 'block-size')).toBe('1lh');
   });
 });
 
@@ -63,19 +63,19 @@ describe('scrolling dialog body', () => {
   it.each(['sheet', 'fullscreen'])(
     '%s: pads inside the scroller and runs out by the same amount',
     (variant) => {
-      const css = body('dialog.css', `.sc-dialog__popup[data-variant='${variant}'] > .sc-dialog__body`);
+      const css = body('dialog.css', `.c-proto-dialog__popup[data-variant='${variant}'] > .c-proto-dialog__body`);
       expect(prop(css, 'overflow')).toBe('hidden auto');
       expect(prop(css, 'margin-inline')).toBe('calc(-1 * var(--_bleed))');
       expect(prop(css, 'padding')).toBe('var(--_ring) var(--_bleed)');
       // The bleed stays inside the popup's own inline padding (the safe-area part stays on the popup) and centres an
       // overlay thumb in it: half the padding, plus half the thumb, plus the thumb's inset from the scroller's edge.
       expect(prop(css, '--_bleed')).toBe(
-        'calc(var(--sc-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset))',
+        'calc(var(--proto-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset))',
       );
       expect(prop(css, '--_thumb')).toBe('6px');
       expect(prop(css, '--_thumb-inset')).toBe('2px');
       expect(prop(css, 'margin-block')).toBe(
-        'calc(var(--sc-spacing-md) - var(--_ring)) calc(-1 * var(--_ring))',
+        'calc(var(--proto-spacing-md) - var(--_ring)) calc(-1 * var(--_ring))',
       );
     },
   );

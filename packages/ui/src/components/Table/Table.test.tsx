@@ -48,10 +48,10 @@ describe('Table', () => {
   it('is a native table with caption, column and row headers, in a scrolling wrapper', async () => {
     const { container } = render(<Example />);
     const table = screen.getByRole('table', { name: 'Applications this week' });
-    expect(table).toHaveClass('sc-table');
+    expect(table).toHaveClass('c-proto-table');
     expect(table).toHaveAttribute('data-divided');
     expect(table).toHaveAttribute('data-layout', 'auto');
-    expect(table.parentElement).toHaveClass('sc-table-wrap');
+    expect(table.parentElement).toHaveClass('c-proto-table-wrap');
     expect(screen.getAllByRole('columnheader')).toHaveLength(3);
     expect(screen.getByRole('columnheader', { name: 'Role' })).toHaveStyle({ inlineSize: '40%' });
     expect(screen.getByRole('columnheader', { name: 'Score' })).toHaveAttribute('data-align', 'end');
@@ -133,7 +133,7 @@ describe('Table sorting', () => {
     expect(role).not.toHaveAttribute('aria-sort');
     expect(role).toHaveAttribute('data-sortable');
     expect(screen.getByRole('columnheader', { name: 'Status' })).not.toHaveAttribute('data-sortable');
-    expect(screen.getByRole('button', { name: 'Score' })).toHaveClass('sc-table__sort');
+    expect(screen.getByRole('button', { name: 'Score' })).toHaveClass('c-proto-table__sort');
     expect(screen.queryByRole('button', { name: 'Status' })).toBeNull();
     await expectNoA11yViolations(container);
   });

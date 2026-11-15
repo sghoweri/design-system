@@ -22,7 +22,7 @@ describe('Badge', () => {
     expect(badge).toHaveAttribute('data-tone', 'success');
     expect(badge).toHaveAttribute('data-variant', 'solid');
     expect(badge).toHaveAttribute('data-size', 'sm');
-    expect(badge.querySelector('.sc-badge__dot')).toHaveAttribute('aria-hidden', 'true');
+    expect(badge.querySelector('.c-proto-badge__dot')).toHaveAttribute('aria-hidden', 'true');
   });
 });
 

@@ -15,7 +15,7 @@ describe('Select', () => {
       <Select label="Sort by" name="sort" options={options} placeholder="Pick one" />,
     );
     const trigger = screen.getByRole('combobox', { name: 'Sort by' });
-    expect(trigger).toHaveClass('sc-select');
+    expect(trigger).toHaveClass('c-proto-select');
     expect(trigger).toHaveTextContent('Pick one');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
     expect(container.querySelector('input[name="sort"]')).not.toBeNull();
@@ -41,7 +41,7 @@ describe('Select', () => {
     render(<Select label="Sort by" options={options} />);
     await user.click(screen.getByRole('combobox', { name: 'Sort by' }));
     const listbox = await screen.findByRole('listbox');
-    const positioner = listbox.closest('.sc-select__positioner');
+    const positioner = listbox.closest('.c-proto-select__positioner');
     expect(positioner).toHaveAttribute('data-side', 'bottom');
     expect(positioner).toHaveAttribute('data-align', 'start');
   });

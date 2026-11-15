@@ -1,43 +1,43 @@
 /* ---- Badge ----------------------------------------------------------------- */
-.sc-badge {
-  --_bg: var(--sc-color-surface-active);
-  --_fg: var(--sc-color-text-muted);
+.c-proto-badge {
+  --_bg: var(--proto-color-surface-active);
+  --_fg: var(--proto-color-text-muted);
   --_bd: transparent;
   display: inline-flex;
   align-items: center;
-  gap: var(--sc-spacing-2xs);
+  gap: var(--proto-spacing-2xs);
   box-sizing: border-box;
-  block-size: var(--sc-size-badge-md);
-  padding-inline: var(--sc-spacing-xs);
-  border-radius: var(--sc-radius-sm);
-  font-family: var(--sc-font-family-sans);
-  font-size: var(--sc-font-size-xs);
-  font-weight: var(--sc-font-weight-medium);
+  block-size: var(--proto-size-badge-md);
+  padding-inline: var(--proto-spacing-xs);
+  border-radius: var(--proto-radius-sm);
+  font-family: var(--proto-font-family-sans);
+  font-size: var(--proto-font-size-xs);
+  font-weight: var(--proto-font-weight-medium);
   line-height: 1;
   letter-spacing: 0.01em;
   white-space: nowrap;
   background: var(--_bg);
   color: var(--_fg);
-  border: var(--sc-border-width-hairline) solid var(--_bd);
+  border: var(--proto-border-width-hairline) solid var(--_bd);
 }
-.sc-badge[data-size='sm'] {
-  block-size: var(--sc-size-badge-sm);
-  padding-inline: var(--sc-spacing-2xs);
-  font-size: calc(var(--sc-font-size-xs) * 0.92);
+.c-proto-badge[data-size='sm'] {
+  block-size: var(--proto-size-badge-sm);
+  padding-inline: var(--proto-spacing-2xs);
+  font-size: calc(var(--proto-font-size-xs) * 0.92);
 }
 /* rounded (the default): full radius in the mono face (the homepage's .pill), for status and evidence. Mono runs
    wider, so no tracking; the extra inline padding keeps the text clear of the round ends. rounded={false} keeps
    the 4px corner in the sans face above. */
-.sc-badge[data-rounded] {
-  border-radius: var(--sc-radius-full);
-  padding-inline: var(--sc-spacing-sm);
-  font-family: var(--sc-font-family-mono);
+.c-proto-badge[data-rounded] {
+  border-radius: var(--proto-radius-full);
+  padding-inline: var(--proto-spacing-sm);
+  font-family: var(--proto-font-family-mono);
   letter-spacing: 0;
 }
-.sc-badge[data-rounded][data-size='sm'] {
-  padding-inline: var(--sc-spacing-xs);
+.c-proto-badge[data-rounded][data-size='sm'] {
+  padding-inline: var(--proto-spacing-xs);
 }
-.sc-badge__dot {
+.c-proto-badge__dot {
   inline-size: 6px;
   block-size: 6px;
   border-radius: 50%;
@@ -45,76 +45,76 @@
   flex: none;
 }
 /* soft (default) */
-.sc-badge[data-tone='accent'] {
-  --_bg: var(--sc-color-accent-subtle);
-  --_fg: var(--sc-color-accent-text);
+.c-proto-badge[data-tone='accent'] {
+  --_bg: var(--proto-color-accent-subtle);
+  --_fg: var(--proto-color-accent-text);
 }
-.sc-badge[data-tone='success'] {
-  --_bg: var(--sc-color-success-subtle);
-  --_fg: var(--sc-color-success-text);
+.c-proto-badge[data-tone='success'] {
+  --_bg: var(--proto-color-success-subtle);
+  --_fg: var(--proto-color-success-text);
 }
-.sc-badge[data-tone='warning'] {
-  --_bg: var(--sc-color-warning-subtle);
-  --_fg: var(--sc-color-warning-text);
+.c-proto-badge[data-tone='warning'] {
+  --_bg: var(--proto-color-warning-subtle);
+  --_fg: var(--proto-color-warning-text);
 }
-.sc-badge[data-tone='danger'] {
-  --_bg: var(--sc-color-danger-subtle);
-  --_fg: var(--sc-color-danger-text);
+.c-proto-badge[data-tone='danger'] {
+  --_bg: var(--proto-color-danger-subtle);
+  --_fg: var(--proto-color-danger-text);
 }
-.sc-badge[data-tone='info'] {
-  --_bg: var(--sc-color-info-subtle);
-  --_fg: var(--sc-color-info-text);
+.c-proto-badge[data-tone='info'] {
+  --_bg: var(--proto-color-info-subtle);
+  --_fg: var(--proto-color-info-text);
 }
 /* solid */
-.sc-badge[data-variant='solid'][data-tone='neutral'] {
-  --_bg: var(--sc-color-text-default);
-  --_fg: var(--sc-color-surface-default);
+.c-proto-badge[data-variant='solid'][data-tone='neutral'] {
+  --_bg: var(--proto-color-text-default);
+  --_fg: var(--proto-color-surface-default);
 }
-.sc-badge[data-variant='solid'][data-tone='accent'] {
-  --_bg: var(--sc-color-accent-default);
-  --_fg: var(--sc-color-text-on-accent);
+.c-proto-badge[data-variant='solid'][data-tone='accent'] {
+  --_bg: var(--proto-color-accent-default);
+  --_fg: var(--proto-color-text-on-accent);
 }
-.sc-badge[data-variant='solid'][data-tone='success'] {
-  --_bg: var(--sc-color-success-solid);
-  --_fg: var(--sc-color-text-on-status);
+.c-proto-badge[data-variant='solid'][data-tone='success'] {
+  --_bg: var(--proto-color-success-solid);
+  --_fg: var(--proto-color-text-on-status);
 }
-.sc-badge[data-variant='solid'][data-tone='warning'] {
-  --_bg: var(--sc-color-warning-solid);
-  --_fg: var(--sc-color-text-on-status);
+.c-proto-badge[data-variant='solid'][data-tone='warning'] {
+  --_bg: var(--proto-color-warning-solid);
+  --_fg: var(--proto-color-text-on-status);
 }
-.sc-badge[data-variant='solid'][data-tone='danger'] {
-  --_bg: var(--sc-color-danger-solid);
-  --_fg: var(--sc-color-text-on-status);
+.c-proto-badge[data-variant='solid'][data-tone='danger'] {
+  --_bg: var(--proto-color-danger-solid);
+  --_fg: var(--proto-color-text-on-status);
 }
-.sc-badge[data-variant='solid'][data-tone='info'] {
-  --_bg: var(--sc-color-info-solid);
-  --_fg: var(--sc-color-text-on-status);
+.c-proto-badge[data-variant='solid'][data-tone='info'] {
+  --_bg: var(--proto-color-info-solid);
+  --_fg: var(--proto-color-text-on-status);
 }
 /* outline */
-.sc-badge[data-variant='outline'] {
+.c-proto-badge[data-variant='outline'] {
   --_bg: transparent;
 }
-.sc-badge[data-variant='outline'][data-tone='neutral'] {
-  --_fg: var(--sc-color-text-muted);
-  --_bd: var(--sc-color-border-strong);
+.c-proto-badge[data-variant='outline'][data-tone='neutral'] {
+  --_fg: var(--proto-color-text-muted);
+  --_bd: var(--proto-color-border-strong);
 }
-.sc-badge[data-variant='outline'][data-tone='accent'] {
-  --_fg: var(--sc-color-accent-text);
-  --_bd: var(--sc-color-accent-text);
+.c-proto-badge[data-variant='outline'][data-tone='accent'] {
+  --_fg: var(--proto-color-accent-text);
+  --_bd: var(--proto-color-accent-text);
 }
-.sc-badge[data-variant='outline'][data-tone='success'] {
-  --_fg: var(--sc-color-success-text);
-  --_bd: var(--sc-color-success-text);
+.c-proto-badge[data-variant='outline'][data-tone='success'] {
+  --_fg: var(--proto-color-success-text);
+  --_bd: var(--proto-color-success-text);
 }
-.sc-badge[data-variant='outline'][data-tone='warning'] {
-  --_fg: var(--sc-color-warning-text);
-  --_bd: var(--sc-color-warning-text);
+.c-proto-badge[data-variant='outline'][data-tone='warning'] {
+  --_fg: var(--proto-color-warning-text);
+  --_bd: var(--proto-color-warning-text);
 }
-.sc-badge[data-variant='outline'][data-tone='danger'] {
-  --_fg: var(--sc-color-danger-text);
-  --_bd: var(--sc-color-danger-text);
+.c-proto-badge[data-variant='outline'][data-tone='danger'] {
+  --_fg: var(--proto-color-danger-text);
+  --_bd: var(--proto-color-danger-text);
 }
-.sc-badge[data-variant='outline'][data-tone='info'] {
-  --_fg: var(--sc-color-info-text);
-  --_bd: var(--sc-color-info-text);
+.c-proto-badge[data-variant='outline'][data-tone='info'] {
+  --_fg: var(--proto-color-info-text);
+  --_bd: var(--proto-color-info-text);
 }

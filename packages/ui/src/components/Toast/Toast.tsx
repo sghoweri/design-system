@@ -12,7 +12,7 @@ export interface ToastOptions {
   description?: ReactNode | undefined;
   /**
    * `neutral` (default), `success` and `danger` colour the edge. `accent` fills the toast with the accent colour, for
-   * the rare notice that has to be seen (the app was updated); its buttons read on the fill (`.sc-on-accent`).
+   * the rare notice that has to be seen (the app was updated); its buttons read on the fill (`.t-proto-on-accent`).
    */
   tone?: ToastTone | undefined;
   /**
@@ -67,25 +67,25 @@ function Provider({ children, timeout = 6000, limit = 3 }: ToastProviderProps) {
 function Viewport() {
   const { toasts, close } = BaseToast.useToastManager<ToastData>();
   return (
-    <BaseToast.Viewport className="sc-toast-viewport">
+    <BaseToast.Viewport className="c-proto-toast-viewport">
       {toasts.map((toast) => (
-        <BaseToast.Root key={toast.id} toast={toast} className="sc-toast" data-tone={toast.type ?? 'neutral'}>
-          <BaseToast.Content className="sc-toast__content">
-            <BaseToast.Title className="sc-toast__title" />
-            {toast.description != null ? <BaseToast.Description className="sc-toast__description" /> : null}
+        <BaseToast.Root key={toast.id} toast={toast} className="c-proto-toast" data-tone={toast.type ?? 'neutral'}>
+          <BaseToast.Content className="c-proto-toast__content">
+            <BaseToast.Title className="c-proto-toast__title" />
+            {toast.description != null ? <BaseToast.Description className="c-proto-toast__description" /> : null}
           </BaseToast.Content>
           {toast.actionProps ? (
             <BaseToast.Action
-              className="sc-toast__action"
+              className="c-proto-toast__action"
               render={<Button variant={toast.type === 'accent' ? 'inverse' : 'secondary'} size="sm" />}
             />
           ) : null}
           {toast.data?.dismissLabel ? (
-            <Button variant="ghost" size="sm" className="sc-toast__close" onClick={() => close(toast.id)}>
+            <Button variant="ghost" size="sm" className="c-proto-toast__close" onClick={() => close(toast.id)}>
               {toast.data.dismissLabel}
             </Button>
           ) : (
-            <IconButton label="Dismiss" size="sm" className="sc-toast__close" onClick={() => close(toast.id)}>
+            <IconButton label="Dismiss" size="sm" className="c-proto-toast__close" onClick={() => close(toast.id)}>
               <XIcon />
             </IconButton>
           )}

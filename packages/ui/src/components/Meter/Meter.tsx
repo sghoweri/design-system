@@ -70,7 +70,7 @@ export function Meter({
       max={max}
       format={{ maximumFractionDigits: 2 }}
       getAriaValueText={ariaValueText}
-      className={cx('sc-meter', className)}
+      className={cx('c-proto-meter', className)}
       data-tone={tone}
       data-size={size}
       data-layout={layout}
@@ -78,15 +78,15 @@ export function Meter({
       style={markAt === null ? style : ({ ...style, '--_mark': `${markAt}%` } as CSSProperties)}
       {...rest}
     >
-      <BaseMeter.Label className={layout === 'inline' ? 'sc-visually-hidden' : 'sc-meter__label'}>
+      <BaseMeter.Label className={layout === 'inline' ? 'u-proto-visually-hidden' : 'c-proto-meter__label'}>
         {label}
       </BaseMeter.Label>
-      <BaseMeter.Value className="sc-meter__value">
+      <BaseMeter.Value className="c-proto-meter__value">
         {(formatted) => (valueText != null ? valueText : formatted)}
       </BaseMeter.Value>
-      <BaseMeter.Track className="sc-meter__track">
-        <BaseMeter.Indicator className="sc-meter__fill" />
-        {mark ? <span className="sc-meter__mark" title={mark.label} aria-hidden="true" /> : null}
+      <BaseMeter.Track className="c-proto-meter__track">
+        <BaseMeter.Indicator className="c-proto-meter__fill" />
+        {mark ? <span className="c-proto-meter__mark" title={mark.label} aria-hidden="true" /> : null}
       </BaseMeter.Track>
     </BaseMeter.Root>
   );

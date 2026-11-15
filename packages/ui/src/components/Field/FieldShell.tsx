@@ -50,29 +50,29 @@ export function FieldShell({
 }: FieldShellProps) {
   return (
     <Field.Root
-      className={cx('sc-field', className)}
+      className={cx('c-proto-field', className)}
       name={name}
       disabled={disabled}
       invalid={invalid || error != null}
       data-size={size}
     >
-      <Field.Label className={cx('sc-field__label', hideLabel && 'sc-visually-hidden')}>
+      <Field.Label className={cx('c-proto-field__label', hideLabel && 'u-proto-visually-hidden')}>
         {label}
         {required ? (
-          <span className="sc-field__required" aria-hidden="true">
+          <span className="c-proto-field__required" aria-hidden="true">
             *
           </span>
         ) : null}
       </Field.Label>
       {children}
       {description != null ? (
-        <Field.Description className="sc-field__description">{description}</Field.Description>
+        <Field.Description className="c-proto-field__description">{description}</Field.Description>
       ) : null}
       {/* Always rendered, so the message is announced when it appears: a live region added together with
           its text is not reliably read. Empty, it takes no space (field.css). */}
-      <div className="sc-field__error-region" aria-live="polite">
+      <div className="c-proto-field__error-region" aria-live="polite">
         {error != null ? (
-          <Field.Error className="sc-field__error" match>
+          <Field.Error className="c-proto-field__error" match>
             {error}
           </Field.Error>
         ) : null}

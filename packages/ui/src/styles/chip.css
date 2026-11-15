@@ -1,70 +1,70 @@
 /* ---- Chip ------------------------------------------------------------------ */
-.sc-chip {
-  --_h: var(--sc-size-control-sm);
-  --_px: var(--sc-spacing-sm);
-  --_fs: var(--sc-font-size-sm);
-  --_icon: var(--sc-size-icon-sm);
+.c-proto-chip {
+  --_h: var(--proto-size-control-sm);
+  --_px: var(--proto-spacing-sm);
+  --_fs: var(--proto-font-size-sm);
+  --_icon: var(--proto-size-icon-sm);
   --_bg: transparent;
-  --_fg: var(--sc-color-text-default);
-  --_bd: var(--sc-color-border-strong);
-  --_bg-hover: var(--sc-color-surface-hover);
-  --_bg-on: var(--sc-color-surface-active);
-  --_fg-on: var(--sc-color-text-default);
-  --_bd-on: var(--sc-color-text-muted);
+  --_fg: var(--proto-color-text-default);
+  --_bd: var(--proto-color-border-strong);
+  --_bg-hover: var(--proto-color-surface-hover);
+  --_bg-on: var(--proto-color-surface-active);
+  --_fg-on: var(--proto-color-text-default);
+  --_bd-on: var(--proto-color-text-muted);
   position: relative;
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
   max-inline-size: 100%;
   block-size: var(--_h);
-  border-radius: var(--sc-radius-full);
-  border: var(--sc-border-width-hairline) solid var(--_bd);
+  border-radius: var(--proto-radius-full);
+  border: var(--proto-border-width-hairline) solid var(--_bd);
   background: var(--_bg);
   color: var(--_fg);
-  font-family: var(--sc-font-family-sans);
+  font-family: var(--proto-font-family-sans);
   font-size: var(--_fs);
-  font-weight: var(--sc-font-weight-medium);
+  font-weight: var(--proto-font-weight-medium);
   line-height: 1;
   white-space: nowrap;
   transition:
-    background-color var(--sc-duration-fast) var(--sc-ease-standard),
-    border-color var(--sc-duration-fast) var(--sc-ease-standard),
-    box-shadow var(--sc-duration-fast) var(--sc-ease-standard),
-    color var(--sc-duration-fast) var(--sc-ease-standard);
+    background-color var(--proto-duration-fast) var(--proto-ease-standard),
+    border-color var(--proto-duration-fast) var(--proto-ease-standard),
+    box-shadow var(--proto-duration-fast) var(--proto-ease-standard),
+    color var(--proto-duration-fast) var(--proto-ease-standard);
 }
-.sc-chip[data-size='sm'] {
-  --_h: var(--sc-size-badge-md);
-  --_px: var(--sc-spacing-xs);
-  --_fs: var(--sc-font-size-xs);
-  --_icon: var(--sc-size-icon-xs);
+.c-proto-chip[data-size='sm'] {
+  --_h: var(--proto-size-badge-md);
+  --_px: var(--proto-spacing-xs);
+  --_fs: var(--proto-font-size-xs);
+  --_icon: var(--proto-size-icon-xs);
 }
-.sc-chip[data-selected] {
+.c-proto-chip[data-selected] {
   --_bg: var(--_bg-on);
   --_fg: var(--_fg-on);
   --_bd: var(--_bd-on);
 }
-.sc-chip[data-disabled] {
+.c-proto-chip[data-disabled] {
   opacity: 0.5;
 }
 /* The text, or the toggle button that holds it. */
-.sc-chip__action,
-.sc-chip > .sc-chip__icon,
-.sc-chip > .sc-chip__label {
+.c-proto-chip__action,
+.c-proto-chip > .c-proto-chip__icon,
+.c-proto-chip > .c-proto-chip__label {
   display: inline-flex;
   align-items: center;
   min-inline-size: 0;
 }
-.sc-chip > .sc-chip__icon {
+.c-proto-chip > .c-proto-chip__icon {
   margin-inline-start: var(--_px);
 }
-.sc-chip > .sc-chip__label {
+.c-proto-chip > .c-proto-chip__label {
   padding-inline: var(--_px);
 }
-.sc-chip > .sc-chip__icon + .sc-chip__label {
-  padding-inline-start: var(--sc-spacing-2xs);
+.c-proto-chip > .c-proto-chip__icon + .c-proto-chip__label {
+  padding-inline-start: var(--proto-spacing-2xs);
 }
-.sc-chip__action {
-  gap: var(--sc-spacing-2xs);
+.c-proto-chip__action {
+  gap: var(--proto-spacing-2xs);
   box-sizing: border-box;
   block-size: 100%;
   margin: 0;
@@ -77,134 +77,134 @@
   line-height: 1;
   cursor: pointer;
 }
-.sc-chip__action:hover:not(:disabled) {
+.c-proto-chip__action:hover:not(:disabled) {
   background: var(--_bg-hover);
 }
-.sc-chip[data-selected] > .sc-chip__action:hover:not(:disabled) {
+.c-proto-chip[data-selected] > .c-proto-chip__action:hover:not(:disabled) {
   background: transparent;
   filter: brightness(0.97);
 }
-.sc-chip__action:disabled {
+.c-proto-chip__action:disabled {
   cursor: not-allowed;
 }
-.sc-chip__icon {
+.c-proto-chip__icon {
   flex: none;
   inline-size: var(--_icon);
   block-size: var(--_icon);
 }
-.sc-chip__icon > svg {
+.c-proto-chip__icon > svg {
   inline-size: 100%;
   block-size: 100%;
 }
 /* The label clips for the ellipsis, so it needs a real line box or descenders get cut (the chip sets line-height: 1). */
-.sc-chip__label {
+.c-proto-chip__label {
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: var(--sc-font-line-height-ui);
+  line-height: var(--proto-font-line-height-ui);
 }
 /* With a ×, the text keeps a little more room on its right (visible as the hover fill's edge), and the × pulls back by
    the same amount, so the chip is no wider. */
-.sc-chip[data-removable] > .sc-chip__action,
-.sc-chip[data-removable] > .sc-chip__label {
-  padding-inline-end: var(--sc-spacing-xs);
+.c-proto-chip[data-removable] > .c-proto-chip__action,
+.c-proto-chip[data-removable] > .c-proto-chip__label {
+  padding-inline-end: var(--proto-spacing-xs);
 }
-.sc-chip__remove,
-.sc-chip__clear {
+.c-proto-chip__remove,
+.c-proto-chip__clear {
   flex: none;
   display: inline-grid;
   place-items: center;
   box-sizing: border-box;
-  inline-size: calc(var(--_h) - 2 * var(--sc-spacing-2xs) - 2px);
-  block-size: calc(var(--_h) - 2 * var(--sc-spacing-2xs) - 2px);
-  margin-inline: calc(var(--sc-spacing-2xs) - var(--sc-spacing-xs)) var(--sc-spacing-2xs);
+  inline-size: calc(var(--_h) - 2 * var(--proto-spacing-2xs) - 2px);
+  block-size: calc(var(--_h) - 2 * var(--proto-spacing-2xs) - 2px);
+  margin-inline: calc(var(--proto-spacing-2xs) - var(--proto-spacing-xs)) var(--proto-spacing-2xs);
   padding: 0;
   border: 0;
-  border-radius: var(--sc-radius-full);
+  border-radius: var(--proto-radius-full);
   background: transparent;
   color: inherit;
   opacity: 0.7;
   cursor: pointer;
 }
-.sc-chip__remove:hover:not(:disabled),
-.sc-chip__clear:hover {
+.c-proto-chip__remove:hover:not(:disabled),
+.c-proto-chip__clear:hover {
   opacity: 1;
   background: var(--_bg-hover);
 }
-.sc-chip__remove:disabled {
+.c-proto-chip__remove:disabled {
   cursor: not-allowed;
 }
 /* Keyboard focus on the chip's text (its action) rings the whole chip, the same ring as editing (below), so focus
    reads as "this chip"; only the remove × rings itself, when focus moves to it. */
-.sc-chip__action:focus-visible {
+.c-proto-chip__action:focus-visible {
   outline: none;
 }
-.sc-chip__remove:focus-visible {
-  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
+.c-proto-chip__remove:focus-visible {
+  outline: var(--proto-border-width-focus) solid var(--proto-color-border-focus);
   outline-offset: 0;
 }
 /* 44px hit area on touch without changing layout. */
 @media (pointer: coarse) {
-  .sc-chip__action::after,
-  .sc-chip__remove::after,
-  .sc-chip__clear::after {
+  .c-proto-chip__action::after,
+  .c-proto-chip__remove::after,
+  .c-proto-chip__clear::after {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
     translate: -50% -50%;
-    inline-size: max(100%, var(--sc-size-touch-target));
-    block-size: max(100%, var(--sc-size-touch-target));
+    inline-size: max(100%, var(--proto-size-touch-target));
+    block-size: max(100%, var(--proto-size-touch-target));
   }
-  .sc-chip__action,
-  .sc-chip__remove,
-  .sc-chip__clear {
+  .c-proto-chip__action,
+  .c-proto-chip__remove,
+  .c-proto-chip__clear {
     position: relative;
   }
 }
 /* Tones: soft fill when selected, tinted outline otherwise. */
-.sc-chip[data-tone='accent'] {
-  --_fg: var(--sc-color-accent-text);
-  --_bd: var(--sc-color-accent-text);
-  --_bg-hover: var(--sc-color-accent-subtle);
-  --_bg-on: var(--sc-color-accent-subtle);
-  --_fg-on: var(--sc-color-accent-text);
-  --_bd-on: var(--sc-color-accent-default);
+.c-proto-chip[data-tone='accent'] {
+  --_fg: var(--proto-color-accent-text);
+  --_bd: var(--proto-color-accent-text);
+  --_bg-hover: var(--proto-color-accent-subtle);
+  --_bg-on: var(--proto-color-accent-subtle);
+  --_fg-on: var(--proto-color-accent-text);
+  --_bd-on: var(--proto-color-accent-default);
 }
-.sc-chip[data-tone='success'] {
-  --_fg: var(--sc-color-success-text);
-  --_bd: var(--sc-color-success-text);
-  --_bg-hover: var(--sc-color-success-subtle);
-  --_bg-on: var(--sc-color-success-subtle);
-  --_fg-on: var(--sc-color-success-text);
-  --_bd-on: var(--sc-color-success-solid);
+.c-proto-chip[data-tone='success'] {
+  --_fg: var(--proto-color-success-text);
+  --_bd: var(--proto-color-success-text);
+  --_bg-hover: var(--proto-color-success-subtle);
+  --_bg-on: var(--proto-color-success-subtle);
+  --_fg-on: var(--proto-color-success-text);
+  --_bd-on: var(--proto-color-success-solid);
 }
-.sc-chip[data-tone='warning'] {
-  --_fg: var(--sc-color-warning-text);
-  --_bd: var(--sc-color-warning-text);
-  --_bg-hover: var(--sc-color-warning-subtle);
-  --_bg-on: var(--sc-color-warning-subtle);
-  --_fg-on: var(--sc-color-warning-text);
-  --_bd-on: var(--sc-color-warning-solid);
+.c-proto-chip[data-tone='warning'] {
+  --_fg: var(--proto-color-warning-text);
+  --_bd: var(--proto-color-warning-text);
+  --_bg-hover: var(--proto-color-warning-subtle);
+  --_bg-on: var(--proto-color-warning-subtle);
+  --_fg-on: var(--proto-color-warning-text);
+  --_bd-on: var(--proto-color-warning-solid);
 }
-.sc-chip[data-tone='danger'] {
-  --_fg: var(--sc-color-danger-text);
-  --_bd: var(--sc-color-danger-text);
-  --_bg-hover: var(--sc-color-danger-subtle);
-  --_bg-on: var(--sc-color-danger-subtle);
-  --_fg-on: var(--sc-color-danger-text);
-  --_bd-on: var(--sc-color-danger-solid);
+.c-proto-chip[data-tone='danger'] {
+  --_fg: var(--proto-color-danger-text);
+  --_bd: var(--proto-color-danger-text);
+  --_bg-hover: var(--proto-color-danger-subtle);
+  --_bg-on: var(--proto-color-danger-subtle);
+  --_fg-on: var(--proto-color-danger-text);
+  --_bd-on: var(--proto-color-danger-solid);
 }
-.sc-chip[data-tone='info'] {
-  --_fg: var(--sc-color-info-text);
-  --_bd: var(--sc-color-info-text);
-  --_bg-hover: var(--sc-color-info-subtle);
-  --_bg-on: var(--sc-color-info-subtle);
-  --_fg-on: var(--sc-color-info-text);
-  --_bd-on: var(--sc-color-info-solid);
+.c-proto-chip[data-tone='info'] {
+  --_fg: var(--proto-color-info-text);
+  --_bd: var(--proto-color-info-text);
+  --_bg-hover: var(--proto-color-info-subtle);
+  --_bg-on: var(--proto-color-info-subtle);
+  --_fg-on: var(--proto-color-info-text);
+  --_bd-on: var(--proto-color-info-solid);
 }
 /* EditableChip while editing: the same chip, its text a field the width of the text (the grid cell is sized by a
    hidden copy of the value, so it works without field-sizing), a ring for focus, and a clear × at the far end.
    The chip and its error stack, so the message sits under the chip it belongs to. */
-.sc-chip-editor {
+.c-proto-chip-editor {
   display: inline-flex;
   flex-direction: column;
   align-items: flex-start;
@@ -214,25 +214,25 @@
 /* The editing chip's ring is there from the first frame, however editing starts (Salem, 2026-11-14): the border and
    shadow don't transition. Focusing the field forces a style before focus lands, so a transition would run from that
    unfocused style (a grey frame or an ease-in). */
-.sc-chip[data-editing] {
+.c-proto-chip[data-editing] {
   cursor: text;
   transition-property: background-color, color;
-  transition-duration: var(--sc-duration-base);
+  transition-duration: var(--proto-duration-base);
 }
 /* The focus ring: the border takes the focus colour and a shadow outside it makes up the focus width. Nothing is drawn
    inside the border, so a hover fill inside the chip can't cover part of the ring, and the ring is the same 2px all
    the way round (an inset layer made it 3px where no fill covered it). No layout change between states. Forced
    colours drop box-shadows, so an outline stands in there. */
-.sc-chip[data-editing]:focus-within,
-.sc-chip:has(> .sc-chip__action:focus-visible) {
-  border-color: var(--sc-color-border-focus);
-  box-shadow: 0 0 0 calc(var(--sc-border-width-focus) - var(--sc-border-width-hairline))
-    var(--sc-color-border-focus);
+.c-proto-chip[data-editing]:focus-within,
+.c-proto-chip:has(> .c-proto-chip__action:focus-visible) {
+  border-color: var(--proto-color-border-focus);
+  box-shadow: 0 0 0 calc(var(--proto-border-width-focus) - var(--proto-border-width-hairline))
+    var(--proto-color-border-focus);
 }
 @media (forced-colors: active) {
-  .sc-chip[data-editing]:focus-within,
-  .sc-chip:has(> .sc-chip__action:focus-visible) {
-    outline: var(--sc-border-width-focus) solid transparent;
+  .c-proto-chip[data-editing]:focus-within,
+  .c-proto-chip:has(> .c-proto-chip__action:focus-visible) {
+    outline: var(--proto-border-width-focus) solid transparent;
   }
 }
 /* Editing mounts a new chip, so what was on screen a moment before carries over (`data-entry`, set when editing
@@ -240,30 +240,30 @@
    ×'s place as it was, and only fades and grows in on a chip that had no ×. Leaving editing swaps the chip back at
    once. Off under reduced motion (below). */
 @starting-style {
-  .sc-chip[data-editing][data-entry='hover'] > .sc-chip__field {
+  .c-proto-chip[data-editing][data-entry='hover'] > .c-proto-chip__field {
     background-color: var(--_bg-hover);
   }
-  .sc-chip[data-editing]:not([data-removable]) .sc-chip__clear {
+  .c-proto-chip[data-editing]:not([data-removable]) .c-proto-chip__clear {
     opacity: 0;
     scale: 0.6;
   }
 }
-.sc-chip[data-editing] > .sc-chip__field {
-  transition: background-color var(--sc-duration-base) var(--sc-ease-standard);
+.c-proto-chip[data-editing] > .c-proto-chip__field {
+  transition: background-color var(--proto-duration-base) var(--proto-ease-standard);
 }
-.sc-chip[data-editing] .sc-chip__clear {
+.c-proto-chip[data-editing] .c-proto-chip__clear {
   transition:
-    opacity var(--sc-duration-base) var(--sc-ease-enter),
-    scale var(--sc-duration-base) var(--sc-ease-enter),
-    background-color var(--sc-duration-fast) var(--sc-ease-standard);
+    opacity var(--proto-duration-base) var(--proto-ease-enter),
+    scale var(--proto-duration-base) var(--proto-ease-enter),
+    background-color var(--proto-duration-fast) var(--proto-ease-standard);
 }
-.sc-chip[data-invalid] {
-  --_bd: var(--sc-color-danger-text);
+.c-proto-chip[data-invalid] {
+  --_bd: var(--proto-color-danger-text);
 }
 /* The field is exactly as wide as the label button it replaces, so the chips around it don't move when editing
    starts: the hidden copy is the text plus 1px for the caret (not a trailing space, which added about 3px), and that
    1px comes off the field's end padding. */
-.sc-chip__field {
+.c-proto-chip__field {
   --_caret: 1px;
   display: inline-grid;
   align-content: center;
@@ -272,27 +272,27 @@
   padding-inline: var(--_px) calc(var(--_px) - var(--_caret));
   border-radius: inherit;
 }
-.sc-chip > .sc-chip__icon + .sc-chip__field {
-  padding-inline-start: var(--sc-spacing-2xs);
+.c-proto-chip > .c-proto-chip__icon + .c-proto-chip__field {
+  padding-inline-start: var(--proto-spacing-2xs);
 }
-.sc-chip__field:has(+ .sc-chip__clear) {
-  padding-inline-end: calc(var(--sc-spacing-xs) - var(--_caret));
+.c-proto-chip__field:has(+ .c-proto-chip__clear) {
+  padding-inline-end: calc(var(--proto-spacing-xs) - var(--_caret));
 }
-.sc-chip__field::after,
-.sc-chip__input {
+.c-proto-chip__field::after,
+.c-proto-chip__input {
   grid-area: 1 / 1;
   font: inherit;
-  line-height: var(--sc-font-line-height-ui);
+  line-height: var(--proto-font-line-height-ui);
   letter-spacing: inherit;
 }
-.sc-chip__field::after {
+.c-proto-chip__field::after {
   content: attr(data-value);
   padding-inline-end: var(--_caret);
   visibility: hidden;
   white-space: pre;
   overflow: hidden;
 }
-.sc-chip__input {
+.c-proto-chip__input {
   box-sizing: border-box;
   inline-size: 100%;
   min-inline-size: 1ch;
@@ -303,26 +303,26 @@
   color: inherit;
   outline: none;
 }
-.sc-chip-editor__error {
-  font-size: var(--sc-font-size-xs);
-  line-height: var(--sc-font-line-height-ui);
-  color: var(--sc-color-danger-text);
+.c-proto-chip-editor__error {
+  font-size: var(--proto-font-size-xs);
+  line-height: var(--proto-font-line-height-ui);
+  color: var(--proto-color-danger-text);
 }
-.sc-chip-editor__error:not(:empty) {
-  margin-block-start: var(--sc-spacing-3xs);
+.c-proto-chip-editor__error:not(:empty) {
+  margin-block-start: var(--proto-spacing-3xs);
 }
 /* Touch: 16px text while editing so iOS doesn't zoom into the field; the chip grows to fit. */
 @media (pointer: coarse) {
-  .sc-chip[data-editing] {
-    --_fs: max(16px, var(--sc-font-size-sm));
+  .c-proto-chip[data-editing] {
+    --_fs: max(16px, var(--proto-font-size-sm));
     block-size: auto;
     min-block-size: var(--_h);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-chip,
-  .sc-chip[data-editing] > .sc-chip__field,
-  .sc-chip[data-editing] .sc-chip__clear {
+  .c-proto-chip,
+  .c-proto-chip[data-editing] > .c-proto-chip__field,
+  .c-proto-chip[data-editing] .c-proto-chip__clear {
     transition: none;
   }
 }

@@ -34,7 +34,7 @@ export function FilePreviewDialog({ file, open, onOpenChange, finalFocus }: File
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Content
         size="lg"
-        className="sc-file-preview"
+        className="c-proto-file-preview"
         data-kind={kind ?? 'none'}
         finalFocus={finalFocus}
       >
@@ -103,7 +103,7 @@ function PreviewBody({
       // eslint-disable-next-line jsx-a11y/anchor-is-valid -- the effect above sets href to the object URL on mount
       <a
         ref={linkRef}
-        className="sc-button"
+        className="c-proto-button"
         data-variant={pdfInTab ? 'primary' : 'secondary'}
         data-size="md"
         target="_blank"
@@ -114,14 +114,14 @@ function PreviewBody({
       </a>
     );
     return pdfInTab ? (
-      <div className="sc-file-preview__tab">
-        <p className="sc-file-preview__note">On a small screen the PDF reads best in its own tab.</p>
+      <div className="c-proto-file-preview__tab">
+        <p className="c-proto-file-preview__note">On a small screen the PDF reads best in its own tab.</p>
         {link}
       </div>
     ) : (
       <>
-        <iframe ref={frameRef} className="sc-file-preview__frame" title={`Preview of ${file.name}`} />
-        <div className="sc-file-preview__actions">{link}</div>
+        <iframe ref={frameRef} className="c-proto-file-preview__frame" title={`Preview of ${file.name}`} />
+        <div className="c-proto-file-preview__actions">{link}</div>
       </>
     );
   }
@@ -130,7 +130,7 @@ function PreviewBody({
     return (
       <>
         <pre
-          className="sc-file-preview__text"
+          className="c-proto-file-preview__text"
           role="region"
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a scrolling region takes focus so the keyboard can scroll it
           tabIndex={0}
@@ -140,13 +140,13 @@ function PreviewBody({
           {value}
         </pre>
         {file.size > TEXT_LIMIT ? (
-          <p className="sc-file-preview__note">Showing the first {formatSize(TEXT_LIMIT)}.</p>
+          <p className="c-proto-file-preview__note">Showing the first {formatSize(TEXT_LIMIT)}.</p>
         ) : null}
       </>
     );
   }
   if (kind === 'image') {
-    return <img ref={imageRef} className="sc-file-preview__image" alt={file.name} />;
+    return <img ref={imageRef} className="c-proto-file-preview__image" alt={file.name} />;
   }
-  return <p className="sc-file-preview__note">There is no preview for {fileTypeLabel(file)} files.</p>;
+  return <p className="c-proto-file-preview__note">There is no preview for {fileTypeLabel(file)} files.</p>;
 }

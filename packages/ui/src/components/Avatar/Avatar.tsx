@@ -39,9 +39,9 @@ export interface AvatarProps extends AvatarLookProps, Omit<ComponentPropsWithRef
 function Letters({ name, initials }: Pick<AvatarLookProps, 'name' | 'initials'>) {
   const letters = initials?.trim() ? Array.from(initials.trim()).slice(0, 2).join('') : avatarInitials(name);
   return letters ? (
-    <span className="sc-avatar__initials">{letters}</span>
+    <span className="c-proto-avatar__initials">{letters}</span>
   ) : (
-    <UserIcon className="sc-avatar__icon" size="em" />
+    <UserIcon className="c-proto-avatar__icon" size="em" />
   );
 }
 
@@ -52,15 +52,15 @@ function Letters({ name, initials }: Pick<AvatarLookProps, 'name' | 'initials'>)
 export function Avatar({ name, initials, src, size = 'md', label, className, ...rest }: AvatarProps) {
   return (
     <BaseAvatar.Root
-      className={cx('sc-avatar', className)}
+      className={cx('c-proto-avatar', className)}
       data-size={size}
       role={label ? 'img' : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
       {...rest}
     >
-      {src ? <BaseAvatar.Image className="sc-avatar__image" src={src} alt="" /> : null}
-      <BaseAvatar.Fallback className="sc-avatar__fallback">
+      {src ? <BaseAvatar.Image className="c-proto-avatar__image" src={src} alt="" /> : null}
+      <BaseAvatar.Fallback className="c-proto-avatar__fallback">
         <Letters name={name} initials={initials} />
       </BaseAvatar.Fallback>
     </BaseAvatar.Root>
@@ -98,7 +98,7 @@ export function AvatarButton({
     props: {
       // `type` only means something on a real button; a rendered link keeps its own attributes.
       type: render ? type : (type ?? 'button'),
-      className: cx('sc-avatar-button', className),
+      className: cx('c-proto-avatar-button', className),
       'data-size': size,
       'aria-label': label,
       ...rest,

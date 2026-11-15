@@ -112,7 +112,7 @@ describe('Dialog', () => {
     }
     const classes = (el: Element) =>
       [...el.children].map(
-        (c) => [...c.classList].find((n) => n.startsWith('sc-dialog__')) ?? c.classList[0],
+        (c) => [...c.classList].find((n) => n.startsWith('c-proto-dialog__')) ?? c.classList[0],
       );
 
     it('wraps a default dialog’s children, in order, in the one scroller that is the popup’s only child', async () => {
@@ -121,13 +121,13 @@ describe('Dialog', () => {
       await user.click(screen.getByRole('button', { name: 'Edit' }));
       const dialog = await screen.findByRole('dialog', { name: 'Edit application' });
       expect(dialog).toHaveAttribute('data-variant', 'dialog');
-      expect(classes(dialog)).toEqual(['sc-dialog__scroll']);
+      expect(classes(dialog)).toEqual(['c-proto-dialog__scroll']);
       expect(classes(dialog.firstElementChild!)).toEqual([
-        'sc-dialog__close',
-        'sc-dialog__title',
-        'sc-dialog__description',
-        'sc-dialog__body',
-        'sc-dialog__actions',
+        'c-proto-dialog__close',
+        'c-proto-dialog__title',
+        'c-proto-dialog__description',
+        'c-proto-dialog__body',
+        'c-proto-dialog__actions',
       ]);
       // Still the dialog's name and description, and no landmark or role of its own.
       expect(dialog).toHaveAccessibleDescription('Stage and notes.');
@@ -141,9 +141,9 @@ describe('Dialog', () => {
         render(<Variant variant={variant} />);
         await user.click(screen.getByRole('button', { name: 'Edit' }));
         const dialog = await screen.findByRole('dialog', { name: 'Edit application' });
-        expect(dialog.querySelector('.sc-dialog__scroll')).toBeNull();
+        expect(dialog.querySelector('.c-proto-dialog__scroll')).toBeNull();
         expect(classes(dialog)).toEqual(
-          expect.arrayContaining(['sc-dialog__title', 'sc-dialog__body', 'sc-dialog__actions']),
+          expect.arrayContaining(['c-proto-dialog__title', 'c-proto-dialog__body', 'c-proto-dialog__actions']),
         );
       },
     );
@@ -155,7 +155,7 @@ describe('Dialog', () => {
       await user.click(trigger);
       const dialog = await screen.findByRole('dialog', { name: 'Edit application' });
       const close = screen.getByRole('button', { name: 'Close' });
-      expect(close.parentElement).toHaveClass('sc-dialog__scroll');
+      expect(close.parentElement).toHaveClass('c-proto-dialog__scroll');
       await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
 
       close.focus();
@@ -315,19 +315,19 @@ describe('Dialog', () => {
       </Dialog.Root>,
     );
     await screen.findByRole('dialog', { name: 'Posting' });
-    expect(document.querySelectorAll('.sc-dialog__backdrop')).toHaveLength(1);
+    expect(document.querySelectorAll('.c-proto-dialog__backdrop')).toHaveLength(1);
     await user.click(screen.getByRole('button', { name: 'Correct a reason' }));
     const sheet = await screen.findByRole('dialog', { name: 'De-prioritize this' });
     expect(sheet).toHaveAttribute('data-nested');
-    const backdrops = document.querySelectorAll('.sc-dialog__backdrop');
+    const backdrops = document.querySelectorAll('.c-proto-dialog__backdrop');
     expect(backdrops).toHaveLength(2);
     // The nested scrim is a sibling before the nested popup: dialog.css lifts it over the parent popup with
-    // `.sc-dialog__backdrop:has(~ .sc-dialog__popup[data-nested])`.
+    // `.c-proto-dialog__backdrop:has(~ .c-proto-dialog__popup[data-nested])`.
     expect(backdrops[1]!.parentElement).toBe(sheet.parentElement);
-    expect(backdrops[1]!.matches(':has(~ .sc-dialog__popup[data-nested])')).toBe(true);
-    expect(backdrops[0]!.matches(':has(~ .sc-dialog__popup[data-nested])')).toBe(false);
+    expect(backdrops[1]!.matches(':has(~ .c-proto-dialog__popup[data-nested])')).toBe(true);
+    expect(backdrops[0]!.matches(':has(~ .c-proto-dialog__popup[data-nested])')).toBe(false);
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    await waitFor(() => expect(document.querySelectorAll('.sc-dialog__backdrop')).toHaveLength(1));
+    await waitFor(() => expect(document.querySelectorAll('.c-proto-dialog__backdrop')).toHaveLength(1));
   });
 
   it('locks page scroll while a sheet is open and releases it after it closes', async () => {
@@ -349,7 +349,7 @@ describe('Dialog', () => {
     await screen.findByRole('dialog');
     await waitFor(() => expect(locked()).toBe(true));
     // The scrim moves on the sheet's timing (dialog.css matches it by variant).
-    expect(document.querySelector('.sc-dialog__backdrop')).toHaveAttribute('data-variant', 'sheet');
+    expect(document.querySelector('.c-proto-dialog__backdrop')).toHaveAttribute('data-variant', 'sheet');
     await user.click(screen.getByRole('button', { name: 'Done' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
     await waitFor(() => expect(locked()).toBe(false));
@@ -506,7 +506,7 @@ describe('Dialog', () => {
       const dialog = await screen.findByRole('dialog');
       expect(screen.queryByRole('button', { name: 'Dismiss' })).toBeNull();
       expect(dialog).not.toHaveAttribute('data-swipe-dismiss');
-      const handle = dialog.querySelector('.sc-dialog__handle')!;
+      const handle = dialog.querySelector('.c-proto-dialog__handle')!;
       expect(handle).toHaveAttribute('aria-hidden', 'true');
       drag(handle, 300, 100);
       expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -521,7 +521,7 @@ describe('Dialog', () => {
       render(<Example />);
       await userEvent.setup().click(screen.getByRole('button', { name: 'Archive' }));
       const dialog = await screen.findByRole('dialog');
-      expect(dialog.querySelector('.sc-dialog__handle')).toBeNull();
+      expect(dialog.querySelector('.c-proto-dialog__handle')).toBeNull();
     });
   });
 });

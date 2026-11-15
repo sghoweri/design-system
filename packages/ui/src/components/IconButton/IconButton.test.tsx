@@ -19,7 +19,7 @@ describe('IconButton', () => {
     expect(button).toHaveAttribute('type', 'button');
     expect(button).toHaveAttribute('data-variant', 'ghost');
     expect(button).toHaveAttribute('data-size', 'md');
-    expect(button).toHaveClass('sc-button', 'sc-icon-button');
+    expect(button).toHaveClass('c-proto-button', 'c-proto-icon-button');
     expect(button.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
     await expectNoA11yViolations(container);
   });
@@ -110,7 +110,7 @@ describe('IconButton', () => {
     );
     const link = screen.getByRole('link', { name: 'Settings' });
     expect(link).toHaveAttribute('href', '/settings');
-    expect(link).toHaveClass('sc-button', 'sc-icon-button');
+    expect(link).toHaveClass('c-proto-button', 'c-proto-icon-button');
     expect(link).toHaveAttribute('data-variant', 'secondary');
     expect(link).not.toHaveAttribute('type');
     await expectNoA11yViolations(container);
@@ -122,13 +122,13 @@ describe('IconButton', () => {
         <PauseIcon />
       </IconButton>,
     );
-    expect(screen.getByRole('button').querySelector('.sc-icon-button__dot')).toBeNull();
+    expect(screen.getByRole('button').querySelector('.c-proto-icon-button__dot')).toBeNull();
     rerender(
       <IconButton label="Alerts: 2 new" dot="danger">
         <PauseIcon />
       </IconButton>,
     );
-    const dot = screen.getByRole('button', { name: 'Alerts: 2 new' }).querySelector('.sc-icon-button__dot');
+    const dot = screen.getByRole('button', { name: 'Alerts: 2 new' }).querySelector('.c-proto-icon-button__dot');
     expect(dot).toHaveAttribute('data-tone', 'danger');
     expect(dot).toHaveAttribute('aria-hidden', 'true');
   });

@@ -10,7 +10,7 @@ A static amount on a bar: a count, a share, a funnel step. Use `Progress` for wo
 <Canvas of={MeterStories.FunnelRows} />
 
 ```tsx
-import { Meter } from '@salemcobalt/ui';
+import { Meter } from '@protokit/ui';
 
 <Meter label="Shown" value={214} max={1204} valueText="214 · 91% kept" />;
 
@@ -34,7 +34,7 @@ import { Meter } from '@salemcobalt/ui';
 - **`mark`**: `{ value, label }`, a part of the amount ("12 strong leads" of 40 found first). That part is solid from the start of the bar and the rest of the fill is hatched in the same tone. The label is appended to `aria-valuetext`; say it in `valueText` too, since the hatch alone does not name it. For a threshold (a tick where something changes), use `Progress marks`.
 - **`tone`**: accent (default), success, warning, danger, neutral.
 - **`size`**: `sm` 8px (table cells), `md` 12px (default, funnel rows).
-- **`layout`**: `stacked` (default) puts label and value above a full-width bar, so rows line up without a grid. `inline` puts the value, then the bar, on one line for a table cell. The value column is `4ch`; set `--sc-meter-value-width` on the table for longer numbers so every row's bar starts at the same x.
+- **`layout`**: `stacked` (default) puts label and value above a full-width bar, so rows line up without a grid. `inline` puts the value, then the bar, on one line for a table cell. The value column is `4ch`; set `--proto-meter-value-width` on the table for longer numbers so every row's bar starts at the same x.
 
 ## Accessibility
 

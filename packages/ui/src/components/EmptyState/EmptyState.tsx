@@ -42,14 +42,14 @@ export function EmptyState({
 }: EmptyStateProps) {
   return createElement(
     as,
-    { className: cx('sc-empty-state', className), 'data-size': size, ...rest },
+    { className: cx('c-proto-empty-state', className), 'data-size': size, ...rest },
     icon ? (
-      <span className="sc-empty-state__icon" aria-hidden="true">
+      <span className="c-proto-empty-state__icon" aria-hidden="true">
         {icon}
       </span>
     ) : null,
-    createElement(headingLevel ? `h${headingLevel}` : 'p', { className: 'sc-empty-state__title' }, title),
-    description != null ? <p className="sc-empty-state__description">{description}</p> : null,
-    children != null ? <div className="sc-empty-state__actions">{children}</div> : null,
+    createElement(headingLevel ? `h${headingLevel}` : 'p', { className: 'c-proto-empty-state__title' }, title),
+    description != null ? <p className="c-proto-empty-state__description">{description}</p> : null,
+    children != null ? <div className="c-proto-empty-state__actions">{children}</div> : null,
   );
 }

@@ -1,149 +1,149 @@
 /* ---- Tabs ------------------------------------------------------------------ */
-.sc-tabs {
+.c-proto-tabs {
   display: flex;
   flex-direction: column;
   min-inline-size: 0;
-  font-family: var(--sc-font-family-sans);
+  font-family: var(--proto-font-family-sans);
 }
 /* Scrolls sideways only. With `overflow-x: auto` alone, `overflow-y` computes to `auto` as well, so a pixel past the
    bottom made the row scroll vertically; `hidden` stops that (`clip` would compute to `hidden` here anyway). Nothing
    overflows in the block axis either: the baseline is an inset shadow in the list's own 1px bottom padding, where the
    indicator covers it from inside. As a border it sat outside the scrollport, so the indicator laid over it overflowed
    and showed half its height. Focus rings are drawn inside the tab. */
-.sc-tabs__list {
+.c-proto-tabs__list {
   position: relative;
   display: flex;
-  gap: var(--sc-spacing-2xs);
+  gap: var(--proto-spacing-2xs);
   min-inline-size: 0;
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
-  padding-block-end: var(--sc-border-width-hairline);
-  box-shadow: inset 0 calc(-1 * var(--sc-border-width-hairline)) 0 var(--sc-color-border-default);
+  padding-block-end: var(--proto-border-width-hairline);
+  box-shadow: inset 0 calc(-1 * var(--proto-border-width-hairline)) 0 var(--proto-color-border-default);
 }
-.sc-tabs__list[data-fill] > .sc-tabs__tab {
+.c-proto-tabs__list[data-fill] > .c-proto-tabs__tab {
   flex: 1 1 0;
 }
-.sc-tabs__tab {
+.c-proto-tabs__tab {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--sc-spacing-2xs);
+  gap: var(--proto-spacing-2xs);
   box-sizing: border-box;
-  block-size: var(--sc-size-control-md);
+  block-size: var(--proto-size-control-md);
   margin: 0;
-  padding-inline: var(--sc-spacing-sm);
+  padding-inline: var(--proto-spacing-sm);
   border: 0;
-  border-radius: var(--sc-radius-sm) var(--sc-radius-sm) 0 0;
+  border-radius: var(--proto-radius-sm) var(--proto-radius-sm) 0 0;
   background: transparent;
-  color: var(--sc-color-text-muted);
+  color: var(--proto-color-text-muted);
   font: inherit;
-  font-size: var(--sc-font-size-sm);
-  font-weight: var(--sc-font-weight-medium);
+  font-size: var(--proto-font-size-sm);
+  font-weight: var(--proto-font-weight-medium);
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
-  transition: color var(--sc-duration-fast) var(--sc-ease-standard);
+  transition: color var(--proto-duration-fast) var(--proto-ease-standard);
 }
-.sc-tabs__tab:hover:not([data-disabled]) {
-  color: var(--sc-color-text-default);
-  background: var(--sc-color-surface-hover);
+.c-proto-tabs__tab:hover:not([data-disabled]) {
+  color: var(--proto-color-text-default);
+  background: var(--proto-color-surface-hover);
 }
-.sc-tabs__tab[data-active] {
-  color: var(--sc-color-text-default);
+.c-proto-tabs__tab[data-active] {
+  color: var(--proto-color-text-default);
 }
-.sc-tabs__tab[data-disabled] {
+.c-proto-tabs__tab[data-disabled] {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.sc-tabs__tab:focus-visible {
-  outline-offset: calc(-1 * var(--sc-border-width-focus));
+.c-proto-tabs__tab:focus-visible {
+  outline-offset: calc(-1 * var(--proto-border-width-focus));
 }
-.sc-tabs__icon {
+.c-proto-tabs__icon {
   display: inline-flex;
   color: inherit;
 }
-.sc-tabs__count {
-  padding-inline: var(--sc-spacing-2xs);
-  border-radius: var(--sc-radius-sm);
-  background: var(--sc-color-surface-active);
-  color: var(--sc-color-text-muted);
-  font-size: var(--sc-font-size-xs);
+.c-proto-tabs__count {
+  padding-inline: var(--proto-spacing-2xs);
+  border-radius: var(--proto-radius-sm);
+  background: var(--proto-color-surface-active);
+  color: var(--proto-color-text-muted);
+  font-size: var(--proto-font-size-xs);
   font-variant-numeric: tabular-nums;
   line-height: 1.4;
 }
-.sc-tabs__tab[data-active] > .sc-tabs__count {
-  background: var(--sc-color-accent-subtle);
-  color: var(--sc-color-accent-text);
+.c-proto-tabs__tab[data-active] > .c-proto-tabs__count {
+  background: var(--proto-color-accent-subtle);
+  color: var(--proto-color-accent-text);
 }
-.sc-tabs__indicator {
+.c-proto-tabs__indicator {
   position: absolute;
   inset-block-end: 0;
   inset-inline-start: 0;
   inline-size: var(--active-tab-width);
-  block-size: var(--sc-border-width-focus);
+  block-size: var(--proto-border-width-focus);
   translate: var(--active-tab-left) 0;
-  background: var(--sc-color-accent-default);
-  border-radius: var(--sc-radius-full) var(--sc-radius-full) 0 0;
+  background: var(--proto-color-accent-default);
+  border-radius: var(--proto-radius-full) var(--proto-radius-full) 0 0;
   transition:
-    translate var(--sc-duration-base) var(--sc-ease-standard),
-    inline-size var(--sc-duration-base) var(--sc-ease-standard);
+    translate var(--proto-duration-base) var(--proto-ease-standard),
+    inline-size var(--proto-duration-base) var(--proto-ease-standard);
 }
-.sc-tabs__panel {
+.c-proto-tabs__panel {
   min-inline-size: 0;
-  padding-block-start: var(--sc-spacing-md);
+  padding-block-start: var(--proto-spacing-md);
 }
-.sc-tabs__panel[data-hidden] {
+.c-proto-tabs__panel[data-hidden] {
   display: none;
 }
 /* Segmented: a quiet control. Sunken track, the active tab raised on `surface-default` by the sliding
    indicator, no accent colour; counts are plain muted numbers
    (`text-muted`, not `text-subtle`, which fails AA on the sunken track). */
-.sc-tabs__list[data-variant='segmented'] {
+.c-proto-tabs__list[data-variant='segmented'] {
   display: inline-flex;
   align-self: flex-start;
   max-inline-size: 100%;
-  gap: var(--sc-spacing-3xs);
-  padding: var(--sc-spacing-3xs);
+  gap: var(--proto-spacing-3xs);
+  padding: var(--proto-spacing-3xs);
   box-shadow: none;
-  border-radius: var(--sc-radius-md);
-  background: var(--sc-color-surface-sunken);
+  border-radius: var(--proto-radius-md);
+  background: var(--proto-color-surface-sunken);
   isolation: isolate;
 }
-.sc-tabs__list[data-variant='segmented'][data-fill] {
+.c-proto-tabs__list[data-variant='segmented'][data-fill] {
   display: flex;
   align-self: stretch;
 }
-.sc-tabs__list[data-variant='segmented'] > .sc-tabs__tab {
+.c-proto-tabs__list[data-variant='segmented'] > .c-proto-tabs__tab {
   position: relative;
   z-index: 1;
-  block-size: var(--sc-size-control-sm);
-  padding-inline: var(--sc-spacing-sm);
-  border-radius: var(--sc-radius-sm);
+  block-size: var(--proto-size-control-sm);
+  padding-inline: var(--proto-spacing-sm);
+  border-radius: var(--proto-radius-sm);
 }
-.sc-tabs__list[data-variant='segmented'] > .sc-tabs__tab:hover:not([data-disabled]) {
+.c-proto-tabs__list[data-variant='segmented'] > .c-proto-tabs__tab:hover:not([data-disabled]) {
   background: transparent;
 }
-.sc-tabs__list[data-variant='segmented'] .sc-tabs__count,
-.sc-tabs__list[data-variant='segmented'] > .sc-tabs__tab[data-active] > .sc-tabs__count {
+.c-proto-tabs__list[data-variant='segmented'] .c-proto-tabs__count,
+.c-proto-tabs__list[data-variant='segmented'] > .c-proto-tabs__tab[data-active] > .c-proto-tabs__count {
   padding-inline: 0;
   background: transparent;
-  color: var(--sc-color-text-muted);
-  font-weight: var(--sc-font-weight-regular);
+  color: var(--proto-color-text-muted);
+  font-weight: var(--proto-font-weight-regular);
 }
-.sc-tabs__list[data-variant='segmented'] > .sc-tabs__indicator {
+.c-proto-tabs__list[data-variant='segmented'] > .c-proto-tabs__indicator {
   inset-block: 0 auto;
   z-index: 0;
   block-size: var(--active-tab-height);
   translate: var(--active-tab-left) var(--active-tab-top);
-  background: var(--sc-color-surface-default);
-  border-radius: var(--sc-radius-sm);
-  box-shadow: var(--sc-elevation-1);
+  background: var(--proto-color-surface-default);
+  border-radius: var(--proto-radius-sm);
+  box-shadow: var(--proto-elevation-1);
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-tabs__tab,
-  .sc-tabs__indicator {
+  .c-proto-tabs__tab,
+  .c-proto-tabs__indicator {
     transition: none;
   }
 }

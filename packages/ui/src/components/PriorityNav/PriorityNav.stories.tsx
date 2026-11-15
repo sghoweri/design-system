@@ -70,10 +70,10 @@ function Resizable({ children, initial = 560 }: { children: ReactNode; initial?:
         inlineSize: initial,
         minInlineSize: 120,
         maxInlineSize: '100%',
-        padding: 'var(--sc-spacing-xs)',
+        padding: 'var(--proto-spacing-xs)',
         paddingBlockEnd: 220,
-        border: 'var(--sc-border-width-hairline) dashed var(--sc-color-border-strong)',
-        borderRadius: 'var(--sc-radius-md)',
+        border: 'var(--proto-border-width-hairline) dashed var(--proto-color-border-strong)',
+        borderRadius: 'var(--proto-radius-md)',
       }}
     >
       {children}
@@ -144,7 +144,7 @@ export const LeftEdgePhone: Story = {
   globals: { viewport: { value: 'phone390', isRotated: false } },
   parameters: { layout: 'fullscreen' },
   render: () => (
-    <div style={{ padding: 'var(--sc-spacing-2xs)', blockSize: 400 }}>
+    <div style={{ padding: 'var(--proto-spacing-2xs)', blockSize: 400 }}>
       <Text size="sm" tone="muted">
         The toggle sits near the left edge, so the panel flips to the toggle’s start edge instead of running
         off screen. It stays in the viewport even inside a clipping box.
@@ -177,17 +177,17 @@ function Header({ labels = LABELS, badges }: { labels?: string[]; badges?: Badge
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 'var(--sc-spacing-md)',
-        padding: 'var(--sc-spacing-xs) var(--sc-spacing-sm)',
-        background: 'var(--sc-color-surface-default)',
-        borderBlockEnd: 'var(--sc-border-width-hairline) solid var(--sc-color-border-default)',
+        gap: 'var(--proto-spacing-md)',
+        padding: 'var(--proto-spacing-xs) var(--proto-spacing-sm)',
+        background: 'var(--proto-color-surface-default)',
+        borderBlockEnd: 'var(--proto-border-width-hairline) solid var(--proto-color-border-default)',
       }}
     >
       <Text weight="semibold" style={{ whiteSpace: 'nowrap' }}>
         Example app
       </Text>
       <Demo labels={labels} badges={badges} onOverflowChange={setCompact} overflowHysteresis={labelRoom} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sc-spacing-xs)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--proto-spacing-xs)' }}>
         <Popover.Root>
           <Popover.Trigger render={<IconButton label="Sweeps: running" dot="success" />}>
             <BroomIcon sweeping />
@@ -327,11 +327,11 @@ function ThemeHeader() {
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 'var(--sc-spacing-md)',
-        padding: 'var(--sc-spacing-xs) var(--sc-spacing-sm)',
-        background: 'var(--sc-color-surface-default)',
-        color: 'var(--sc-color-text-default)',
-        borderBlockEnd: 'var(--sc-border-width-hairline) solid var(--sc-color-border-default)',
+        gap: 'var(--proto-spacing-md)',
+        padding: 'var(--proto-spacing-xs) var(--proto-spacing-sm)',
+        background: 'var(--proto-color-surface-default)',
+        color: 'var(--proto-color-text-default)',
+        borderBlockEnd: 'var(--proto-border-width-hairline) solid var(--proto-color-border-default)',
       }}
     >
       <Text weight="semibold" style={{ whiteSpace: 'nowrap' }}>

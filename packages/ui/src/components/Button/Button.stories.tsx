@@ -41,8 +41,8 @@ export const Inverse: Story = {
         <div key={theme} data-theme={theme}>
           <Inline
             gap="sm"
-            className="sc-on-accent"
-            style={{ padding: 'var(--sc-spacing-md)', borderRadius: 'var(--sc-radius-lg)' }}
+            className="t-proto-on-accent"
+            style={{ padding: 'var(--proto-spacing-md)', borderRadius: 'var(--proto-radius-lg)' }}
           >
             <Button variant="inverse" size="sm">
               Reload

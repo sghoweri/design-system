@@ -50,7 +50,7 @@ function Funnel() {
       </Heading>
       <ol
         aria-labelledby="funnel-heading"
-        style={{ display: 'grid', gap: 'var(--sc-spacing-sm)', margin: 0, padding: 0, listStyle: 'none' }}
+        style={{ display: 'grid', gap: 'var(--proto-spacing-sm)', margin: 0, padding: 0, listStyle: 'none' }}
       >
         {funnel.map(([label, count], i) => {
           const before = i === 0 ? null : funnel[i - 1]![1];

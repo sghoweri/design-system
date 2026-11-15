@@ -11,7 +11,7 @@ describe('Checkbox', () => {
     const box = screen.getByRole('checkbox', { name: 'Show stale' });
     expect(box).toHaveAttribute('aria-checked', 'false');
     expect(box).toHaveAccessibleDescription('Older than 30 days.');
-    expect(box).toHaveClass('sc-checkbox');
+    expect(box).toHaveClass('c-proto-checkbox');
     expect(container.querySelector('input[name="stale"]')).not.toBeNull();
     await expectNoA11yViolations(container);
   });
@@ -34,6 +34,6 @@ describe('Checkbox', () => {
     expect(box).toHaveAttribute('data-indeterminate');
     expect(box).toHaveAttribute('aria-disabled', 'true');
     expect(box).toHaveAttribute('data-disabled');
-    expect(box.closest('.sc-choice')).toHaveAttribute('data-disabled');
+    expect(box.closest('.c-proto-choice')).toHaveAttribute('data-disabled');
   });
 });

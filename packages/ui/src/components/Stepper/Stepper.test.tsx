@@ -38,11 +38,11 @@ describe('Stepper', () => {
   it('marks a done step with a check and says so in words; the markers are decorative', () => {
     const { container } = render(steps('vertical'));
     const [done, current, upcoming] = screen.getAllByRole('listitem');
-    expect(done!.querySelector('.sc-stepper__marker svg')).not.toBeNull();
-    expect(current!.querySelector('.sc-stepper__marker svg')).toBeNull();
+    expect(done!.querySelector('.c-proto-stepper__marker svg')).not.toBeNull();
+    expect(current!.querySelector('.c-proto-stepper__marker svg')).toBeNull();
     expect(done).toHaveTextContent('Applied, done');
     expect(upcoming).not.toHaveTextContent('done');
-    for (const m of container.querySelectorAll('.sc-stepper__marker'))
+    for (const m of container.querySelectorAll('.c-proto-stepper__marker'))
       expect(m).toHaveAttribute('aria-hidden', 'true');
     expect(screen.getByRole('list')).toHaveAttribute('data-orientation', 'vertical');
   });
@@ -80,7 +80,7 @@ describe('Stepper ended', () => {
     expect(now).toHaveAttribute('data-state', 'ended');
     expect(now).toHaveAttribute('data-tone', 'danger');
     expect(now).toHaveAttribute('aria-current', 'step');
-    expect(now.querySelector('.sc-stepper__marker svg')).not.toBeNull();
+    expect(now.querySelector('.c-proto-stepper__marker svg')).not.toBeNull();
     expect(now).not.toHaveTextContent('done');
     expect(past).toHaveAttribute('data-tone', 'neutral');
     expect(past).not.toHaveAttribute('aria-current');
@@ -128,7 +128,7 @@ describe('Stepper.Date', () => {
   it('horizontal: the word, then a calendar button named with the full date that opens it on tap', async () => {
     const { container } = render(dated('horizontal'));
     const step = screen.getAllByRole('listitem')[1]!;
-    expect(step.querySelector('.sc-stepper__meta')).toHaveTextContent('proposed');
+    expect(step.querySelector('.c-proto-stepper__meta')).toHaveTextContent('proposed');
     expect(step).not.toHaveTextContent('Nov 14, 2pm');
     const button = within(step).getByRole('button', { name: `proposed: ${FULL}` });
     await expectNoA11yViolations(container);

@@ -1,6 +1,6 @@
 // A hydrated island: Base UI's Tabs need client JS for selection and arrow-key focus, so the docs page renders
 // this with `client:visible`. Static components (Button, Badge) render to HTML on the server with no JS.
-import { Tabs, Text } from '@salemcobalt/ui';
+import { Tabs, Text } from '@protokit/ui';
 
 export function TabsDemo() {
   return (

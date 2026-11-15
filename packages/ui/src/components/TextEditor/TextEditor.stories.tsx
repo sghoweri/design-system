@@ -13,7 +13,7 @@ import { WordDiff } from '../WordDiff/WordDiff';
 import { DarkTheme } from '../../stories/helpers';
 
 /**
- * `@salemcobalt/ui/editor`: CodeMirror 6 with inline word diffs against `base`. Each story keeps "Show changes"
+ * `@protokit/ui/editor`: CodeMirror 6 with inline word diffs against `base`. Each story keeps "Show changes"
  * (passes `base` or not), "Show changes while typing" (`liveDiff`) and "Reset to base" above the editor.
  */
 const meta = {

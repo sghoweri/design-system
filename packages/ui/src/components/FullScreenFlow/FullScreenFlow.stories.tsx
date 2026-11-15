@@ -64,7 +64,7 @@ function Radar() {
           cy="490"
           r={r}
           fill="none"
-          stroke="color-mix(in oklab, var(--sc-color-accent-default) 18%, transparent)"
+          stroke="color-mix(in oklab, var(--proto-color-accent-default) 18%, transparent)"
         />
       ))}
     </svg>
@@ -158,7 +158,7 @@ function SetupFlow({ startAt = 0 }: { startAt?: number }) {
 
   if (!open) {
     return (
-      <div style={{ padding: 'var(--sc-spacing-lg)' }}>
+      <div style={{ padding: 'var(--proto-spacing-lg)' }}>
         <Button onClick={() => setOpen(true)}>Open setup</Button>
       </div>
     );

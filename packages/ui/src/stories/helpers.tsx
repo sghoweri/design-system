@@ -7,10 +7,10 @@ export function DarkTheme({ children }: { children: ReactNode }) {
     <div
       data-theme="dark"
       style={{
-        padding: 'var(--sc-spacing-lg)',
-        background: 'var(--sc-color-surface-canvas)',
-        color: 'var(--sc-color-text-default)',
-        borderRadius: 'var(--sc-radius-xl)',
+        padding: 'var(--proto-spacing-lg)',
+        background: 'var(--proto-color-surface-canvas)',
+        color: 'var(--proto-color-text-default)',
+        borderRadius: 'var(--proto-radius-xl)',
       }}
     >
       {children}

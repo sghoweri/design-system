@@ -55,33 +55,33 @@ export function Stat({
   return createElement(
     as,
     {
-      className: cx('sc-stat', className),
+      className: cx('c-proto-stat', className),
       'data-variant': variant,
       'data-size': size,
       ...rest,
     },
     <>
-      <div className="sc-stat__label">{label}</div>
+      <div className="c-proto-stat__label">{label}</div>
       {icon ? (
-        <span className="sc-stat__icon" aria-hidden="true">
+        <span className="c-proto-stat__icon" aria-hidden="true">
           {icon}
         </span>
       ) : null}
-      <div className="sc-stat__value">{value}</div>
+      <div className="c-proto-stat__value">{value}</div>
       {delta != null ? (
-        <div className="sc-stat__delta" data-tone={deltaTone}>
+        <div className="c-proto-stat__delta" data-tone={deltaTone}>
           {trend ? (
-            <span className="sc-stat__trend" aria-hidden="true">
+            <span className="c-proto-stat__trend" aria-hidden="true">
               {trendIcons[trend]}
             </span>
           ) : null}
           {trend ? (
-            <span className="sc-visually-hidden">{trend === 'flat' ? 'unchanged' : trend} </span>
+            <span className="u-proto-visually-hidden">{trend === 'flat' ? 'unchanged' : trend} </span>
           ) : null}
           {delta}
         </div>
       ) : null}
-      {hint != null ? <div className="sc-stat__hint">{hint}</div> : null}
+      {hint != null ? <div className="c-proto-stat__hint">{hint}</div> : null}
     </>,
   );
 }

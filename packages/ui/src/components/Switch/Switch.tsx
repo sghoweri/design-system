@@ -30,24 +30,24 @@ export function Switch({
   const descriptionId = useId();
   return (
     <div
-      className={cx('sc-choice', className)}
+      className={cx('c-proto-choice', className)}
       data-disabled={disabled || undefined}
       data-label-position={labelPosition}
     >
-      <label className="sc-choice__control">
+      <label className="c-proto-choice__control">
         <BaseSwitch.Root
-          className="sc-switch"
+          className="c-proto-switch"
           disabled={disabled}
           aria-describedby={description != null ? descriptionId : undefined}
           onCheckedChange={onCheckedChange ? (checked) => onCheckedChange(checked) : undefined}
           {...rest}
         >
-          <BaseSwitch.Thumb className="sc-switch__thumb" />
+          <BaseSwitch.Thumb className="c-proto-switch__thumb" />
         </BaseSwitch.Root>
-        <span className="sc-choice__label">{label}</span>
+        <span className="c-proto-choice__label">{label}</span>
       </label>
       {description != null ? (
-        <span className="sc-choice__description" id={descriptionId}>
+        <span className="c-proto-choice__description" id={descriptionId}>
           {description}
         </span>
       ) : null}

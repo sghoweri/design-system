@@ -118,7 +118,7 @@ export const Dark: Story = {
   render: () => (
     <DarkTheme>
       <SortableTable />
-      <Text tone="muted" size="xs" style={{ marginBlockStart: 'var(--sc-spacing-sm)' }}>
+      <Text tone="muted" size="xs" style={{ marginBlockStart: 'var(--proto-spacing-sm)' }}>
         Hover a header to preview its arrow.
       </Text>
     </DarkTheme>

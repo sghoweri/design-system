@@ -11,7 +11,7 @@ const config: StorybookConfig = {
       ...cfg.resolve,
       alias: {
         ...cfg.resolve?.alias,
-        '@salemcobalt/ui': new URL('../../../packages/ui/src/index.ts', import.meta.url).pathname,
+        '@protokit/ui': new URL('../../../packages/ui/src/index.ts', import.meta.url).pathname,
       },
     },
   }),

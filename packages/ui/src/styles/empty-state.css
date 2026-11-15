@@ -1,64 +1,64 @@
 /* ---- EmptyState ------------------------------------------------------------ */
-.sc-empty-state {
-  --_icon: var(--sc-size-icon-xl);
+.c-proto-empty-state {
+  --_icon: var(--proto-size-icon-xl);
   --_ring: 48px;
-  --_py: var(--sc-spacing-2xl);
-  --_title: var(--sc-font-size-lg);
+  --_py: var(--proto-spacing-2xl);
+  --_title: var(--proto-font-size-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--sc-spacing-xs);
+  gap: var(--proto-spacing-xs);
   box-sizing: border-box;
   inline-size: 100%;
   margin: 0;
-  padding: var(--_py) var(--sc-spacing-lg);
+  padding: var(--_py) var(--proto-spacing-lg);
   list-style: none;
   text-align: center;
-  font-family: var(--sc-font-family-sans);
-  color: var(--sc-color-text-default);
+  font-family: var(--proto-font-family-sans);
+  color: var(--proto-color-text-default);
 }
-.sc-empty-state[data-size='sm'] {
-  --_icon: var(--sc-size-icon-lg);
+.c-proto-empty-state[data-size='sm'] {
+  --_icon: var(--proto-size-icon-lg);
   --_ring: 40px;
-  --_py: var(--sc-spacing-lg);
-  --_title: var(--sc-font-size-md);
-  gap: var(--sc-spacing-2xs);
+  --_py: var(--proto-spacing-lg);
+  --_title: var(--proto-font-size-md);
+  gap: var(--proto-spacing-2xs);
 }
-.sc-empty-state__icon {
+.c-proto-empty-state__icon {
   display: inline-grid;
   place-items: center;
   inline-size: var(--_ring);
   block-size: var(--_ring);
-  margin-block-end: var(--sc-spacing-xs);
-  border-radius: var(--sc-radius-full);
-  background: var(--sc-color-surface-sunken);
-  color: var(--sc-color-text-muted);
+  margin-block-end: var(--proto-spacing-xs);
+  border-radius: var(--proto-radius-full);
+  background: var(--proto-color-surface-sunken);
+  color: var(--proto-color-text-muted);
 }
-.sc-empty-state__icon > svg {
+.c-proto-empty-state__icon > svg {
   inline-size: var(--_icon);
   block-size: var(--_icon);
 }
-.sc-empty-state__title {
+.c-proto-empty-state__title {
   margin: 0;
   max-inline-size: 36ch;
   font-size: var(--_title);
-  font-weight: var(--sc-font-weight-semibold);
-  line-height: var(--sc-font-line-height-snug);
-  letter-spacing: var(--sc-font-tracking-snug);
+  font-weight: var(--proto-font-weight-semibold);
+  line-height: var(--proto-font-line-height-snug);
+  letter-spacing: var(--proto-font-tracking-snug);
   text-wrap: balance;
 }
-.sc-empty-state__description {
+.c-proto-empty-state__description {
   margin: 0;
   max-inline-size: 48ch;
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-normal);
-  color: var(--sc-color-text-muted);
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-normal);
+  color: var(--proto-color-text-muted);
   text-wrap: pretty;
 }
-.sc-empty-state__actions {
+.c-proto-empty-state__actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--sc-spacing-xs);
-  margin-block-start: var(--sc-spacing-sm);
+  gap: var(--proto-spacing-xs);
+  margin-block-start: var(--proto-spacing-sm);
 }

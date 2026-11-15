@@ -14,12 +14,12 @@ const body = (selector: string) =>
 
 describe('single-line fields truncate with an ellipsis', () => {
   it('Input', () => {
-    expect(body('.sc-input')).toMatch(/text-overflow:\s*ellipsis/);
+    expect(body('.c-proto-input')).toMatch(/text-overflow:\s*ellipsis/);
   });
   it("Select's value", () => {
-    const value = body('.sc-select__value');
+    const value = body('.c-proto-select__value');
     expect(value).toMatch(/overflow:\s*hidden/);
     expect(value).toMatch(/text-overflow:\s*ellipsis/);
-    expect(body('.sc-select')).toMatch(/white-space:\s*nowrap/);
+    expect(body('.c-proto-select')).toMatch(/white-space:\s*nowrap/);
   });
 });

@@ -15,9 +15,9 @@ export interface QuoteProps extends ComponentPropsWithRef<'figure'> {
  */
 export function Quote({ label, className, children, ...rest }: QuoteProps) {
   return (
-    <figure className={cx('sc-quote', className)} {...rest}>
-      <figcaption className="sc-quote__label">{label}</figcaption>
-      <blockquote className="sc-quote__text">{children}</blockquote>
+    <figure className={cx('c-proto-quote', className)} {...rest}>
+      <figcaption className="c-proto-quote__label">{label}</figcaption>
+      <blockquote className="c-proto-quote__text">{children}</blockquote>
     </figure>
   );
 }

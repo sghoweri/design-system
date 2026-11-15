@@ -39,10 +39,10 @@ const pairs: Array<[string, string[], number]> = [
   ['text-subtle', ['surface-default'], 4.5],
   ['text-link', ['surface-canvas', 'surface-default'], 4.5],
   ['text-on-accent', ['accent-default', 'accent-hover'], 4.5],
-  // The .sc-on-accent scope (accent Toast): text, button labels in every state, and the ring, borders and focus rings
+  // The .t-proto-on-accent scope (accent Toast): text, button labels in every state, and the ring, borders and focus rings
   // drawn in text.on-accent on the fill; the fill's own focus ring (accent.default) on the page outside it.
   ['text-on-accent', ['accent-active'], 4.5],
-  // The .sc-on-accent scope's fill is accent.strong, white text on it in both themes, in every state; its main action
+  // The .t-proto-on-accent scope's fill is accent.strong, white text on it in both themes, in every state; its main action
   // is an inverse Button (dark text on white), which must also stand off the fill.
   ['text-on-accent-strong', ['accent-strong', 'accent-strong-hover', 'accent-strong-active'], 4.5],
   ['text-on-inverse', ['inverse-default', 'inverse-hover', 'inverse-active'], 4.5],
@@ -97,8 +97,8 @@ const pairs: Array<[string, string[], number]> = [
 describe.each(['light', 'dark'] as const)('%s theme contrast', (theme) => {
   const t = json[theme];
   const get = (name: string) => {
-    const v = t[`sc-color-${name}`];
-    expect(v, `token sc-color-${name} exists`).toMatch(/^#[0-9a-f]{6}$/);
+    const v = t[`proto-color-${name}`];
+    expect(v, `token proto-color-${name} exists`).toMatch(/^#[0-9a-f]{6}$/);
     return v!;
   };
   for (const [fg, bgs, min] of pairs) {
@@ -118,7 +118,7 @@ const washes: Array<[string, string]> = [
   ['surface-raised', 'surface-raised-hover'],
   ['surface-raised-hover', 'surface-raised-active'],
   ['surface-default', 'accent-wash'],
-  // Hover and pressed on an accent fill (.sc-on-accent).
+  // Hover and pressed on an accent fill (.t-proto-on-accent).
   ['accent-default', 'accent-hover'],
   ['accent-hover', 'accent-active'],
   ['success-solid', 'success-hover'],
@@ -131,7 +131,7 @@ describe.each(['light', 'dark'] as const)('%s theme state washes', (theme) => {
   const t = json[theme];
   for (const [base, wash] of washes) {
     it(`${wash} is distinguishable from ${base}`, () => {
-      expect(contrast(t[`sc-color-${base}`]!, t[`sc-color-${wash}`]!)).toBeGreaterThanOrEqual(1.08);
+      expect(contrast(t[`proto-color-${base}`]!, t[`proto-color-${wash}`]!)).toBeGreaterThanOrEqual(1.08);
     });
   }
 });
@@ -143,6 +143,6 @@ describe('build outputs', () => {
     expect(css).toContain('[data-theme="dark"]');
     expect(css).toContain('@media (prefers-color-scheme: dark)');
     expect(css).toContain('[data-density="compact"]');
-    expect(css).toContain('--sc-color-surface-canvas');
+    expect(css).toContain('--proto-color-surface-canvas');
   });
 });

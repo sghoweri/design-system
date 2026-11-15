@@ -36,7 +36,7 @@ export const Playground: Story = {
 
 // A plain wrapping list: an open chip edits where it sits, so the list needs nothing for editing.
 const listCss = `
-.story-chip-list { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--sc-spacing-xs); margin: 0; padding: 0; list-style: none; }
+.story-chip-list { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--proto-spacing-xs); margin: 0; padding: 0; list-style: none; }
 .story-chip-list > li { min-inline-size: 0; max-inline-size: 100%; }
 `;
 

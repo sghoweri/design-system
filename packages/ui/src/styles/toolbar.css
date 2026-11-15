@@ -1,91 +1,91 @@
 /* ---- Toolbar --------------------------------------------------------------- */
-.sc-toolbar {
+.c-proto-toolbar {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  gap: var(--sc-spacing-xs);
+  gap: var(--proto-spacing-xs);
   min-inline-size: 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
-.sc-toolbar[data-wrap] {
+.c-proto-toolbar[data-wrap] {
   flex-wrap: wrap;
   overflow: visible;
 }
-.sc-toolbar__group {
+.c-proto-toolbar__group {
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: var(--sc-spacing-2xs);
+  gap: var(--proto-spacing-2xs);
 }
-.sc-toolbar__separator {
+.c-proto-toolbar__separator {
   flex: none;
-  inline-size: var(--sc-border-width-hairline);
-  block-size: var(--sc-size-icon-lg);
-  margin-inline: var(--sc-spacing-2xs);
-  background: var(--sc-color-border-default);
+  inline-size: var(--proto-border-width-hairline);
+  block-size: var(--proto-size-icon-lg);
+  margin-inline: var(--proto-spacing-2xs);
+  background: var(--proto-color-border-default);
 }
-.sc-toolbar[data-orientation='vertical'] {
+.c-proto-toolbar[data-orientation='vertical'] {
   flex-direction: column;
   align-items: stretch;
 }
-.sc-toolbar[data-orientation='vertical'] > .sc-toolbar__separator {
+.c-proto-toolbar[data-orientation='vertical'] > .c-proto-toolbar__separator {
   inline-size: auto;
-  block-size: var(--sc-border-width-hairline);
+  block-size: var(--proto-border-width-hairline);
   margin-inline: 0;
-  margin-block: var(--sc-spacing-2xs);
+  margin-block: var(--proto-spacing-2xs);
 }
-.sc-toolbar__spacer {
+.c-proto-toolbar__spacer {
   flex: 1 1 0;
-  min-inline-size: var(--sc-spacing-xs);
+  min-inline-size: var(--proto-spacing-xs);
 }
-.sc-toolbar[data-gap='none'],
-.sc-toolbar__group[data-gap='none'] {
-  gap: var(--sc-spacing-none);
+.c-proto-toolbar[data-gap='none'],
+.c-proto-toolbar__group[data-gap='none'] {
+  gap: var(--proto-spacing-none);
 }
-.sc-toolbar[data-gap='3xs'],
-.sc-toolbar__group[data-gap='3xs'] {
-  gap: var(--sc-spacing-3xs);
+.c-proto-toolbar[data-gap='3xs'],
+.c-proto-toolbar__group[data-gap='3xs'] {
+  gap: var(--proto-spacing-3xs);
 }
-.sc-toolbar[data-gap='2xs'],
-.sc-toolbar__group[data-gap='2xs'] {
-  gap: var(--sc-spacing-2xs);
+.c-proto-toolbar[data-gap='2xs'],
+.c-proto-toolbar__group[data-gap='2xs'] {
+  gap: var(--proto-spacing-2xs);
 }
-.sc-toolbar[data-gap='xs'],
-.sc-toolbar__group[data-gap='xs'] {
-  gap: var(--sc-spacing-xs);
+.c-proto-toolbar[data-gap='xs'],
+.c-proto-toolbar__group[data-gap='xs'] {
+  gap: var(--proto-spacing-xs);
 }
-.sc-toolbar[data-gap='sm'],
-.sc-toolbar__group[data-gap='sm'] {
-  gap: var(--sc-spacing-sm);
+.c-proto-toolbar[data-gap='sm'],
+.c-proto-toolbar__group[data-gap='sm'] {
+  gap: var(--proto-spacing-sm);
 }
-.sc-toolbar[data-gap='md'],
-.sc-toolbar__group[data-gap='md'] {
-  gap: var(--sc-spacing-md);
+.c-proto-toolbar[data-gap='md'],
+.c-proto-toolbar__group[data-gap='md'] {
+  gap: var(--proto-spacing-md);
 }
-.sc-toolbar[data-gap='lg'],
-.sc-toolbar__group[data-gap='lg'] {
-  gap: var(--sc-spacing-lg);
+.c-proto-toolbar[data-gap='lg'],
+.c-proto-toolbar__group[data-gap='lg'] {
+  gap: var(--proto-spacing-lg);
 }
-.sc-toolbar[data-gap='xl'],
-.sc-toolbar__group[data-gap='xl'] {
-  gap: var(--sc-spacing-xl);
+.c-proto-toolbar[data-gap='xl'],
+.c-proto-toolbar__group[data-gap='xl'] {
+  gap: var(--proto-spacing-xl);
 }
-.sc-toolbar[data-gap='2xl'],
-.sc-toolbar__group[data-gap='2xl'] {
-  gap: var(--sc-spacing-2xl);
+.c-proto-toolbar[data-gap='2xl'],
+.c-proto-toolbar__group[data-gap='2xl'] {
+  gap: var(--proto-spacing-2xl);
 }
-.sc-toolbar[data-gap='3xl'],
-.sc-toolbar__group[data-gap='3xl'] {
-  gap: var(--sc-spacing-3xl);
+.c-proto-toolbar[data-gap='3xl'],
+.c-proto-toolbar__group[data-gap='3xl'] {
+  gap: var(--proto-spacing-3xl);
 }
-.sc-toolbar[data-gap='4xl'],
-.sc-toolbar__group[data-gap='4xl'] {
-  gap: var(--sc-spacing-4xl);
+.c-proto-toolbar[data-gap='4xl'],
+.c-proto-toolbar__group[data-gap='4xl'] {
+  gap: var(--proto-spacing-4xl);
 }
 /* Toolbar.Button stays focusable when disabled (aria-disabled + data-disabled, no `disabled` attribute), so the
    Button's :disabled look is repeated for it here. */
-.sc-toolbar .sc-button[data-disabled] {
+.c-proto-toolbar .c-proto-button[data-disabled] {
   opacity: 0.5;
   cursor: not-allowed;
 }

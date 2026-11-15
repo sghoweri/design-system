@@ -5,143 +5,143 @@
    and later paints fixed elements only inside the layout viewport and fills its status-bar and toolbar areas by
    extending the colour of a fixed surface whose box sits exactly on that edge. A box pushed past the edge (the old
    negative inset and bottom border) gets no extension, so the page showed above and below it. */
-.sc-dialog__backdrop,
-.sc-dialog__popup {
+.c-proto-dialog__backdrop,
+.c-proto-dialog__popup {
   --_overhang: 160px;
 }
-.sc-dialog__backdrop {
+.c-proto-dialog__backdrop {
   position: fixed;
   /* The scrim runs past the bottom edge: when a phone's browser toolbar collapses or floats, the strip it uncovers
      is still dimmed instead of showing the page undimmed beneath it. */
   inset: 0 0 calc(-1 * var(--_overhang));
-  z-index: var(--sc-z-backdrop);
-  background: var(--sc-color-surface-backdrop);
+  z-index: var(--proto-z-backdrop);
+  background: var(--proto-color-surface-backdrop);
   /* A drag on the scrim never pans the page behind it (iOS rubber-banding included); a tap still closes. */
   touch-action: none;
-  transition: opacity var(--sc-duration-base) var(--sc-ease-enter);
+  transition: opacity var(--proto-duration-base) var(--proto-ease-enter);
 }
 /* A dialog opened from inside another (Base UI nests its portal after the parent's popup): its scrim covers the
    parent's popup too, so the layer behind the new one reads as behind. Same layer as the popups; DOM order stacks it. */
-.sc-dialog__backdrop:has(~ .sc-dialog__popup[data-nested]) {
-  z-index: var(--sc-z-dialog);
+.c-proto-dialog__backdrop:has(~ .c-proto-dialog__popup[data-nested]) {
+  z-index: var(--proto-z-dialog);
 }
-.sc-dialog__backdrop[data-starting-style],
-.sc-dialog__backdrop[data-ending-style] {
+.c-proto-dialog__backdrop[data-starting-style],
+.c-proto-dialog__backdrop[data-ending-style] {
   opacity: 0;
 }
-.sc-dialog__backdrop[data-ending-style] {
-  transition-duration: calc(var(--sc-duration-base) * 0.75);
-  transition-timing-function: var(--sc-ease-exit);
+.c-proto-dialog__backdrop[data-ending-style] {
+  transition-duration: calc(var(--proto-duration-base) * 0.75);
+  transition-timing-function: var(--proto-ease-exit);
 }
 /* The popup never exceeds the viewport minus a gutter each side, whatever `size` says. 100dvw rather than
    100% so the clamp holds inside a transformed or narrow portal container too. Under `viewport-fit=cover` each
    gutter is at least the safe-area inset on that axis (the larger of the pair, as the popup is centred), so a
    centred dialog on a landscape phone stays clear of the notch, the rounded corners and the home indicator. */
-.sc-dialog__popup {
-  --_gutter: var(--sc-spacing-md);
+.c-proto-dialog__popup {
+  --_gutter: var(--proto-spacing-md);
   --_side: max(var(--_gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
   --_ends: max(var(--_gutter), env(safe-area-inset-top, 0px), env(safe-area-inset-bottom, 0px));
   --_max: calc(100dvw - 2 * var(--_side));
   position: fixed;
   inset: 0;
   margin: auto;
-  z-index: var(--sc-z-dialog);
+  z-index: var(--proto-z-dialog);
   box-sizing: border-box;
-  inline-size: min(var(--_max), var(--sc-size-dialog-md));
+  inline-size: min(var(--_max), var(--proto-size-dialog-md));
   max-inline-size: var(--_max);
   max-block-size: min(100dvh - 2 * var(--_ends), 85dvh);
   block-size: fit-content;
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
-  padding: var(--sc-spacing-lg);
-  border-radius: var(--sc-radius-xl);
-  background: var(--sc-color-surface-raised);
+  padding: var(--proto-spacing-lg);
+  border-radius: var(--proto-radius-xl);
+  background: var(--proto-color-surface-raised);
   /* Hover and pressed washes inside a raised surface use the raised tokens, so they show against it (docs/adr/0003). */
-  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
-  --sc-color-surface-active: var(--sc-color-surface-raised-active);
-  color: var(--sc-color-text-default);
-  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
-  box-shadow: var(--sc-elevation-3);
-  font-family: var(--sc-font-family-sans);
+  --proto-color-surface-hover: var(--proto-color-surface-raised-hover);
+  --proto-color-surface-active: var(--proto-color-surface-raised-active);
+  color: var(--proto-color-text-default);
+  border: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
+  box-shadow: var(--proto-elevation-3);
+  font-family: var(--proto-font-family-sans);
   transition:
-    opacity var(--sc-duration-base) var(--sc-ease-enter),
-    translate var(--sc-duration-base) var(--sc-ease-enter),
-    scale var(--sc-duration-base) var(--sc-ease-enter);
+    opacity var(--proto-duration-base) var(--proto-ease-enter),
+    translate var(--proto-duration-base) var(--proto-ease-enter),
+    scale var(--proto-duration-base) var(--proto-ease-enter);
 }
-.sc-dialog__popup[data-starting-style],
-.sc-dialog__popup[data-ending-style] {
+.c-proto-dialog__popup[data-starting-style],
+.c-proto-dialog__popup[data-ending-style] {
   opacity: 0;
   translate: 0 8px;
   scale: 0.98;
 }
-.sc-dialog__popup[data-ending-style] {
-  transition-duration: calc(var(--sc-duration-base) * 0.75);
-  transition-timing-function: var(--sc-ease-exit);
+.c-proto-dialog__popup[data-ending-style] {
+  transition-duration: calc(var(--proto-duration-base) * 0.75);
+  transition-timing-function: var(--proto-ease-exit);
 }
-.sc-dialog__popup[data-size='sm'] {
-  inline-size: min(var(--_max), var(--sc-size-dialog-sm));
+.c-proto-dialog__popup[data-size='sm'] {
+  inline-size: min(var(--_max), var(--proto-size-dialog-sm));
 }
-.sc-dialog__popup[data-size='lg'] {
-  inline-size: min(var(--_max), var(--sc-size-dialog-lg));
+.c-proto-dialog__popup[data-size='lg'] {
+  inline-size: min(var(--_max), var(--proto-size-dialog-lg));
 }
-.sc-dialog__title {
+.c-proto-dialog__title {
   margin: 0;
-  font-size: var(--sc-font-size-lg);
-  line-height: var(--sc-font-line-height-snug);
-  font-weight: var(--sc-font-weight-semibold);
-  letter-spacing: var(--sc-font-tracking-snug);
-  padding-inline-end: var(--sc-spacing-xl);
+  font-size: var(--proto-font-size-lg);
+  line-height: var(--proto-font-line-height-snug);
+  font-weight: var(--proto-font-weight-semibold);
+  letter-spacing: var(--proto-font-tracking-snug);
+  padding-inline-end: var(--proto-spacing-xl);
   text-wrap-style: balance;
 }
-.sc-dialog__description {
-  margin: var(--sc-spacing-2xs) 0 0;
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-normal);
-  color: var(--sc-color-text-muted);
+.c-proto-dialog__description {
+  margin: var(--proto-spacing-2xs) 0 0;
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-normal);
+  color: var(--proto-color-text-muted);
   text-wrap-style: pretty;
 }
-.sc-dialog__body {
-  margin-block-start: var(--sc-spacing-md);
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-normal);
+.c-proto-dialog__body {
+  margin-block-start: var(--proto-spacing-md);
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-normal);
   text-wrap-style: pretty;
 }
 /* Content wraps instead of widening the popup: long URLs break, fields and media stay inside the box. */
-.sc-dialog__title,
-.sc-dialog__description,
-.sc-dialog__body {
+.c-proto-dialog__title,
+.c-proto-dialog__description,
+.c-proto-dialog__body {
   min-inline-size: 0;
   overflow-wrap: anywhere;
 }
-.sc-dialog__body > *,
-.sc-dialog__body :where(img, video, table, pre, .sc-select) {
+.c-proto-dialog__body > *,
+.c-proto-dialog__body :where(img, video, table, pre, .c-proto-select) {
   max-inline-size: 100%;
 }
-.sc-dialog__body :where(pre) {
+.c-proto-dialog__body :where(pre) {
   overflow: auto;
 }
-.sc-dialog__actions {
-  margin-block-start: var(--sc-spacing-lg);
+.c-proto-dialog__actions {
+  margin-block-start: var(--proto-spacing-lg);
 }
-.sc-dialog__close {
+.c-proto-dialog__close {
   position: absolute;
-  inset-block-start: var(--sc-spacing-sm);
-  inset-inline-end: var(--sc-spacing-sm);
+  inset-block-start: var(--proto-spacing-sm);
+  inset-inline-end: var(--proto-spacing-sm);
   display: inline-grid;
   place-items: center;
-  inline-size: var(--sc-size-control-sm);
-  block-size: var(--sc-size-control-sm);
+  inline-size: var(--proto-size-control-sm);
+  block-size: var(--proto-size-control-sm);
   padding: 0;
   border: 0;
-  border-radius: var(--sc-radius-md);
+  border-radius: var(--proto-radius-md);
   background: transparent;
-  color: var(--sc-color-text-muted);
+  color: var(--proto-color-text-muted);
   cursor: pointer;
 }
-.sc-dialog__close:hover {
-  background: var(--sc-color-surface-hover);
-  color: var(--sc-color-text-default);
+.c-proto-dialog__close:hover {
+  background: var(--proto-color-surface-hover);
+  color: var(--proto-color-text-default);
 }
-/* Default dialog: the popup no longer scrolls; `.sc-dialog__scroll`, which Dialog renders around the children, does.
+/* Default dialog: the popup no longer scrolls; `.c-proto-dialog__scroll`, which Dialog renders around the children, does.
    It runs out over the popup's padding (all of it in the block axis, the bleed in the inline axis) and pads itself
    back by the same amounts, so the content stays where it was and still scrolls right up to the popup's edges. The
    bleed centres the scrollbar in the side padding (Salem, 2026-11-14): an overlay thumb (macOS, iOS, Android; about
@@ -149,39 +149,39 @@
    24px, so it reads as even space on both sides. A classic scrollbar (Windows, or macOS set to always show) takes
    layout width instead: it sits a few pixels nearer the edge and the content moves in by its width. The full block
    padding inside the scroller leaves room for the focus rings of a first or last field. */
-.sc-dialog__popup[data-variant='dialog'] {
+.c-proto-dialog__popup[data-variant='dialog'] {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-.sc-dialog__scroll {
+.c-proto-dialog__scroll {
   --_thumb: 6px;
   --_thumb-inset: 2px;
-  --_bleed: calc(var(--sc-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset));
+  --_bleed: calc(var(--proto-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset));
   position: relative; /* the × is placed against it, so it scrolls away with the title as it did */
   flex: 1 1 auto;
   min-block-size: 0;
-  margin: calc(-1 * var(--sc-spacing-lg)) calc(-1 * var(--_bleed));
-  padding: var(--sc-spacing-lg) var(--_bleed);
+  margin: calc(-1 * var(--proto-spacing-lg)) calc(-1 * var(--_bleed));
+  padding: var(--proto-spacing-lg) var(--_bleed);
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
   overscroll-behavior: contain;
 }
 /* The scroller's inline end is the bleed short of the popup's padding edge, so the × keeps its corner. */
-.sc-dialog__scroll > .sc-dialog__close {
-  inset-inline-end: calc(var(--sc-spacing-sm) - var(--sc-spacing-lg) + var(--_bleed));
+.c-proto-dialog__scroll > .c-proto-dialog__close {
+  inset-inline-end: calc(var(--proto-spacing-sm) - var(--proto-spacing-lg) + var(--_bleed));
 }
 /* Sheet: title and actions stay put, the body scrolls. Same centred box as `dialog` on wide viewports. */
-.sc-dialog__popup[data-variant='sheet'] {
+.c-proto-dialog__popup[data-variant='sheet'] {
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
-.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__title,
-.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__description,
-.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__actions {
+.c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__title,
+.c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__description,
+.c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__actions {
   flex: none;
 }
-.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__body {
+.c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__body {
   flex: 1 1 auto;
   min-block-size: 0;
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
@@ -195,18 +195,18 @@
    always show) takes layout width instead: it sits a few pixels nearer the edge and the content moves in by its
    width. The same trick in the block axis leaves room for a focus ring (2px outline, 2px offset) on a first or last
    field; the scrollport clipped them before. */
-.sc-dialog__popup[data-variant='sheet'] > .sc-dialog__body,
-.sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__body {
+.c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__body,
+.c-proto-dialog__popup[data-variant='fullscreen'] > .c-proto-dialog__body {
   --_thumb: 6px;
   --_thumb-inset: 2px;
-  --_bleed: calc(var(--sc-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset));
-  --_ring: calc(2 * var(--sc-border-width-focus));
+  --_bleed: calc(var(--proto-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset));
+  --_ring: calc(2 * var(--proto-border-width-focus));
   margin-inline: calc(-1 * var(--_bleed));
-  margin-block: calc(var(--sc-spacing-md) - var(--_ring)) calc(-1 * var(--_ring));
+  margin-block: calc(var(--proto-spacing-md) - var(--_ring)) calc(-1 * var(--_ring));
   padding: var(--_ring) var(--_bleed);
 }
 /* The sheet's grab handle shows only where the sheet docks. */
-.sc-dialog__handle {
+.c-proto-dialog__handle {
   display: none;
 }
 /* Below 640px the sheet docks to the bottom edge, full width, and slides up. The breakpoint is fixed
@@ -222,91 +222,91 @@
      sheet does. In: `slow` on `standard`, which leaves the bottom edge gently instead of jumping a quarter of its
      height in the first frame. Out: 75% of that on `exit`, accelerating, so it is in view until it leaves.
      After a swipe it decelerates instead (`data-swiped`), carrying on from the finger's speed. */
-  .sc-dialog__popup[data-variant='sheet'] {
+  .c-proto-dialog__popup[data-variant='sheet'] {
     inset: auto 0 0 0;
     margin: 0;
     inline-size: 100%;
     max-inline-size: none;
-    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - var(--sc-spacing-xl));
-    padding-block-end: calc(var(--sc-spacing-lg) + env(safe-area-inset-bottom, 0px));
-    padding-inline: calc(var(--sc-spacing-lg) + env(safe-area-inset-left, 0px))
-      calc(var(--sc-spacing-lg) + env(safe-area-inset-right, 0px));
+    max-block-size: calc(100dvh - env(safe-area-inset-top, 0px) - var(--proto-spacing-xl));
+    padding-block-end: calc(var(--proto-spacing-lg) + env(safe-area-inset-bottom, 0px));
+    padding-inline: calc(var(--proto-spacing-lg) + env(safe-area-inset-left, 0px))
+      calc(var(--proto-spacing-lg) + env(safe-area-inset-right, 0px));
     border-block-end: 0; /* the popup's hairline would draw a line along the screen's bottom edge */
-    border-radius: var(--sc-radius-xl) var(--sc-radius-xl) 0 0;
+    border-radius: var(--proto-radius-xl) var(--proto-radius-xl) 0 0;
     box-shadow:
-      0 var(--_overhang) 0 0 var(--sc-color-surface-raised),
-      var(--sc-elevation-3);
+      0 var(--_overhang) 0 0 var(--proto-color-surface-raised),
+      var(--proto-elevation-3);
     touch-action: none;
     transition:
-      translate var(--sc-duration-slow) var(--sc-ease-standard),
-      transform var(--sc-duration-slow) var(--sc-ease-standard);
+      translate var(--proto-duration-slow) var(--proto-ease-standard),
+      transform var(--proto-duration-slow) var(--proto-ease-standard);
   }
-  .sc-dialog__backdrop[data-variant='sheet'] {
-    transition-duration: var(--sc-duration-slow);
-    transition-timing-function: var(--sc-ease-standard);
+  .c-proto-dialog__backdrop[data-variant='sheet'] {
+    transition-duration: var(--proto-duration-slow);
+    transition-timing-function: var(--proto-ease-standard);
   }
-  .sc-dialog__popup[data-variant='sheet'][data-ending-style],
-  .sc-dialog__backdrop[data-variant='sheet'][data-ending-style] {
-    transition-duration: calc(var(--sc-duration-slow) * 0.75);
-    transition-timing-function: var(--sc-ease-exit);
+  .c-proto-dialog__popup[data-variant='sheet'][data-ending-style],
+  .c-proto-dialog__backdrop[data-variant='sheet'][data-ending-style] {
+    transition-duration: calc(var(--proto-duration-slow) * 0.75);
+    transition-timing-function: var(--proto-ease-exit);
   }
-  .sc-dialog__popup[data-variant='sheet'][data-ending-style][data-swiped] {
-    transition-duration: var(--sc-duration-base);
-    transition-timing-function: var(--sc-ease-enter);
+  .c-proto-dialog__popup[data-variant='sheet'][data-ending-style][data-swiped] {
+    transition-duration: var(--proto-duration-base);
+    transition-timing-function: var(--proto-ease-enter);
   }
   /* The handle: a 36 × 4 bar centred in a 64 × 24 target, where the bar alone used to sit. */
-  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__handle {
+  .c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__handle {
     display: grid;
     place-items: center;
     flex: none;
     align-self: center;
     inline-size: 64px;
     block-size: 24px;
-    margin-block: calc(-1 * var(--sc-spacing-sm) - 10px) calc(var(--sc-spacing-md) - 10px);
+    margin-block: calc(-1 * var(--proto-spacing-sm) - 10px) calc(var(--proto-spacing-md) - 10px);
     padding: 0;
     border: 0;
-    border-radius: var(--sc-radius-md);
+    border-radius: var(--proto-radius-md);
     background: transparent;
-    color: var(--sc-color-border-strong);
+    color: var(--proto-color-border-strong);
   }
   /* Inset, so the popup's clipped top edge does not cut the ring. */
-  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__handle:focus-visible {
-    outline-offset: calc(-1 * var(--sc-border-width-focus));
+  .c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__handle:focus-visible {
+    outline-offset: calc(-1 * var(--proto-border-width-focus));
   }
-  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__handle::before {
+  .c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__handle::before {
     content: '';
     inline-size: 36px;
     block-size: 4px;
-    border-radius: var(--sc-radius-full);
+    border-radius: var(--proto-radius-full);
     background: currentColor;
   }
-  .sc-dialog__popup[data-variant='sheet'][data-swipe-dismiss] > .sc-dialog__handle {
+  .c-proto-dialog__popup[data-variant='sheet'][data-swipe-dismiss] > .c-proto-dialog__handle {
     cursor: grab;
   }
-  .sc-dialog__popup[data-variant='sheet'][data-swiping] {
+  .c-proto-dialog__popup[data-variant='sheet'][data-swiping] {
     cursor: grabbing;
     user-select: none;
     transition: none;
   }
   /* Just below the edge. */
-  .sc-dialog__popup[data-variant='sheet'][data-starting-style],
-  .sc-dialog__popup[data-variant='sheet'][data-ending-style] {
+  .c-proto-dialog__popup[data-variant='sheet'][data-starting-style],
+  .c-proto-dialog__popup[data-variant='sheet'][data-ending-style] {
     opacity: 1;
     translate: 0 100%;
     scale: none;
   }
   /* Actions stack full width, confirming action on top, in thumb reach. */
-  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__actions {
+  .c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__actions {
     flex-wrap: wrap-reverse;
   }
-  .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__actions > * {
+  .c-proto-dialog__popup[data-variant='sheet'] > .c-proto-dialog__actions > * {
     flex: 1 1 100%;
   }
 }
 /* Full screen: covers the viewport and slides in from the inline end. Title and actions stay put while
    `Dialog.Body` scrolls, as in a sheet. The surface is `surface-default`, not raised, because it replaces
    the page rather than floating over it, so the hover washes go back to the page's own. */
-.sc-dialog__popup[data-variant='fullscreen'] {
+.c-proto-dialog__popup[data-variant='fullscreen'] {
   --_slide: 1;
   inset: 0;
   margin: 0;
@@ -317,41 +317,41 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding-block: calc(var(--sc-spacing-lg) + env(safe-area-inset-top, 0px))
-    calc(var(--sc-spacing-lg) + env(safe-area-inset-bottom, 0px));
-  padding-inline: calc(var(--sc-spacing-lg) + env(safe-area-inset-left, 0px))
-    calc(var(--sc-spacing-lg) + env(safe-area-inset-right, 0px));
+  padding-block: calc(var(--proto-spacing-lg) + env(safe-area-inset-top, 0px))
+    calc(var(--proto-spacing-lg) + env(safe-area-inset-bottom, 0px));
+  padding-inline: calc(var(--proto-spacing-lg) + env(safe-area-inset-left, 0px))
+    calc(var(--proto-spacing-lg) + env(safe-area-inset-right, 0px));
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  background: var(--sc-color-surface-default);
-  --sc-color-surface-hover: inherit;
-  --sc-color-surface-active: inherit;
+  background: var(--proto-color-surface-default);
+  --proto-color-surface-hover: inherit;
+  --proto-color-surface-active: inherit;
   transition:
-    opacity var(--sc-duration-slower) var(--sc-ease-enter),
-    translate var(--sc-duration-slower) var(--sc-ease-enter);
+    opacity var(--proto-duration-slower) var(--proto-ease-enter),
+    translate var(--proto-duration-slower) var(--proto-ease-enter);
 }
-.sc-dialog__popup[data-variant='fullscreen'][data-starting-style] {
+.c-proto-dialog__popup[data-variant='fullscreen'][data-starting-style] {
   opacity: 0;
   translate: calc(var(--_slide) * 96px) 0;
   scale: none;
 }
-.sc-dialog__popup[data-variant='fullscreen'][data-ending-style] {
+.c-proto-dialog__popup[data-variant='fullscreen'][data-ending-style] {
   opacity: 0;
   translate: calc(var(--_slide) * 64px) 0;
   scale: none;
-  transition-duration: var(--sc-duration-slow);
-  transition-timing-function: var(--sc-ease-exit);
+  transition-duration: var(--proto-duration-slow);
+  transition-timing-function: var(--proto-ease-exit);
 }
-.sc-dialog__popup[data-variant='fullscreen']:dir(rtl) {
+.c-proto-dialog__popup[data-variant='fullscreen']:dir(rtl) {
   --_slide: -1;
 }
-.sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__title,
-.sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__description,
-.sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__actions {
+.c-proto-dialog__popup[data-variant='fullscreen'] > .c-proto-dialog__title,
+.c-proto-dialog__popup[data-variant='fullscreen'] > .c-proto-dialog__description,
+.c-proto-dialog__popup[data-variant='fullscreen'] > .c-proto-dialog__actions {
   flex: none;
 }
-.sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__body {
+.c-proto-dialog__popup[data-variant='fullscreen'] > .c-proto-dialog__body {
   flex: 1 1 auto;
   min-block-size: 0;
   overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
@@ -359,65 +359,65 @@
 }
 /* A `Dialog.Close` on the full-screen surface sits at the top inline-end corner of the screen, so it clears the
    status bar and a landscape notch the way the padding does. */
-.sc-dialog__popup[data-variant='fullscreen'] .sc-dialog__close {
-  inset-block-start: calc(var(--sc-spacing-sm) + env(safe-area-inset-top, 0px));
+.c-proto-dialog__popup[data-variant='fullscreen'] .c-proto-dialog__close {
+  inset-block-start: calc(var(--proto-spacing-sm) + env(safe-area-inset-top, 0px));
   inset-inline-end: calc(
-    var(--sc-spacing-sm) + max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))
+    var(--proto-spacing-sm) + max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))
   );
 }
 /* Below 900px the full-screen surface runs past the bottom edge like the sheet (the overhang, a box-shadow in its
    own colour; its box stays on the edges so iOS Safari extends it under the status bar and toolbar), so a collapsing
    browser toolbar uncovers more of it, not the page. */
 @media (width < 900px) {
-  .sc-dialog__popup[data-variant='fullscreen'] {
-    box-shadow: 0 var(--_overhang) 0 0 var(--sc-color-surface-default);
+  .c-proto-dialog__popup[data-variant='fullscreen'] {
+    box-shadow: 0 var(--_overhang) 0 0 var(--proto-color-surface-default);
   }
 }
 /* From 900px the backdrop shows a margin around it, so it still reads as a layer over the app. */
 @media (width >= 900px) {
-  .sc-dialog__popup[data-variant='fullscreen'] {
-    inset: var(--sc-spacing-md);
-    border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
-    border-radius: var(--sc-radius-xl);
-    box-shadow: var(--sc-elevation-3);
+  .c-proto-dialog__popup[data-variant='fullscreen'] {
+    inset: var(--proto-spacing-md);
+    border: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
+    border-radius: var(--proto-radius-xl);
+    box-shadow: var(--proto-elevation-3);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-dialog__backdrop,
-  .sc-dialog__popup {
+  .c-proto-dialog__backdrop,
+  .c-proto-dialog__popup {
     transition-duration: 0ms;
   }
-  .sc-dialog__popup[data-starting-style],
-  .sc-dialog__popup[data-ending-style] {
+  .c-proto-dialog__popup[data-starting-style],
+  .c-proto-dialog__popup[data-ending-style] {
     translate: none;
     scale: none;
   }
 }
 /* Reduced motion: the full-screen surface crossfades instead of sliding. */
 @media (prefers-reduced-motion: reduce) {
-  .sc-dialog__popup[data-variant='fullscreen'] {
-    transition-duration: var(--sc-duration-base);
+  .c-proto-dialog__popup[data-variant='fullscreen'] {
+    transition-duration: var(--proto-duration-base);
   }
-  .sc-dialog__popup[data-variant='fullscreen'][data-starting-style],
-  .sc-dialog__popup[data-variant='fullscreen'][data-ending-style] {
+  .c-proto-dialog__popup[data-variant='fullscreen'][data-starting-style],
+  .c-proto-dialog__popup[data-variant='fullscreen'][data-ending-style] {
     translate: none;
   }
-  .sc-dialog__popup[data-variant='fullscreen'][data-ending-style] {
-    transition-duration: var(--sc-duration-fast);
+  .c-proto-dialog__popup[data-variant='fullscreen'][data-ending-style] {
+    transition-duration: var(--proto-duration-fast);
   }
 }
 /* Reduced motion: a docked sheet appears and goes without sliding, and a released swipe closes or snaps
    back in place without the spring. */
 @media (width < 640px) and (prefers-reduced-motion: reduce) {
-  .sc-dialog__popup[data-variant='sheet'],
-  .sc-dialog__popup[data-variant='sheet'][data-ending-style],
-  .sc-dialog__popup[data-variant='sheet'][data-ending-style][data-swiped],
-  .sc-dialog__backdrop[data-variant='sheet'],
-  .sc-dialog__backdrop[data-variant='sheet'][data-ending-style] {
+  .c-proto-dialog__popup[data-variant='sheet'],
+  .c-proto-dialog__popup[data-variant='sheet'][data-ending-style],
+  .c-proto-dialog__popup[data-variant='sheet'][data-ending-style][data-swiped],
+  .c-proto-dialog__backdrop[data-variant='sheet'],
+  .c-proto-dialog__backdrop[data-variant='sheet'][data-ending-style] {
     transition-duration: 0ms;
   }
-  .sc-dialog__popup[data-variant='sheet'][data-starting-style],
-  .sc-dialog__popup[data-variant='sheet'][data-ending-style] {
+  .c-proto-dialog__popup[data-variant='sheet'][data-starting-style],
+  .c-proto-dialog__popup[data-variant='sheet'][data-ending-style] {
     translate: none;
   }
 }

@@ -25,7 +25,7 @@ describe('EditableChip', () => {
     const { container } = render(<Controlled onRemove={() => {}} />);
     const edit = screen.getByRole('button', { name: 'Edit “frontend architect”' });
     expect(edit).not.toHaveAttribute('aria-pressed');
-    expect(edit.closest('.sc-chip')).toHaveAttribute('data-editable');
+    expect(edit.closest('.c-proto-chip')).toHaveAttribute('data-editable');
     expect(screen.getByRole('button', { name: 'Remove frontend architect' })).toBeInTheDocument();
     expect(screen.queryByRole('textbox')).toBeNull();
     await expectNoA11yViolations(container);
@@ -41,11 +41,11 @@ describe('EditableChip', () => {
     expect(field).toHaveValue('frontend architect');
     expect(field.selectionStart).toBe('frontend architect'.length);
     expect(field).toHaveAttribute('enterkeyhint', 'done');
-    const chip = field.closest('.sc-chip')!;
+    const chip = field.closest('.c-proto-chip')!;
     expect(chip).toHaveAttribute('data-editing');
     expect(chip).toHaveAttribute('data-tone', 'accent');
     expect(field.parentElement).toHaveAttribute('data-value', 'frontend architect');
-    expect(container.firstElementChild).toHaveClass('sc-chip-editor');
+    expect(container.firstElementChild).toHaveClass('c-proto-chip-editor');
     await user.type(field, 's');
     expect(field.parentElement).toHaveAttribute('data-value', 'frontend architects');
     await expectNoA11yViolations(container);
@@ -59,7 +59,7 @@ describe('EditableChip', () => {
     const field = screen.getByRole('textbox', { name: 'Edit job title' });
     const clear = screen.getByRole('button', { name: 'Clear title' });
     expect(clear).toHaveAttribute('tabindex', '-1');
-    expect(field.closest('.sc-chip')!.lastElementChild).toBe(clear);
+    expect(field.closest('.c-proto-chip')!.lastElementChild).toBe(clear);
     await user.click(clear);
     expect(field).toHaveValue('');
     expect(field).toHaveFocus();
@@ -145,8 +145,8 @@ describe('EditableChip', () => {
     expect(onValueChange).not.toHaveBeenCalled();
     expect(field).toHaveAttribute('aria-invalid', 'true');
     expect(field).toHaveAccessibleDescription('“staff engineer” is already in this list.');
-    expect(container.querySelector('.sc-chip-editor__error')).toHaveAttribute('aria-live', 'polite');
-    expect(field.closest('.sc-chip')).toHaveAttribute('data-invalid');
+    expect(container.querySelector('.c-proto-chip-editor__error')).toHaveAttribute('aria-live', 'polite');
+    expect(field.closest('.c-proto-chip')).toHaveAttribute('data-invalid');
     await expectNoA11yViolations(container);
 
     await user.type(field, 's');

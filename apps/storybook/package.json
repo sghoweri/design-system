@@ -9,8 +9,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@salemcobalt/tokens": "workspace:*",
-    "@salemcobalt/ui": "workspace:*",
+    "@protokit/tokens": "workspace:*",
+    "@protokit/ui": "workspace:*",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
   },

@@ -10,7 +10,7 @@ const activeSelectors = files.flatMap((file) => {
   const css = readFileSync(join(__dirname, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
   return [...css.matchAll(/([^{}]+)\{[^{}]*\}/g)]
     .map((m) => m[1]!.trim().replace(/\s+/g, ' '))
-    .filter((s) => /\.sc-button[^,]*:active/.test(s) || /__dismiss:active/.test(s))
+    .filter((s) => /\.c-proto-button[^,]*:active/.test(s) || /__dismiss:active/.test(s))
     .map((selector) => ({ file, selector }));
 });
 

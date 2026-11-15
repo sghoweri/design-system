@@ -139,7 +139,7 @@ export function EditableChip({
     'data-disabled': disabled || undefined,
   };
   const iconEl = icon ? (
-    <span className="sc-chip__icon" aria-hidden="true">
+    <span className="c-proto-chip__icon" aria-hidden="true">
       {icon}
     </span>
   ) : null;
@@ -148,9 +148,9 @@ export function EditableChip({
     return (
       // Distinct keys: otherwise React reuses the resting chip's span as this wrapper, and the chip's focus ring
       // transitions out on it as a square box.
-      <span key="editor" className={cx('sc-chip-editor', className)} data-editing="">
+      <span key="editor" className={cx('c-proto-chip-editor', className)} data-editing="">
         <span
-          className="sc-chip"
+          className="c-proto-chip"
           {...shared}
           data-editing=""
           data-entry={entry}
@@ -158,10 +158,10 @@ export function EditableChip({
           data-invalid={error ? '' : undefined}
         >
           {iconEl}
-          <span className="sc-chip__field" data-value={text}>
+          <span className="c-proto-chip__field" data-value={text}>
             <input
               ref={field}
-              className="sc-chip__input"
+              className="c-proto-chip__input"
               aria-label={editLabel}
               aria-invalid={error ? true : undefined}
               aria-describedby={errorId}
@@ -192,7 +192,7 @@ export function EditableChip({
             // Pointer only: from the keyboard, select-all and delete clears, and Tab means "done".
             <button
               type="button"
-              className="sc-chip__clear"
+              className="c-proto-chip__clear"
               aria-label={clearLabel}
               tabIndex={-1}
               onPointerDown={(event) => event.preventDefault()}
@@ -206,7 +206,7 @@ export function EditableChip({
             </button>
           ) : null}
         </span>
-        <span id={errorId} className="sc-chip-editor__error" aria-live="polite">
+        <span id={errorId} className="c-proto-chip-editor__error" aria-live="polite">
           {error}
         </span>
       </span>
@@ -223,7 +223,7 @@ export function EditableChip({
   return (
     <span
       key="chip"
-      className={cx('sc-chip', className)}
+      className={cx('c-proto-chip', className)}
       {...shared}
       data-removable={onRemove ? '' : undefined}
       data-editable=""
@@ -232,7 +232,7 @@ export function EditableChip({
       <button
         ref={button}
         type="button"
-        className="sc-chip__action"
+        className="c-proto-chip__action"
         aria-label={editButtonLabel ?? `Edit “${value}”`}
         disabled={disabled}
         onClick={start}
@@ -247,7 +247,7 @@ export function EditableChip({
         }}
       >
         {iconEl}
-        <span className="sc-chip__label">{value}</span>
+        <span className="c-proto-chip__label">{value}</span>
       </button>
       {onRemove ? (
         <ChipRemove

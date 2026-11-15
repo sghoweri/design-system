@@ -51,7 +51,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={cx('sc-button', className)}
+      className={cx('c-proto-button', className)}
       data-variant={variant}
       data-size={size}
       data-loading={loading || undefined}
@@ -62,22 +62,22 @@ export function Button({
       {...press}
     >
       {iconStart ? (
-        <span className="sc-button__icon" aria-hidden="true">
+        <span className="c-proto-button__icon" aria-hidden="true">
           {iconStart}
         </span>
       ) : null}
-      <span className="sc-button__label">{children}</span>
+      <span className="c-proto-button__label">{children}</span>
       {iconEnd ? (
-        <span className="sc-button__icon" aria-hidden="true">
+        <span className="c-proto-button__icon" aria-hidden="true">
           {iconEnd}
         </span>
       ) : null}
       {shortcut ? (
-        <span className="sc-button__shortcut" aria-hidden="true">
+        <span className="c-proto-button__shortcut" aria-hidden="true">
           {shortcut}
         </span>
       ) : null}
-      {loading ? <span className="sc-button__spinner" aria-hidden="true" /> : null}
+      {loading ? <span className="c-proto-button__spinner" aria-hidden="true" /> : null}
     </button>
   );
 }

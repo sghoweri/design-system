@@ -66,14 +66,14 @@ function ReasonListRoot({
     const icon = emptyIcon === undefined ? tone === 'for' ? null : <CircleCheckIcon size="em" /> : emptyIcon;
     return (
       <p
-        className={cx('sc-reason-list__empty', className)}
+        className={cx('c-proto-reason-list__empty', className)}
         data-tone={tone}
         data-size={size}
         data-divider={divider || undefined}
         {...p}
       >
         {icon ? (
-          <span className="sc-reason-list__empty-icon" aria-hidden="true">
+          <span className="c-proto-reason-list__empty-icon" aria-hidden="true">
             {icon}
           </span>
         ) : null}
@@ -84,7 +84,7 @@ function ReasonListRoot({
   }
   return (
     <ul
-      className={cx('sc-reason-list', className)}
+      className={cx('c-proto-reason-list', className)}
       data-tone={tone}
       data-size={size}
       data-divider={divider || undefined}
@@ -97,7 +97,7 @@ function ReasonListRoot({
 
 /** One reason. `<strong>` inside picks out the key words in the default text colour. */
 function ReasonListItem({ className, ...rest }: ReasonListItemProps) {
-  return <li className={cx('sc-reason-list__item', className)} {...rest} />;
+  return <li className={cx('c-proto-reason-list__item', className)} {...rest} />;
 }
 
 export const ReasonList = Object.assign(ReasonListRoot, { Item: ReasonListItem });
