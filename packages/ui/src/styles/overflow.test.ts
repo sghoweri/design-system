@@ -67,8 +67,13 @@ describe('scrolling dialog body', () => {
       expect(prop(css, 'overflow')).toBe('hidden auto');
       expect(prop(css, 'margin-inline')).toBe('calc(-1 * var(--_bleed))');
       expect(prop(css, 'padding')).toBe('var(--_ring) var(--_bleed)');
-      // The bleed is the popup's own inline padding, less the safe-area part, which stays on the popup.
-      expect(prop(css, '--_bleed')).toBe('var(--sc-spacing-lg)');
+      // The bleed stays inside the popup's own inline padding (the safe-area part stays on the popup) and centres an
+      // overlay thumb in it: half the padding, plus half the thumb, plus the thumb's inset from the scroller's edge.
+      expect(prop(css, '--_bleed')).toBe(
+        'calc(var(--sc-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset))',
+      );
+      expect(prop(css, '--_thumb')).toBe('6px');
+      expect(prop(css, '--_thumb-inset')).toBe('2px');
       expect(prop(css, 'margin-block')).toBe(
         'calc(var(--sc-spacing-md) - var(--_ring)) calc(-1 * var(--_ring))',
       );

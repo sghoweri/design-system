@@ -159,12 +159,18 @@
   overscroll-behavior: contain;
 }
 /* A body that scrolls (sheet, full screen) runs out over the popup's inline padding and pads itself back by the same
-   amount, so its content stays where it was while its scrollbar moves to the popup's edge (still inside the
-   safe-area part of that padding) instead of over the content. The same trick in the block axis leaves room for a
-   focus ring (2px outline, 2px offset) on a first or last field; the scrollport clipped them before. */
+   amount, so its content stays where it was while its scrollbar moves out of the content into that padding (never
+   into the safe-area part of it). The bleed centres the scrollbar in the padding (Salem, 2026-11-14): an overlay
+   thumb (macOS, iOS, Android; about 6px, drawn about 2px in from the scroller's edge) has its centre half the padding
+   from the popup's edge, so it reads as even space on both sides. A classic scrollbar (Windows, or macOS set to
+   always show) takes layout width instead: it sits a few pixels nearer the edge and the content moves in by its
+   width. The same trick in the block axis leaves room for a focus ring (2px outline, 2px offset) on a first or last
+   field; the scrollport clipped them before. */
 .sc-dialog__popup[data-variant='sheet'] > .sc-dialog__body,
 .sc-dialog__popup[data-variant='fullscreen'] > .sc-dialog__body {
-  --_bleed: var(--sc-spacing-lg);
+  --_thumb: 6px;
+  --_thumb-inset: 2px;
+  --_bleed: calc(var(--sc-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset));
   --_ring: calc(2 * var(--sc-border-width-focus));
   margin-inline: calc(-1 * var(--_bleed));
   margin-block: calc(var(--sc-spacing-md) - var(--_ring)) calc(-1 * var(--_ring));
