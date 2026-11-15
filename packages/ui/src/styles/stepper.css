@@ -93,6 +93,11 @@
   font-weight: var(--sc-font-weight-semibold);
 }
 .sc-stepper__meta {
+  /* As tall as Stepper.Date's 24px button, centred: a plain date ("Oct 28") lines up with a date in a button, and a
+     step with a control is no taller than one without. */
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 24px;
   font-family: var(--sc-font-family-mono);
   font-size: var(--sc-font-size-xs);
   color: var(--sc-color-text-muted);
@@ -126,6 +131,8 @@
 .sc-stepper[data-orientation='vertical'] > .sc-stepper__step {
   display: grid;
   grid-template-columns: var(--_m) minmax(0, 1fr) auto;
+  /* Every row as tall as one holding a 24px date button, so the column's rhythm is even with or without a meta. */
+  grid-auto-rows: minmax(24px, auto);
   align-items: center;
   column-gap: var(--sc-spacing-sm);
   padding-block: var(--sc-spacing-xs);
@@ -137,6 +144,7 @@
   inline-size: 2px;
 }
 .sc-stepper[data-orientation='vertical'] .sc-stepper__meta {
+  justify-content: flex-end;
   text-align: end;
 }
 /* Stepper.Date: the word and a 24px calendar button on one line. The button keeps the meta's colour (accent on a
