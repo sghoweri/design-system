@@ -11,7 +11,7 @@ const meta = {
   component: Button,
   args: { children: 'Add job', variant: 'primary', size: 'md' },
   argTypes: {
-    variant: { control: 'radio', options: ['primary', 'secondary', 'ghost', 'danger'] },
+    variant: { control: 'radio', options: ['primary', 'secondary', 'ghost', 'danger', 'inverse'] },
     size: { control: 'radio', options: ['sm', 'md', 'lg'] },
   },
 } satisfies Meta<typeof Button>;
@@ -28,6 +28,34 @@ export const Variants: Story = {
       <Button variant="ghost">Snooze</Button>
       <Button variant="danger">Delete application</Button>
     </Inline>
+  ),
+};
+
+/** `inverse` is for the main action on a dark or coloured fill, like the accent Toast: white, dark text, same in both
+ * themes. Beside it, ghost and secondary read in the fill's own text colour. */
+export const Inverse: Story = {
+  render: () => (
+    <Stack gap="md">
+      {(['light', 'dark'] as const).map((theme) => (
+        <div key={theme} data-theme={theme}>
+          <Inline
+            gap="sm"
+            className="sc-on-accent"
+            style={{ padding: 'var(--sc-spacing-md)', borderRadius: 'var(--sc-radius-lg)' }}
+          >
+            <Button variant="inverse" size="sm">
+              Reload
+            </Button>
+            <Button variant="ghost" size="sm">
+              Later
+            </Button>
+            <Button variant="secondary" size="sm">
+              Details
+            </Button>
+          </Inline>
+        </div>
+      ))}
+    </Stack>
   ),
 };
 

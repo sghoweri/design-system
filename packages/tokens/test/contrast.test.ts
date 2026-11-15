@@ -42,6 +42,11 @@ const pairs: Array<[string, string[], number]> = [
   // The .sc-on-accent scope (accent Toast): text, button labels in every state, and the ring, borders and focus rings
   // drawn in text.on-accent on the fill; the fill's own focus ring (accent.default) on the page outside it.
   ['text-on-accent', ['accent-active'], 4.5],
+  // The .sc-on-accent scope's fill is accent.strong, white text on it in both themes, in every state; its main action
+  // is an inverse Button (dark text on white), which must also stand off the fill.
+  ['text-on-accent-strong', ['accent-strong', 'accent-strong-hover', 'accent-strong-active'], 4.5],
+  ['text-on-inverse', ['inverse-default', 'inverse-hover', 'inverse-active'], 4.5],
+  ['inverse-default', ['accent-strong'], 3],
   ['accent-default', ['surface-raised'], 3],
   ['accent-text', ['accent-subtle', 'surface-default'], 4.5],
   ['success-text', ['success-subtle', 'surface-default'], 4.5],
@@ -114,6 +119,10 @@ const washes: Array<[string, string]> = [
   // Hover and pressed on an accent fill (.sc-on-accent).
   ['accent-default', 'accent-hover'],
   ['accent-hover', 'accent-active'],
+  ['accent-strong', 'accent-strong-hover'],
+  ['accent-strong-hover', 'accent-strong-active'],
+  ['inverse-default', 'inverse-hover'],
+  ['inverse-hover', 'inverse-active'],
 ];
 describe.each(['light', 'dark'] as const)('%s theme state washes', (theme) => {
   const t = json[theme];

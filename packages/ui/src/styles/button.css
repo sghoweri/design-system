@@ -66,6 +66,18 @@
 .sc-button[data-variant='primary']:active:where(:not(:disabled)) {
   background: var(--sc-color-accent-active);
 }
+/* Inverse: a white button with dark text, for the main action on a dark or coloured fill (the accent Toast), where
+   primary would be accent on accent and secondary only an outline. Same fill and text in both themes. */
+.sc-button[data-variant='inverse'] {
+  background: var(--sc-color-inverse-default);
+  color: var(--sc-color-text-on-inverse);
+}
+.sc-button[data-variant='inverse']:hover:where(:not(:disabled)) {
+  background: var(--sc-color-inverse-hover);
+}
+.sc-button[data-variant='inverse']:active:where(:not(:disabled)) {
+  background: var(--sc-color-inverse-active);
+}
 .sc-button[data-variant='secondary'] {
   background: transparent;
   color: var(--sc-color-text-default);
@@ -259,6 +271,9 @@
 }
 .sc-button[data-variant='primary'][data-popup-open] {
   background: var(--sc-color-accent-active);
+}
+.sc-button[data-variant='inverse'][data-popup-open] {
+  background: var(--sc-color-inverse-active);
 }
 .sc-button[data-variant='danger'][data-popup-open] {
   background: var(--sc-color-danger-hover);
