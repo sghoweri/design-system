@@ -17,8 +17,14 @@ describe('fitCount', () => {
     expect(fitCount({ widths, current: -1, available: 500, more: 72, gap: 0, keepMore: false })).toBe(6);
   });
 
-  it('tolerates sub-pixel rounding at the exact fit', () => {
-    expect(fitCount({ widths, current: -1, available: 495.6, more: 72, gap: 0 })).toBe(6);
+  it('keeps an exact fit inline, allowing for float noise only', () => {
+    expect(fitCount({ widths, current: -1, available: 496 - 1e-9, more: 72, gap: 0 })).toBe(6);
+  });
+
+  it('does not fit a row a fraction of a pixel too wide, which would cut the current label to an ellipsis', () => {
+    // The current item (64) is the one that shrinks. At 495.9 the row is 0.1px short: More takes the overflow.
+    expect(fitCount({ widths, current: 0, available: 495.9, more: 72, gap: 0 })).toBe(4);
+    expect(isOverflowing({ widths, gap: 0, available: 495.9, was: false, hysteresis: 0 })).toBe(true);
   });
 
   it('reserves room for "More" once anything overflows, and keeps a contiguous run', () => {

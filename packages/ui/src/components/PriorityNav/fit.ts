@@ -15,8 +15,13 @@ export interface FitInput {
   keepMore?: boolean | undefined;
 }
 
-/** Sub-pixel slack: measured widths are fractional and a row that fits exactly must not flip to "More". */
-const EPSILON = 0.5;
+/**
+ * Float slack only, smaller than a layout unit (1/64 px in Chromium and WebKit, 1/60 in Firefox). Widths are
+ * exact fractional layout sizes, so a row that fits exactly still sums to `available`. Anything looser lets a
+ * row that is a fraction of a pixel too wide count as fitting, and the current link, the one item that may
+ * shrink, absorbs the overrun and shows its ellipsis ("Inb…") at that width.
+ */
+const EPSILON = 0.01;
 
 /**
  * How many of the non-current items stay inline, counted in order. Every item fits: all of them.
