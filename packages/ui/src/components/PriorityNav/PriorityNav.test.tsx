@@ -79,6 +79,7 @@ beforeEach(() => {
         24 +
         (this.querySelector('.sc-priority-nav__badge') ? 16 : 0);
     if (this.classList.contains('sc-priority-nav__more')) width = 72;
+    if (this.classList.contains('sc-priority-nav__list')) width = rowWidth;
     return {
       width,
       height: 32,
@@ -258,6 +259,39 @@ describe('PriorityNav', () => {
     resize(496);
     expect(inlineLinks()).toEqual(LABELS);
     expect(screen.queryByRole('button')).toBeNull();
+  });
+
+  it('renders the new split inside the observer callback, before the browser paints the new width', () => {
+    // Observer callbacks run after layout and before paint. A split rendered in a later task paints one
+    // frame of the old links at the new width: the current label cut to "In…", or a gap when widening.
+    // Delivered outside `act`, so nothing but the component itself can flush the render.
+    rowWidth = 496;
+    render(<PriorityNav aria-label="Main" items={items('Inbox')} />);
+    expect(inlineLinks()).toEqual(LABELS);
+    const deliver = (width: number) => {
+      rowWidth = width;
+      for (const { cb, target } of observers) {
+        if (!target) continue;
+        const entry = {
+          target,
+          contentBoxSize: [{ inlineSize: width, blockSize: 32 }],
+          contentRect: { width },
+        };
+        cb([entry as unknown as ResizeObserverEntry], {} as ResizeObserver);
+      }
+    };
+    const env = globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean | undefined };
+    const actEnv = env.IS_REACT_ACT_ENVIRONMENT;
+    env.IS_REACT_ACT_ENVIRONMENT = false;
+    try {
+      deliver(300);
+      expect(inlineLinks()).toEqual(['Inbox', 'Applications']);
+      expect(toggle()).toHaveAccessibleName('More, 4 links');
+      deliver(496);
+      expect(inlineLinks()).toEqual(LABELS);
+    } finally {
+      env.IS_REACT_ACT_ENVIRONMENT = actEnv;
+    }
   });
 
   it('measures again when the items change, and renders links through renderLink', () => {

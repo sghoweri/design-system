@@ -11,6 +11,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
+import { flushSync } from 'react-dom';
 import { ChevronDownIcon, MoreHorizontalIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
 import { fitCount, inlineFlags, isOverflowing } from './fit';
@@ -194,7 +195,8 @@ export function PriorityNav({
         widths,
         more: more.getBoundingClientRect().width,
         gap: parseFloat(getComputedStyle(list).columnGap) || 0,
-        available: list.clientWidth,
+        // Fractional, like the observer's content box: `clientWidth` rounds, and can round a row up past its links.
+        available: list.getBoundingClientRect().width,
       };
     } else if (fit.current === current) return;
     const m = measured.current;
@@ -204,7 +206,11 @@ export function PriorityNav({
 
   // One observer, on the row and on the "More" item. Its callback reads sizes from the entries (no layout
   // read): the row's width, and the toggle's width when it switches between "More" and icon-only (a
-  // container query). It writes state only when the inline count or the overflow flag changes.
+  // container query). It writes state only when the inline count or the overflow flag changes, and renders
+  // that change inside the callback (`flushSync`): observer callbacks run after layout and before paint, and
+  // the browser lays out again before painting, so the new split is the first frame drawn at the new width.
+  // A plain `setFit` here renders in a later task, after the browser has painted one frame of the old split
+  // at the new width: a link cut to "In…" when narrowing, a gap where a returning link belongs when widening.
   useEffect(() => {
     const list = listRef.current;
     const more = moreRef.current;
@@ -225,7 +231,8 @@ export function PriorityNav({
       const prev = fitRef.current;
       if (prev.signature === null) return;
       const next = solve(m, currentRef.current, prev.overflowing);
-      if (prev.count !== next.count || prev.overflowing !== next.overflowing) setFit({ ...prev, ...next });
+      if (prev.count !== next.count || prev.overflowing !== next.overflowing)
+        flushSync(() => setFit({ ...prev, ...next }));
     });
     observer.observe(list);
     observer.observe(more);
