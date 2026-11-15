@@ -264,6 +264,45 @@ export const ClampedAt390: Story = {
   ),
 };
 
+/**
+ * A centred dialog longer than the viewport. The popup stays put and its content scrolls inside it, with the
+ * scrollbar centred in the popup's side padding (an overlay thumb has even space on both sides); the × scrolls away
+ * with the title, and the first and last fields keep room for their focus rings.
+ */
+export const Long: Story = {
+  name: 'Long content',
+  render: () => (
+    <Dialog.Root>
+      <Dialog.Trigger render={<Button />}>Open job notes</Dialog.Trigger>
+      <Dialog.Content>
+        <Dialog.Close />
+        <Dialog.Title>Staff Frontend Engineer at Northwind</Dialog.Title>
+        <Dialog.Description>Remote, US · $190,000 – $240,000 · posted 3 days ago</Dialog.Description>
+        <Dialog.Body>
+          <Stack gap="md">
+            <Input
+              label="Posting URL"
+              defaultValue="https://northwind.example/careers/staff-frontend-engineer"
+            />
+            {Array.from({ length: 10 }, (_, i) => (
+              <Text key={i}>
+                Paragraph {i + 1}. The design-system team owns the component library, the tokens pipeline and
+                the docs site, and pairs with product teams on adoption. You would lead the accessibility work
+                and the move to a new headless primitives layer.
+              </Text>
+            ))}
+            <Textarea label="Notes" rows={3} />
+          </Stack>
+        </Dialog.Body>
+        <Dialog.Actions>
+          <Dialog.Close render={<Button variant="secondary" />}>Close</Dialog.Close>
+          <Button>Save</Button>
+        </Dialog.Actions>
+      </Dialog.Content>
+    </Dialog.Root>
+  ),
+};
+
 function PopupsInside() {
   const [sort, setSort] = useState<string | null>('score');
   return (

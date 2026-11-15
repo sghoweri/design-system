@@ -87,7 +87,11 @@ export interface PopoverContentProps extends Omit<BasePopover.Popup.Props, 'clas
  */
 const COLLISION_AVOIDANCE = { fallbackAxisSide: 'none' } as const;
 
-/** Portal, positioner and the panel. Any content goes inside; name it with `Popover.Title`. */
+/**
+ * Portal, positioner and the panel. Any content goes inside; name it with `Popover.Title`. The children render inside
+ * `div.sc-popover__scroll`, which is what scrolls when the panel is taller than the room (the popup itself no longer
+ * does), so its scrollbar sits centred in the panel's side padding (popover.css). The arrow stays outside it.
+ */
 function Content({
   side = 'bottom',
   align = 'center',
@@ -112,7 +116,7 @@ function Content({
       >
         <BasePopover.Popup className={cx('sc-popover', className)} {...rest}>
           {arrow ? <BasePopover.Arrow className="sc-popover__arrow" /> : null}
-          {children}
+          <div className="sc-popover__scroll">{children}</div>
         </BasePopover.Popup>
       </BasePopover.Positioner>
     </BasePopover.Portal>

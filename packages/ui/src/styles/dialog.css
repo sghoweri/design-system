@@ -141,6 +141,35 @@
   background: var(--sc-color-surface-hover);
   color: var(--sc-color-text-default);
 }
+/* Default dialog: the popup no longer scrolls; `.sc-dialog__scroll`, which Dialog renders around the children, does.
+   It runs out over the popup's padding (all of it in the block axis, the bleed in the inline axis) and pads itself
+   back by the same amounts, so the content stays where it was and still scrolls right up to the popup's edges. The
+   bleed centres the scrollbar in the side padding (Salem, 2026-11-14): an overlay thumb (macOS, iOS, Android; about
+   6px, drawn about 2px in from the scroller's edge) has its centre half the padding from the popup's edge, 12px of
+   24px, so it reads as even space on both sides. A classic scrollbar (Windows, or macOS set to always show) takes
+   layout width instead: it sits a few pixels nearer the edge and the content moves in by its width. The full block
+   padding inside the scroller leaves room for the focus rings of a first or last field. */
+.sc-dialog__popup[data-variant='dialog'] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sc-dialog__scroll {
+  --_thumb: 6px;
+  --_thumb-inset: 2px;
+  --_bleed: calc(var(--sc-spacing-lg) / 2 + var(--_thumb) / 2 + var(--_thumb-inset));
+  position: relative; /* the × is placed against it, so it scrolls away with the title as it did */
+  flex: 1 1 auto;
+  min-block-size: 0;
+  margin: calc(-1 * var(--sc-spacing-lg)) calc(-1 * var(--_bleed));
+  padding: var(--sc-spacing-lg) var(--_bleed);
+  overflow: hidden auto; /* vertical only: a 44px touch target on an edge button must not scroll it sideways */
+  overscroll-behavior: contain;
+}
+/* The scroller's inline end is the bleed short of the popup's padding edge, so the × keeps its corner. */
+.sc-dialog__scroll > .sc-dialog__close {
+  inset-inline-end: calc(var(--sc-spacing-sm) - var(--sc-spacing-lg) + var(--_bleed));
+}
 /* Sheet: title and actions stay put, the body scrolls. Same centred box as `dialog` on wide viewports. */
 .sc-dialog__popup[data-variant='sheet'] {
   display: flex;
