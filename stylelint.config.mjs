@@ -1,6 +1,5 @@
 // Namespace rules for the Protokit rename (ADR 0009, decisions 2–5 and 9). Only these rules run: formatting is
-// Prettier's job. Enforced from the rename on (docs/protokit-rename-plan.md, PR 2); until then `pnpm lint:css` fails on
-// every `sc-` name, by design.
+// Prettier's job. Part of `pnpm lint` since the rename (docs/protokit-rename-plan.md, PR 2).
 const component = '(?:c|o|u|t)-proto-[a-z0-9]+(?:-[a-z0-9]+)*(?:__[a-z0-9]+(?:-[a-z0-9]+)*)?';
 // FilePond's own markup, restyled inside the FileInput (ADR 0004).
 const vendor = 'filepond--[a-z0-9-]+';
