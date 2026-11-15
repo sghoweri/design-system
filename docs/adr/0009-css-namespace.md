@@ -1,7 +1,57 @@
 # ADR 0009: CSS namespace: bare BEMIT or brand plus BEMIT
 
 Date: 2026-11-15
-Status: proposed (for Salem; nothing is changed or renamed by this PR). Depends on ADR 0008's name call.
+Status: accepted (Salem, 2026-11-15), with two questions still open (below). Nothing is renamed by this ADR; the
+migration follows [the Protokit rename plan](../protokit-rename-plan.md).
+
+## Decisions (Salem, 2026-11-15)
+
+ADR 0008 decided the name: Protokit, prefix `pk`. Against that name, Salem answered this ADR's calls as follows.
+Where an answer differs from the recommendation, it says so.
+
+1. **Brand + BEMIT** (option 2).
+2. **Order: BEMIT first, then brand**: `.c-pk-button`, following Bolt's `c-bolt-button`. This goes against the
+   recommendation (brand first, `.pk-c-button`). What it changes:
+   - Class names start with their ITCSS role (`c-`, `o-`, `u-`, `t-`), so source and devtools group them by role.
+   - Custom properties, the layer and any future tag still start with the brand (`--pk-*`, `@layer pk`,
+     `<pk-button>`), so classes no longer share one leading prefix with everything else. A devtools or grep filter
+     uses the substring `pk-`, which matches both.
+   - One Stylelint pattern still covers every class: `^(c|o|u|t)-pk-[a-z0-9-]+(__[a-z0-9-]+)?$`.
+3. **Layout namespace: `o-` (objects)**, as ITCSS and the brief write it: `.o-pk-stack`, `.o-pk-inline`. This goes
+   against the recommendation and **deviates from guideline 01 decision B13** (`l-` in `@layer layout`, 2026-11-03).
+   The deviation is this system's. Whether guideline 01 follows it is a separate change in the guidelines repo.
+4. **Every `--sc-*` becomes `--pk-*`, and `@layer sc` becomes `@layer pk`, with no aliases.** That covers tokens,
+   component knobs and anchor names. No `legacy.css` ships. It is one breaking release, and the codemod migrates Job
+   Sweep in the same window. While the 0.2.0 rc line is open, the release label is ignored (docs/releasing.md). So the
+   rename lands as the next `0.2.0-rc.N`, `@protokit/*` starts there, and its first stable is 0.2.0 (ADR 0008,
+   decision 6).
+5. **Stylelint in both repos: accepted.** That means the class pattern, the custom-property pattern (`^pk-`, private
+   `--_*` allowed) and the `var()` usage check.
+6. **When: soon, before portfolio links.** The rename and the class migration land before any portfolio or resume
+   link to the site goes out, ahead of ADR 0008's docs-site work. This goes against the recommendation (after the
+   site work, likely after 2026-12-31).
+
+### Open, Salem to discuss
+
+These two were left unticked. They are not decided here.
+
+- **Job Sweep's frozen mockups** (`docs/design/`, call 6): about 14,000 `sc-` occurrences in 29 files (HTML, CSS,
+  JS and Markdown), 7,362 of them custom-property references.
+  - _Leave them:_ costs nothing now. Each mockup embeds its own copy of the token CSS, so it still renders. The
+    occurrences stay in Job Sweep, so its Stylelint and grep checks must exclude `docs/design/`. The mockups also stop
+    matching the class names a reader would copy from the shipping app.
+  - _Migrate them:_ run the same codemod over the 29 files. That is about an hour, plus a look at each page before
+    and after. A page whose embedded tokens and their
+    uses are renamed inconsistently breaks silently.
+  - Nothing else depends on this call, so it can wait until after the rename.
+- **The hybrid** (call 8): bare BEMIT classes (`.c-button`, `.o-stack`) with branded `--pk-*` and `@layer pk`.
+  - _For:_ shorter class names. The custom-property churn is the same as decided, because the tokens are renamed
+    anyway.
+  - _Against:_ in light DOM, a consumer's own unlayered `.c-card` beats the system's `.c-card` inside `@layer pk`, and
+    Salem's own apps use `c-` (section 5).
+  - _Cost:_ none if it is decided before the rename PR merges, because only the codemod's map changes. Decided later,
+    it is a second class-only breaking change: about 2,100 class references in this repo and 150 in Job Sweep again,
+    about half a day with the same codemod. **Settle it before PR 2 of the rename plan (the rename itself) merges.**
 
 ## Context
 
@@ -11,27 +61,30 @@ Every class and custom property today carries a brand-only prefix: `.sc-button`,
 only block and element names are in play.
 
 Brand-only (`.bds-button`) was rejected before this ADR and is not reconsidered here. That leaves two options, each
-weighed against ADR 0008's three name outcomes (keep `@salemcobalt` → `sc`, Protokit → `pk`, Bit → `bds`):
+weighed against ADR 0008's three name outcomes (keep `@salemcobalt` → `sc`, Protokit → `pk`, Bit → `bds`). The table
+shows the decided form of option 2 (Protokit, BEMIT first, `o-` for layout). The proposal compared the other
+prefixes and the brand-first order, which the sections below still discuss:
 
-| Thing                      | Today                                              | Option 1: bare BEMIT       | Option 2: brand + BEMIT (`<p>` = `sc`, `pk` or `bds`) |
-| -------------------------- | -------------------------------------------------- | -------------------------- | ----------------------------------------------------- |
-| Component                  | `.sc-button`                                       | `.c-button`                | `.<p>-c-button`                                       |
-| Element                    | `.sc-dialog__close`                                | `.c-dialog__close`         | `.<p>-c-dialog__close`                                |
-| Layout primitive           | `.sc-stack`                                        | `.l-stack`                 | `.<p>-l-stack`                                        |
-| Utility                    | `.sc-visually-hidden`                              | `.u-visually-hidden`       | `.<p>-u-visually-hidden`                              |
-| Theme scope                | `.sc-on-accent`                                    | `.t-on-accent`             | `.<p>-t-on-accent`                                    |
-| Token                      | `--sc-color-text-default`                          | `--color-text-default`     | `--<p>-color-text-default`                            |
-| Component knob             | `--sc-toast-offset-block-end`, `--sc-broom-stroke` | `--toast-offset-block-end` | `--<p>-toast-offset-block-end`                        |
-| Anchor name (dashed ident) | `--sc-bottom-bar` (consumer API, in the README)    | `--bottom-bar`             | `--<p>-bottom-bar`                                    |
-| Private value              | `--_bg`                                            | `--_bg`                    | `--_bg`                                               |
-| Cascade layer              | `@layer sc`                                        | (see below)                | `@layer <p>`                                          |
+| Thing                      | Today                                              | Option 1: bare BEMIT       | Option 2, as decided: BEMIT + brand |
+| -------------------------- | -------------------------------------------------- | -------------------------- | ----------------------------------- |
+| Component                  | `.sc-button`                                       | `.c-button`                | `.c-pk-button`                      |
+| Element                    | `.sc-dialog__close`                                | `.c-dialog__close`         | `.c-pk-dialog__close`               |
+| Layout primitive (object)  | `.sc-stack`                                        | `.o-stack`                 | `.o-pk-stack`                       |
+| Utility                    | `.sc-visually-hidden`                              | `.u-visually-hidden`       | `.u-pk-visually-hidden`             |
+| Theme scope                | `.sc-on-accent`                                    | `.t-on-accent`             | `.t-pk-on-accent`                   |
+| Token                      | `--sc-color-text-default`                          | `--color-text-default`     | `--pk-color-text-default`           |
+| Component knob             | `--sc-toast-offset-block-end`, `--sc-broom-stroke` | `--toast-offset-block-end` | `--pk-toast-offset-block-end`       |
+| Anchor name (dashed ident) | `--sc-bottom-bar` (consumer API, in the README)    | `--bottom-bar`             | `--pk-bottom-bar`                   |
+| Private value              | `--_bg`                                            | `--_bg`                    | `--_bg`                             |
+| Cascade layer              | `@layer sc`                                        | (see below)                | `@layer pk`                         |
 
 **Layout prefix.** The brief's example `.o-wrapper` uses ITCSS's `o-`. Salem's guideline 01 settled on `l-` in
-`@layer layout` (decision B13, 2026-11-03), so this ADR writes `l-` in both options.
+`@layer layout` (decision B13, 2026-11-03), so the proposal wrote `l-`. Salem chose `o-` (decision 3), and the
+examples now show it.
 
 The current 59 blocks sort into namespaces the same way under either option:
 
-- `l-` (2): `stack`, `inline`.
+- `o-` (2): `stack`, `inline`.
 - `u-` (2): `visually-hidden`, `focus-ring`.
 - `t-` (1): `on-accent`.
 - `c-` (54): everything else, including the wrapper blocks `table-wrap`, `input-wrap`, `kbd-group`,
@@ -88,7 +141,7 @@ so the choice should survive that move.
 | Classes now (light DOM)             | Global and unbranded; `.c-card` meets any consumer or third-party `.c-card`. Job Sweep's own ~430 block classes are bare BEM (`.banner`, `.alert`), so they would not clash today, but nothing stops an app adopting `c-` | Branded and global; safe beside any CSS                                                                                       |
 | Classes later (inside shadow roots) | Ideal: encapsulated, so short is right (guideline 01 rule 5: "Classes inside shadow roots don't need it")                                                                                                                 | The brand becomes noise inside shadow roots; a WC rewrite can drop it there and keep it only in light-DOM and pre-upgrade CSS |
 | Custom properties now and later     | A hazard in both worlds: custom properties are the one thing that crosses the shadow boundary (guideline 01 rule 9; Gold Standard index belief 6)                                                                         | Correct in both worlds; the public theming API of a future `<pk-button>` is exactly `--pk-*`                                  |
-| Tag names (future)                  | Need a prefix anyway (`<?-button>`); the brand appears in tags but not in tokens, which is inconsistent                                                                                                                   | `<pk-button>`, `--pk-button-bg`, `.pk-c-button` (pre-upgrade): one prefix everywhere                                          |
+| Tag names (future)                  | Need a prefix anyway (`<?-button>`); the brand appears in tags but not in tokens, which is inconsistent                                                                                                                   | `<pk-button>`, `--pk-button-bg`, `.c-pk-button` (pre-upgrade): one brand everywhere                                           |
 | `::part()` names                    | Unaffected                                                                                                                                                                                                                | Unaffected                                                                                                                    |
 
 The two halves of the choice point different ways once there are shadow roots. Classes want to be bare inside shadow
@@ -99,11 +152,11 @@ custom properties right, and it is the custom properties that a web-component fu
 
 Counted with `git grep` on tracked files, excluding lockfiles, changelogs and `dist`:
 
-| Where                                           | `--sc-*` refs                              | `.sc-*` selectors (CSS)                  | `sc-*` class strings (TS/TSX/MDX/Astro)          | Files |
-| ----------------------------------------------- | ------------------------------------------ | ---------------------------------------- | ------------------------------------------------ | ----: |
-| design-system (`f2efcdf`)                       | 1,798 (158 names in source; 221 generated) | 1,328 (271 classes, 59 blocks, 42 files) | 783 (components, stories, tests)                 |   183 |
-| Job Sweep app code (`apps/`, `f7b5bc56`)        | 2,159                                      | 23 (overrides of DS classes)             | 125 (mostly DOM tests querying `.sc-score` etc.) |    59 |
-| Job Sweep design mockups (`docs/design/*.html`) | 7,362                                      | 1,082 (inline `<style>` blocks)          | 72                                               |    29 |
+| Where                                     | `--sc-*` refs                              | `.sc-*` selectors (CSS)                  | `sc-*` class strings (TS/TSX/MDX/Astro)          | Files |
+| ----------------------------------------- | ------------------------------------------ | ---------------------------------------- | ------------------------------------------------ | ----: |
+| design-system (`f2efcdf`)                 | 1,798 (158 names in source; 221 generated) | 1,328 (271 classes, 59 blocks, 42 files) | 783 (components, stories, tests)                 |   183 |
+| Job Sweep app code (`apps/`, `f7b5bc56`)  | 2,159                                      | 23 (overrides of DS classes)             | 125 (mostly DOM tests querying `.sc-score` etc.) |    59 |
+| Job Sweep design mockups (`docs/design/`) | 7,362                                      | 1,082 (inline `<style>` blocks)          | 72                                               |    29 |
 
 Plus a handful of one-liners in each repo:
 
@@ -112,18 +165,18 @@ Plus a handful of one-liners in each repo:
 - The docs site's Starlight mapping and swatches (51 lines in `apps/docs`).
 - Job Sweep's `layers.css` and its test.
 
-**Leave the mockups alone.** Each mockup embeds its own copy of the token CSS, so it renders correctly forever as a
+**Leave the mockups alone** (proposed; open, see Decisions). Each mockup embeds its own copy of the token CSS, so it renders correctly forever as a
 snapshot. Rewriting 14,000 lines of archived design artifacts buys nothing.
 
 What changes, per option and name:
 
-| Option × name                      | Custom properties                               | Classes                                     | Layer                        | Rough effort with a codemod                           |
-| ---------------------------------- | ----------------------------------------------- | ------------------------------------------- | ---------------------------- | ----------------------------------------------------- |
-| **2 × keep `sc`**                  | **none** (`--sc-*` is already brand + category) | `.sc-x` → `.sc-c-x` / `-l-` / `-u-` / `-t-` | unchanged                    | ~half a day; Job Sweep: 148 class refs, 0 var refs    |
-| 2 × Protokit (`pk`) or Bit (`bds`) | all 1,798 + 2,159 rewritten                     | all, as above, with the new prefix          | renamed                      | ~1 day, mostly review                                 |
-| 1 × any name                       | all 1,798 + 2,159 rewritten (prefix dropped)    | all, as above, prefix dropped               | renamed to something neutral | ~1 day, plus the Tailwind exposure above, permanently |
+| Option × name                    | Custom properties                               | Classes                                     | Layer                        | Rough effort with a codemod                           |
+| -------------------------------- | ----------------------------------------------- | ------------------------------------------- | ---------------------------- | ----------------------------------------------------- |
+| **2 × keep `sc`**                | **none** (`--sc-*` is already brand + category) | `.sc-x` → `.sc-c-x` / `-l-` / `-u-` / `-t-` | unchanged                    | ~half a day; Job Sweep: 148 class refs, 0 var refs    |
+| **2 × Protokit (`pk`), decided** | all 1,798 + 2,159 rewritten                     | all, as above, with the new prefix          | renamed                      | ~1 day, mostly review                                 |
+| 1 × any name                     | all 1,798 + 2,159 rewritten (prefix dropped)    | all, as above, prefix dropped               | renamed to something neutral | ~1 day, plus the Tailwind exposure above, permanently |
 
-Classifying blocks into `c-`, `l-`, `u-` and `t-` is the same work in every row. The real cost driver is whether the
+Classifying blocks into `c-`, `o-` (proposed: `l-`), `u-` and `t-` is the same work in every row. The real cost driver is whether the
 custom properties change, and only "option 2, keep `sc`" leaves them alone.
 
 ## 4. Codemod and deprecation
@@ -147,14 +200,15 @@ The codemod ships in the DS repo, so Job Sweep runs it with `node ../design-syst
 
 **Prove it with lints that stay afterwards** (guideline 01 lint rules; guideline 02 rule 13):
 
-- Stylelint `selector-class-pattern` built from the namespace table: `^<p>-(c|l|u|t)-[a-z0-9-]+(__[a-z0-9-]+)?$` for
-  DS CSS.
+- Stylelint `selector-class-pattern` built from the namespace table. As proposed (brand first, `l-`):
+  `^<p>-(c|l|u|t)-[a-z0-9-]+(__[a-z0-9-]+)?$`. As decided: `^(c|o|u|t)-pk-[a-z0-9-]+(__[a-z0-9-]+)?$`.
 - `custom-property-pattern` for `^<p>-` (private `--_*` allowed).
 - A usage check: every `var(--<p>-*)` must exist in `tokens.json` or be a documented knob. Job Sweep shipped an
   undefined `--sc-color-text-on-solid` this autumn (its backlog F2), which is exactly what this check catches.
 
-**Deprecation.** The packages are 0.x with one consumer that Salem owns, so this is **one breaking minor** (release
-label `minor` → `0.3.0-rc.*`), with no long dual-name period:
+**Deprecation.** The packages are 0.x with one consumer that Salem owns, so this is **one breaking release**, with no
+long dual-name period. (Proposed as a `minor` → `0.3.0-rc.*`. As decided, it lands on the open 0.2.0 rc line under
+the new names, and `legacy.css` is not shipped: decision 4.)
 
 - **Classes**: no compat layer. The codemod updates Job Sweep in the same afternoon, pinned to the rc.
 - **Custom properties, only if they change** (rename or option 1): for one minor, ship an opt-in
@@ -184,15 +238,21 @@ label `minor` → `0.3.0-rc.*`), with no long dual-name period:
 
 - **Note**: the guideline's literal default, bare classes with branded properties, is neither briefed option. It is
   recorded here because it is where a web-component rewrite would land, not proposed for the light-DOM system.
-- **Guideline 01 decision B13, `l-` for layout**: both options use `l-`, not the brief's `o-`.
+- **Guideline 01 decision B13, `l-` for layout**: the proposal used `l-`. **Salem chose `o-` (decision 3), a
+  deliberate deviation from B13** recorded here: `.o-pk-stack` and `.o-pk-inline`.
 - **Guideline 02 rules 4 and 13**: components read `var(--<p>-*)`, and usage is linted against declarations. Option 2
   keeps the token build's `prefix` setting, and option 1 removes it.
 - **Bolt precedent** (guideline 01 rule 5 origin): `c-bolt-button`, which is BEMIT first, then brand. Option 2 as
   briefed is brand first (`pk-c-button`). Brand first wins here because one prefix starts every class, custom
   property, layer and future tag. That makes one lint pattern and one devtools filter (`pk-`), and the namespace
-  letter still reads immediately after it.
+  letter still reads immediately after it. **Salem chose BEMIT first, following Bolt (decision 2): `.c-pk-button`.**
+  The lint pattern stays single (`^(c|o|u|t)-pk-…`), and the substring filter `pk-` still finds classes, custom
+  properties and the layer.
 
-## Recommendation
+## Recommendation (as proposed)
+
+Salem accepted option 2 and decided the prefix, order, layout namespace and timing differently: see Decisions at the
+top. The recommendation is kept as written.
 
 **Option 2, brand plus BEMIT, with the prefix following ADR 0008's name.** With ADR 0008's recommendation (keep
 `@salemcobalt`), that is:
@@ -251,19 +311,24 @@ These disagreements are left for Salem:
 
 ## Calls for Salem
 
-1. **Option 1 (bare BEMIT) or option 2 (brand + BEMIT)?** _Recommend: option 2._
+Answered 2026-11-15, except calls 6 and 8, which are open. The answers are recorded under Decisions at the top.
+
+1. **Option 1 (bare BEMIT) or option 2 (brand + BEMIT)?** _Recommend: option 2._ **Salem: brand + BEMIT.**
 2. **Prefix**: follows ADR 0008 (`sc` / `pk` / `bds`). _Recommend: `sc`, which leaves custom properties untouched._
+   **Salem: `pk` (ADR 0008 renamed to Protokit).**
 3. **Order**: brand first (`sc-c-button`, as briefed) or BEMIT first like Bolt (`c-sc-button`)? _Recommend: brand
-   first._
-4. **Layout namespace**: `l-` per guideline 01 (B13) or the brief's `o-`? _Recommend: `l-`._
+   first._ **Salem: BEMIT first, `c-pk-button`.**
+4. **Layout namespace**: `l-` per guideline 01 (B13) or the brief's `o-`? _Recommend: `l-`._ **Salem: `o-`.**
 5. **Release shape**: one breaking minor with a codemod, with no dual class names? _Recommend: yes. Add
-   `legacy.css` aliases only if custom properties change._
-6. **Job Sweep design mockups** (`docs/design/*.html`, about 14,000 occurrences): leave as frozen snapshots?
-   _Recommend: yes._
+   `legacy.css` aliases only if custom properties change._ **Salem: one breaking release, `--sc-*` → `--pk-*`, no
+   aliases; the codemod covers Job Sweep.**
+6. **Job Sweep design mockups** (`docs/design/`, about 14,000 occurrences): leave as frozen snapshots?
+   _Recommend: yes._ **Open, Salem to discuss** (costs under Decisions).
 7. **Lint**: add the Stylelint class and custom-property patterns plus the `var()` usage check in both repos as part
-   of the migration? _Recommend: yes, as the migration's proof._
+   of the migration? _Recommend: yes, as the migration's proof._ **Salem: yes.**
 8. **Hybrid** (Fable's call): was bare `--color-*` really intended, or should bare BEMIT classes with branded `--sc-*`
    tokens (the guideline's default) be analysed too? _Recommend: no. Option 2, because in light DOM an app's own
-   `c-` classes beat the system's._
+   `c-` classes beat the system's._ **Open, Salem to discuss** (costs under Decisions; settle before the rename PR
+   merges).
 9. **When**: land as 0.3.0 after 0.2.0 stable and ADR 0008's site work? _Recommend: yes, after 2026-12-31 unless the
-   site work finishes early._
+   site work finishes early._ **Salem: soon, before portfolio links, ahead of the site work.**

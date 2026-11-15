@@ -1,7 +1,32 @@
 # ADR 0008: Docs-site parity, branding and the system's name
 
 Date: 2026-11-15
-Status: proposed (for Salem; nothing is changed or renamed by this PR)
+Status: accepted (Salem, 2026-11-15). Nothing is renamed by this ADR; the rename follows
+[the Protokit rename plan](../protokit-rename-plan.md).
+
+## Decisions (Salem, 2026-11-15)
+
+Salem answered the calls at the end of this ADR. Where an answer differs from the recommendation, it says so.
+
+1. **Name: rename to Protokit.** Scope `@protokit` (`@protokit/ui`, `@protokit/tokens`), prefix `pk`. This goes
+   against the recommendation in section 5 (keep `@salemcobalt`). The rename lands before any portfolio or resume
+   link to the site goes out, and before the docs-site work in section 3 (ADR 0009, decision 6).
+2. **Homepage copy: C, name-led.** "Protokit. Production parts for side projects." followed by copy A's subcopy.
+   The recommendation was A; C keeps A's subcopy, so the proof and the voice are unchanged.
+3. **Display type: A.** IBM Plex Sans, tuned, with Unbounded for the wordmark and the proof strip's numerals.
+4. **Component pages: generate all 47**, after the half-day spike (section 3, step 3).
+5. **Decisions section and `llms.txt`: accepted** (section 3, steps 4 and 7).
+6. **First stable release is `@protokit`.** No stable `@salemcobalt` 0.2.0 is cut. Section 3's step 2 is replaced:
+   the rename lands on the open 0.2.0 rc line, the first stable is `@protokit/*` 0.2.0, and then `@salemcobalt/ui` and
+   `@salemcobalt/tokens` are deprecated with `npm deprecate`, pointing at the new packages. The rename plan sequences
+   it.
+
+Consequences for the rest of this ADR:
+
+- Package names written below (`@salemcobalt/tokens/json`, `@salemcobalt/ui`) become `@protokit/*` when the rename
+  lands. The text is left as written, as the record of what was proposed.
+- Section 3's order becomes: the rename (ADR 0009 and the rename plan), then the first stable, then steps 1 and 3–8.
+- The display token keeps its documented rule (wordmark and big numerals only), because type option A was chosen.
 
 ## Context
 
@@ -269,6 +294,10 @@ an interviewer could raise. The personality gap is in the copy and type, not the
 half a day. A rename spends two to three days that would otherwise build 47 component pages. If Salem wants a product
 name anyway, Protokit is the less bad of the two, and ADR 0009's codemod makes it a mechanical change later.
 
+**Decided otherwise (Salem, 2026-11-15): rename to Protokit.** The objections above (the "prototype" reading and the
+npm neighbours) were weighed and accepted. The rename's cost is planned in
+[the Protokit rename plan](../protokit-rename-plan.md).
+
 ## Second opinion (Fable 5.2)
 
 `claude-fable-5-2` reviewed this draft against both repos. It confirmed the counts, the npm state and the guideline
@@ -309,15 +338,21 @@ These disagreements are left for Salem:
 
 ## Calls for Salem
 
+Answered 2026-11-15. The answers are recorded under Decisions at the top.
+
 1. **Name**: keep `@salemcobalt`; keep the scope but give the site a product name (Fable's option); rename to
    Protokit; or rename to Bit? _Recommend: keep `@salemcobalt`, name and scope, through 2026-12-31._
-2. **Homepage copy**: A ("A design system with a day job"), B or C? _Recommend: A._
+   **Salem: rename to Protokit (`@protokit`, prefix `pk`).**
+2. **Homepage copy**: A ("A design system with a day job"), B or C? _Recommend: A._ **Salem: C, name-led, with A's
+   subcopy.**
 3. **Display type**: A (Plex, tuned, Unbounded for wordmark and numerals), B (Unbounded headline) or C (editorial
-   serif)? _Recommend: A._
+   serif)? _Recommend: A._ **Salem: A.**
 4. **Component pages**: generate all 47 from curated stories and docgen (plan step 3), or hand-finish a few flagship
    pages after the case study and Decisions (Fable's order)? _Recommend: generate, after a half-day spike; take Fable's
-   order if the site gets less than a week._
-5. **ADRs on the site** as a "Decisions" section? _Recommend: yes._
+   order if the site gets less than a week._ **Salem: generate all 47, after the spike.**
+5. **ADRs on the site** as a "Decisions" section? _Recommend: yes._ **Salem: yes.**
 6. **Cut 0.2.0 stable** now, so npm `latest` shows the current system? _Recommend: yes, before any portfolio link
-   goes out._
+   goes out._ **Salem: no stable `@salemcobalt`; the first stable is `@protokit` 0.2.0, then deprecate the old
+   packages.**
 7. **`llms.txt` / MCP note** (plan step 7)? _Recommend: yes, after steps 1–5, verifying Storybook's MCP first._
+   **Salem: yes.**
