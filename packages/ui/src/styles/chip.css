@@ -211,14 +211,13 @@
   max-inline-size: 100%;
   min-inline-size: 0;
 }
+/* The editing chip's ring is there from the first frame, however editing starts (Salem, 2026-11-14): the border and
+   shadow don't transition. Focusing the field forces a style before focus lands, so a transition would run from that
+   unfocused style (a grey frame or an ease-in). */
 .sc-chip[data-editing] {
   cursor: text;
-  transition-duration: var(--sc-duration-base);
-}
-/* From keyboard focus the chip was already ringed, so the ring must not animate: focusing the field forces a style
-   before focus lands, and a border or shadow transition would run from that unfocused style (a grey dip). */
-.sc-chip[data-editing][data-entry='ring'] {
   transition-property: background-color, color;
+  transition-duration: var(--sc-duration-base);
 }
 /* The focus ring: the border takes the focus colour and a shadow outside it makes up the focus width. Nothing is drawn
    inside the border, so a hover fill inside the chip can't cover part of the ring, and the ring is the same 2px all
@@ -236,18 +235,11 @@
     outline: var(--sc-border-width-focus) solid transparent;
   }
 }
-/* Editing mounts a new chip, so it starts from how the chip looked a moment before (`data-entry`, set when editing
-   starts) and eases to the editing look (@starting-style):
-   - ring (keyboard focus): already ringed, so nothing changes but the text becoming a field;
-   - hover (a click): the ring eases in from the resting border, and the hover fill fades out of the field;
-   - plain: the ring eases in.
-   A clear × takes the remove ×'s place as it was; it only fades and grows in on a chip that had no ×. Leaving editing
-   swaps the chip back at once. Off under reduced motion (below). */
+/* Editing mounts a new chip, so what was on screen a moment before carries over (`data-entry`, set when editing
+   starts; @starting-style): after a click (hover) the hover fill fades out of the field; a clear × takes the remove
+   ×'s place as it was, and only fades and grows in on a chip that had no ×. Leaving editing swaps the chip back at
+   once. Off under reduced motion (below). */
 @starting-style {
-  .sc-chip[data-editing]:not([data-entry='ring']):focus-within {
-    border-color: var(--_bd);
-    box-shadow: 0 0 0 0 var(--sc-color-border-focus);
-  }
   .sc-chip[data-editing][data-entry='hover'] > .sc-chip__field {
     background-color: var(--_bg-hover);
   }
