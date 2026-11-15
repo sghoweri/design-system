@@ -2,11 +2,12 @@
 
 Date: 2026-11-15
 Status: planned; nothing has started. This plan carries out ADR 0008 (decisions 1 and 6) and ADR 0009 (decisions
-1–6).
+1–8). It keeps the GitHub repository and the site's domain (Salem, 2026-11-15: "Keep for now, we'll
+figure out the repo and domain name later").
 
 The rename and the class migration land before any portfolio or resume link to the site goes out, and before ADR
-0008's docs-site work. The plan is four pull requests and one release merge, plus steps only Salem can take (npm,
-GitHub and DNS), listed separately at the end and referenced in the sequence as **S1–S6**.
+0008's docs-site work. The plan is four pull requests and one release merge, plus steps only Salem can take on npm,
+listed separately at the end and referenced in the sequence as **S1–S4**. A repo or domain rename is left for later.
 
 ## What changes
 
@@ -20,8 +21,8 @@ GitHub and DNS), listed separately at the end and referenced in the sequence as 
 | Cascade layer             | `@layer sc`; Job Sweep declares `@layer base, sc;`                 | `@layer pk`; `@layer base, pk;`                                                  |
 | Product name              | "Salem Cobalt design system" (READMEs, descriptions, site title)   | "Protokit"                                                                       |
 | Homepage copy             | stack list                                                         | ADR 0008 copy C, with type option A, in ADR 0008's homepage step (not this plan) |
-| GitHub repository         | `sghoweri/design-system`                                           | Salem's call (S1)                                                                |
-| Site URL                  | `designsystem.salemcobalt.com`                                     | Salem's call (S2)                                                                |
+| GitHub repository         | `sghoweri/design-system`                                           | unchanged for now ("Later (Salem)" below)                                        |
+| Site URL                  | `designsystem.salemcobalt.com`                                     | unchanged for now ("Later (Salem)" below)                                        |
 | Versions                  | `latest` 0.1.1, `next` 0.2.0-rc.52                                 | `@protokit/*` starts at the next 0.2.0 rc; its first stable is 0.2.0             |
 
 **Why the first `@protokit` version is a 0.2.0 rc.** While an rc line is open, the release label is ignored and only
@@ -42,8 +43,6 @@ Sweep's `docs/design/` mockups are migrated, in their own PR (PR 4, ADR 0009 dec
    the newest old-name rc, with its tests passing, so PR 3 changes names only.
 4. **No other design-system PR is open,** or each open one is listed in PR 2 and rebased afterwards. The codemod is
    idempotent, so a branch that rebases onto PR 2 runs it once more and resolves the rest by hand.
-5. **ADR 0009's hybrid question is settled.** It changes only the codemod's map, so it costs nothing before PR 2
-   merges and half a day after.
 
 ## Sequence
 
@@ -87,11 +86,10 @@ Label `skip-release`. Nothing published changes. About a day, tests included.
   - `custom-property-pattern` `^(pk-|_)`;
   - a `var()` usage check against `tokens.json` and the documented knobs.
 
-### S1–S3 (Salem), while PR 2 is in review
+### S1 (Salem), when PR 2 is green
 
-The repository name, the URL decision and the npm names all have to exist before PR 2's first publish. See
-"Salem's steps" below. S3's Trusted Publisher setup expires if nothing publishes within two days, so do it when PR 2
-is green.
+The npm names have to exist, with a Trusted Publisher, before PR 2's first publish. See "Salem's steps" below. The
+Trusted Publisher setup expires if nothing publishes within two days, so do it when PR 2 is green.
 
 ### PR 2 (design-system): the rename
 
@@ -102,11 +100,11 @@ then review. Three commits, so review reads the hand-written diff apart from the
 2. **Hand edits:**
    - package `name`s and `description`s;
    - `PREFIX = 'pk'`;
-   - `repository.url` if S1 renamed the repo;
+   - `repository.url` stays `https://github.com/sghoweri/design-system.git` in both packages;
    - READMEs, install lines and import examples;
    - `docs/releasing.md` (package names, the Trusted Publisher section for `@protokit/*`);
    - the Starlight `title` and Storybook branding;
-   - the docs site's `site` URL if S2 changes it.
+   - the docs site keeps `site: designsystem.salemcobalt.com`; only its title and copy change.
 3. **Lint on**: Stylelint and the usage check join `pnpm lint` and CI.
 
 Verification:
@@ -117,8 +115,8 @@ Verification:
 - A screenshot diff of every story before and after shows no pixel changes. The rename should change no pixels, so
   any difference is a missed reference.
 
-Salem merges, after S3. The release run publishes `@protokit/tokens` and `@protokit/ui` to `next` with provenance.
-That first OIDC publish also validates S3's Trusted Publisher setup.
+Salem merges, after S1. The release run publishes `@protokit/tokens` and `@protokit/ui` to `next` with provenance.
+That first OIDC publish also validates S1's Trusted Publisher setup.
 
 ### PR 3 (Job Sweep): adopt `@protokit`
 
@@ -178,14 +176,14 @@ codemodded page, because the mockups are snapshots of their date, and note any p
 
 ### Release merge (design-system): first stable `@protokit` 0.2.0
 
-A `main` → `release` PR, merged with a merge commit (docs/releasing.md). Salem merges it (S4). The release run tags
+A `main` → `release` PR, merged with a merge commit (docs/releasing.md). Salem merges it (S2). The release run tags
 `v0.2.0`, publishes both packages to `latest`, writes `CHANGELOG.md`, creates the GitHub release and merges back into
 `main`. Job Sweep then pins `0.2.0`; that is a one-line change, folded into its next PR.
 
-### S5–S6 (Salem): deprecate the old names, then link the site
+### S3–S4 (Salem): deprecate the old names, then link the site
 
-Once `@protokit/*` 0.2.0 is on `latest`: deprecate both `@salemcobalt` packages (S5), then check the live site under
-its final name and URL before the first portfolio or resume link goes out (S6).
+Once `@protokit/*` 0.2.0 is on `latest`: deprecate both `@salemcobalt` packages (S3), then check the live site under
+its new name before the first portfolio or resume link goes out (S4).
 
 ### Then: ADR 0008's site work
 
@@ -194,31 +192,9 @@ Homepage (copy C, type A), generated component pages after the spike, Decisions,
 
 ## Salem's steps
 
-Only Salem can do these: they need Salem's GitHub owner rights, npm login with two-factor authentication, or DNS
-access.
+Only Salem can do these: they need Salem's npm login with two-factor authentication, or Salem's merge.
 
-**S1. Decide and set the GitHub repository name** (before PR 2 merges).
-
-- Keeping `sghoweri/design-system` needs no work.
-- Renaming (for example to `sghoweri/protokit`): **Settings → General → Repository name**.
-  - GitHub redirects the old URLs and git remotes.
-  - npm Trusted Publishing matches `repository.url` exactly ("must exactly match your GitHub repository",
-    docs.npmjs.com/trusted-publishers). So the rename happens before S3, and PR 2 sets the new URL.
-  - Afterwards, check that the Vercel project still deploys from the renamed repo, and that the Actions variable
-    `RELEASE_APP_ID` and the secret `RELEASE_APP_PRIVATE_KEY` are still listed.
-
-**S2. Decide the site URL** (before PR 2 merges, if it changes).
-
-- Keeping `designsystem.salemcobalt.com` needs no work; only the site's title and copy change.
-- A new domain needs four things:
-  - register it;
-  - add it to the Vercel project under **Domains**;
-  - set the DNS records Vercel shows at the registrar;
-  - keep the old host as a permanent redirect to the new one, so links already shared keep working.
-
-  PR 2 updates `site` in `apps/docs/astro.config.mjs` and the README links.
-
-**S3. Create `@protokit/tokens` and `@protokit/ui` on npm and give them a Trusted Publisher** (when PR 2 is green,
+**S1. Create `@protokit/tokens` and `@protokit/ui` on npm and give them a Trusted Publisher** (when PR 2 is green,
 then merge PR 2 within two days).
 
 npm cannot attach a Trusted Publisher to a name that has never been published ("must already exist on the npm
@@ -243,12 +219,12 @@ hand:
    ```
 
 3. Attach the Trusted Publisher to each package, as in docs/releasing.md. Either use the package page: **Settings →
-   Trusted Publisher → GitHub Actions**, with user `sghoweri`, the repository from S1, workflow `release.yml` and no
+   Trusted Publisher → GitHub Actions**, with user `sghoweri`, repository `design-system`, workflow `release.yml` and no
    environment. Or use the CLI (npm 11.15.0 or later):
 
    ```sh
-   npm trust github @protokit/ui --file release.yml --repository sghoweri/<repo>
-   npm trust github @protokit/tokens --file release.yml --repository sghoweri/<repo>
+   npm trust github @protokit/ui --file release.yml --repository sghoweri/design-system
+   npm trust github @protokit/tokens --file release.yml --repository sghoweri/design-system
    ```
 
 4. Optionally, set **Publishing access** to _Require two-factor authentication and disallow tokens_, as on the old
@@ -259,21 +235,34 @@ A new Trusted Publisher configuration "must complete its first successful publis
 
 The registry may point `latest` at the placeholder until 0.2.0 ships. The deprecation message covers that window.
 
-**S4. Merge PR 2, then the `main` → `release` PR**, as for every design-system release.
+**S2. Merge PR 2, then the `main` → `release` PR**, as for every design-system release.
 
-**S5. Deprecate the old packages** (after `@protokit/*` 0.2.0 is on `latest`):
+**S3. Deprecate the old packages** (after `@protokit/*` 0.2.0 is on `latest`):
 
 ```sh
 npm deprecate @salemcobalt/ui "Renamed to @protokit/ui. Install @protokit/ui instead." --otp=<code>
 npm deprecate @salemcobalt/tokens "Renamed to @protokit/tokens. Install @protokit/tokens instead." --otp=<code>
 ```
 
-This deprecates every version, including the 0.2.0 rcs on `next`. The old packages' Trusted Publisher entries can be
-revoked afterwards (`npm trust revoke`, or the package settings page), because nothing publishes to them again. The
-same can also be done on the website: package **Settings → Deprecate package**.
+This deprecates every version, including the 0.2.0 rcs on `next`. The website does the same under the package's
+**Settings → Deprecate package**. The old packages' Trusted Publisher entries can be revoked afterwards
+(`npm trust revoke`, or the package settings page), because nothing publishes to them again.
 
-**S6. Check the live site before the first portfolio or resume link goes out**: the name, the URL from S2, the npm
-badge pointing at `@protokit/ui`, and the workshop at `/workshop/`.
+**S4. Check the live site before the first portfolio or resume link goes out**: the name at
+`designsystem.salemcobalt.com`, the npm badge pointing at `@protokit/ui`, and the workshop at `/workshop/`.
+
+## Later (Salem)
+
+Salem keeps the GitHub repository (`sghoweri/design-system`) and the domain (`designsystem.salemcobalt.com`) through
+the rename, and decides on them later.
+
+A later rename touches:
+
+- the Trusted Publisher configuration of both `@protokit` packages;
+- each package's `repository` field (npm matches `repository.url` exactly: "must exactly match your GitHub
+  repository", docs.npmjs.com/trusted-publishers);
+- the README badges;
+- the Vercel domain, plus a permanent redirect from the old host.
 
 ## Effort
 
@@ -284,4 +273,4 @@ About two to three days in all, as ADR 0008 estimated:
 - PR 3: about half a day.
 - PR 4: about two hours, most of it the visual check.
 - The release merge: minutes.
-- Salem's steps: about an hour, plus any domain registration.
+- Salem's steps: about an hour.

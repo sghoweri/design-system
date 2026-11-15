@@ -1,7 +1,7 @@
 # ADR 0009: CSS namespace: bare BEMIT or brand plus BEMIT
 
 Date: 2026-11-15
-Status: accepted (Salem, 2026-11-15), with one question still open (the hybrid, below). Nothing is renamed by this ADR; the
+Status: accepted (Salem, 2026-11-15). Nothing is renamed by this ADR; the
 migration follows [the Protokit rename plan](../protokit-rename-plan.md).
 
 ## Decisions (Salem, 2026-11-15)
@@ -44,18 +44,16 @@ Where an answer differs from the recommendation, it says so.
    screenshots, because the pages are static HTML with no tests. The `var()` usage check and Stylelint deliberately
    exclude `docs/design/`; a leftover-`sc-` check covers it instead. The rename plan has the detail.
 
-### Open, Salem to discuss
+8. **No hybrid: classes and custom properties are both branded** (call 8; Salem, 2026-11-15: "Let's run with branded
+   for now"). Classes are `.c-pk-button`, custom properties `--pk-*`, the layer `@layer pk`. This matches the
+   recommendation.
+   - "For now" leaves room to revisit after the rename. Moving to bare classes (`.c-button`) later would be a second
+     class-only breaking change: about 2,100 class references in this repo and 150 in Job Sweep, about half a day
+     with the same codemod and a new map. The custom properties and the layer would not change.
+   - Inside shadow roots, if the system ever moves to web components, bare classes remain the guideline's default
+     (section 2).
 
-This one was left unticked. It is not decided here.
-
-- **The hybrid** (call 8): bare BEMIT classes (`.c-button`, `.o-stack`) with branded `--pk-*` and `@layer pk`.
-  - _For:_ shorter class names. The custom-property churn is the same as decided, because the tokens are renamed
-    anyway.
-  - _Against:_ in light DOM, a consumer's own unlayered `.c-card` beats the system's `.c-card` inside `@layer pk`, and
-    Salem's own apps use `c-` (section 5).
-  - _Cost:_ none if it is decided before the rename PR merges, because only the codemod's map changes. Decided later,
-    it is a second class-only breaking change: about 2,100 class references in this repo and 150 in Job Sweep again,
-    about half a day with the same codemod. **Settle it before PR 2 of the rename plan (the rename itself) merges.**
+Every call is now answered.
 
 ## Context
 
@@ -315,7 +313,7 @@ These disagreements are left for Salem:
 
 ## Calls for Salem
 
-Answered 2026-11-15, except call 8, which is open. The answers are recorded under Decisions at the top.
+Answered 2026-11-15. The answers are recorded under Decisions at the top.
 
 1. **Option 1 (bare BEMIT) or option 2 (brand + BEMIT)?** _Recommend: option 2._ **Salem: brand + BEMIT.**
 2. **Prefix**: follows ADR 0008 (`sc` / `pk` / `bds`). _Recommend: `sc`, which leaves custom properties untouched._
@@ -332,7 +330,7 @@ Answered 2026-11-15, except call 8, which is open. The answers are recorded unde
    of the migration? _Recommend: yes, as the migration's proof._ **Salem: yes.**
 8. **Hybrid** (Fable's call): was bare `--color-*` really intended, or should bare BEMIT classes with branded `--sc-*`
    tokens (the guideline's default) be analysed too? _Recommend: no. Option 2, because in light DOM an app's own
-   `c-` classes beat the system's._ **Open, Salem to discuss** (costs under Decisions; settle before the rename PR
-   merges).
+   `c-` classes beat the system's._ **Salem: no hybrid, branded classes and custom properties "for now"** (decision 8, which
+   gives the cost of revisiting it).
 9. **When**: land as 0.3.0 after 0.2.0 stable and ADR 0008's site work? _Recommend: yes, after 2026-12-31 unless the
    site work finishes early._ **Salem: soon, before portfolio links, ahead of the site work.**
