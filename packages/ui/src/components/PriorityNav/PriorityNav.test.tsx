@@ -539,4 +539,124 @@ describe('PriorityNav', () => {
       ]);
     });
   });
+
+  describe('panelEnd', () => {
+    const Theme = () => (
+      <label>
+        <input type="checkbox" /> Dark theme
+      </label>
+    );
+
+    it('adds content after the collapsed links, below them in the panel list, only while More exists', async () => {
+      const user = userEvent.setup();
+      rowWidth = 300;
+      const { container, rerender } = render(
+        <PriorityNav aria-label="Main" items={items()} panelEnd={<Theme />} />,
+      );
+      // Not in the row, and hidden with the panel until More opens.
+      expect(nav().querySelector(':scope > ul > .sc-priority-nav__panel-end')).toBeNull();
+      expect(screen.queryByRole('checkbox', { name: 'Dark theme' })).toBeNull();
+      await user.click(toggle());
+      const end = panel().lastElementChild as HTMLElement;
+      expect(end).toHaveClass('sc-priority-nav__panel-end');
+      expect(end.tagName).toBe('LI');
+      expect(within(end).getByRole('checkbox', { name: 'Dark theme' })).toBeVisible();
+      // The links come first; the toggle's name still counts only links.
+      expect(
+        within(panel())
+          .getAllByRole('link')
+          .map((a) => a.textContent),
+      ).toEqual(['Sweeps', 'Files', 'Learning', 'Settings']);
+      expect(toggle()).toHaveAccessibleName('More, 4 links');
+      await expectNoA11yViolations(container);
+      // Everything fits: no More, so no panel end either.
+      rowWidth = 1000;
+      rerender(<PriorityNav aria-label="Main" items={items()} panelEnd={<Theme />} />);
+      resize(1000);
+      expect(screen.queryByRole('button', { name: /^More/ })).toBeNull();
+      expect(screen.queryByRole('checkbox', { name: 'Dark theme' })).toBeNull();
+    });
+
+    it('is reached by Tab after the last link, keeps the panel open when used, and Escape returns to More', async () => {
+      const user = userEvent.setup();
+      rowWidth = 300;
+      render(
+        <>
+          <PriorityNav aria-label="Main" items={items()} panelEnd={<Theme />} />
+          <button type="button">After</button>
+        </>,
+      );
+      await user.click(toggle());
+      for (let i = 0; i < 4; i++) await user.tab(); // Sweeps, Files, Learning, Settings
+      await user.tab();
+      const box = screen.getByRole('checkbox', { name: 'Dark theme' });
+      expect(box).toHaveFocus();
+      await user.keyboard(' ');
+      expect(box).toBeChecked();
+      await user.click(box);
+      expect(box).not.toBeChecked();
+      expect(toggle()).toHaveAttribute('aria-expanded', 'true');
+      await user.keyboard('{Escape}');
+      expect(toggle()).toHaveAttribute('aria-expanded', 'false');
+      expect(toggle()).toHaveFocus();
+      // Tab past it closes the panel, as past the last link.
+      await user.click(toggle());
+      for (let i = 0; i < 6; i++) await user.tab();
+      expect(screen.getByRole('button', { name: 'After' })).toHaveFocus();
+      expect(toggle()).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('keeps More, holding only the end content, while the row overflows but every link fits', async () => {
+      const user = userEvent.setup();
+      const onOverflowChange = vi.fn();
+      rowWidth = 300;
+      render(
+        <PriorityNav
+          aria-label="Main"
+          items={items()}
+          panelEnd={<Theme />}
+          onOverflowChange={onOverflowChange}
+          overflowHysteresis={200}
+        />,
+      );
+      expect(onOverflowChange).toHaveBeenLastCalledWith(true);
+      // 600 fits every link (496) and More (72), but not the 200 the header needs back: still overflowing.
+      resize(600);
+      expect(inlineLinks()).toEqual(LABELS);
+      expect(toggle()).toBeVisible();
+      // Nothing is collapsed, so the toggle's name has no count.
+      expect(toggle()).toHaveAccessibleName('More');
+      await user.click(toggle());
+      expect(within(panel()).queryAllByRole('link')).toHaveLength(0);
+      expect(panel().children).toHaveLength(1);
+      expect(within(panel()).getByRole('checkbox', { name: 'Dark theme' })).toBeVisible();
+      // With room for the header's 200 too, the row fits: More and the end content go.
+      resize(700);
+      expect(onOverflowChange).toHaveBeenLastCalledWith(false);
+      expect(screen.queryByRole('button', { name: /^More/ })).toBeNull();
+      expect(screen.queryByRole('checkbox', { name: 'Dark theme' })).toBeNull();
+    });
+
+    it('without panelEnd, the same band has no More (links only)', () => {
+      rowWidth = 300;
+      render(<PriorityNav aria-label="Main" items={items()} overflowHysteresis={200} />);
+      resize(600);
+      expect(inlineLinks()).toEqual(LABELS);
+      expect(screen.queryByRole('button', { name: /^More/ })).toBeNull();
+      expect(nav()).toHaveAttribute('data-overflowing');
+    });
+
+    it('renders nothing extra without it, or with null or false', async () => {
+      const user = userEvent.setup();
+      rowWidth = 300;
+      const { rerender } = render(<PriorityNav aria-label="Main" items={items()} />);
+      await user.click(toggle());
+      expect(panel().querySelector('.sc-priority-nav__panel-end')).toBeNull();
+      expect(panel().children).toHaveLength(4);
+      for (const empty of [null, false]) {
+        rerender(<PriorityNav aria-label="Main" items={items()} panelEnd={empty} />);
+        expect(panel().querySelector('.sc-priority-nav__panel-end')).toBeNull();
+      }
+    });
+  });
 });

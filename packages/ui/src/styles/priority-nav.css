@@ -247,6 +247,21 @@
 .sc-priority-nav__panel[hidden] {
   display: none;
 }
+/* panelEnd: whatever follows the links (a theme switch, say), set off by a divider and padded like a link row. */
+.sc-priority-nav__panel-end {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-spacing-xs);
+  margin-block-start: var(--sc-spacing-2xs);
+  padding: var(--sc-spacing-xs) var(--sc-spacing-xs) var(--sc-spacing-2xs);
+  border-block-start: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+}
+/* Every link fits but the row still overflows: More holds only this, with no divider above it. */
+.sc-priority-nav__panel-end:first-child {
+  margin-block-start: 0;
+  padding-block-start: var(--sc-spacing-2xs);
+  border-block-start: 0;
+}
 .sc-priority-nav__panel .sc-priority-nav__link {
   display: flex;
   inline-size: 100%;

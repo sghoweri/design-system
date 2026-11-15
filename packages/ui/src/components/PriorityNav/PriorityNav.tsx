@@ -66,6 +66,15 @@ export interface PriorityNavProps extends Omit<ComponentPropsWithRef<'nav'>, 'ch
    * Default 0.
    */
   overflowHysteresis?: number | undefined;
+  /**
+   * Content at the end of the "More" panel, after the collapsed links and a divider: a control that belongs in the
+   * overflow rather than a link, such as a theme switch. More exists while links are collapsed, and with `panelEnd`
+   * also for as long as the row reports overflow (`onOverflowChange`), even once every link fits, so the content is
+   * always reachable: pass it always, show an inline copy only while `onOverflowChange` says the row fits, and set
+   * `overflowHysteresis` to the room that copy takes (its width and the gap before it). It is the panel list's last
+   * item; Tab reaches it after the links, Escape returns to More, and clicks in it leave the panel open.
+   */
+  panelEnd?: ReactNode | undefined;
 }
 
 const defaultCountLabel = (n: number) => (n === 1 ? '1 link' : `${n} links`);
@@ -119,6 +128,8 @@ interface Fit {
   count: number;
   /** Latched overflow signal (`isOverflowing`). */
   overflowing: boolean;
+  /** Whether `panelEnd` was given when `count` was computed. */
+  end: boolean;
 }
 
 interface Measured {
@@ -142,13 +153,21 @@ export function PriorityNav({
   renderLink = defaultLink,
   onOverflowChange,
   overflowHysteresis = 0,
+  panelEnd,
   className,
   style,
   ...rest
 }: PriorityNavProps) {
   const signature = signatureOf(items);
   const current = items.findIndex((item) => item.current);
-  const [fit, setFit] = useState<Fit>({ signature: null, current: -1, count: 0, overflowing: false });
+  const hasEnd = panelEnd != null && panelEnd !== false;
+  const [fit, setFit] = useState<Fit>({
+    signature: null,
+    current: -1,
+    count: 0,
+    overflowing: false,
+    end: false,
+  });
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const listRef = useRef<HTMLUListElement>(null);
@@ -160,12 +179,21 @@ export function PriorityNav({
   const fitRef = useRef(fit);
   const hysteresisRef = useRef(overflowHysteresis);
   const onOverflowRef = useRef(onOverflowChange);
+  const hasEndRef = useRef(hasEnd);
 
-  /** The split for the cached measurements: how many links stay inline, and the latched overflow flag. */
-  const solve = (m: Measured, cur: number, was: boolean) => ({
-    count: fitCount({ ...m, current: cur }),
-    overflowing: isOverflowing({ ...m, was, hysteresis: hysteresisRef.current }),
-  });
+  /**
+   * The split for the cached measurements: the latched overflow flag, and how many links stay inline. With
+   * `panelEnd`, More stays while the row overflows, even once every link fits (the header has moved that content
+   * into the panel), so its room is kept.
+   */
+  const solve = (m: Measured, cur: number, was: boolean) => {
+    const overflowing = isOverflowing({ ...m, was, hysteresis: hysteresisRef.current });
+    return {
+      overflowing,
+      count: fitCount({ ...m, current: cur, keepMore: hasEndRef.current && overflowing }),
+      end: hasEndRef.current,
+    };
+  };
 
   // Until the items are measured (on the server, before hydration, after the items or the fonts change)
   // every link renders inline in a single line that clips (or scrolls without JS), and the toggle is laid
@@ -179,6 +207,7 @@ export function PriorityNav({
     fitRef.current = fit;
     hysteresisRef.current = overflowHysteresis;
     onOverflowRef.current = onOverflowChange;
+    hasEndRef.current = hasEnd;
   });
 
   useLayoutEffect(() => {
@@ -196,11 +225,11 @@ export function PriorityNav({
         gap: parseFloat(getComputedStyle(list).columnGap) || 0,
         available: list.clientWidth,
       };
-    } else if (fit.current === current) return;
+    } else if (fit.current === current && fit.end === hasEnd) return;
     const m = measured.current;
     if (!m) return;
     setFit({ signature, current, ...solve(m, current, fit.overflowing) });
-  }, [measuring, signature, current, fit]);
+  }, [measuring, signature, current, hasEnd, fit]);
 
   // One observer, on the row and on the "More" item. Its callback reads sizes from the entries (no layout
   // read): the row's width, and the toggle's width when it switches between "More" and icon-only (a
@@ -225,20 +254,39 @@ export function PriorityNav({
       const prev = fitRef.current;
       if (prev.signature === null) return;
       const next = solve(m, currentRef.current, prev.overflowing);
-      if (prev.count !== next.count || prev.overflowing !== next.overflowing) setFit({ ...prev, ...next });
+      if (prev.count !== next.count || prev.overflowing !== next.overflowing || prev.end !== next.end)
+        setFit({ ...prev, ...next });
     });
     observer.observe(list);
     observer.observe(more);
     return () => observer.disconnect();
   }, []);
 
-  // Tell the header when the overflow flag changes (not on mount: it starts false everywhere).
+  // Tell the header when the overflow flag changes (not on mount: it starts false everywhere). In a layout effect,
+  // so a header that gives the row room (an inline control moving into the panel) commits before paint.
   const reported = useRef(false);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (reported.current === fit.overflowing) return;
     reported.current = fit.overflowing;
     onOverflowRef.current?.(fit.overflowing);
   }, [fit.overflowing]);
+
+  // After a render the header caused (it gave the row room, or took it back), refit before paint rather than a
+  // frame later from the ResizeObserver: otherwise links drop into More for a frame and come straight back. One
+  // read of the row's width per render; a state write only when the split changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- every render on purpose; it records the width before writing, so it cannot loop
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    const m = measured.current;
+    const prev = fitRef.current;
+    if (!list || !m || prev.signature === null || measuring) return;
+    const available = list.clientWidth;
+    if (available === m.available) return;
+    m.available = available;
+    const next = solve(m, currentRef.current, prev.overflowing);
+    if (prev.count !== next.count || prev.overflowing !== next.overflowing || prev.end !== next.end)
+      setFit({ ...prev, ...next });
+  });
 
   // Web fonts change every width. If they are still loading at mount, measure again once they are ready.
   useEffect(() => {
@@ -255,7 +303,9 @@ export function PriorityNav({
 
   const flags = measuring ? null : inlineFlags(items.length, current, fit.count);
   const overflow = flags ? items.filter((_, i) => !flags[i]) : [];
-  const expanded = open && overflow.length > 0;
+  // More shows while links are collapsed, and while it holds `panelEnd` for an overflowing row.
+  const showMore = !measuring && (overflow.length > 0 || (hasEnd && fit.overflowing));
+  const expanded = open && showMore;
   // "More" carries the collapsed items' badges: their summed count, or a dot when they only have dots.
   const overflowBadges = overflow.map(badgeOf).filter((b) => b !== null);
   const overflowCount = overflowBadges.reduce<number>((sum, b) => sum + (b === 'dot' ? 0 : b), 0);
@@ -375,12 +425,7 @@ export function PriorityNav({
             </li>
           ),
         )}
-        <li
-          ref={moreRef}
-          className="sc-priority-nav__more"
-          hidden={measuring || overflow.length === 0}
-          onBlur={onBlur}
-        >
+        <li ref={moreRef} className="sc-priority-nav__more" hidden={!showMore} onBlur={onBlur}>
           <button
             ref={toggleRef}
             type="button"
@@ -392,10 +437,12 @@ export function PriorityNav({
             {/* Narrow navs (a container query) show only the ellipsis; the label stays in the name. */}
             <MoreHorizontalIcon className="sc-priority-nav__ellipsis" />
             <span className="sc-priority-nav__toggle-label">{moreLabel}</span>
-            <span className="sc-visually-hidden">
-              , {moreCountLabel(overflow.length)}
-              {moreBadgeText}
-            </span>
+            {overflow.length > 0 ? (
+              <span className="sc-visually-hidden">
+                , {moreCountLabel(overflow.length)}
+                {moreBadgeText}
+              </span>
+            ) : null}
             {moreBadge !== null ? <Badge value={moreBadge} /> : null}
             <ChevronDownIcon size="sm" className="sc-priority-nav__chevron" />
           </button>
@@ -403,6 +450,9 @@ export function PriorityNav({
             {overflow.map((item) => (
               <li key={keyOf(item)}>{link(item, true)}</li>
             ))}
+            {panelEnd != null && panelEnd !== false ? (
+              <li className="sc-priority-nav__panel-end">{panelEnd}</li>
+            ) : null}
           </ul>
         </li>
       </ul>
