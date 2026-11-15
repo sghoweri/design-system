@@ -99,6 +99,19 @@
 .sc-button[data-variant='ghost']:active:where(:not(:disabled)) {
   background: var(--sc-color-surface-active);
 }
+/* Success: the positive decision (the inbox's Approve), green where danger is red. Use one per view at most, beside
+   a neutral or danger counterpart; it isn't a second primary. */
+.sc-button[data-variant='success'] {
+  background: var(--sc-color-success-solid);
+  color: var(--sc-color-text-on-status);
+}
+.sc-button[data-variant='success']:hover:where(:not(:disabled)) {
+  background: var(--sc-color-success-hover);
+}
+.sc-button[data-variant='success']:active:where(:not(:disabled)) {
+  background: var(--sc-color-success-hover);
+  filter: brightness(0.95);
+}
 .sc-button[data-variant='danger'] {
   background: var(--sc-color-danger-solid);
   color: var(--sc-color-text-on-status);
@@ -179,6 +192,7 @@
    ghost on the .sc-on-accent scope's fill (base.css), show it at full strength. Ratios: button-shortcut.test.ts. */
 .sc-button[data-variant='primary'] > .sc-button__shortcut .sc-kbd,
 .sc-button[data-variant='danger'] > .sc-button__shortcut .sc-kbd,
+.sc-button[data-variant='success'] > .sc-button__shortcut .sc-kbd,
 .sc-on-accent .sc-button__shortcut .sc-kbd,
 .sc-toast[data-tone='accent'] .sc-button__shortcut .sc-kbd {
   opacity: 1;
@@ -271,6 +285,9 @@
 }
 .sc-button[data-variant='primary'][data-popup-open] {
   background: var(--sc-color-accent-active);
+}
+.sc-button[data-variant='success'][data-popup-open] {
+  background: var(--sc-color-success-hover);
 }
 .sc-button[data-variant='inverse'][data-popup-open] {
   background: var(--sc-color-inverse-active);

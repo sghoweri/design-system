@@ -11,7 +11,7 @@ const meta = {
   component: Button,
   args: { children: 'Add job', variant: 'primary', size: 'md' },
   argTypes: {
-    variant: { control: 'radio', options: ['primary', 'secondary', 'ghost', 'danger', 'inverse'] },
+    variant: { control: 'radio', options: ['primary', 'secondary', 'ghost', 'danger', 'success', 'inverse'] },
     size: { control: 'radio', options: ['sm', 'md', 'lg'] },
   },
 } satisfies Meta<typeof Button>;
@@ -27,6 +27,7 @@ export const Variants: Story = {
       <Button variant="secondary">Cancel</Button>
       <Button variant="ghost">Snooze</Button>
       <Button variant="danger">Delete application</Button>
+      <Button variant="success">Approve</Button>
     </Inline>
   ),
 };
