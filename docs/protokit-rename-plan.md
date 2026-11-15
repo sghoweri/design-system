@@ -86,6 +86,34 @@ Label `skip-release`. Nothing published changes. About a day, tests included.
   - `custom-property-pattern` `^(proto-|_)`;
   - a `var()` usage check against `tokens.json` and the documented knobs.
 
+**As built** (2026-11-15). Where PR 1 differs from the outline above:
+
+- **Location.** All the tools live in `scripts/`:
+  - `namespace-map.mjs`, which writes `namespace-map.json`;
+  - `codemod-namespace.mjs`;
+  - `check-vars.mjs`;
+  - `codemod-namespace.test.mjs`, which runs on `node --test` inside `pnpm test`.
+- **One text engine instead of separate PostCSS and string passes.** Every rule matches whole names only, so one
+  engine covers CSS, Sass, TS, MDX, Astro, HTML, JSON and Markdown alike, with no parser per file type.
+- **Prefix rules for dashed idents.** `--sc-*` and `$sc-*` are renamed by prefix rather than per entry. This also
+  covers names built at runtime, such as `` `--sc-priority-nav${id}` ``.
+- **Token-key strings.** Keys of `tokens.json` written in tests, such as `` `sc-color-${name}` ``, are renamed through
+  the token categories in the map.
+- **Keyframes.** The map lists all 14, so `sc-spin` becomes `proto-spin`.
+- **Package imports.** The codemod also renames them (`@salemcobalt/ui` → `@protokit/ui`, the same for tokens).
+- **A leftover check replaces the build-time check.** Instead of failing the build on an unmapped name,
+  `codemod-namespace.mjs --check` (`pnpm check:names`) lists every old name still present.
+  - On a simulated run over this repo it leaves exactly one: the Logo's SVG mask id, `` `sc-logo-${id}` ``. That is
+    PR 2's hand edit.
+- **Base UI's custom properties.** The Stylelint config allows the ones the stylesheets read, such as
+  `--anchor-width` and `--transform-origin`.
+- **The docs site.** Its own classes (`.demo`) are a consumer's and are not linted for the brand.
+- **The map** has 60 blocks, which includes Logo (added after the ADR counts), and 277 classes.
+- **The `var()` check runs in CI from PR 1 on** (`pnpm check:vars`): it reads the prefix from `tokens.json`. It counts
+  the inline-style keys a component sets (`'--sc-text-lines': clamp`) as declarations.
+- **The other checks wait for PR 2.** `pnpm lint:css` and `pnpm check:names` fail on every old name until the rename,
+  so they join `pnpm lint` there.
+
 ### S1 (Salem), when PR 2 is green
 
 The npm names have to exist, with a Trusted Publisher, before PR 2's first publish. See "Salem's steps" below. The

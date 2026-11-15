@@ -4,3 +4,4 @@ pnpm-lock.yaml
 CHANGELOG.md
 DESIGN_SYSTEM_BRIEF.md
 .astro
+scripts/namespace-map.json
