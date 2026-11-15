@@ -19,19 +19,20 @@
 }
 /* Controls on an accent fill. The scope repoints the semantic tokens its descendants read, the way raised surfaces
    repoint the washes (docs/adr/0003), so secondary and ghost Buttons, IconButtons, muted text and focus rings inside
-   need no rules of their own: text, strong borders and focus rings take text.on-accent; hover and pressed take
-   accent.hover and accent.active, the primary Button's states. The element's own focus ring is outside the fill, so it
-   keeps its colour by setting it again. Contrast: packages/tokens/test/contrast.test.ts. */
+   need no rules of their own: text, strong borders and focus rings take text.on-accent-strong; hover and pressed take
+   accent.strong-hover and accent.strong-active. The fill is accent.strong, which is darker than accent.default in dark
+   so the text is white in both themes; its main action is an inverse Button. The element's own focus ring is outside
+   the fill, so it keeps its colour by setting it again. Contrast: packages/tokens/test/contrast.test.ts. */
 .sc-on-accent,
 .sc-toast[data-tone='accent'] {
-  --sc-color-text-default: var(--sc-color-text-on-accent);
-  --sc-color-text-muted: var(--sc-color-text-on-accent);
-  --sc-color-border-strong: var(--sc-color-text-on-accent);
-  --sc-color-border-focus: var(--sc-color-text-on-accent);
-  --sc-color-surface-hover: var(--sc-color-accent-hover);
-  --sc-color-surface-active: var(--sc-color-accent-active);
-  background: var(--sc-color-accent-default);
-  color: var(--sc-color-text-on-accent);
+  --sc-color-text-default: var(--sc-color-text-on-accent-strong);
+  --sc-color-text-muted: var(--sc-color-text-on-accent-strong);
+  --sc-color-border-strong: var(--sc-color-text-on-accent-strong);
+  --sc-color-border-focus: var(--sc-color-text-on-accent-strong);
+  --sc-color-surface-hover: var(--sc-color-accent-strong-hover);
+  --sc-color-surface-active: var(--sc-color-accent-strong-active);
+  background: var(--sc-color-accent-strong);
+  color: var(--sc-color-text-on-accent-strong);
 }
 .sc-on-accent:focus-visible,
 .sc-toast[data-tone='accent']:focus-visible {

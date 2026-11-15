@@ -57,14 +57,16 @@ describe('Toast', () => {
     const css = readFileSync(join(__dirname, '..', '..', 'styles', 'base.css'), 'utf8');
     const scope = /\.sc-toast\[data-tone='accent'\] \{([^}]*)\}/.exec(css)?.[1] ?? '';
     for (const [token, value] of [
-      ['text-default', 'text-on-accent'],
-      ['text-muted', 'text-on-accent'],
-      ['border-strong', 'text-on-accent'],
-      ['border-focus', 'text-on-accent'],
-      ['surface-hover', 'accent-hover'],
-      ['surface-active', 'accent-active'],
+      ['text-default', 'text-on-accent-strong'],
+      ['text-muted', 'text-on-accent-strong'],
+      ['border-strong', 'text-on-accent-strong'],
+      ['border-focus', 'text-on-accent-strong'],
+      ['surface-hover', 'accent-strong-hover'],
+      ['surface-active', 'accent-strong-active'],
     ])
       expect(scope).toContain(`--sc-color-${token}: var(--sc-color-${value});`);
+    // The main action is the white inverse Button, not an outline.
+    expect(screen.getByRole('button', { name: 'Reload' })).toHaveAttribute('data-variant', 'inverse');
   });
 
   it('runs the action once and closes; Dismiss closes', async () => {

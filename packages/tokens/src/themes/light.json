@@ -68,6 +68,16 @@
         "$type": "color",
         "$description": "Text on accent.default and accent.hover."
       },
+      "on-accent-strong": {
+        "$value": "{color.white}",
+        "$type": "color",
+        "$description": "Text on accent.strong in every state."
+      },
+      "on-inverse": {
+        "$value": "{color.neutral.1000}",
+        "$type": "color",
+        "$description": "Text on inverse.default, .hover and .active: the inverse Button."
+      },
       "on-status": {
         "$value": "{color.white}",
         "$type": "color",
@@ -131,6 +141,21 @@
         "$value": "{color.brand.500}",
         "$type": "color",
         "$description": "Selection border on accent.wash (plain Card selected); 3:1 on accent.wash and every surface."
+      },
+      "strong": {
+        "$value": "{color.brand.500}",
+        "$type": "color",
+        "$description": "Filled notice (the .sc-on-accent scope: accent Toast). Darker than accent.default in dark, so text.on-accent-strong is white in both themes."
+      },
+      "strong-hover": {
+        "$value": "{color.brand.600}",
+        "$type": "color",
+        "$description": "Hover wash on accent.strong."
+      },
+      "strong-active": {
+        "$value": "{color.brand.800}",
+        "$type": "color",
+        "$description": "Pressed wash on accent.strong."
       }
     },
     "success": {
@@ -258,6 +283,23 @@
         "$value": "{color.brand.500}",
         "$type": "color",
         "$description": "Avatar's 1px inset ring, the shape's boundary: 3:1 on avatar.fill and on canvas, default, raised and sunken."
+      }
+    },
+    "inverse": {
+      "default": {
+        "$value": "{color.white}",
+        "$type": "color",
+        "$description": "Inverse Button fill: a white button for dark or coloured fills (the accent Toast)."
+      },
+      "hover": {
+        "$value": "{color.neutral.100}",
+        "$type": "color",
+        "$description": "Inverse Button hover."
+      },
+      "active": {
+        "$value": "{color.neutral.200}",
+        "$type": "color",
+        "$description": "Inverse Button pressed."
       }
     }
   },

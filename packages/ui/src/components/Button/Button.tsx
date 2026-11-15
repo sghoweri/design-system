@@ -1,7 +1,8 @@
 import type { ComponentPropsWithRef, MouseEvent, ReactNode } from 'react';
 import { cx } from '../../utils/cx';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+/** `inverse` is a white button for a dark or coloured fill (the accent Toast's action); elsewhere use the others. */
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'inverse';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ComponentPropsWithRef<'button'> {

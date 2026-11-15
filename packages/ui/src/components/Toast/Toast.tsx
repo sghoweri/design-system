@@ -77,7 +77,7 @@ function Viewport() {
           {toast.actionProps ? (
             <BaseToast.Action
               className="sc-toast__action"
-              render={<Button variant="secondary" size="sm" />}
+              render={<Button variant={toast.type === 'accent' ? 'inverse' : 'secondary'} size="sm" />}
             />
           ) : null}
           {toast.data?.dismissLabel ? (
