@@ -104,3 +104,43 @@ export const AcrossFaces: Story = {
     </Stack>
   ),
 };
+
+export const Sweep: Story = {
+  name: 'Sweep on hover and focus',
+  render: () => (
+    <Stack gap="md">
+      <Text size="sm" tone="muted">
+        Hover or Tab to a link: the cut-out broom sweeps about 9° inside the tile and three specks of dust
+        puff off its bristles; leaving mid-sweep eases back to the static tile. Nothing moves under reduced
+        motion, and the 16px drawing (md and below) never sweeps.
+      </Text>
+      <Inline gap="lg" align="center">
+        {(['md', 'lg', 'xl'] as const).map((size) => (
+          <a
+            key={size}
+            href={`#${size}`}
+            style={{ color: 'var(--sc-color-text-default)', textDecoration: 'none' }}
+          >
+            <Logo size={size} wordmark sweep />
+          </a>
+        ))}
+        <a
+          href="#big"
+          style={
+            {
+              color: 'var(--sc-color-text-default)',
+              textDecoration: 'none',
+              fontSize: 'var(--sc-font-size-xl)',
+              '--sc-logo-size': '30px',
+            } as CSSProperties
+          }
+        >
+          <Logo wordmark sweep />
+        </a>
+        <button type="button" style={{ all: 'unset', cursor: 'pointer' }}>
+          <Logo size="xl" sweep label="Job Sweep home" />
+        </button>
+      </Inline>
+    </Stack>
+  ),
+};

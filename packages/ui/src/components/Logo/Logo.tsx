@@ -19,6 +19,13 @@ export interface LogoProps extends Omit<ComponentPropsWithRef<'span'>, 'children
   wordmark?: boolean | undefined;
   /** The accessible name of the mark alone (`role="img"`). Default "Job Sweep". Ignored with `wordmark`. */
   label?: string | undefined;
+  /**
+   * Sweeps while the link or button around the logo is hovered or keyboard-focused: the cut-out broom swings up to 9°
+   * inside the tile and three cut-out specks of dust puff off its bristles. Leaving mid-sweep eases back to the static
+   * tile, which is also the resting state and the only state under `prefers-reduced-motion`. Not at `md` and below
+   * (the 16px drawing). Decorative; it changes nothing that is read.
+   */
+  sweep?: boolean | undefined;
 }
 
 /** The product name the wordmark shows. */
@@ -33,7 +40,14 @@ const SMALL: ReadonlySet<LogoSize> = new Set<LogoSize>(['xs', 'sm', 'md']);
  * the broom is a mask, so whatever is behind the logo shows through it. Inline SVG with a per-instance mask id.
  * See `BroomIcon` for the status broom; the two are different drawings on purpose.
  */
-export function Logo({ size = 'lg', wordmark = false, label = NAME, className, ...rest }: LogoProps) {
+export function Logo({
+  size = 'lg',
+  wordmark = false,
+  label = NAME,
+  sweep = false,
+  className,
+  ...rest
+}: LogoProps) {
   const mask = `sc-logo-${useId().replace(/[^\w-]/g, '')}`;
   const small = SMALL.has(size);
   return (
@@ -41,6 +55,7 @@ export function Logo({ size = 'lg', wordmark = false, label = NAME, className, .
       className={cx('sc-logo', className)}
       data-size={size}
       data-wordmark={wordmark || undefined}
+      data-sweep={(sweep && !small) || undefined}
       role={wordmark ? undefined : 'img'}
       aria-label={wordmark ? undefined : label}
       {...rest}
@@ -48,25 +63,35 @@ export function Logo({ size = 'lg', wordmark = false, label = NAME, className, .
       <svg className="sc-logo__mark" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
         <mask id={mask}>
           <path fill="#fff" d="M0 0h24v24H0z" />
-          <g
-            transform="translate(.5 -.5) rotate(45 12 12)"
-            stroke="#000"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            {small ? (
-              <>
-                <path strokeWidth="3" d="M12 2.5v8" />
-                <path strokeWidth="1.5" d="M9.5 11h5l3.5 9h-12z" />
-              </>
-            ) : (
-              <>
-                <path strokeWidth="2.4" d="M12 2.5v8" />
-                <path fill="#000" strokeWidth="1.5" d="M9.75 11h4.5l3.2 9H6.55z" />
-                <path stroke="#fff" strokeWidth="1.3" d="M10.3 21l.7-5.5M13.7 21l-.7-5.5" />
-              </>
-            )}
+          {/* The broom pivots on its handle's top end, (19.2, 4.8) in the tile, when it sweeps. */}
+          <g className="sc-logo__broom">
+            <g
+              transform="translate(.5 -.5) rotate(45 12 12)"
+              stroke="#000"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {small ? (
+                <>
+                  <path strokeWidth="3" d="M12 2.5v8" />
+                  <path strokeWidth="1.5" d="M9.5 11h5l3.5 9h-12z" />
+                </>
+              ) : (
+                <>
+                  <path strokeWidth="2.4" d="M12 2.5v8" />
+                  <path fill="#000" strokeWidth="1.5" d="M9.75 11h4.5l3.2 9H6.55z" />
+                  <path stroke="#fff" strokeWidth="1.3" d="M10.3 21l.7-5.5M13.7 21l-.7-5.5" />
+                </>
+              )}
+            </g>
           </g>
+          {sweep && !small ? (
+            <g className="sc-logo__dust" fill="#000">
+              <circle cx="4.3" cy="19.4" r=".95" />
+              <circle cx="6.9" cy="21.1" r=".75" />
+              <circle cx="3.3" cy="16.6" r=".6" />
+            </g>
+          ) : null}
         </mask>
         <rect width="24" height="24" rx="5.5" fill="currentColor" mask={`url(#${mask})`} />
       </svg>

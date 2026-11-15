@@ -88,4 +88,34 @@ describe('Logo', () => {
     expect(css).toMatch(/@media \(forced-colors: active\) \{\s*\.sc-logo__mark \{\s*color: CanvasText;/);
     expect(css).toMatch(/--sc-logo-size/);
   });
+
+  it('with sweep, adds three dust cut-outs and data-sweep, never at md and below; the resting drawing is unchanged', () => {
+    const { container } = render(
+      <>
+        <Logo sweep />
+        <Logo size="md" sweep />
+        <Logo />
+      </>,
+    );
+    const [swept, small, still] = container.querySelectorAll('.sc-logo');
+    expect(swept).toHaveAttribute('data-sweep', 'true');
+    expect(swept!.querySelectorAll('mask .sc-logo__dust circle')).toHaveLength(3);
+    expect(small).not.toHaveAttribute('data-sweep');
+    expect(small!.querySelector('.sc-logo__dust')).toBeNull();
+    expect(still).not.toHaveAttribute('data-sweep');
+    expect(still!.querySelector('.sc-logo__dust')).toBeNull();
+    for (const logo of [swept, small, still])
+      expect(logo!.querySelector('mask > .sc-logo__broom > g[transform]')).not.toBeNull();
+  });
+
+  it('sweeps only on hover or keyboard focus of its link or button, eases in and out, and not for reduced motion', () => {
+    expect(css).toMatch(/@property --sc-logo-sweep-amp \{[^}]*syntax: '<number>';[^}]*initial-value: 0;/);
+    expect(css).toMatch(
+      /\.sc-logo\[data-sweep\] \.sc-logo__broom \{[^}]*transform: rotate\(calc\(var\(--sc-logo-sweep-amp, 0\) \* var\(--sc-logo-sweep-phase, 0\) \* -9deg\)\);[^}]*animation: sc-logo-sweep 1\.6s ease-in-out infinite paused;/,
+    );
+    expect(css).toMatch(/\.sc-logo\[data-sweep\] \{\s*transition: --sc-logo-sweep-amp/);
+    expect(css).toMatch(
+      /@media \(prefers-reduced-motion: no-preference\) \{\s*:is\(a, button\):is\(:hover, :focus-visible\) \.sc-logo\[data-sweep\] \{\s*--sc-logo-sweep-amp: 1;/,
+    );
+  });
 });
