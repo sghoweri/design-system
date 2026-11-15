@@ -8,6 +8,7 @@ import { Kbd } from '../Kbd/Kbd';
 import { BroomIcon } from '../BroomIcon/BroomIcon';
 import { Text } from '../Text/Text';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { Switch } from '../Switch/Switch';
 import { PlusIcon } from '../../icons/icons.gen';
 import { DarkTheme } from '../../stories/helpers';
 
@@ -29,7 +30,7 @@ function Demo({
   ...rest
 }: { initial?: string; label?: string; labels?: string[]; badges?: Badges | undefined } & Pick<
   PriorityNavProps,
-  'onOverflowChange' | 'overflowHysteresis'
+  'onOverflowChange' | 'overflowHysteresis' | 'panelEnd'
 >) {
   const [current, setCurrent] = useState(initial);
   const items: PriorityNavItem[] = labels.map((label) => ({
@@ -296,5 +297,72 @@ export const Dark: Story = {
         <Demo initial="Settings" label="Sections" />
       </Resizable>
     </DarkTheme>
+  ),
+};
+
+/**
+ * `panelEnd`: a control that belongs in the overflow, here a theme switch. It is always passed; the header
+ * shows an inline copy only while `onOverflowChange` says the row fits. While the row overflows More stays, even
+ * once every link fits again (the switch has moved out of the row), so the switch is never in neither place.
+ * `overflowHysteresis` is the room the inline switch gives back (its width and the gap before it), so the two
+ * cannot flip back and forth at the boundary.
+ */
+function ThemeHeader() {
+  const [dark, setDark] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
+  const [room, setRoom] = useState(0);
+  const inlineRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const el = inlineRef.current;
+    if (!el || overflowing) return;
+    // The room it gives back when it moves into the panel: its width and the header's gap before it. With the
+    // width alone the row oscillates inside that gap's band (measured: 708–728px at 4px steps).
+    const gap = parseFloat(getComputedStyle(el.parentElement!).columnGap) || 0;
+    setRoom(Math.ceil(el.getBoundingClientRect().width + gap));
+  }, [overflowing]);
+  const theme = <Switch label="Dark theme" checked={dark} onCheckedChange={setDark} />;
+  return (
+    <div
+      data-theme={dark ? 'dark' : 'light'}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 'var(--sc-spacing-md)',
+        padding: 'var(--sc-spacing-xs) var(--sc-spacing-sm)',
+        background: 'var(--sc-color-surface-default)',
+        color: 'var(--sc-color-text-default)',
+        borderBlockEnd: 'var(--sc-border-width-hairline) solid var(--sc-color-border-default)',
+      }}
+    >
+      <Text weight="semibold" style={{ whiteSpace: 'nowrap' }}>
+        Example app
+      </Text>
+      <Demo label="Sections" onOverflowChange={setOverflowing} overflowHysteresis={room} panelEnd={theme} />
+      {overflowing ? null : (
+        <div ref={inlineRef} style={{ flex: 'none' }}>
+          {theme}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export const PanelEnd: Story = {
+  name: 'Panel end: a theme switch',
+  render: () => (
+    <>
+      <Text size="sm" tone="muted">
+        Wide, the switch sits beside the links. Narrow the box: once they stop fitting beside it, it moves
+        into More (at first More holds only the switch, as every link fits without it; narrower, the collapsed
+        links come first, then a divider, then the switch). Tab reaches it after the last link; Escape returns
+        to More; flipping it leaves the panel open.
+      </Text>
+      <Resizable initial={900}>
+        <ThemeHeader />
+      </Resizable>
+      <div style={{ inlineSize: 375, paddingBlockEnd: 260 }}>
+        <ThemeHeader />
+      </div>
+    </>
   ),
 };
