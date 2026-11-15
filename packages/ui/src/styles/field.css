@@ -74,6 +74,9 @@
   font: inherit;
   font-size: var(--_fs);
   line-height: var(--sc-font-line-height-ui);
+  /* A value or placeholder longer than the field ends in an ellipsis, like the Select's value, instead of being cut
+     mid-letter. Browsers drop it while the field has focus, so typing and the caret scroll as usual. */
+  text-overflow: ellipsis;
   transition:
     border-color var(--sc-duration-fast) var(--sc-ease-standard),
     background-color var(--sc-duration-fast) var(--sc-ease-standard);

@@ -131,3 +131,24 @@ export const ClearableStory: Story = {
   name: 'Nullable and clearable',
   render: () => <Clearable />,
 };
+
+const longOptions = [
+  { value: 'pr', label: 'Principal Software Development Engineer, Design Systems (Web)' },
+  { value: 'st', label: 'Staff Software Engineer, Frontend Platform Architecture and Infrastructure' },
+  { value: 'sh', label: 'Short' },
+];
+
+/** A value longer than the trigger ends in an ellipsis; the popup still shows each option in full. */
+export const LongValue: Story = {
+  render: () => (
+    <Stack gap="md">
+      <div style={{ maxWidth: 240 }}>
+        <Select label="Role" options={longOptions} defaultValue="pr" />
+      </div>
+      <div style={{ maxWidth: 240 }}>
+        <Select label="Role" options={longOptions} defaultValue="st" clearable />
+      </div>
+      <Select label="Role" options={longOptions} defaultValue="pr" fullWidth />
+    </Stack>
+  ),
+};
