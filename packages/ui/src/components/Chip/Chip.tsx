@@ -72,19 +72,7 @@ export function Chip({
     </>
   );
   const remove = onRemove ? (
-    <button
-      type="button"
-      className="sc-chip__remove"
-      aria-label={removeName}
-      disabled={disabled}
-      onClick={(event) => {
-        event.stopPropagation();
-        onRemove();
-      }}
-      onKeyDown={handleRemoveKey}
-    >
-      <XIcon size="xs" />
-    </button>
+    <ChipRemove label={removeName} disabled={disabled} onRemove={onRemove} onKeyDown={handleRemoveKey} />
   ) : null;
 
   if (interactive) {
@@ -109,5 +97,34 @@ export function Chip({
       {body}
       {remove}
     </span>
+  );
+}
+
+/** Internal: the labelled × shared by Chip and EditableChip. */
+export function ChipRemove({
+  label,
+  disabled,
+  onRemove,
+  onKeyDown,
+}: {
+  label: string;
+  disabled: boolean;
+  onRemove: () => void;
+  onKeyDown: (event: KeyboardEvent<HTMLElement>) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className="sc-chip__remove"
+      aria-label={label}
+      disabled={disabled}
+      onClick={(event) => {
+        event.stopPropagation();
+        onRemove();
+      }}
+      onKeyDown={onKeyDown}
+    >
+      <XIcon size="xs" />
+    </button>
   );
 }
