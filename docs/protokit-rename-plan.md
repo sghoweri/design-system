@@ -5,7 +5,7 @@ Status: planned; nothing has started. This plan carries out ADR 0008 (decisions 
 1–6).
 
 The rename and the class migration land before any portfolio or resume link to the site goes out, and before ADR
-0008's docs-site work. The plan is three pull requests and one release merge, plus steps only Salem can take (npm,
+0008's docs-site work. The plan is four pull requests and one release merge, plus steps only Salem can take (npm,
 GitHub and DNS), listed separately at the end and referenced in the sequence as **S1–S6**.
 
 ## What changes
@@ -30,7 +30,7 @@ and the first stable is `@protokit/*` 0.2.0. No stable `@salemcobalt` 0.2.0 is c
 tag line (`v0.2.0-rc.N`) carries on unchanged, so the release tooling needs no change.
 
 **Left alone:** `CHANGELOG.md`, `docs/adr/**` and `docs/screenshots/**` are history and keep the old names. Job
-Sweep's `docs/design/` mockups wait on ADR 0009's open question.
+Sweep's `docs/design/` mockups are migrated, in their own PR (PR 4, ADR 0009 decision 7).
 
 ## Gates before PR 1 merges
 
@@ -61,10 +61,18 @@ Label `skip-release`. Nothing published changes. About a day, tests included.
 
   The build fails if any class or dashed ident in the output has no map entry.
 
-- `scripts/codemod-namespace.mjs` runs three passes driven by the map:
+- `scripts/codemod-namespace.mjs` runs five passes driven by the map:
   - CSS, with `postcss-selector-parser` for selectors and a value walk for dashed idents;
-  - string and template literals in TS, TSX, MDX and Astro, matching map keys only on class-token boundaries;
-  - `@layer` statements.
+  - string and template literals in TS, TSX, JS, MJS, MDX and Astro, matching map keys only on class-token
+    boundaries;
+  - `@layer` statements;
+  - HTML, for Job Sweep's mockups (PR 4):
+    - each inline `<style>` block goes through the CSS pass;
+    - each `style` attribute goes through the value walk;
+    - each `class` attribute's tokens are mapped;
+    - each inline `<script>` goes through the string pass;
+  - JSON whose string values hold captured markup, such as `sweeps-popover.before.json`: those values go through the
+    HTML pass, and the file is written back with its original indentation.
 
   It has a `--dry-run` that prints counts per file and takes paths, so Job Sweep can run it as
   `node ../design-system/scripts/codemod-namespace.mjs apps/web apps/extension`.
@@ -72,6 +80,7 @@ Label `skip-release`. Nothing published changes. About a day, tests included.
 - Fixture tests:
   - every pass;
   - idempotence (running twice changes nothing);
+  - an HTML fixture with a `<style>` block, `style` and `class` attributes, and markup escaped inside JSON;
   - no false positives on `sc-` inside other words.
 - The Stylelint config, ready but not yet enforced:
   - `selector-class-pattern` `^(c|o|u|t)-pk-[a-z0-9-]+(__[a-z0-9-]+)?$`;
@@ -119,10 +128,53 @@ About half a day.
   and 125 class strings, mostly in DOM tests, at `f7b5bc56`. Re-count at the time.
 - Swap the dependencies to `@protokit/*` at PR 2's rc.
 - Change `layers.css` to `@layer base, pk;` and update its test.
-- Add the same Stylelint patterns and usage check (ADR 0009, decision 5), excluding `docs/design/` until the mockup
-  question is decided.
+- Add the same Stylelint patterns and usage check (ADR 0009, decision 5). Both exclude `docs/design/` for good
+  (see PR 4).
 - Verify with Job Sweep's tests and builds, plus a look at the inbox, tracker, stepper and file flows in light and
   dark.
+
+### PR 4 (Job Sweep): migrate the design mockups
+
+Right after PR 3, as its own PR, so PR 3's app diff stays reviewable and this one is reviewed by its screenshots. It
+can merge before or after the release merge; nothing depends on it. About two hours, most of it the visual check.
+
+**What it covers.** All 29 files under `docs/design/` with an `sc-` occurrence (about 14,000 at `f7b5bc56`; re-count
+at the time):
+
+| Files                                                                  | How                                                                                                                 |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 9 HTML pages in `docs/design/concepts/`                                | Codemod HTML pass: inline `<style>` blocks, `style` and `class` attributes, inline scripts                          |
+| 6 stylesheets (`*.concept.css`, `*.proposed.css`)                      | Codemod CSS pass                                                                                                    |
+| 3 concept scripts (`*.concept.js`) and 3 build scripts (`*.build.mjs`) | Codemod string pass, plus hand edits to the build scripts' `@salemcobalt/*` package paths, which are not in the map |
+| `sweeps-popover.before.json` (captured markup of the real panel)       | Codemod JSON pass                                                                                                   |
+| 7 Markdown design docs (16 mentions of class or token names)           | The map's token-boundary replace, each of the 16 checked by hand                                                    |
+
+**Cross-check against the build scripts.** Three pages (`sweeps-popover`, `applications-declutter`,
+`admin-dashboard`) are generated by their `*.build.mjs` from the packages in `apps/web/node_modules` and a committed
+capture. After PR 3, run each one, giving `sweeps-popover` the `--no-capture` flag so it builds from the committed
+capture. The rebuilt page should match the codemodded page except where the packages changed since the page was
+built; `applications-declutter`, for one, was built against 0.2.0-rc.37, so some drift is expected. Any other difference is a reference the codemod missed. Commit the
+codemodded page, because the mockups are snapshots of their date, and note any package drift in the PR.
+
+**Visual check of every page.** The pages are static HTML with no tests, so screenshots are the proof:
+
+- Take full-page screenshots of all 9 pages on the base commit, before the codemod, with Playwright.
+- Use 1280px and 390px widths, in light and dark where a page has a theme switch, and every scene where a page has a
+  scene switcher.
+- Wait for `document.fonts.ready`, because the pages load fonts from the network.
+- Repeat on the PR branch and pixel-diff each pair.
+- The expected diff is zero. The PR shows the diff summary and the before and after screenshots of any page that
+  moved.
+
+**Lint: deliberately excluded, with one check that covers it.**
+
+- **Excluded from Stylelint and the `var()` usage check.** Each page declares its own copy of the tokens, and the
+  proposal stylesheets declare tokens that do not exist in the package yet. A usage check against the published
+  `tokens.json` would flag the proposals as errors. Nothing edits these files after this PR, so style rules would only
+  add noise.
+- **Covered by a leftover-prefix check.** One CI step runs the PR 2 grep
+  (`git grep -E '(^|[^a-z0-9])-?-?sc-[a-z0-9]' -- docs/design apps`) and fails on any match. That guards the
+  migration itself and any page copied from an old one later.
 
 ### Release merge (design-system): first stable `@protokit` 0.2.0
 
@@ -230,5 +282,6 @@ About two to three days in all, as ADR 0008 estimated:
 - PR 1: about a day.
 - PR 2: about half a day, plus review.
 - PR 3: about half a day.
+- PR 4: about two hours, most of it the visual check.
 - The release merge: minutes.
 - Salem's steps: about an hour, plus any domain registration.

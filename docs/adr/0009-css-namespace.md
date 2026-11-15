@@ -1,7 +1,7 @@
 # ADR 0009: CSS namespace: bare BEMIT or brand plus BEMIT
 
 Date: 2026-11-15
-Status: accepted (Salem, 2026-11-15), with two questions still open (below). Nothing is renamed by this ADR; the
+Status: accepted (Salem, 2026-11-15), with one question still open (the hybrid, below). Nothing is renamed by this ADR; the
 migration follows [the Protokit rename plan](../protokit-rename-plan.md).
 
 ## Decisions (Salem, 2026-11-15)
@@ -31,19 +31,23 @@ Where an answer differs from the recommendation, it says so.
    link to the site goes out, ahead of ADR 0008's docs-site work. This goes against the recommendation (after the
    site work, likely after 2026-12-31).
 
+7. **Job Sweep's design mockups are migrated** (call 6; Salem, 2026-11-15: "Yes they should get migrated"). This
+   goes against the recommendation (leave them as frozen snapshots). It covers everything under `docs/design/`:
+   about 14,000 `sc-` occurrences in 29 files, 7,362 of them custom-property references.
+   - The 9 HTML pages, their inline `<style>` blocks, `class` and `style` attributes.
+   - The 6 concept and proposal stylesheets.
+   - The 3 build scripts and 3 concept scripts.
+   - The 1 captured-markup JSON.
+   - 16 mentions in 7 Markdown design docs.
+
+   It runs as its own Job Sweep PR right after the app migration, checked page by page with before-and-after
+   screenshots, because the pages are static HTML with no tests. The `var()` usage check and Stylelint deliberately
+   exclude `docs/design/`; a leftover-`sc-` check covers it instead. The rename plan has the detail.
+
 ### Open, Salem to discuss
 
-These two were left unticked. They are not decided here.
+This one was left unticked. It is not decided here.
 
-- **Job Sweep's frozen mockups** (`docs/design/`, call 6): about 14,000 `sc-` occurrences in 29 files (HTML, CSS,
-  JS and Markdown), 7,362 of them custom-property references.
-  - _Leave them:_ costs nothing now. Each mockup embeds its own copy of the token CSS, so it still renders. The
-    occurrences stay in Job Sweep, so its Stylelint and grep checks must exclude `docs/design/`. The mockups also stop
-    matching the class names a reader would copy from the shipping app.
-  - _Migrate them:_ run the same codemod over the 29 files. That is about an hour, plus a look at each page before
-    and after. A page whose embedded tokens and their
-    uses are renamed inconsistently breaks silently.
-  - Nothing else depends on this call, so it can wait until after the rename.
 - **The hybrid** (call 8): bare BEMIT classes (`.c-button`, `.o-stack`) with branded `--pk-*` and `@layer pk`.
   - _For:_ shorter class names. The custom-property churn is the same as decided, because the tokens are renamed
     anyway.
@@ -165,7 +169,7 @@ Plus a handful of one-liners in each repo:
 - The docs site's Starlight mapping and swatches (51 lines in `apps/docs`).
 - Job Sweep's `layers.css` and its test.
 
-**Leave the mockups alone** (proposed; open, see Decisions). Each mockup embeds its own copy of the token CSS, so it renders correctly forever as a
+**Leave the mockups alone** (proposed; Salem decided to migrate them, decision 7). Each mockup embeds its own copy of the token CSS, so it renders correctly forever as a
 snapshot. Rewriting 14,000 lines of archived design artifacts buys nothing.
 
 What changes, per option and name:
@@ -311,7 +315,7 @@ These disagreements are left for Salem:
 
 ## Calls for Salem
 
-Answered 2026-11-15, except calls 6 and 8, which are open. The answers are recorded under Decisions at the top.
+Answered 2026-11-15, except call 8, which is open. The answers are recorded under Decisions at the top.
 
 1. **Option 1 (bare BEMIT) or option 2 (brand + BEMIT)?** _Recommend: option 2._ **Salem: brand + BEMIT.**
 2. **Prefix**: follows ADR 0008 (`sc` / `pk` / `bds`). _Recommend: `sc`, which leaves custom properties untouched._
@@ -323,7 +327,7 @@ Answered 2026-11-15, except calls 6 and 8, which are open. The answers are recor
    `legacy.css` aliases only if custom properties change._ **Salem: one breaking release, `--sc-*` → `--pk-*`, no
    aliases; the codemod covers Job Sweep.**
 6. **Job Sweep design mockups** (`docs/design/`, about 14,000 occurrences): leave as frozen snapshots?
-   _Recommend: yes._ **Open, Salem to discuss** (costs under Decisions).
+   _Recommend: yes._ **Salem: migrate them** (decision 7).
 7. **Lint**: add the Stylelint class and custom-property patterns plus the `var()` usage check in both repos as part
    of the migration? _Recommend: yes, as the migration's proof._ **Salem: yes.**
 8. **Hybrid** (Fable's call): was bare `--color-*` really intended, or should bare BEMIT classes with branded `--sc-*`
