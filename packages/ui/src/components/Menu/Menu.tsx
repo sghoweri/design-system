@@ -1,5 +1,15 @@
 import { Menu as BaseMenu } from '@base-ui/react/menu';
-import { useId, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useId,
+  useLayoutEffect,
+  useState,
+  type ComponentPropsWithRef,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from 'react';
 import { Button } from '../Button/Button';
 import { CheckIcon, ChevronDownIcon } from '../../icons/icons.gen';
 import { cx } from '../../utils/cx';
@@ -68,16 +78,35 @@ export interface MenuContentProps extends Omit<BaseMenu.Popup.Props, 'className'
   className?: string | undefined;
 }
 
-/** Portal, positioner and the popup. Items go inside. */
+/** What a `Menu.Header` registers: who it is, and the ids that name and describe the popup. */
+interface HeaderRefs {
+  owner: string;
+  labelledBy: string;
+  describedBy: string | undefined;
+}
+
+/** Lets a `Menu.Header` name (and describe) the popup it sits in. */
+const HeaderIdContext = createContext<Dispatch<SetStateAction<HeaderRefs | undefined>> | null>(null);
+
+/**
+ * Portal, positioner and the popup. Items go inside. A `Menu.Header` inside names the menu
+ * (`aria-labelledby`) unless `aria-label` or `aria-labelledby` is passed here, and its `detail` line describes it.
+ */
 function Content({
   side = 'bottom',
   align = 'start',
   sideOffset = 4,
   className,
   children,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
   ...rest
 }: MenuContentProps) {
   const collisionPadding = useSafeAreaPadding();
+  const [header, setHeader] = useState<HeaderRefs | undefined>(undefined);
+  const labelledBy = ariaLabelledBy ?? (ariaLabel === undefined ? header?.labelledBy : undefined);
+  const describedBy = [ariaDescribedBy, header?.describedBy].filter(Boolean).join(' ') || undefined;
   return (
     <BaseMenu.Portal>
       <BaseMenu.Positioner
@@ -87,8 +116,14 @@ function Content({
         collisionPadding={collisionPadding}
         className="sc-menu__positioner"
       >
-        <BaseMenu.Popup className={cx('sc-menu', className)} {...rest}>
-          {children}
+        <BaseMenu.Popup
+          className={cx('sc-menu', className)}
+          aria-label={ariaLabel}
+          aria-labelledby={labelledBy}
+          aria-describedby={describedBy}
+          {...rest}
+        >
+          <HeaderIdContext.Provider value={setHeader}>{children}</HeaderIdContext.Provider>
         </BaseMenu.Popup>
       </BaseMenu.Positioner>
     </BaseMenu.Portal>
@@ -165,7 +200,12 @@ export interface MenuItemProps extends Omit<BaseMenu.Item.Props, 'className'>, I
   className?: string | undefined;
 }
 
-/** One action. Closes the menu when activated. */
+/**
+ * One action. Closes the menu when activated; usually `onClick` does the work. It can also render as a native
+ * button, a form's submit button included (`nativeButton render={<button type="submit" />}`, or `form="id"` for a
+ * form outside the menu), and keeps the item's look. The menu closes and unmounts its contents as the item is
+ * activated, so a form inside the menu has nowhere to show pending or error state: keep that state outside it.
+ */
 function Item({
   icon,
   description,
@@ -328,6 +368,53 @@ function Group({ label, className, children, ...rest }: MenuGroupProps) {
   );
 }
 
+export interface MenuHeaderProps extends ComponentPropsWithRef<'div'> {
+  /** A muted line above the text: "Signed in as". Part of the menu's name. */
+  caption?: ReactNode | undefined;
+  /** The text: an email or a name. Wraps anywhere, so a long address never widens the menu. Part of the name. */
+  children?: ReactNode | undefined;
+  /** A muted line under the text: "Trial · ends Nov 30". The menu's description, not part of its name. */
+  detail?: ReactNode | undefined;
+}
+
+/**
+ * A non-interactive block at the top of `Menu.Content` that names the menu: "Signed in as" over an email.
+ * Not an item: arrow keys and type-ahead skip it, and it is `role="none"`. Its text becomes the menu's
+ * accessible name through `aria-labelledby`. Follow it with a `Menu.Separator`.
+ */
+function Header({ caption, detail, className, children, id, ...rest }: MenuHeaderProps) {
+  const autoId = useId();
+  const headerId = id ?? autoId;
+  const setHeader = useContext(HeaderIdContext);
+  const hasCaption = caption !== undefined && caption !== null;
+  const hasDetail = detail !== undefined && detail !== null;
+  const labelledBy = hasCaption ? `${headerId}-caption ${headerId}-text` : `${headerId}-text`;
+  const describedBy = hasDetail ? `${headerId}-detail` : undefined;
+  useLayoutEffect(() => {
+    if (!setHeader) return;
+    setHeader({ owner: headerId, labelledBy, describedBy });
+    // Clear only our own registration: another header may have registered since.
+    return () => setHeader((current) => (current?.owner === headerId ? undefined : current));
+  }, [setHeader, headerId, labelledBy, describedBy]);
+  return (
+    <div role="none" id={headerId} className={cx('sc-menu__header', className)} {...rest}>
+      {hasCaption ? (
+        <span id={`${headerId}-caption`} className="sc-menu__header-caption">
+          {caption}
+        </span>
+      ) : null}
+      <span id={`${headerId}-text`} className="sc-menu__header-text">
+        {children}
+      </span>
+      {hasDetail ? (
+        <span id={`${headerId}-detail`} className="sc-menu__header-detail">
+          {detail}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
 export interface MenuSeparatorProps extends Omit<BaseMenu.Separator.Props, 'className'> {
   className?: string | undefined;
 }
@@ -348,5 +435,6 @@ export const Menu = {
   RadioGroup,
   RadioItem,
   Group,
+  Header,
   Separator,
 };
