@@ -145,7 +145,7 @@ function ValidatedOnBlur() {
       onValueChange={() => setError(undefined)}
     />
   );
-};
+}
 
 /**
  * The error renders in a live region that is always there, so a message that appears after the field
