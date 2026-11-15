@@ -1,0 +1,57 @@
+/* ---- Callout --------------------------------------------------------------- */
+/* A block to look at and decide on: a tinted wash, a border in the tone, an optional title and actions. No role. */
+.sc-callout {
+  --_bg: var(--sc-color-accent-wash);
+  --_bd: var(--sc-color-accent-border);
+  display: grid;
+  gap: var(--sc-spacing-xs);
+  box-sizing: border-box;
+  padding: var(--sc-spacing-sm) var(--sc-spacing-md);
+  border: var(--sc-border-width-hairline) solid var(--_bd);
+  border-radius: var(--sc-radius-lg);
+  background: var(--_bg);
+  color: var(--sc-color-text-default);
+  font-family: var(--sc-font-family-sans);
+  font-size: var(--sc-font-size-sm);
+  line-height: var(--sc-font-line-height-ui);
+}
+.sc-callout[data-variant='dashed'] {
+  border-style: dashed;
+}
+.sc-callout[data-tone='neutral'] {
+  --_bg: var(--sc-color-surface-sunken);
+  --_bd: var(--sc-color-border-default);
+}
+.sc-callout[data-tone='info'] {
+  --_bg: var(--sc-color-info-subtle);
+  --_bd: rgb(from var(--sc-color-info-text) r g b / 0.45);
+}
+.sc-callout[data-tone='success'] {
+  --_bg: var(--sc-color-success-subtle);
+  --_bd: var(--sc-color-success-border);
+}
+.sc-callout[data-tone='warning'] {
+  --_bg: var(--sc-color-warning-subtle);
+  --_bd: var(--sc-color-warning-border);
+}
+.sc-callout[data-tone='danger'] {
+  --_bg: var(--sc-color-danger-subtle);
+  --_bd: var(--sc-color-danger-border);
+}
+.sc-callout__title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: var(--sc-font-weight-semibold);
+  line-height: inherit;
+  text-wrap-style: balance;
+}
+.sc-callout__body {
+  min-inline-size: 0;
+  text-wrap-style: pretty;
+}
+.sc-callout__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sc-spacing-xs);
+}
