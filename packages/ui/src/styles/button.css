@@ -163,6 +163,14 @@
   box-shadow: none;
   opacity: 0.72;
 }
+/* On a fill the dim drops the key below 4.5:1 (3.2:1 on light primary), so the filled variants, and secondary and
+   ghost on the .sc-on-accent scope's fill (base.css), show it at full strength. Ratios: button-shortcut.test.ts. */
+.sc-button[data-variant='primary'] > .sc-button__shortcut .sc-kbd,
+.sc-button[data-variant='danger'] > .sc-button__shortcut .sc-kbd,
+.sc-on-accent .sc-button__shortcut .sc-kbd,
+.sc-toast[data-tone='accent'] .sc-button__shortcut .sc-kbd {
+  opacity: 1;
+}
 .sc-button__shortcut .sc-kbd-group {
   color: inherit;
 }

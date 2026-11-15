@@ -19,7 +19,11 @@ export interface BannerProps extends ComponentPropsWithRef<'div'> {
   icon?: ReactNode | false | undefined;
   /** One Button, usually `variant="ghost" size="sm"`, at the end of the strip; or an Inline of two (Details, Hide). */
   action?: ReactNode | undefined;
-  /** Shows a close button that hides the banner. */
+  /**
+   * Shows a close button that hides the banner. Inline, it sits on the top-right corner, half outside, as a raised
+   * round button, so leave the banner a few pixels of room above and at the end (an ancestor's `overflow: hidden`
+   * would clip it). On a page banner it stays in the row.
+   */
   dismissible?: boolean | undefined;
   /** Called when the close button is pressed. */
   onDismiss?: (() => void) | undefined;
@@ -62,6 +66,7 @@ export function Banner({
       className={cx('sc-banner', className)}
       data-tone={tone}
       data-placement={placement === 'page' ? 'page' : undefined}
+      data-dismissible={dismissible || undefined}
       {...rest}
     >
       {glyph ? (
@@ -72,9 +77,12 @@ export function Banner({
       <div className="sc-banner__body">{children}</div>
       {action ? <div className="sc-banner__action">{action}</div> : null}
       {dismissible ? (
+        // Inline: a raised round button on the top-right corner. Page: in the row, as part of the bar.
         <IconButton
           label={dismissLabel}
           size="sm"
+          variant={placement === 'page' ? 'ghost' : 'secondary'}
+          round={placement !== 'page'}
           className="sc-banner__dismiss"
           onClick={() => {
             setDismissed(true);
