@@ -49,6 +49,8 @@ const pairs: Array<[string, string[], number]> = [
   ['info-text', ['info-subtle', 'surface-default'], 4.5],
   ['danger-text', ['danger-subtle', 'surface-default'], 4.5],
   ['text-on-status', ['success-solid', 'warning-solid', 'danger-solid', 'info-solid'], 4.5],
+  // The success Button's hover and pressed fill.
+  ['text-on-status', ['success-hover'], 4.5],
   ['border-strong', ['surface-default', 'surface-canvas'], 3],
   ['border-focus', ['surface-canvas', 'surface-default', 'surface-raised'], 3],
   ['accent-default', ['surface-default', 'surface-canvas'], 3],
@@ -109,6 +111,7 @@ const washes: Array<[string, string]> = [
   // Hover and pressed on an accent fill (.sc-on-accent).
   ['accent-default', 'accent-hover'],
   ['accent-hover', 'accent-active'],
+  ['success-solid', 'success-hover'],
 ];
 describe.each(['light', 'dark'] as const)('%s theme state washes', (theme) => {
   const t = json[theme];
