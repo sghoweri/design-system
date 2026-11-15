@@ -411,6 +411,16 @@ export function SignOutIcon(props: IconGlyphProps) {
   );
 }
 
+/** `sparkles` */
+export function SparklesIcon(props: IconGlyphProps) {
+  return (
+    <Icon {...props}>
+      <path d="M7 3.75c.56 3.15 2.1 4.69 5.25 5.25-3.15.56-4.69 2.1-5.25 5.25-.56-3.15-2.1-4.69-5.25-5.25 3.15-.56 4.69-2.1 5.25-5.25z" />
+      <path d="M12.75 1.75c.16.9.6 1.34 1.5 1.5-.9.16-1.34.6-1.5 1.5-.16-.9-.6-1.34-1.5-1.5.9-.16 1.34-.6 1.5-1.5z" />
+    </Icon>
+  );
+}
+
 /** `star` */
 export function StarIcon(props: IconGlyphProps) {
   return (

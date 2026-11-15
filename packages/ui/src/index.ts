@@ -57,6 +57,7 @@ export {
   type MenuCheckboxItemProps,
   type MenuContentProps,
   type MenuGroupProps,
+  type MenuHeaderProps,
   type MenuItemProps,
   type MenuItemTone,
   type MenuLinkItemProps,
@@ -99,6 +100,20 @@ export {
   type ProgressTone,
   type ProgressVariant,
 } from './components/Progress/Progress';
+export {
+  Meter,
+  type MeterLayout,
+  type MeterMark,
+  type MeterProps,
+  type MeterSize,
+  type MeterTone,
+} from './components/Meter/Meter';
+export {
+  StatusStrip,
+  type StatusStripItem,
+  type StatusStripProps,
+  type StatusStripTone,
+} from './components/StatusStrip/StatusStrip';
 export {
   Heading,
   type HeadingElement,

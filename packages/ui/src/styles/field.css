@@ -41,6 +41,10 @@
   font-size: var(--sc-font-size-xs);
   text-wrap-style: pretty;
 }
+/* The error's live region is always in the tree; empty, it leaves the flex flow so the field's gap stays as it was. */
+.sc-field__error-region:empty {
+  position: absolute;
+}
 .sc-field__error {
   margin: 0;
   color: var(--sc-color-danger-text);
@@ -70,6 +74,9 @@
   font: inherit;
   font-size: var(--_fs);
   line-height: var(--sc-font-line-height-ui);
+  /* A value or placeholder longer than the field ends in an ellipsis, like the Select's value, instead of being cut
+     mid-letter. Browsers drop it while the field has focus, so typing and the caret scroll as usual. */
+  text-overflow: ellipsis;
   transition:
     border-color var(--sc-duration-fast) var(--sc-ease-standard),
     background-color var(--sc-duration-fast) var(--sc-ease-standard);
@@ -153,6 +160,15 @@
 }
 .sc-textarea[data-resize='none'] {
   resize: none;
+}
+/* autoSize: as tall as the content, never shorter than `rows` lines (--_rows, set inline). */
+.sc-textarea[data-autosize] {
+  field-sizing: content;
+  min-block-size: max(
+    var(--_h),
+    calc(var(--_rows, 1) * 1lh + 2 * var(--sc-spacing-xs) + 2 * var(--sc-border-width-hairline))
+  );
+  overflow-y: hidden;
 }
 .sc-textarea[data-variant='code'] {
   font-family: var(--sc-font-family-mono);
