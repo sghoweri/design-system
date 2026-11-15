@@ -1,0 +1,43 @@
+/* ---- Logo ------------------------------------------------------------------ */
+/* The Job Sweep mark ("Tile cut-out", picked 2026-11-15): an accent tile with the broom masked out, so the
+   surface behind shows through. Sized like an icon; the wordmark takes the surrounding font. */
+.sc-logo {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-lg));
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--_s) * 0.4);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.sc-logo[data-size='xs'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-xs));
+}
+.sc-logo[data-size='sm'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-sm));
+}
+.sc-logo[data-size='md'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-md));
+}
+.sc-logo[data-size='xl'] {
+  --_s: var(--sc-logo-size, var(--sc-size-icon-xl));
+}
+.sc-logo[data-size='em'] {
+  --_s: var(--sc-logo-size, 1em);
+}
+.sc-logo__mark {
+  display: block;
+  flex: none;
+  inline-size: var(--_s);
+  block-size: var(--_s);
+  color: var(--sc-color-accent-default);
+  /* The mask's black and white are luminance, not colour: forced colours must not repaint them. */
+  forced-color-adjust: none;
+}
+.sc-logo__wordmark {
+  font-weight: var(--sc-font-weight-semibold);
+}
+@media (forced-colors: active) {
+  .sc-logo__mark {
+    color: CanvasText;
+  }
+}

@@ -217,6 +217,7 @@ export {
   type PopoverTriggerProps,
 } from './components/Popover/Popover';
 export { BroomIcon, type BroomIconProps } from './components/BroomIcon/BroomIcon';
+export { Logo, type LogoProps, type LogoSize } from './components/Logo/Logo';
 export {
   FullScreenFlow,
   type FlowChapter,
