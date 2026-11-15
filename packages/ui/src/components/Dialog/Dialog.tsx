@@ -90,6 +90,10 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
    * inline end, keeps clear of the safe areas, and lets `Dialog.Body` scroll between a pinned title and
    * actions; `size` is ignored. It is the surface of `FullScreenFlow`. Pair it with `onRequestClose` on
    * the Root when leaving needs a confirmation.
+   *
+   * Never open a dialog from inside one of the same variant: no sheet from a sheet, no full-screen dialog
+   * from a full-screen one. Open a Popover or Menu instead, use a different variant (a small centred
+   * `dialog` to confirm), or replace the content in place.
    */
   variant?: DialogVariant | undefined;
   /**
@@ -107,6 +111,12 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
  * Portal, backdrop and the popup. Focus moves inside on open and returns to the trigger on close. A dialog opened
  * from inside another has its own backdrop too, over the first dialog.
  * Menus, selects and tooltips opened from inside render above it (`--sc-z-dropdown` > `--sc-z-dialog`).
+ *
+ * In the default `dialog` variant the children render inside `div.sc-dialog__scroll`, the popup's only child, and that
+ * is what scrolls (with the × in it, so the × scrolls away with the title as before): its scrollbar sits centred in
+ * the popup's side padding instead of against the popup's edge (dialog.css). A `sheet` and a `fullscreen` dialog have
+ * no wrapper; their `Dialog.Body` scrolls. Changing `variant` while open between `dialog` and another remounts the
+ * children (their own state and focus reset), so keep state that must survive it above `Dialog.Content`.
  */
 function Content({
   size = 'md',
@@ -134,7 +144,7 @@ function Content({
         {...rest}
       >
         {isSheet && <SheetHandle swipe={swipe} />}
-        {children}
+        {variant === 'dialog' ? <div className="sc-dialog__scroll">{children}</div> : children}
       </BaseDialog.Popup>
     </BaseDialog.Portal>
   );

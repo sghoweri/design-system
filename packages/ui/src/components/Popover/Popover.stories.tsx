@@ -47,6 +47,34 @@ export const WithArrow: Story = {
   ),
 };
 
+/**
+ * A panel taller than the room below its trigger: it shrinks to that room and its content scrolls inside it, with
+ * the scrollbar centred in the panel's side padding. The × scrolls away with the title.
+ */
+export const Long: Story = {
+  name: 'Long content',
+  render: () => (
+    <Popover.Root>
+      <Popover.Trigger>Why this score</Popover.Trigger>
+      <Popover.Content style={{ inlineSize: 320 }}>
+        <Popover.Close />
+        <Popover.Title>Score 82</Popover.Title>
+        <Popover.Description>What counted for and against this posting.</Popover.Description>
+        <Stack gap="xs" style={{ marginBlockStart: 'var(--sc-spacing-sm)' }}>
+          {Array.from({ length: 16 }, (_, i) => (
+            <Text key={i} size="sm">
+              Reason {i + 1}. Mentions design systems, tokens and accessibility in the first paragraph.
+            </Text>
+          ))}
+          <Button size="sm" variant="secondary">
+            Adjust what counts
+          </Button>
+        </Stack>
+      </Popover.Content>
+    </Popover.Root>
+  ),
+};
+
 /** A status panel opened from a nav IconButton: the broom sweeps while a sweep runs, the dot says on or paused. */
 function SweepStatus({ defaultOpen = false }: { defaultOpen?: boolean }) {
   const [running, setRunning] = useState(true);

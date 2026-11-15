@@ -115,6 +115,36 @@ describe('Popover', () => {
     expect((await screen.findByRole('dialog')).querySelector('.sc-popover__arrow')).not.toBeNull();
   });
 
+  it('puts the children, in order, in one scroller after the arrow, and the × inside it still closes', async () => {
+    const user = userEvent.setup();
+    render(<Example arrow />);
+    const trigger = screen.getByRole('button', { name: 'Sweeps: running' });
+    await user.click(trigger);
+    const popup = await screen.findByRole('dialog', { name: 'Sweeps' });
+    const classes = (el: Element) =>
+      [...el.children].map(
+        (c) => [...c.classList].find((n) => n.startsWith('sc-popover__')) ?? c.classList[0],
+      );
+    expect(classes(popup)).toEqual(['sc-popover__arrow', 'sc-popover__scroll']);
+    const scroll = popup.lastElementChild!;
+    expect(classes(scroll)).toEqual([
+      'sc-popover__close',
+      'sc-popover__title',
+      'sc-popover__description',
+      'sc-button',
+    ]);
+    expect(scroll.getAttributeNames()).toEqual(['class']);
+    expect(popup).toHaveAccessibleDescription('Next sweep in 2 hours.');
+
+    const close = screen.getByRole('button', { name: 'Close' });
+    close.focus();
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Sweep now' })).toHaveFocus();
+    await user.click(close);
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+  });
+
   it('closes on Escape (focus back to the trigger), on the ×, and on a click outside', async () => {
     const user = userEvent.setup();
     render(<Example />);

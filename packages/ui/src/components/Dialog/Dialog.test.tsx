@@ -85,6 +85,96 @@ describe('Dialog', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
   });
 
+  describe('scroll wrapper', () => {
+    function Variant({ variant }: { variant?: 'dialog' | 'sheet' | 'fullscreen' }) {
+      return (
+        <Dialog.Root>
+          <Dialog.Trigger render={<Button />}>Edit</Dialog.Trigger>
+          <Dialog.Content variant={variant}>
+            <Dialog.Close />
+            <Dialog.Title>Edit application</Dialog.Title>
+            <Dialog.Description>Stage and notes.</Dialog.Description>
+            <Dialog.Body>
+              <label>
+                Stage <input />
+              </label>
+              <label>
+                Notes <textarea />
+              </label>
+            </Dialog.Body>
+            <Dialog.Actions>
+              <Dialog.Close render={<Button variant="secondary" />}>Cancel</Dialog.Close>
+              <Dialog.Close render={<Button />}>Save</Dialog.Close>
+            </Dialog.Actions>
+          </Dialog.Content>
+        </Dialog.Root>
+      );
+    }
+    const classes = (el: Element) =>
+      [...el.children].map(
+        (c) => [...c.classList].find((n) => n.startsWith('sc-dialog__')) ?? c.classList[0],
+      );
+
+    it('wraps a default dialog’s children, in order, in the one scroller that is the popup’s only child', async () => {
+      const user = userEvent.setup();
+      render(<Variant />);
+      await user.click(screen.getByRole('button', { name: 'Edit' }));
+      const dialog = await screen.findByRole('dialog', { name: 'Edit application' });
+      expect(dialog).toHaveAttribute('data-variant', 'dialog');
+      expect(classes(dialog)).toEqual(['sc-dialog__scroll']);
+      expect(classes(dialog.firstElementChild!)).toEqual([
+        'sc-dialog__close',
+        'sc-dialog__title',
+        'sc-dialog__description',
+        'sc-dialog__body',
+        'sc-dialog__actions',
+      ]);
+      // Still the dialog's name and description, and no landmark or role of its own.
+      expect(dialog).toHaveAccessibleDescription('Stage and notes.');
+      expect(dialog.firstElementChild!.getAttributeNames()).toEqual(['class']);
+    });
+
+    it.each(['sheet', 'fullscreen'] as const)(
+      'leaves a %s alone: its Dialog.Body is the scroller, so there is no second one',
+      async (variant) => {
+        const user = userEvent.setup();
+        render(<Variant variant={variant} />);
+        await user.click(screen.getByRole('button', { name: 'Edit' }));
+        const dialog = await screen.findByRole('dialog', { name: 'Edit application' });
+        expect(dialog.querySelector('.sc-dialog__scroll')).toBeNull();
+        expect(classes(dialog)).toEqual(
+          expect.arrayContaining(['sc-dialog__title', 'sc-dialog__body', 'sc-dialog__actions']),
+        );
+      },
+    );
+
+    it('keeps the × inside it working and focus moving through the fields and wrapping inside the dialog', async () => {
+      const user = userEvent.setup();
+      render(<Variant />);
+      const trigger = screen.getByRole('button', { name: 'Edit' });
+      await user.click(trigger);
+      const dialog = await screen.findByRole('dialog', { name: 'Edit application' });
+      const close = screen.getByRole('button', { name: 'Close' });
+      expect(close.parentElement).toHaveClass('sc-dialog__scroll');
+      await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
+
+      close.focus();
+      await user.tab();
+      expect(screen.getByRole('textbox', { name: 'Stage' })).toHaveFocus();
+      await user.tab();
+      expect(screen.getByRole('textbox', { name: 'Notes' })).toHaveFocus();
+      await user.tab();
+      await user.tab();
+      expect(screen.getByRole('button', { name: 'Save' })).toHaveFocus();
+      await user.tab();
+      await waitFor(() => expect(close).toHaveFocus());
+
+      await user.click(close);
+      await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+      await waitFor(() => expect(trigger).toHaveFocus());
+    });
+  });
+
   it('has no axe violations open, and sheet is a data-variant on the same popup', async () => {
     const user = userEvent.setup();
     const { baseElement } = render(
