@@ -138,14 +138,14 @@ describe('FullScreenFlow', () => {
     await waitFor(() => expect(title).toHaveFocus());
     await waitFor(() => expect(liveRegion(dialog)).toHaveTextContent('Step 2 of 4, Experience'));
     await waitFor(() => expect(screen.queryByRole('heading', { name: 'About you' })).toBeNull());
-    const frame = title.closest('.sc-flow__frame')!;
+    const frame = title.closest('.c-proto-flow__frame')!;
     expect(frame).toHaveAttribute('data-phase', 'enter');
     expect(frame).toHaveAttribute('data-direction', 'forward');
 
     await user.click(screen.getByRole('button', { name: 'Back' }));
     const back = screen.getByRole('heading', { level: 2, name: 'About you' });
     await waitFor(() => expect(back).toHaveFocus());
-    expect(back.closest('.sc-flow__frame')).toHaveAttribute('data-direction', 'back');
+    expect(back.closest('.c-proto-flow__frame')).toHaveAttribute('data-direction', 'back');
     await waitFor(() => expect(liveRegion(dialog)).toHaveTextContent('Step 1 of 4, About you'));
   });
 
@@ -161,14 +161,16 @@ describe('FullScreenFlow', () => {
       render(<Demo />);
       await screen.findByRole('dialog');
       await user.click(screen.getByRole('button', { name: 'Continue' }));
-      const leaving = document.querySelector('.sc-flow__frame[data-phase="exit"]')!;
+      const leaving = document.querySelector('.c-proto-flow__frame[data-phase="exit"]')!;
       expect(leaving).toHaveAttribute('inert');
       expect(within(leaving as HTMLElement).getByText('About you')).toBeInTheDocument();
       await act(async () => {
         finish();
         await finished;
       });
-      await waitFor(() => expect(document.querySelector('.sc-flow__frame[data-phase="exit"]')).toBeNull());
+      await waitFor(() =>
+        expect(document.querySelector('.c-proto-flow__frame[data-phase="exit"]')).toBeNull(),
+      );
     } finally {
       HTMLElement.prototype.getAnimations = original;
     }
@@ -180,8 +182,8 @@ describe('FullScreenFlow', () => {
     const [you, search] = within(list).getAllByRole('listitem');
     expect(you).not.toHaveAttribute('aria-current');
     expect(search).toHaveAttribute('aria-current', 'step');
-    expect(you!.querySelector('.sc-flow__segment-fill')).toHaveStyle({ inlineSize: '100%' });
-    expect(search!.querySelector('.sc-flow__segment-fill')).toHaveStyle({ inlineSize: '25%' });
+    expect(you!.querySelector('.c-proto-flow__segment-fill')).toHaveStyle({ inlineSize: '100%' });
+    expect(search!.querySelector('.c-proto-flow__segment-fill')).toHaveStyle({ inlineSize: '25%' });
     expect(search).toHaveStyle({ flexGrow: '2' });
   });
 

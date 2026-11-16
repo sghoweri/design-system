@@ -27,24 +27,24 @@ export function Checkbox({
 }: CheckboxProps) {
   const descriptionId = useId();
   return (
-    <div className={cx('sc-choice', className)} data-disabled={disabled || undefined}>
-      <label className="sc-choice__control">
+    <div className={cx('c-proto-choice', className)} data-disabled={disabled || undefined}>
+      <label className="c-proto-choice__control">
         <BaseCheckbox.Root
-          className="sc-checkbox"
+          className="c-proto-checkbox"
           disabled={disabled}
           aria-describedby={description != null ? descriptionId : undefined}
           onCheckedChange={onCheckedChange ? (checked) => onCheckedChange(checked) : undefined}
           {...rest}
         >
-          <BaseCheckbox.Indicator className="sc-checkbox__indicator">
-            <CheckIcon size="sm" className="sc-checkbox__check" />
-            <MinusIcon size="sm" className="sc-checkbox__dash" />
+          <BaseCheckbox.Indicator className="c-proto-checkbox__indicator">
+            <CheckIcon size="sm" className="c-proto-checkbox__check" />
+            <MinusIcon size="sm" className="c-proto-checkbox__dash" />
           </BaseCheckbox.Indicator>
         </BaseCheckbox.Root>
-        <span className="sc-choice__label">{label}</span>
+        <span className="c-proto-choice__label">{label}</span>
       </label>
       {description != null ? (
-        <span className="sc-choice__description" id={descriptionId}>
+        <span className="c-proto-choice__description" id={descriptionId}>
           {description}
         </span>
       ) : null}

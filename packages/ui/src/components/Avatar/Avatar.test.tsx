@@ -37,7 +37,7 @@ describe('avatarInitials', () => {
 describe('Avatar', () => {
   it('shows initials from name, md by default, decorative and hidden from assistive tech', async () => {
     const { container } = render(<Avatar name="Robin Test" />);
-    const avatar = container.querySelector('.sc-avatar')!;
+    const avatar = container.querySelector('.c-proto-avatar')!;
     expect(avatar).toHaveTextContent('RT');
     expect(avatar).toHaveAttribute('data-size', 'md');
     expect(avatar).toHaveAttribute('aria-hidden', 'true');
@@ -63,8 +63,8 @@ describe('Avatar', () => {
 
   it('shows a person glyph with no name and no initials', () => {
     const { container } = render(<Avatar />);
-    expect(container.querySelector('svg.sc-avatar__icon')).not.toBeNull();
-    expect(container.querySelector('.sc-avatar__initials')).toBeNull();
+    expect(container.querySelector('svg.c-proto-avatar__icon')).not.toBeNull();
+    expect(container.querySelector('.c-proto-avatar__initials')).toBeNull();
   });
 
   it('shows the picture once it loads, in place of the initials', async () => {
@@ -108,10 +108,10 @@ describe('AvatarButton', () => {
     );
     const button = screen.getByRole('button', { name: 'Account: Robin Test' });
     expect(button).toHaveAttribute('type', 'button');
-    expect(button).toHaveClass('sc-avatar-button');
+    expect(button).toHaveClass('c-proto-avatar-button');
     expect(button).toHaveTextContent('RT');
-    expect(button.querySelector('.sc-avatar')).toHaveAttribute('aria-hidden', 'true');
-    expect(button.querySelector('.sc-avatar')).toHaveAttribute('data-size', 'sm');
+    expect(button.querySelector('.c-proto-avatar')).toHaveAttribute('aria-hidden', 'true');
+    expect(button.querySelector('.c-proto-avatar')).toHaveAttribute('data-size', 'sm');
     await userEvent.click(button);
     expect(onClick).toHaveBeenCalledTimes(1);
     await expectNoA11yViolations(container);
@@ -138,7 +138,7 @@ describe('AvatarButton', () => {
     const trigger = screen.getByRole('button', { name: 'Account: Robin Test' });
     expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
-    expect(trigger).toHaveClass('sc-avatar-button');
+    expect(trigger).toHaveClass('c-proto-avatar-button');
     await expectNoA11yViolations(container);
     await user.click(trigger);
     expect(await screen.findByRole('menuitem', { name: 'Sign out' })).toBeInTheDocument();

@@ -56,7 +56,7 @@ function resize(width: number) {
 function resizeMore(width: number) {
   act(() => {
     for (const { cb, targets } of observers) {
-      const target = targets.find((t) => t.classList.contains('sc-priority-nav__more'));
+      const target = targets.find((t) => t.classList.contains('c-proto-priority-nav__more'));
       if (!target) continue;
       const entry = { target, borderBoxSize: [{ inlineSize: width, blockSize: 32 }] };
       cb([entry as unknown as ResizeObserverEntry], {} as ResizeObserver);
@@ -73,13 +73,13 @@ beforeEach(() => {
   vi.stubGlobal('CSS', { supports: (q: string) => anchorSupported && q.includes('anchor') });
   vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
     let width = 0;
-    if (this.classList.contains('sc-priority-nav__item'))
+    if (this.classList.contains('c-proto-priority-nav__item'))
       width =
-        8 * (this.querySelector('.sc-priority-nav__label')?.textContent ?? '').length +
+        8 * (this.querySelector('.c-proto-priority-nav__label')?.textContent ?? '').length +
         24 +
-        (this.querySelector('.sc-priority-nav__badge') ? 16 : 0);
-    if (this.classList.contains('sc-priority-nav__more')) width = 72;
-    if (this.classList.contains('sc-priority-nav__list')) width = rowWidth;
+        (this.querySelector('.c-proto-priority-nav__badge') ? 16 : 0);
+    if (this.classList.contains('c-proto-priority-nav__more')) width = 72;
+    if (this.classList.contains('c-proto-priority-nav__list')) width = rowWidth;
     return {
       width,
       height: 32,
@@ -93,7 +93,7 @@ beforeEach(() => {
     } as DOMRect;
   });
   vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function (this: HTMLElement) {
-    return this.classList.contains('sc-priority-nav__list') ? rowWidth : 0;
+    return this.classList.contains('c-proto-priority-nav__list') ? rowWidth : 0;
   });
 });
 
@@ -104,14 +104,14 @@ afterEach(() => {
 
 const nav = () => screen.getByRole('navigation', { name: 'Main' });
 const inlineLinks = () =>
-  Array.from(nav().querySelectorAll(':scope > ul > .sc-priority-nav__item a'), (a) => a.textContent);
+  Array.from(nav().querySelectorAll(':scope > ul > .c-proto-priority-nav__item a'), (a) => a.textContent);
 const toggle = () => screen.getByRole('button', { name: /^More/ });
 const panel = () => document.getElementById(toggle().getAttribute('aria-controls')!)!;
 
 describe('PriorityNav', () => {
   it('is a labelled navigation landmark with a list of links and the current page marked', async () => {
     const { container } = render(<PriorityNav aria-label="Main" items={items('Sweeps')} />);
-    expect(nav()).toHaveClass('sc-priority-nav');
+    expect(nav()).toHaveClass('c-proto-priority-nav');
     expect(within(nav()).getAllByRole('listitem').length).toBeGreaterThanOrEqual(6);
     expect(screen.getByRole('link', { name: 'Sweeps' })).toHaveAttribute('aria-current', 'page');
     expect(screen.getByRole('link', { name: 'Inbox' })).not.toHaveAttribute('aria-current');
@@ -127,8 +127,8 @@ describe('PriorityNav', () => {
     const html = renderToString(ui);
     for (const label of LABELS) expect(html).toContain(`>${label}</span></a>`);
     expect(html).toContain('data-measuring="true"');
-    expect(html).toMatch(/class="sc-priority-nav__more" hidden=""/);
-    expect(html).toMatch(/class="sc-priority-nav__panel" hidden=""/);
+    expect(html).toMatch(/class="c-proto-priority-nav__more" hidden=""/);
+    expect(html).toMatch(/class="c-proto-priority-nav__panel" hidden=""/);
     expect(html).not.toContain('popover');
     const container = document.createElement('div');
     container.innerHTML = html;
@@ -140,7 +140,7 @@ describe('PriorityNav', () => {
     error.mockRestore();
     // Measured on hydration: the split happened before the browser could paint.
     expect(container.querySelector('nav')).not.toHaveAttribute('data-measuring');
-    expect(container.querySelectorAll('nav > ul > .sc-priority-nav__item')).toHaveLength(2);
+    expect(container.querySelectorAll('nav > ul > .c-proto-priority-nav__item')).toHaveLength(2);
     act(() => root.unmount());
     container.remove();
   });
@@ -151,7 +151,7 @@ describe('PriorityNav', () => {
     expect(inlineLinks()).toEqual(['Inbox', 'Applications']);
     expect(toggle()).toHaveAccessibleName('More, 4 links');
     expect(toggle()).toHaveTextContent(/^More, 4 links$/);
-    expect(toggle().querySelector('.sc-visually-hidden')).toHaveTextContent(', 4 links');
+    expect(toggle().querySelector('.u-proto-visually-hidden')).toHaveTextContent(', 4 links');
     expect(toggle()).toHaveAttribute('aria-expanded', 'false');
     expect(panel()).not.toBeVisible();
     expect(screen.queryByRole('link', { name: 'Sweeps' })).toBeNull();
@@ -240,7 +240,7 @@ describe('PriorityNav', () => {
     expect(inlineLinks()).toEqual(['Inbox', 'Learning']);
     // The links and More are not measured again (the row's own width is read once per render, to refit).
     const measuredItems = measure.mock.contexts.filter((el) =>
-      (el as HTMLElement).matches('.sc-priority-nav__item, .sc-priority-nav__more'),
+      (el as HTMLElement).matches('.c-proto-priority-nav__item, .c-proto-priority-nav__more'),
     );
     expect(measuredItems).toEqual([]);
   });
@@ -374,8 +374,8 @@ describe('PriorityNav', () => {
       </>,
     );
     const names = screen.getAllByRole('navigation').map((nav) => nav.style.getPropertyValue('--_anchor'));
-    expect(names[0]).toMatch(/^--sc-priority-nav[\w-]+$/);
-    expect(names[1]).toMatch(/^--sc-priority-nav[\w-]+$/);
+    expect(names[0]).toMatch(/^--proto-priority-nav[\w-]+$/);
+    expect(names[1]).toMatch(/^--proto-priority-nav[\w-]+$/);
     expect(names[0]).not.toBe(names[1]);
   });
 
@@ -436,8 +436,8 @@ describe('PriorityNav', () => {
     resizeMore(32);
     expect(inlineLinks()).toEqual(['Inbox', 'Applications', 'Sweeps']);
     expect(toggle()).toHaveAccessibleName('More, 3 links');
-    expect(toggle().querySelector('.sc-priority-nav__toggle-label')).toHaveTextContent('More');
-    expect(toggle().querySelector('.sc-priority-nav__ellipsis')).toHaveAttribute('aria-hidden', 'true');
+    expect(toggle().querySelector('.c-proto-priority-nav__toggle-label')).toHaveTextContent('More');
+    expect(toggle().querySelector('.c-proto-priority-nav__ellipsis')).toHaveAttribute('aria-hidden', 'true');
     // Hidden (0) reports are ignored.
     resizeMore(0);
     expect(inlineLinks()).toEqual(['Inbox', 'Applications', 'Sweeps']);
@@ -449,7 +449,7 @@ describe('PriorityNav', () => {
       current?: string,
     ): PriorityNavItem[] => items(current).map((item) => ({ ...item, ...extra[String(item.label)] }));
     const files = { badge: 2, badgeLabel: '2 suggestions to review' } as const;
-    const badgeOn = (el: Element) => el.querySelector(':scope > .sc-priority-nav__badge');
+    const badgeOn = (el: Element) => el.querySelector(':scope > .c-proto-priority-nav__badge');
 
     it('shows a count on an inline item, named by badgeLabel, and leaves More alone', async () => {
       const { container } = render(<PriorityNav aria-label="Main" items={withBadges({ Files: files })} />);
@@ -570,10 +570,10 @@ describe('PriorityNav', () => {
       const reduced =
         /@media \(prefers-reduced-motion: reduce\) \{\s*([^{]+)\{\s*transition: none;\s*\}\s*\}/.exec(css);
       expect(reduced?.[1]!.split(',').map((s) => s.trim())).toEqual([
-        '.sc-priority-nav__link',
-        '.sc-priority-nav__toggle',
-        '.sc-priority-nav__chevron',
-        '.sc-priority-nav__panel',
+        '.c-proto-priority-nav__link',
+        '.c-proto-priority-nav__toggle',
+        '.c-proto-priority-nav__chevron',
+        '.c-proto-priority-nav__panel',
       ]);
     });
   });
@@ -592,11 +592,11 @@ describe('PriorityNav', () => {
         <PriorityNav aria-label="Main" items={items()} panelEnd={<Theme />} />,
       );
       // Not in the row, and hidden with the panel until More opens.
-      expect(nav().querySelector(':scope > ul > .sc-priority-nav__panel-end')).toBeNull();
+      expect(nav().querySelector(':scope > ul > .c-proto-priority-nav__panel-end')).toBeNull();
       expect(screen.queryByRole('checkbox', { name: 'Dark theme' })).toBeNull();
       await user.click(toggle());
       const end = panel().lastElementChild as HTMLElement;
-      expect(end).toHaveClass('sc-priority-nav__panel-end');
+      expect(end).toHaveClass('c-proto-priority-nav__panel-end');
       expect(end.tagName).toBe('LI');
       expect(within(end).getByRole('checkbox', { name: 'Dark theme' })).toBeVisible();
       // The links come first; the toggle's name still counts only links.
@@ -689,11 +689,11 @@ describe('PriorityNav', () => {
       rowWidth = 300;
       const { rerender } = render(<PriorityNav aria-label="Main" items={items()} />);
       await user.click(toggle());
-      expect(panel().querySelector('.sc-priority-nav__panel-end')).toBeNull();
+      expect(panel().querySelector('.c-proto-priority-nav__panel-end')).toBeNull();
       expect(panel().children).toHaveLength(4);
       for (const empty of [null, false]) {
         rerender(<PriorityNav aria-label="Main" items={items()} panelEnd={empty} />);
-        expect(panel().querySelector('.sc-priority-nav__panel-end')).toBeNull();
+        expect(panel().querySelector('.c-proto-priority-nav__panel-end')).toBeNull();
       }
     });
   });

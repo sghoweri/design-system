@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'The Job Sweep mark, "Tile cut-out": a rounded square in `--sc-color-accent-default` with the broom knocked out, so the surface behind shows through. `CanvasText` in forced colours. At `md` (16px) and below it uses the simplified 16px drawing. `wordmark` adds the name in the surrounding font, which then names the logo; without it the logo is an image named "Job Sweep" (`label` to change). For a size outside the Icon scale, set `--sc-logo-size`.',
+          'The Job Sweep mark, "Tile cut-out": a rounded square in `--proto-color-accent-default` with the broom knocked out, so the surface behind shows through. `CanvasText` in forced colours. At `md` (16px) and below it uses the simplified 16px drawing. `wordmark` adds the name in the surrounding font, which then names the logo; without it the logo is an image named "Job Sweep" (`label` to change). For a size outside the Icon scale, set `--proto-logo-size`.',
       },
     },
   },
@@ -31,9 +31,9 @@ function Gallery() {
   return (
     <Stack gap="lg">
       <Inline gap="lg" align="end">
-        <Logo style={{ '--sc-logo-size': '96px' } as CSSProperties} />
-        <Logo style={{ '--sc-logo-size': '48px' } as CSSProperties} />
-        <Logo style={{ '--sc-logo-size': '32px' } as CSSProperties} />
+        <Logo style={{ '--proto-logo-size': '96px' } as CSSProperties} />
+        <Logo style={{ '--proto-logo-size': '48px' } as CSSProperties} />
+        <Logo style={{ '--proto-logo-size': '32px' } as CSSProperties} />
         <Logo size="xl" />
         <Logo size="lg" />
         <Logo size="md" />
@@ -69,7 +69,7 @@ export const Dark: Story = {
 export const InAHeader: Story = {
   name: 'In a header',
   render: () => (
-    <a href="#home" style={{ color: 'var(--sc-color-text-default)', textDecoration: 'none' }}>
+    <a href="#home" style={{ color: 'var(--proto-color-text-default)', textDecoration: 'none' }}>
       <Logo wordmark />
     </a>
   ),
@@ -84,14 +84,14 @@ export const AcrossFaces: Story = {
   render: () => (
     <Stack gap="md">
       {[
-        'var(--sc-font-family-sans)',
-        'var(--sc-font-family-mono)',
+        'var(--proto-font-family-sans)',
+        'var(--proto-font-family-mono)',
         'Georgia, "Times New Roman", serif',
         '"Arial Black", Impact, system-ui, sans-serif',
       ].map((fontFamily) => (
         <Inline key={fontFamily} gap="lg" align="center">
           <span style={{ fontFamily, fontSize: 16 }}>
-            <Logo wordmark style={{ '--sc-logo-size': '30px' } as CSSProperties} />
+            <Logo wordmark style={{ '--proto-logo-size': '30px' } as CSSProperties} />
           </span>
           <span style={{ fontFamily, fontSize: 24 }}>
             <Logo size="xl" wordmark />
@@ -119,7 +119,7 @@ export const Sweep: Story = {
           <a
             key={size}
             href={`#${size}`}
-            style={{ color: 'var(--sc-color-text-default)', textDecoration: 'none' }}
+            style={{ color: 'var(--proto-color-text-default)', textDecoration: 'none' }}
           >
             <Logo size={size} wordmark sweep />
           </a>
@@ -128,10 +128,10 @@ export const Sweep: Story = {
           href="#big"
           style={
             {
-              color: 'var(--sc-color-text-default)',
+              color: 'var(--proto-color-text-default)',
               textDecoration: 'none',
-              fontSize: 'var(--sc-font-size-xl)',
-              '--sc-logo-size': '30px',
+              fontSize: 'var(--proto-font-size-xl)',
+              '--proto-logo-size': '30px',
             } as CSSProperties
           }
         >

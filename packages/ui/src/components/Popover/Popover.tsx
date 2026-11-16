@@ -89,7 +89,7 @@ const COLLISION_AVOIDANCE = { fallbackAxisSide: 'none' } as const;
 
 /**
  * Portal, positioner and the panel. Any content goes inside; name it with `Popover.Title`. The children render inside
- * `div.sc-popover__scroll`, which is what scrolls when the panel is taller than the room (the popup itself no longer
+ * `div.c-proto-popover__scroll`, which is what scrolls when the panel is taller than the room (the popup itself no longer
  * does), so its scrollbar sits centred in the panel's side padding (popover.css). The arrow stays outside it.
  */
 function Content({
@@ -112,11 +112,11 @@ function Content({
         anchor={anchor}
         collisionAvoidance={COLLISION_AVOIDANCE}
         collisionPadding={collisionPadding}
-        className="sc-popover__positioner"
+        className="c-proto-popover__positioner"
       >
-        <BasePopover.Popup className={cx('sc-popover', className)} {...rest}>
-          {arrow ? <BasePopover.Arrow className="sc-popover__arrow" /> : null}
-          <div className="sc-popover__scroll">{children}</div>
+        <BasePopover.Popup className={cx('c-proto-popover', className)} {...rest}>
+          {arrow ? <BasePopover.Arrow className="c-proto-popover__arrow" /> : null}
+          <div className="c-proto-popover__scroll">{children}</div>
         </BasePopover.Popup>
       </BasePopover.Positioner>
     </BasePopover.Portal>
@@ -129,7 +129,7 @@ export interface PopoverTitleProps extends Omit<BasePopover.Title.Props, 'classN
 
 /** Names the popover (`aria-labelledby`). A heading, `h2` by default. */
 function Title({ className, ...rest }: PopoverTitleProps) {
-  return <BasePopover.Title className={cx('sc-popover__title', className)} {...rest} />;
+  return <BasePopover.Title className={cx('c-proto-popover__title', className)} {...rest} />;
 }
 
 export interface PopoverDescriptionProps extends Omit<BasePopover.Description.Props, 'className'> {
@@ -138,7 +138,7 @@ export interface PopoverDescriptionProps extends Omit<BasePopover.Description.Pr
 
 /** Describes the popover (`aria-describedby`). Muted text. */
 function Description({ className, ...rest }: PopoverDescriptionProps) {
-  return <BasePopover.Description className={cx('sc-popover__description', className)} {...rest} />;
+  return <BasePopover.Description className={cx('c-proto-popover__description', className)} {...rest} />;
 }
 
 export interface PopoverCloseProps extends Omit<BasePopover.Close.Props, 'className'> {
@@ -149,7 +149,7 @@ export interface PopoverCloseProps extends Omit<BasePopover.Close.Props, 'classN
 function Close({ className, children, render, ...rest }: PopoverCloseProps) {
   if (children === undefined && render === undefined) {
     return (
-      <BasePopover.Close className={cx('sc-popover__close', className)} aria-label="Close" {...rest}>
+      <BasePopover.Close className={cx('c-proto-popover__close', className)} aria-label="Close" {...rest}>
         <XIcon />
       </BasePopover.Close>
     );

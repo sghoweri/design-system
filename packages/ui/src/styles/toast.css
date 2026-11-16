@@ -1,103 +1,105 @@
 /* ---- Toast ----------------------------------------------------------------- */
 /* Bottom-end, clear of a bar fixed along the bottom: an open SelectionBar, or any `position: fixed` bar of the app's
-   that sets `anchor-name: --sc-bottom-bar`. Without one, the gutter. Phones use the md gutter on both sides.
+   that sets `anchor-name: --proto-bottom-bar`. Without one, the gutter. Phones use the md gutter on both sides.
    A sticky bar can't be an anchor (anchor() reads where it would be unstuck); while one shows, the app raises the
-   toasts by setting `--sc-toast-offset-block-end` (on :root, for example) to the room it needs.
+   toasts by setting `--proto-toast-offset-block-end` (on :root, for example) to the room it needs.
    Under `viewport-fit=cover` the side keeps clear of a landscape phone's notch or Dynamic Island and rounded corners:
    the gutter or the larger side inset, whichever is wider (the larger of the two, so inline-end is right either way). */
-.sc-toast-viewport {
-  --_gutter: var(--sc-spacing-lg);
+.c-proto-toast-viewport {
+  --_gutter: var(--proto-spacing-lg);
   --_side: max(var(--_gutter), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
-  --_bottom: calc(var(--_gutter) + var(--sc-toast-offset-block-end, 0px) + env(safe-area-inset-bottom, 0px));
+  --_bottom: calc(
+    var(--_gutter) + var(--proto-toast-offset-block-end, 0px) + env(safe-area-inset-bottom, 0px)
+  );
   position: fixed;
   inset-block-end: var(--_bottom);
   inset-inline-end: var(--_side);
-  z-index: var(--sc-z-toast);
+  z-index: var(--proto-z-toast);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--sc-spacing-xs);
+  gap: var(--proto-spacing-xs);
   inline-size: min(360px, 100vw - 2 * var(--_side));
   outline: none;
 }
 @supports (anchor-name: --a) {
-  .sc-toast-viewport {
-    inset-block-end: max(var(--_bottom), calc(anchor(--sc-bottom-bar top, 0px) + var(--sc-spacing-xs)));
+  .c-proto-toast-viewport {
+    inset-block-end: max(var(--_bottom), calc(anchor(--proto-bottom-bar top, 0px) + var(--proto-spacing-xs)));
   }
 }
 @media (width < 640px) {
-  .sc-toast-viewport {
-    --_gutter: var(--sc-spacing-md);
+  .c-proto-toast-viewport {
+    --_gutter: var(--proto-spacing-md);
   }
 }
 /* A raised surface, so washes inside use the raised tokens (docs/adr/0003). */
-.sc-toast {
-  --sc-color-surface-hover: var(--sc-color-surface-raised-hover);
-  --sc-color-surface-active: var(--sc-color-surface-raised-active);
+.c-proto-toast {
+  --proto-color-surface-hover: var(--proto-color-surface-raised-hover);
+  --proto-color-surface-active: var(--proto-color-surface-raised-active);
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: var(--sc-spacing-xs);
+  gap: var(--proto-spacing-xs);
   inline-size: 100%;
-  padding: var(--sc-spacing-xs) var(--sc-spacing-xs) var(--sc-spacing-xs) var(--sc-spacing-sm);
-  border: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
-  border-inline-start: var(--sc-border-width-focus) solid var(--sc-color-border-strong);
-  border-radius: var(--sc-radius-lg);
-  background: var(--sc-color-surface-raised);
-  box-shadow: var(--sc-elevation-2);
-  color: var(--sc-color-text-default);
-  font-family: var(--sc-font-family-sans);
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-ui);
+  padding: var(--proto-spacing-xs) var(--proto-spacing-xs) var(--proto-spacing-xs) var(--proto-spacing-sm);
+  border: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
+  border-inline-start: var(--proto-border-width-focus) solid var(--proto-color-border-strong);
+  border-radius: var(--proto-radius-lg);
+  background: var(--proto-color-surface-raised);
+  box-shadow: var(--proto-elevation-2);
+  color: var(--proto-color-text-default);
+  font-family: var(--proto-font-family-sans);
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-ui);
   transition:
-    opacity var(--sc-duration-fast) var(--sc-ease-standard),
-    translate var(--sc-duration-fast) var(--sc-ease-standard);
+    opacity var(--proto-duration-fast) var(--proto-ease-standard),
+    translate var(--proto-duration-fast) var(--proto-ease-standard);
 }
-.sc-toast:focus-visible {
-  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
-  outline-offset: var(--sc-border-width-focus);
+.c-proto-toast:focus-visible {
+  outline: var(--proto-border-width-focus) solid var(--proto-color-border-focus);
+  outline-offset: var(--proto-border-width-focus);
 }
-.sc-toast[data-tone='success'] {
-  border-inline-start-color: var(--sc-color-success-solid);
+.c-proto-toast[data-tone='success'] {
+  border-inline-start-color: var(--proto-color-success-solid);
 }
-.sc-toast[data-tone='danger'] {
-  border-inline-start-color: var(--sc-color-danger-solid);
+.c-proto-toast[data-tone='danger'] {
+  border-inline-start-color: var(--proto-color-danger-solid);
 }
-/* Filled; the fill, text and button states come from the .sc-on-accent scope (base.css). */
-.sc-toast[data-tone='accent'] {
-  border-color: var(--sc-color-accent-strong);
+/* Filled; the fill, text and button states come from the .t-proto-on-accent scope (base.css). */
+.c-proto-toast[data-tone='accent'] {
+  border-color: var(--proto-color-accent-strong);
 }
-.sc-toast[data-starting-style],
-.sc-toast[data-ending-style] {
+.c-proto-toast[data-starting-style],
+.c-proto-toast[data-ending-style] {
   opacity: 0;
-  translate: 0 var(--sc-spacing-xs);
+  translate: 0 var(--proto-spacing-xs);
 }
-.sc-toast__content {
+.c-proto-toast__content {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
-.sc-toast__title {
+.c-proto-toast__title {
   margin: 0;
   font-size: inherit;
-  font-weight: var(--sc-font-weight-medium);
+  font-weight: var(--proto-font-weight-medium);
   text-wrap-style: balance;
 }
-.sc-toast__description {
+.c-proto-toast__description {
   margin: 0;
-  color: var(--sc-color-text-muted);
-  font-size: var(--sc-font-size-xs);
+  color: var(--proto-color-text-muted);
+  font-size: var(--proto-font-size-xs);
   text-wrap-style: pretty;
 }
-.sc-toast__action,
-.sc-toast__close {
+.c-proto-toast__action,
+.c-proto-toast__close {
   flex: none;
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-toast {
+  .c-proto-toast {
     transition: none;
   }
-  .sc-toast[data-starting-style],
-  .sc-toast[data-ending-style] {
+  .c-proto-toast[data-starting-style],
+  .c-proto-toast[data-ending-style] {
     translate: none;
   }
 }

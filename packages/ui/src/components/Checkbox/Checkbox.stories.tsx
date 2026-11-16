@@ -21,14 +21,14 @@ function Group() {
   const some = values.some(Boolean) && !all;
   return (
     <Stack as="fieldset" gap="xs">
-      <legend className="sc-visually-hidden">Sources</legend>
+      <legend className="u-proto-visually-hidden">Sources</legend>
       <Checkbox
         label="All sources"
         checked={all}
         indeterminate={some}
         onCheckedChange={(next) => setSources({ greenhouse: next, ashby: next, lever: next })}
       />
-      <Stack gap="xs" style={{ paddingInlineStart: 'var(--sc-spacing-lg)' }}>
+      <Stack gap="xs" style={{ paddingInlineStart: 'var(--proto-spacing-lg)' }}>
         {(Object.keys(sources) as Array<keyof typeof sources>).map((key) => (
           <Checkbox
             key={key}

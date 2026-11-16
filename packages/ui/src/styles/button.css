@@ -1,10 +1,10 @@
 /* ---- Button ---------------------------------------------------------------- */
-.sc-button {
-  --_h: var(--sc-size-control-md);
-  --_px: var(--sc-spacing-md);
-  --_gap: var(--sc-spacing-xs);
-  --_radius: var(--sc-radius-md);
-  --_fs: var(--sc-font-size-sm);
+.c-proto-button {
+  --_h: var(--proto-size-control-md);
+  --_px: var(--proto-spacing-md);
+  --_gap: var(--proto-spacing-xs);
+  --_radius: var(--proto-radius-md);
+  --_fs: var(--proto-font-size-sm);
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -16,153 +16,153 @@
   padding-inline: var(--_px);
   border-radius: var(--_radius);
   font: inherit;
-  font-family: var(--sc-font-family-sans);
+  font-family: var(--proto-font-family-sans);
   font-size: var(--_fs);
-  font-weight: var(--sc-font-weight-medium);
+  font-weight: var(--proto-font-weight-medium);
   line-height: 1;
   letter-spacing: 0;
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
   text-decoration: none;
-  border: var(--sc-border-width-hairline) solid transparent;
+  border: var(--proto-border-width-hairline) solid transparent;
   transition:
-    background-color var(--sc-duration-fast) var(--sc-ease-standard),
-    border-color var(--sc-duration-fast) var(--sc-ease-standard),
-    color var(--sc-duration-fast) var(--sc-ease-standard);
+    background-color var(--proto-duration-fast) var(--proto-ease-standard),
+    border-color var(--proto-duration-fast) var(--proto-ease-standard),
+    color var(--proto-duration-fast) var(--proto-ease-standard);
 }
-.sc-button[data-size='sm'] {
-  --_h: var(--sc-size-control-sm);
-  --_px: var(--sc-spacing-sm);
-  --_gap: var(--sc-spacing-2xs);
-  --_radius: var(--sc-radius-sm);
+.c-proto-button[data-size='sm'] {
+  --_h: var(--proto-size-control-sm);
+  --_px: var(--proto-spacing-sm);
+  --_gap: var(--proto-spacing-2xs);
+  --_radius: var(--proto-radius-sm);
 }
-.sc-button[data-size='lg'] {
-  --_h: var(--sc-size-control-lg);
-  --_px: var(--sc-spacing-lg);
-  --_fs: var(--sc-font-size-md);
+.c-proto-button[data-size='lg'] {
+  --_h: var(--proto-size-control-lg);
+  --_px: var(--proto-spacing-lg);
+  --_fs: var(--proto-font-size-md);
 }
-.sc-button[data-full-width] {
+.c-proto-button[data-full-width] {
   inline-size: 100%;
 }
 /* 44px hit area on touch without changing layout. */
 @media (pointer: coarse) {
-  .sc-button::after {
+  .c-proto-button::after {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
     translate: -50% -50%;
-    inline-size: max(100%, var(--sc-size-touch-target));
-    block-size: max(100%, var(--sc-size-touch-target));
+    inline-size: max(100%, var(--proto-size-touch-target));
+    block-size: max(100%, var(--proto-size-touch-target));
   }
 }
-.sc-button[data-variant='primary'] {
-  background: var(--sc-color-accent-default);
-  color: var(--sc-color-text-on-accent);
+.c-proto-button[data-variant='primary'] {
+  background: var(--proto-color-accent-default);
+  color: var(--proto-color-text-on-accent);
 }
-.sc-button[data-variant='primary']:hover:where(:not(:disabled)) {
-  background: var(--sc-color-accent-hover);
+.c-proto-button[data-variant='primary']:hover:where(:not(:disabled)) {
+  background: var(--proto-color-accent-hover);
 }
-.sc-button[data-variant='primary']:active:where(:not(:disabled):not([data-loading])) {
-  background: var(--sc-color-accent-active);
+.c-proto-button[data-variant='primary']:active:where(:not(:disabled):not([data-loading])) {
+  background: var(--proto-color-accent-active);
 }
 /* Inverse: a white button with dark text, for the main action on a dark or coloured fill (the accent Toast), where
    primary would be accent on accent and secondary only an outline. Same fill and text in both themes. */
-.sc-button[data-variant='inverse'] {
-  background: var(--sc-color-inverse-default);
-  color: var(--sc-color-text-on-inverse);
+.c-proto-button[data-variant='inverse'] {
+  background: var(--proto-color-inverse-default);
+  color: var(--proto-color-text-on-inverse);
 }
-.sc-button[data-variant='inverse']:hover:where(:not(:disabled)) {
-  background: var(--sc-color-inverse-hover);
+.c-proto-button[data-variant='inverse']:hover:where(:not(:disabled)) {
+  background: var(--proto-color-inverse-hover);
 }
-.sc-button[data-variant='inverse']:active:where(:not(:disabled):not([data-loading])) {
-  background: var(--sc-color-inverse-active);
+.c-proto-button[data-variant='inverse']:active:where(:not(:disabled):not([data-loading])) {
+  background: var(--proto-color-inverse-active);
 }
-.sc-button[data-variant='secondary'] {
+.c-proto-button[data-variant='secondary'] {
   background: transparent;
-  color: var(--sc-color-text-default);
-  border-color: var(--sc-color-border-strong);
+  color: var(--proto-color-text-default);
+  border-color: var(--proto-color-border-strong);
 }
-.sc-button[data-variant='secondary']:hover:where(:not(:disabled)) {
-  background: var(--sc-color-surface-hover);
+.c-proto-button[data-variant='secondary']:hover:where(:not(:disabled)) {
+  background: var(--proto-color-surface-hover);
 }
-.sc-button[data-variant='secondary']:active:where(:not(:disabled):not([data-loading])) {
-  background: var(--sc-color-surface-active);
+.c-proto-button[data-variant='secondary']:active:where(:not(:disabled):not([data-loading])) {
+  background: var(--proto-color-surface-active);
 }
-.sc-button[data-variant='ghost'] {
+.c-proto-button[data-variant='ghost'] {
   background: transparent;
-  color: var(--sc-color-text-default);
+  color: var(--proto-color-text-default);
 }
-.sc-button[data-variant='ghost']:hover:where(:not(:disabled)) {
-  background: var(--sc-color-surface-hover);
+.c-proto-button[data-variant='ghost']:hover:where(:not(:disabled)) {
+  background: var(--proto-color-surface-hover);
 }
-.sc-button[data-variant='ghost']:active:where(:not(:disabled):not([data-loading])) {
-  background: var(--sc-color-surface-active);
+.c-proto-button[data-variant='ghost']:active:where(:not(:disabled):not([data-loading])) {
+  background: var(--proto-color-surface-active);
 }
 /* Success: the positive decision (the inbox's Approve), green where danger is red. Use one per view at most, beside
    a neutral or danger counterpart; it isn't a second primary. */
-.sc-button[data-variant='success'] {
-  background: var(--sc-color-success-solid);
-  color: var(--sc-color-text-on-status);
+.c-proto-button[data-variant='success'] {
+  background: var(--proto-color-success-solid);
+  color: var(--proto-color-text-on-status);
 }
-.sc-button[data-variant='success']:hover:where(:not(:disabled)) {
-  background: var(--sc-color-success-hover);
+.c-proto-button[data-variant='success']:hover:where(:not(:disabled)) {
+  background: var(--proto-color-success-hover);
 }
-.sc-button[data-variant='success']:active:where(:not(:disabled):not([data-loading])) {
-  background: var(--sc-color-success-hover);
+.c-proto-button[data-variant='success']:active:where(:not(:disabled):not([data-loading])) {
+  background: var(--proto-color-success-hover);
   filter: brightness(0.95);
 }
-.sc-button[data-variant='danger'] {
-  background: var(--sc-color-danger-solid);
-  color: var(--sc-color-text-on-status);
+.c-proto-button[data-variant='danger'] {
+  background: var(--proto-color-danger-solid);
+  color: var(--proto-color-text-on-status);
 }
-.sc-button[data-variant='danger']:hover:where(:not(:disabled)) {
-  background: var(--sc-color-danger-hover);
+.c-proto-button[data-variant='danger']:hover:where(:not(:disabled)) {
+  background: var(--proto-color-danger-hover);
 }
-.sc-button[data-variant='danger']:active:where(:not(:disabled):not([data-loading])) {
-  background: var(--sc-color-danger-hover);
+.c-proto-button[data-variant='danger']:active:where(:not(:disabled):not([data-loading])) {
+  background: var(--proto-color-danger-hover);
   filter: brightness(0.95);
 }
-.sc-button:disabled {
+.c-proto-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.sc-button[data-loading] {
+.c-proto-button[data-loading] {
   cursor: progress;
 }
-.sc-button[data-loading] > .sc-button__label {
+.c-proto-button[data-loading] > .c-proto-button__label {
   opacity: 0;
 }
 /* Its own line box, so descenders sit inside the label (the button sets line-height: 1 for centring). */
-.sc-button__label {
-  line-height: var(--sc-font-line-height-ui);
+.c-proto-button__label {
+  line-height: var(--proto-font-line-height-ui);
 }
-.sc-button__icon {
+.c-proto-button__icon {
   display: inline-flex;
   inline-size: 1.125em;
   block-size: 1.125em;
   flex: none;
 }
-.sc-button__icon > svg {
+.c-proto-button__icon > svg {
   inline-size: 100%;
   block-size: 100%;
 }
-.sc-button__spinner {
+.c-proto-button__spinner {
   position: absolute;
   inline-size: 1em;
   block-size: 1em;
   border-radius: 50%;
-  border: var(--sc-border-width-focus) solid currentColor;
+  border: var(--proto-border-width-focus) solid currentColor;
   border-inline-end-color: transparent;
-  animation: sc-spin 0.8s linear infinite;
+  animation: proto-spin 0.8s linear infinite;
 }
 /* Icon-only: square, the label kept for assistive tech only, no shortcut hint. Same element, so focus and
    any open tooltip survive the switch. */
-.sc-button[data-icon-only] {
+.c-proto-button[data-icon-only] {
   inline-size: var(--_h);
   padding-inline: 0;
 }
-.sc-button[data-icon-only] > .sc-button__label {
+.c-proto-button[data-icon-only] > .c-proto-button__label {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -170,18 +170,18 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
-.sc-button[data-icon-only] > .sc-button__shortcut {
+.c-proto-button[data-icon-only] > .c-proto-button__shortcut {
   display: none;
 }
 /* A shortcut hint after the label: a Kbd tinted to the button's own colour, so it reads on every variant. */
-.sc-button__shortcut {
+.c-proto-button__shortcut {
   display: inline-flex;
   align-items: center;
-  gap: var(--sc-spacing-3xs);
+  gap: var(--proto-spacing-3xs);
   flex: none;
-  margin-inline-start: var(--sc-spacing-3xs);
+  margin-inline-start: var(--proto-spacing-3xs);
 }
-.sc-button__shortcut .sc-kbd {
+.c-proto-button__shortcut .c-proto-kbd {
   background: transparent;
   color: inherit;
   border-color: currentColor;
@@ -189,109 +189,109 @@
   opacity: 0.72;
 }
 /* On a fill the dim drops the key below 4.5:1 (3.2:1 on light primary), so the filled variants, and secondary and
-   ghost on the .sc-on-accent scope's fill (base.css), show it at full strength. Ratios: button-shortcut.test.ts. */
-.sc-button[data-variant='primary'] > .sc-button__shortcut .sc-kbd,
-.sc-button[data-variant='danger'] > .sc-button__shortcut .sc-kbd,
-.sc-button[data-variant='success'] > .sc-button__shortcut .sc-kbd,
-.sc-on-accent .sc-button__shortcut .sc-kbd,
-.sc-toast[data-tone='accent'] .sc-button__shortcut .sc-kbd {
+   ghost on the .t-proto-on-accent scope's fill (base.css), show it at full strength. Ratios: button-shortcut.test.ts. */
+.c-proto-button[data-variant='primary'] > .c-proto-button__shortcut .c-proto-kbd,
+.c-proto-button[data-variant='danger'] > .c-proto-button__shortcut .c-proto-kbd,
+.c-proto-button[data-variant='success'] > .c-proto-button__shortcut .c-proto-kbd,
+.t-proto-on-accent .c-proto-button__shortcut .c-proto-kbd,
+.c-proto-toast[data-tone='accent'] .c-proto-button__shortcut .c-proto-kbd {
   opacity: 1;
 }
-.sc-button__shortcut .sc-kbd-group {
+.c-proto-button__shortcut .c-proto-kbd-group {
   color: inherit;
 }
-.sc-button[data-loading] > .sc-button__shortcut {
+.c-proto-button[data-loading] > .c-proto-button__shortcut {
   opacity: 0;
 }
 /* No hint where there is no fine pointer (phones, tablets without a trackpad): touch users rarely have the keys,
    and the hint costs width. A tablet with a trackpad (any-pointer: fine) keeps it. `aria-keyshortcuts` stays. */
 @media not all and (any-pointer: fine) {
-  .sc-button__shortcut {
+  .c-proto-button__shortcut {
     display: none;
   }
 }
-@keyframes sc-spin {
+@keyframes proto-spin {
   to {
     rotate: 1turn;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-button {
+  .c-proto-button {
     transition: none;
   }
-  .sc-button__spinner {
+  .c-proto-button__spinner {
     animation-duration: 1.6s;
   }
 }
 /* ---- IconButton ------------------------------------------------------------ */
-.sc-icon-button {
-  --_icon: var(--sc-size-icon-md);
+.c-proto-icon-button {
+  --_icon: var(--proto-size-icon-md);
   padding-inline: 0;
   inline-size: var(--_h);
   flex: none;
 }
-.sc-icon-button[data-size='sm'] {
-  --_icon: var(--sc-size-icon-sm);
+.c-proto-icon-button[data-size='sm'] {
+  --_icon: var(--proto-size-icon-sm);
 }
-.sc-icon-button[data-size='lg'] {
-  --_icon: var(--sc-size-icon-lg);
+.c-proto-icon-button[data-size='lg'] {
+  --_icon: var(--proto-size-icon-lg);
 }
-.sc-icon-button[data-round] {
-  border-radius: var(--sc-radius-full);
+.c-proto-icon-button[data-round] {
+  border-radius: var(--proto-radius-full);
 }
-.sc-icon-button > .sc-button__icon {
+.c-proto-icon-button > .c-proto-button__icon {
   inline-size: var(--_icon);
   block-size: var(--_icon);
 }
-.sc-icon-button[data-loading] > .sc-button__icon {
+.c-proto-icon-button[data-loading] > .c-proto-button__icon {
   opacity: 0;
 }
 /* Status dot, top-left: icons such as the broom own the top-right and fill the bottom. Physical corner on
    purpose, because the glyph does not mirror in RTL either. */
-.sc-icon-button__dot {
-  --_dot: var(--sc-color-accent-default);
+.c-proto-icon-button__dot {
+  --_dot: var(--proto-color-accent-default);
   position: absolute;
-  inset: var(--sc-spacing-2xs) auto auto var(--sc-spacing-2xs);
+  inset: var(--proto-spacing-2xs) auto auto var(--proto-spacing-2xs);
   inline-size: 8px;
   block-size: 8px;
-  border-radius: var(--sc-radius-full);
+  border-radius: var(--proto-radius-full);
   background: var(--_dot);
-  box-shadow: 0 0 0 var(--sc-border-width-focus)
-    var(--sc-icon-button-dot-ring, var(--sc-color-surface-default));
+  box-shadow: 0 0 0 var(--proto-border-width-focus)
+    var(--proto-icon-button-dot-ring, var(--proto-color-surface-default));
   pointer-events: none;
 }
-.sc-icon-button[data-size='sm'] > .sc-icon-button__dot {
-  inset: var(--sc-spacing-3xs) auto auto var(--sc-spacing-3xs);
+.c-proto-icon-button[data-size='sm'] > .c-proto-icon-button__dot {
+  inset: var(--proto-spacing-3xs) auto auto var(--proto-spacing-3xs);
   inline-size: 6px;
   block-size: 6px;
 }
-.sc-icon-button__dot[data-tone='neutral'] {
-  --_dot: var(--sc-color-text-subtle);
+.c-proto-icon-button__dot[data-tone='neutral'] {
+  --_dot: var(--proto-color-text-subtle);
 }
-.sc-icon-button__dot[data-tone='success'] {
-  --_dot: var(--sc-color-success-solid);
+.c-proto-icon-button__dot[data-tone='success'] {
+  --_dot: var(--proto-color-success-solid);
 }
-.sc-icon-button__dot[data-tone='warning'] {
-  --_dot: var(--sc-color-warning-solid);
+.c-proto-icon-button__dot[data-tone='warning'] {
+  --_dot: var(--proto-color-warning-solid);
 }
-.sc-icon-button__dot[data-tone='danger'] {
-  --_dot: var(--sc-color-danger-solid);
+.c-proto-icon-button__dot[data-tone='danger'] {
+  --_dot: var(--proto-color-danger-solid);
 }
-.sc-icon-button__dot[data-tone='info'] {
-  --_dot: var(--sc-color-info-solid);
+.c-proto-icon-button__dot[data-tone='info'] {
+  --_dot: var(--proto-color-info-solid);
 }
-.sc-button[data-popup-open] {
-  background: var(--sc-color-surface-active);
+.c-proto-button[data-popup-open] {
+  background: var(--proto-color-surface-active);
 }
-.sc-button[data-variant='primary'][data-popup-open] {
-  background: var(--sc-color-accent-active);
+.c-proto-button[data-variant='primary'][data-popup-open] {
+  background: var(--proto-color-accent-active);
 }
-.sc-button[data-variant='success'][data-popup-open] {
-  background: var(--sc-color-success-hover);
+.c-proto-button[data-variant='success'][data-popup-open] {
+  background: var(--proto-color-success-hover);
 }
-.sc-button[data-variant='inverse'][data-popup-open] {
-  background: var(--sc-color-inverse-active);
+.c-proto-button[data-variant='inverse'][data-popup-open] {
+  background: var(--proto-color-inverse-active);
 }
-.sc-button[data-variant='danger'][data-popup-open] {
-  background: var(--sc-color-danger-hover);
+.c-proto-button[data-variant='danger'][data-popup-open] {
+  background: var(--proto-color-danger-hover);
 }

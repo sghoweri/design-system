@@ -26,7 +26,7 @@ export const Playground: Story = {
   args: { children: <path d="M8 3v10M3 8h10" /> },
 };
 
-/** Every shipped icon. Import them by name: `import { PlayIcon } from '@salemcobalt/ui'`. */
+/** Every shipped icon. Import them by name: `import { PlayIcon } from '@protokit/ui'`. */
 export const AllIcons: Story = {
   name: 'All icons',
   render: (args) => (
@@ -34,7 +34,7 @@ export const AllIcons: Story = {
       style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-        gap: 'var(--sc-spacing-xs)',
+        gap: 'var(--proto-spacing-xs)',
         margin: 0,
         padding: 0,
         listStyle: 'none',
@@ -48,15 +48,15 @@ export const AllIcons: Story = {
             style={{
               display: 'grid',
               justifyItems: 'center',
-              gap: 'var(--sc-spacing-2xs)',
-              padding: 'var(--sc-spacing-sm)',
-              border: '1px solid var(--sc-color-border-default)',
-              borderRadius: 'var(--sc-radius-lg)',
-              fontSize: 'var(--sc-font-size-xs)',
-              color: 'var(--sc-color-text-muted)',
+              gap: 'var(--proto-spacing-2xs)',
+              padding: 'var(--proto-spacing-sm)',
+              border: '1px solid var(--proto-color-border-default)',
+              borderRadius: 'var(--proto-radius-lg)',
+              fontSize: 'var(--proto-font-size-xs)',
+              color: 'var(--proto-color-text-muted)',
             }}
           >
-            <span style={{ color: 'var(--sc-color-text-default)' }}>
+            <span style={{ color: 'var(--proto-color-text-default)' }}>
               <Glyph size={args.size} />
             </span>
             <code>{`${toPascal(name)}Icon`}</code>
@@ -73,14 +73,14 @@ export const Sizes: Story = {
       {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <Stack key={size} gap="2xs" align="center">
           <icons.BriefcaseIcon size={size} />
-          <code style={{ fontSize: 'var(--sc-font-size-xs)' }}>{size}</code>
+          <code style={{ fontSize: 'var(--proto-font-size-xs)' }}>{size}</code>
         </Stack>
       ))}
       <Stack gap="2xs" align="center">
-        <span style={{ fontSize: 'var(--sc-font-size-2xl)' }}>
+        <span style={{ fontSize: 'var(--proto-font-size-2xl)' }}>
           <icons.BriefcaseIcon size="em" />
         </span>
-        <code style={{ fontSize: 'var(--sc-font-size-xs)' }}>em</code>
+        <code style={{ fontSize: 'var(--proto-font-size-xs)' }}>em</code>
       </Stack>
     </Inline>
   ),
@@ -114,7 +114,7 @@ export const InContext: Story = {
           <icons.FlagIcon size="xs" /> Flagged
         </Badge>
       </Inline>
-      <p style={{ margin: 0, color: 'var(--sc-color-text-muted)' }}>
+      <p style={{ margin: 0, color: 'var(--proto-color-text-muted)' }}>
         <icons.MapPinIcon size="em" /> Boston, MA · <icons.CalendarIcon size="em" /> posted 3 days ago
       </p>
       <p style={{ margin: 0 }}>

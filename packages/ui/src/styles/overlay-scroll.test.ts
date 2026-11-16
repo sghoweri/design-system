@@ -1,4 +1,4 @@
-// The default Dialog and Popover scroll in an inner wrapper (`.sc-dialog__scroll`, `.sc-popover__scroll`) that runs
+// The default Dialog and Popover scroll in an inner wrapper (`.c-proto-dialog__scroll`, `.c-proto-popover__scroll`) that runs
 // out over the popup's padding and pads itself back, so the content stays put while an overlay scrollbar thumb sits
 // centred in the side padding: its centre half the padding from the popup's edge. Checked against the CSS itself and
 // the built spacing tokens (jsdom has no layout).
@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const tokens = JSON.parse(
-  readFileSync(createRequire(import.meta.url).resolve('@salemcobalt/tokens/json'), 'utf8'),
+  readFileSync(createRequire(import.meta.url).resolve('@protokit/tokens/json'), 'utf8'),
 ) as Record<'light', Record<string, string>>;
 
 const read = (file: string) => readFileSync(join(__dirname, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
@@ -29,7 +29,7 @@ const prop = (css: string, name: string) =>
 function px(value: string, local: string): number {
   const expr = value
     .replace(/var\((--_[\w-]+)\)/g, (_, name: string) => `(${px(prop(local, name)!, local)})`)
-    .replace(/var\(--(sc-[\w-]+)\)/g, (_, name: string) => tokens.light[name]!)
+    .replace(/var\(--(proto-[\w-]+)\)/g, (_, name: string) => tokens.light[name]!)
     .replace(/calc\(/g, '(')
     .replace(/px/g, '');
   if (!/^[\d\s.+\-*/()]+$/.test(expr)) throw new Error(`unresolved: ${value} → ${expr}`);
@@ -40,22 +40,22 @@ describe.each([
   {
     name: 'default Dialog',
     file: 'dialog.css',
-    popup: ".sc-dialog__popup[data-variant='dialog']",
-    base: '.sc-dialog__popup',
-    scroller: '.sc-dialog__scroll',
-    close: '.sc-dialog__close',
-    pad: 'var(--sc-spacing-lg)',
+    popup: ".c-proto-dialog__popup[data-variant='dialog']",
+    base: '.c-proto-dialog__popup',
+    scroller: '.c-proto-dialog__scroll',
+    close: '.c-proto-dialog__close',
+    pad: 'var(--proto-spacing-lg)',
     padPx: 24,
     bleedPx: 17,
   },
   {
     name: 'Popover',
     file: 'popover.css',
-    popup: '.sc-popover',
-    base: '.sc-popover',
-    scroller: '.sc-popover__scroll',
-    close: '.sc-popover__close',
-    pad: 'var(--sc-spacing-md)',
+    popup: '.c-proto-popover',
+    base: '.c-proto-popover',
+    scroller: '.c-proto-popover__scroll',
+    close: '.c-proto-popover__close',
+    pad: 'var(--proto-spacing-md)',
     padPx: 16,
     bleedPx: 13,
   },
@@ -105,6 +105,8 @@ describe.each([
 
 describe('Popover with an arrow', () => {
   it('still does not clip the arrow; the wrapper inside scrolls instead', () => {
-    expect(prop(body('popover.css', '.sc-popover:has(> .sc-popover__arrow)'), 'overflow')).toBe('visible');
+    expect(prop(body('popover.css', '.c-proto-popover:has(> .c-proto-popover__arrow)'), 'overflow')).toBe(
+      'visible',
+    );
   });
 });

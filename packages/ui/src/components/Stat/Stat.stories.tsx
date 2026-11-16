@@ -36,7 +36,7 @@ export const Playground: Story = {
 const grid = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-  gap: 'var(--sc-spacing-sm)',
+  gap: 'var(--proto-spacing-sm)',
   margin: 0,
   padding: 0,
   listStyle: 'none',

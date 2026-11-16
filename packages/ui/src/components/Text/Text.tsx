@@ -54,7 +54,7 @@ export function Text({
 }: TextProps): ReactElement {
   const clamp = typeof truncate === 'number' ? truncate : undefined;
   return createElement(as, {
-    className: cx('sc-text', className),
+    className: cx('c-proto-text', className),
     'data-size': size,
     'data-tone': tone,
     'data-weight': weight,
@@ -62,7 +62,7 @@ export function Text({
     'data-truncate': truncate === true ? '' : clamp !== undefined ? 'clamp' : undefined,
     'data-numeric': numeric || undefined,
     'data-family': family === 'mono' ? 'mono' : undefined,
-    style: clamp !== undefined ? ({ ...style, '--sc-text-lines': clamp } as CSSProperties) : style,
+    style: clamp !== undefined ? ({ ...style, '--proto-text-lines': clamp } as CSSProperties) : style,
     ...rest,
   });
 }

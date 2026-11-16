@@ -1,39 +1,39 @@
 /* ---- Tooltip --------------------------------------------------------------- */
-.sc-tooltip__positioner {
-  z-index: var(--sc-z-tooltip);
+.c-proto-tooltip__positioner {
+  z-index: var(--proto-z-tooltip);
   outline: 0;
 }
-.sc-tooltip {
+.c-proto-tooltip {
   box-sizing: border-box;
   max-inline-size: 280px;
-  padding: var(--sc-spacing-2xs) var(--sc-spacing-xs);
-  border-radius: var(--sc-radius-md);
-  background: var(--sc-color-text-default);
-  color: var(--sc-color-surface-default);
-  box-shadow: var(--sc-elevation-2);
-  font-family: var(--sc-font-family-sans);
-  font-size: var(--sc-font-size-xs);
-  font-weight: var(--sc-font-weight-medium);
-  line-height: var(--sc-font-line-height-ui);
+  padding: var(--proto-spacing-2xs) var(--proto-spacing-xs);
+  border-radius: var(--proto-radius-md);
+  background: var(--proto-color-text-default);
+  color: var(--proto-color-surface-default);
+  box-shadow: var(--proto-elevation-2);
+  font-family: var(--proto-font-family-sans);
+  font-size: var(--proto-font-size-xs);
+  font-weight: var(--proto-font-weight-medium);
+  line-height: var(--proto-font-line-height-ui);
   text-wrap: pretty;
   transform-origin: var(--transform-origin);
   transition:
-    opacity var(--sc-duration-fast) var(--sc-ease-enter),
-    scale var(--sc-duration-fast) var(--sc-ease-enter);
+    opacity var(--proto-duration-fast) var(--proto-ease-enter),
+    scale var(--proto-duration-fast) var(--proto-ease-enter);
 }
-.sc-tooltip[data-starting-style],
-.sc-tooltip[data-ending-style] {
+.c-proto-tooltip[data-starting-style],
+.c-proto-tooltip[data-ending-style] {
   opacity: 0;
   scale: 0.96;
 }
-.sc-tooltip[data-ending-style] {
-  transition-timing-function: var(--sc-ease-exit);
+.c-proto-tooltip[data-ending-style] {
+  transition-timing-function: var(--proto-ease-exit);
 }
-.sc-tooltip[data-instant] {
+.c-proto-tooltip[data-instant] {
   transition: none;
 }
 /* A pointed tip, 12×6, placed by Base UI on the side facing the trigger. */
-.sc-tooltip__arrow {
+.c-proto-tooltip__arrow {
   --_w: 12px;
   --_h: 6px;
   display: block;
@@ -42,35 +42,35 @@
   overflow: clip;
   pointer-events: none;
 }
-.sc-tooltip__arrow::before {
+.c-proto-tooltip__arrow::before {
   content: '';
   position: absolute;
   inset-block-end: 0;
   inset-inline-start: 50%;
   inline-size: calc(var(--_h) * 1.4142);
   block-size: calc(var(--_h) * 1.4142);
-  background: var(--sc-color-text-default);
+  background: var(--proto-color-text-default);
   translate: -50% 50%;
   rotate: 45deg;
 }
-.sc-tooltip__arrow[data-side='top'] {
+.c-proto-tooltip__arrow[data-side='top'] {
   inset-block-end: calc(-1 * var(--_h));
   rotate: 180deg;
 }
-.sc-tooltip__arrow[data-side='bottom'] {
+.c-proto-tooltip__arrow[data-side='bottom'] {
   inset-block-start: calc(-1 * var(--_h));
 }
-.sc-tooltip__arrow[data-side='left'],
-.sc-tooltip__arrow[data-side='inline-start'] {
+.c-proto-tooltip__arrow[data-side='left'],
+.c-proto-tooltip__arrow[data-side='inline-start'] {
   inset-inline-end: calc(-1 * (var(--_w) + var(--_h)) / 2);
   rotate: 90deg;
 }
-.sc-tooltip__arrow[data-side='right'],
-.sc-tooltip__arrow[data-side='inline-end'] {
+.c-proto-tooltip__arrow[data-side='right'],
+.c-proto-tooltip__arrow[data-side='inline-end'] {
   inset-inline-start: calc(-1 * (var(--_w) + var(--_h)) / 2);
   rotate: -90deg;
 }
-.sc-tooltip .sc-kbd {
+.c-proto-tooltip .c-proto-kbd {
   background: transparent;
   color: inherit;
   border-color: currentColor;
@@ -78,11 +78,11 @@
   opacity: 0.8;
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-tooltip {
+  .c-proto-tooltip {
     transition-duration: 0ms;
   }
-  .sc-tooltip[data-starting-style],
-  .sc-tooltip[data-ending-style] {
+  .c-proto-tooltip[data-starting-style],
+  .c-proto-tooltip[data-ending-style] {
     scale: none;
   }
 }

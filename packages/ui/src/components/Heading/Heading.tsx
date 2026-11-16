@@ -31,7 +31,7 @@ const sizeByLevel: Record<HeadingLevel, HeadingSize> = {
 /** A heading from the type scale. `level` is the semantics, `size` the look; they are set separately on purpose. */
 export function Heading({ level = 2, size, as, tone, truncate = false, className, ...rest }: HeadingProps) {
   return createElement(as ?? `h${level}`, {
-    className: cx('sc-heading', className),
+    className: cx('c-proto-heading', className),
     'data-size': size ?? sizeByLevel[level],
     'data-tone': tone ?? (size === 'overline' ? 'muted' : 'default'),
     'data-truncate': truncate || undefined,

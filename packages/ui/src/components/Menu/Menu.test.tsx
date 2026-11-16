@@ -37,7 +37,7 @@ describe('Menu', () => {
   it('renders a secondary Button trigger by default, closed, with aria-haspopup', () => {
     render(<Example />);
     const trigger = screen.getByRole('button', { name: 'Pause' });
-    expect(trigger).toHaveClass('sc-button');
+    expect(trigger).toHaveClass('c-proto-button');
     expect(trigger).toHaveAttribute('data-variant', 'secondary');
     expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -50,7 +50,7 @@ describe('Menu', () => {
     render(<Example onPauseMine={onPauseMine} />);
     await user.click(screen.getByRole('button', { name: 'Pause' }));
     const menu = await screen.findByRole('menu');
-    expect(menu).toHaveClass('sc-menu');
+    expect(menu).toHaveClass('c-proto-menu');
     expect(screen.getByRole('menuitem', { name: 'Pause mine' })).toHaveAttribute('data-tone', 'default');
     expect(screen.getByRole('menuitem', { name: 'Pause all' })).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByRole('menuitemcheckbox', { name: 'Show stale' })).toHaveAttribute(
@@ -165,9 +165,9 @@ describe('Menu', () => {
 
     const hide = screen.getByRole('menuitem', { name: 'Hide' });
     expect(hide).toHaveAccessibleDescription('Leave it out of this list');
-    expect(hide.querySelector('.sc-menu__description')).toHaveTextContent('Leave it out of this list');
+    expect(hide.querySelector('.c-proto-menu__description')).toHaveTextContent('Leave it out of this list');
     // the icon is decorative
-    const icon = hide.querySelector('.sc-menu__icon');
+    const icon = hide.querySelector('.c-proto-menu__icon');
     expect(icon).toHaveAttribute('aria-hidden', 'true');
     expect(icon?.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
 
@@ -207,11 +207,11 @@ describe('Menu', () => {
       expect(item).not.toHaveAttribute('aria-labelledby');
       expect(item).not.toHaveAttribute('aria-describedby');
       expect(item).toHaveAccessibleDescription('');
-      expect(item.querySelector('.sc-menu__description')).toBeNull();
+      expect(item.querySelector('.c-proto-menu__description')).toBeNull();
       expect([...item.children].map((c) => c.className)).toEqual(
         item.textContent?.includes('Z')
-          ? ['sc-menu__icon', 'sc-menu__label', 'sc-menu__trailing']
-          : ['sc-menu__icon', 'sc-menu__label'],
+          ? ['c-proto-menu__icon', 'c-proto-menu__label', 'c-proto-menu__trailing']
+          : ['c-proto-menu__icon', 'c-proto-menu__label'],
       );
       for (const child of item.querySelectorAll('span')) expect(child).not.toHaveAttribute('id');
     }
@@ -231,7 +231,7 @@ describe('Menu', () => {
       </Menu.Root>,
     );
     const trigger = screen.getByRole('button', { name: 'More actions' });
-    expect(trigger).toHaveClass('sc-icon-button');
+    expect(trigger).toHaveClass('c-proto-icon-button');
     await user.click(trigger);
     await screen.findByRole('menu');
     expect(onOpenChange).toHaveBeenLastCalledWith(true);
@@ -279,7 +279,7 @@ describe('Menu', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Account' }));
     const menu = await screen.findByRole('menu', { name: 'Signed in as salem@example.com' });
-    const header = screen.getByText('salem@example.com').closest('.sc-menu__header')!;
+    const header = screen.getByText('salem@example.com').closest('.c-proto-menu__header')!;
     expect(header).toHaveAttribute('role', 'none');
     expect(menu).toHaveAttribute('aria-labelledby', `${header.id}-caption ${header.id}-text`);
     expect(menu).not.toHaveAttribute('aria-describedby');
@@ -306,7 +306,7 @@ describe('Menu', () => {
     );
     const menu = await screen.findByRole('menu', { name: 'Signed in as salem@example.com' });
     const detail = screen.getByText('Trial · ends Nov 30');
-    expect(detail).toHaveClass('sc-menu__header-detail');
+    expect(detail).toHaveClass('c-proto-menu__header-detail');
     expect(menu.getAttribute('aria-describedby')).toBe(`extra ${detail.id}`);
   });
 
@@ -365,7 +365,7 @@ describe('Menu', () => {
     const item = await screen.findByRole('menuitem', { name: 'Sign out' });
     expect(item.tagName).toBe('BUTTON');
     expect(item).toHaveAttribute('type', 'submit');
-    expect(item).toHaveClass('sc-menu__item');
+    expect(item).toHaveClass('c-proto-menu__item');
     await expectNoA11yViolations(document.body);
 
     await user.click(item);

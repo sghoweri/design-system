@@ -36,7 +36,7 @@ describe('TextEditor', () => {
     const textarea = screen.getByLabelText('search.yaml');
     expect(textarea.tagName).toBe('TEXTAREA');
     expect(textarea).toHaveAccessibleDescription('Search settings. Unknown key: seniority.');
-    expect(container.querySelector('.sc-field')).toHaveAttribute('data-editor', 'fallback');
+    expect(container.querySelector('.c-proto-field')).toHaveAttribute('data-editor', 'fallback');
     await editorContent(container); // let the swap finish inside act
   });
 
@@ -51,8 +51,8 @@ describe('TextEditor', () => {
     expect(screen.getByRole('textbox', { name: 'search.yaml' })).toBe(content);
     expect(content).toHaveAccessibleDescription('Search settings. Unknown key: seniority.');
     // The diff shows (not focused), with WordDiff's classes and screen reader words.
-    expect(content.querySelector('del.sc-word-diff__removed')).toHaveTextContent('[removed: manager]');
-    expect(content.querySelector('ins.sc-word-diff__added')).toHaveTextContent('senior');
+    expect(content.querySelector('del.c-proto-word-diff__removed')).toHaveTextContent('[removed: manager]');
+    expect(content.querySelector('ins.c-proto-word-diff__added')).toHaveTextContent('senior');
     expect(content.textContent).toContain('[added: senior]');
     await expectNoA11yViolations(container);
   });

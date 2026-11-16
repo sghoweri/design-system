@@ -1,10 +1,10 @@
 # design-system
 
-Salem Cobalt: a personal design system. Publishes `@salemcobalt/tokens` and `@salemcobalt/ui`, with a public docs site and Storybook. Read `DESIGN_SYSTEM_BRIEF.md` first.
+Protokit: a design system by Salem Cobalt. Publishes `@protokit/tokens` and `@protokit/ui`, with a public docs site and Storybook. Read `DESIGN_SYSTEM_BRIEF.md` first.
 
 ```
-packages/tokens   @salemcobalt/tokens   Style Dictionary source → CSS custom properties, Sass, TypeScript, JSON
-packages/ui       @salemcobalt/ui       React 19 components on Base UI, CSS shipped as one stylesheet
+packages/tokens   @protokit/tokens   Style Dictionary source → CSS custom properties, Sass, TypeScript, JSON
+packages/ui       @protokit/ui       React 19 components on Base UI, CSS shipped as one stylesheet
 apps/storybook    Storybook with the a11y addon on every story
 apps/docs         Docs site on Astro + Starlight; the Storybook is copied in at /workshop/
 docs/             project.json (portfolio contract), ADRs, releasing.md
@@ -25,14 +25,14 @@ pnpm docs         # http://localhost:4321 (docs site, dev server; no /workshop/ 
 ## Consume
 
 ```sh
-pnpm add @salemcobalt/tokens @salemcobalt/ui
+pnpm add @protokit/tokens @protokit/ui
 ```
 
 ```ts
-import '@salemcobalt/tokens/css';
-import '@salemcobalt/ui/fonts'; // optional: self-hosted IBM Plex and Unbounded
-import '@salemcobalt/ui/styles.css';
-import { Button } from '@salemcobalt/ui';
+import '@protokit/tokens/css';
+import '@protokit/ui/fonts'; // optional: self-hosted IBM Plex and Unbounded
+import '@protokit/ui/styles.css';
+import { Button } from '@protokit/ui';
 ```
 
 Set `data-theme="light"` or `"dark"` on `<html>`; with no attribute the system follows `prefers-color-scheme`.

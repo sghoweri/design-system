@@ -30,7 +30,7 @@ const ProposedContext = createContext(false);
 function Root({ orientation = 'horizontal', className, children, ...rest }: StepperProps) {
   return (
     <OrientationContext.Provider value={orientation}>
-      <ol className={cx('sc-stepper', className)} data-orientation={orientation} {...rest}>
+      <ol className={cx('c-proto-stepper', className)} data-orientation={orientation} {...rest}>
         {children}
       </ol>
     </OrientationContext.Provider>
@@ -68,21 +68,21 @@ function Step({
 }: StepperStepProps) {
   return (
     <li
-      className={cx('sc-stepper__step', className)}
+      className={cx('c-proto-stepper__step', className)}
       data-state={state}
       data-tone={state === 'ended' ? tone : undefined}
       aria-current={state === 'current' || state === 'ended' ? 'step' : undefined}
       {...rest}
     >
-      <span className="sc-stepper__marker" aria-hidden="true">
+      <span className="c-proto-stepper__marker" aria-hidden="true">
         {state === 'done' ? <CheckIcon size="xs" /> : state === 'ended' ? <XIcon size="xs" /> : null}
       </span>
-      <span className="sc-stepper__label">
+      <span className="c-proto-stepper__label">
         {children}
-        {state === 'done' ? <span className="sc-visually-hidden">, {doneLabel}</span> : null}
+        {state === 'done' ? <span className="u-proto-visually-hidden">, {doneLabel}</span> : null}
       </span>
       {meta != null ? (
-        <span className="sc-stepper__meta" data-proposed={proposed || undefined}>
+        <span className="c-proto-stepper__meta" data-proposed={proposed || undefined}>
           <ProposedContext.Provider value={proposed}>{meta}</ProposedContext.Provider>
         </span>
       ) : null}
@@ -134,23 +134,23 @@ function DateMeta({
     <Popover.Root open={open} onOpenChange={onOpenChange}>
       <Popover.Trigger
         render={
-          <IconButton label={name} tooltip={label} size="sm" className="sc-stepper__date-button">
+          <IconButton label={name} tooltip={label} size="sm" className="c-proto-stepper__date-button">
             <CalendarIcon />
           </IconButton>
         }
       />
-      <Popover.Content side="bottom" align="start" arrow className="sc-stepper__date-popover">
+      <Popover.Content side="bottom" align="start" arrow className="c-proto-stepper__date-popover">
         {editable ? (
           children
         ) : (
-          <p className="sc-stepper__date-full">{proposed ? `${proposedLabel} · ${label}` : label}</p>
+          <p className="c-proto-stepper__date-full">{proposed ? `${proposedLabel} · ${label}` : label}</p>
         )}
       </Popover.Content>
     </Popover.Root>
   );
   if (orientation === 'vertical') {
     return (
-      <span className="sc-stepper__date">
+      <span className="c-proto-stepper__date">
         <span>
           {proposed ? `${proposedLabel} · ` : null}
           {short ?? label}
@@ -160,7 +160,7 @@ function DateMeta({
     );
   }
   return (
-    <span className="sc-stepper__date">
+    <span className="c-proto-stepper__date">
       {proposed ? <span aria-hidden="true">{proposedLabel}</span> : null}
       {button}
     </span>

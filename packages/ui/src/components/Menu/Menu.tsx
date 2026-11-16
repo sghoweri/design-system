@@ -114,10 +114,10 @@ function Content({
         align={align}
         sideOffset={sideOffset}
         collisionPadding={collisionPadding}
-        className="sc-menu__positioner"
+        className="c-proto-menu__positioner"
       >
         <BaseMenu.Popup
-          className={cx('sc-menu', className)}
+          className={cx('c-proto-menu', className)}
           aria-label={ariaLabel}
           aria-labelledby={labelledBy}
           aria-describedby={describedBy}
@@ -168,19 +168,19 @@ function useItemBody(
   const join = (...ids: (string | false | undefined)[]) => ids.filter(Boolean).join(' ') || undefined;
   const body = (
     <>
-      <span className="sc-menu__icon" aria-hidden="true">
+      <span className="c-proto-menu__icon" aria-hidden="true">
         {icon}
       </span>
-      <span className="sc-menu__label" id={hasDescription ? `${id}-label` : undefined}>
+      <span className="c-proto-menu__label" id={hasDescription ? `${id}-label` : undefined}>
         {children}
       </span>
       {hasDescription ? (
-        <span className="sc-menu__description" id={`${id}-description`}>
+        <span className="c-proto-menu__description" id={`${id}-description`}>
           {description}
         </span>
       ) : null}
       {hasTrailing ? (
-        <span className="sc-menu__trailing" id={hasDescription ? `${id}-trailing` : undefined}>
+        <span className="c-proto-menu__trailing" id={hasDescription ? `${id}-trailing` : undefined}>
           {trailing}
         </span>
       ) : null}
@@ -222,7 +222,7 @@ function Item({
     { 'aria-labelledby': labelledBy, 'aria-describedby': describedBy },
   );
   return (
-    <BaseMenu.Item className={cx('sc-menu__item', className)} data-tone={tone} {...aria} {...rest}>
+    <BaseMenu.Item className={cx('c-proto-menu__item', className)} data-tone={tone} {...aria} {...rest}>
       {body}
     </BaseMenu.Item>
   );
@@ -254,7 +254,7 @@ function LinkItem({
   );
   return (
     <BaseMenu.LinkItem
-      className={cx('sc-menu__item', className)}
+      className={cx('c-proto-menu__item', className)}
       data-tone={tone}
       closeOnClick={closeOnClick}
       {...aria}
@@ -280,15 +280,15 @@ export interface MenuCheckboxItemProps extends Omit<
 function CheckboxItem({ trailing, onCheckedChange, className, children, ...rest }: MenuCheckboxItemProps) {
   return (
     <BaseMenu.CheckboxItem
-      className={cx('sc-menu__item', className)}
+      className={cx('c-proto-menu__item', className)}
       onCheckedChange={onCheckedChange ? (checked) => onCheckedChange(checked) : undefined}
       {...rest}
     >
-      <BaseMenu.CheckboxItemIndicator className="sc-menu__icon sc-menu__indicator">
+      <BaseMenu.CheckboxItemIndicator className="c-proto-menu__icon c-proto-menu__indicator">
         <CheckIcon size="sm" />
       </BaseMenu.CheckboxItemIndicator>
-      <span className="sc-menu__label">{children}</span>
-      {trailing !== undefined ? <span className="sc-menu__trailing">{trailing}</span> : null}
+      <span className="c-proto-menu__label">{children}</span>
+      {trailing !== undefined ? <span className="c-proto-menu__trailing">{trailing}</span> : null}
     </BaseMenu.CheckboxItem>
   );
 }
@@ -318,12 +318,12 @@ function RadioGroup<Value extends string = string>({
 }: MenuRadioGroupProps<Value>) {
   return (
     <BaseMenu.RadioGroup
-      className={cx('sc-menu__group', className)}
+      className={cx('c-proto-menu__group', className)}
       onValueChange={onValueChange ? (value: Value) => onValueChange(value) : undefined}
       {...rest}
     >
       {label !== undefined ? (
-        <BaseMenu.GroupLabel className="sc-menu__group-label">{label}</BaseMenu.GroupLabel>
+        <BaseMenu.GroupLabel className="c-proto-menu__group-label">{label}</BaseMenu.GroupLabel>
       ) : null}
       {children}
     </BaseMenu.RadioGroup>
@@ -340,12 +340,12 @@ export interface MenuRadioItemProps extends Omit<BaseMenu.RadioItem.Props, 'clas
 /** One choice in a `Menu.RadioGroup`. Stays open when chosen; pass `closeOnClick` to close. */
 function RadioItem({ trailing, className, children, ...rest }: MenuRadioItemProps) {
   return (
-    <BaseMenu.RadioItem className={cx('sc-menu__item', className)} {...rest}>
-      <BaseMenu.RadioItemIndicator className="sc-menu__icon sc-menu__indicator">
-        <span className="sc-menu__radio-dot" />
+    <BaseMenu.RadioItem className={cx('c-proto-menu__item', className)} {...rest}>
+      <BaseMenu.RadioItemIndicator className="c-proto-menu__icon c-proto-menu__indicator">
+        <span className="c-proto-menu__radio-dot" />
       </BaseMenu.RadioItemIndicator>
-      <span className="sc-menu__label">{children}</span>
-      {trailing !== undefined ? <span className="sc-menu__trailing">{trailing}</span> : null}
+      <span className="c-proto-menu__label">{children}</span>
+      {trailing !== undefined ? <span className="c-proto-menu__trailing">{trailing}</span> : null}
     </BaseMenu.RadioItem>
   );
 }
@@ -359,9 +359,9 @@ export interface MenuGroupProps extends Omit<BaseMenu.Group.Props, 'className'> 
 /** Labels a run of items. */
 function Group({ label, className, children, ...rest }: MenuGroupProps) {
   return (
-    <BaseMenu.Group className={cx('sc-menu__group', className)} {...rest}>
+    <BaseMenu.Group className={cx('c-proto-menu__group', className)} {...rest}>
       {label !== undefined ? (
-        <BaseMenu.GroupLabel className="sc-menu__group-label">{label}</BaseMenu.GroupLabel>
+        <BaseMenu.GroupLabel className="c-proto-menu__group-label">{label}</BaseMenu.GroupLabel>
       ) : null}
       {children}
     </BaseMenu.Group>
@@ -397,17 +397,17 @@ function Header({ caption, detail, className, children, id, ...rest }: MenuHeade
     return () => setHeader((current) => (current?.owner === headerId ? undefined : current));
   }, [setHeader, headerId, labelledBy, describedBy]);
   return (
-    <div role="none" id={headerId} className={cx('sc-menu__header', className)} {...rest}>
+    <div role="none" id={headerId} className={cx('c-proto-menu__header', className)} {...rest}>
       {hasCaption ? (
-        <span id={`${headerId}-caption`} className="sc-menu__header-caption">
+        <span id={`${headerId}-caption`} className="c-proto-menu__header-caption">
           {caption}
         </span>
       ) : null}
-      <span id={`${headerId}-text`} className="sc-menu__header-text">
+      <span id={`${headerId}-text`} className="c-proto-menu__header-text">
         {children}
       </span>
       {hasDetail ? (
-        <span id={`${headerId}-detail`} className="sc-menu__header-detail">
+        <span id={`${headerId}-detail`} className="c-proto-menu__header-detail">
           {detail}
         </span>
       ) : null}
@@ -421,7 +421,7 @@ export interface MenuSeparatorProps extends Omit<BaseMenu.Separator.Props, 'clas
 
 /** A hairline between runs of items. */
 function Separator({ className, ...rest }: MenuSeparatorProps) {
-  return <BaseMenu.Separator className={cx('sc-menu__separator', className)} {...rest} />;
+  return <BaseMenu.Separator className={cx('c-proto-menu__separator', className)} {...rest} />;
 }
 
 /** A dropdown of actions on a trigger, with full keyboard support. Built on Base UI's Menu. */

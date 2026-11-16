@@ -20,12 +20,12 @@ describe('ReasonList', () => {
       </>,
     );
     const list = screen.getByRole('list', { name: 'Why it fits' });
-    expect(list).toHaveClass('sc-reason-list');
+    expect(list).toHaveClass('c-proto-reason-list');
     expect(list).toHaveAttribute('data-tone', 'for');
     expect(list).toHaveAttribute('data-size', 'md');
     expect(list).not.toHaveAttribute('data-divider');
     expect(within(list).getAllByRole('listitem')).toHaveLength(2);
-    expect(within(list).getAllByRole('listitem')[0]).toHaveClass('sc-reason-list__item');
+    expect(within(list).getAllByRole('listitem')[0]).toHaveClass('c-proto-reason-list__item');
     await expectNoA11yViolations(container);
   });
 
@@ -65,7 +65,7 @@ describe('ReasonList', () => {
       );
       expect(screen.queryByRole('list')).not.toBeInTheDocument();
       const line = screen.getByText('No cons flagged.').closest('p');
-      expect(line).toHaveClass('sc-reason-list__empty', 'extra');
+      expect(line).toHaveClass('c-proto-reason-list__empty', 'extra');
       expect(line).toHaveAttribute('id', 'cons');
       expect(line).toHaveAttribute('data-tone', 'against');
       expect(line).toHaveAttribute('data-size', 'md');
@@ -83,11 +83,11 @@ describe('ReasonList', () => {
           <ReasonList tone="gap" size="sm" divider empty="No gaps flagged." aria-label="Gaps" />
         </>,
       );
-      const [pros, cons, gaps] = container.querySelectorAll('.sc-reason-list__empty');
-      expect(pros!.querySelector('.sc-reason-list__empty-icon')).toBeNull();
-      expect(cons!.querySelector('.sc-reason-list__empty-icon svg')).toBeInTheDocument();
-      expect(cons!.querySelector('.sc-reason-list__empty-icon')).toHaveAttribute('aria-hidden', 'true');
-      expect(gaps!.querySelector('.sc-reason-list__empty-icon svg')).toBeInTheDocument();
+      const [pros, cons, gaps] = container.querySelectorAll('.c-proto-reason-list__empty');
+      expect(pros!.querySelector('.c-proto-reason-list__empty-icon')).toBeNull();
+      expect(cons!.querySelector('.c-proto-reason-list__empty-icon svg')).toBeInTheDocument();
+      expect(cons!.querySelector('.c-proto-reason-list__empty-icon')).toHaveAttribute('aria-hidden', 'true');
+      expect(gaps!.querySelector('.c-proto-reason-list__empty-icon svg')).toBeInTheDocument();
       expect(gaps).toHaveAttribute('data-size', 'sm');
       expect(gaps).toHaveAttribute('data-divider');
       expect(cons).toHaveTextContent(/^No cons flagged\.$/);
@@ -101,9 +101,9 @@ describe('ReasonList', () => {
           <ReasonList tone="for" empty="Nothing for yet" emptyIcon={<ArchiveIcon size="em" />} />
         </>,
       );
-      const [against, pros] = container.querySelectorAll('.sc-reason-list__empty');
-      expect(against!.querySelector('.sc-reason-list__empty-icon')).toBeNull();
-      expect(pros!.querySelector('.sc-reason-list__empty-icon svg')).toBeInTheDocument();
+      const [against, pros] = container.querySelectorAll('.c-proto-reason-list__empty');
+      expect(against!.querySelector('.c-proto-reason-list__empty-icon')).toBeNull();
+      expect(pros!.querySelector('.c-proto-reason-list__empty-icon svg')).toBeInTheDocument();
     });
 
     it('counts only real items: false, null, empty strings and empty fragments are none', () => {
@@ -142,7 +142,7 @@ describe('ReasonList', () => {
       render(<ReasonList tone="against" aria-label="Against" />);
       const list = screen.getByRole('list', { name: 'Against' });
       expect(list.children).toHaveLength(0);
-      expect(document.querySelector('.sc-reason-list__empty')).toBeNull();
+      expect(document.querySelector('.c-proto-reason-list__empty')).toBeNull();
     });
   });
 });

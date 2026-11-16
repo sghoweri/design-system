@@ -103,8 +103,8 @@ function Persistent() {
 /**
  * A toast that stays until it is answered: `timeout: 0`, an action that keeps it open (`keepOpen`, for an action
  * that may ask first), a text dismiss (`dismissLabel: 'Later'`) and `onClose`. Adding it again with the same `id`
- * updates it in place. It sits above an open SelectionBar (or any fixed bar with `anchor-name: --sc-bottom-bar`); for a
- * sticky bar, set `--sc-toast-offset-block-end` while it shows.
+ * updates it in place. It sits above an open SelectionBar (or any fixed bar with `anchor-name: --proto-bottom-bar`); for a
+ * sticky bar, set `--proto-toast-offset-block-end` while it shows.
  */
 export const Persistent_: Story = {
   name: 'Persistent, with a SelectionBar',
@@ -140,7 +140,7 @@ function Accent() {
 /**
  * `tone: 'accent'` fills the toast with the accent colour, for the rare notice that has to be seen (the app was
  * updated). Keep it for one toast at a time; the other tones are an edge on a raised surface. Its buttons, description
- * and focus rings read on the fill through the `.sc-on-accent` scope: text.on-accent on accent.default is 4.64:1 light
+ * and focus rings read on the fill through the `.t-proto-on-accent` scope: text.on-accent on accent.default is 4.64:1 light
  * and 7.15:1 dark, hover and pressed use the primary Button's accent.hover and accent.active.
  */
 export const AccentTone: Story = {

@@ -12,16 +12,16 @@ const parts: WordDiffPart[] = [
   { kind: 'same', text: '.\n' },
 ];
 const srText = (el: Element) =>
-  [...el.querySelectorAll('.sc-visually-hidden')].map((n) => n.textContent).join('|');
+  [...el.querySelectorAll('.u-proto-visually-hidden')].map((n) => n.textContent).join('|');
 
 describe('WordDiff', () => {
   it('renders del and ins with screen reader wrappers, whitespace kept exactly', async () => {
     const { container } = render(<WordDiff parts={parts} />);
-    const root = container.querySelector('.sc-word-diff')!;
+    const root = container.querySelector('.c-proto-word-diff')!;
     expect(root.tagName).toBe('P');
     expect(root).toHaveAttribute('data-size', 'sm');
-    const dels = root.querySelectorAll('del.sc-word-diff__removed');
-    const inss = root.querySelectorAll('ins.sc-word-diff__added');
+    const dels = root.querySelectorAll('del.c-proto-word-diff__removed');
+    const inss = root.querySelectorAll('ins.c-proto-word-diff__added');
     expect(dels).toHaveLength(2);
     expect(inss).toHaveLength(2);
     expect(dels[0]).toHaveTextContent('[removed: helped with]', { normalizeWhitespace: false });
@@ -30,7 +30,7 @@ describe('WordDiff', () => {
     expect(dels[0]!.nextSibling?.textContent).toBe(' ');
     // Without the screen reader text, the visible string is exactly the parts joined.
     const visible = root.cloneNode(true) as Element;
-    visible.querySelectorAll('.sc-visually-hidden').forEach((n) => n.remove());
+    visible.querySelectorAll('.u-proto-visually-hidden').forEach((n) => n.remove());
     expect(visible.textContent).toBe(parts.map((p) => p.text).join(''));
     expect(srText(root)).toBe('[removed: |]|[added: |]|[removed: |]|[added: |]');
     await expectNoA11yViolations(container);
@@ -49,7 +49,7 @@ describe('WordDiff', () => {
         ]}
       />,
     );
-    const root = container.querySelector('.sc-word-diff')!;
+    const root = container.querySelector('.c-proto-word-diff')!;
     expect(root.tagName).toBe('DIV');
     expect(root).toHaveAttribute('data-size', 'md');
     expect(srText(root)).toBe('[supprimé: |]|[ajouté: |]');
@@ -68,16 +68,16 @@ describe('WordDiff', () => {
         ]}
       />,
     );
-    expect(container.querySelector('.sc-word-diff')).toHaveAttribute('data-family', 'mono');
-    expect(render(<WordDiff parts={parts} />).container.querySelector('.sc-word-diff')).not.toHaveAttribute(
-      'data-family',
-    );
+    expect(container.querySelector('.c-proto-word-diff')).toHaveAttribute('data-family', 'mono');
+    expect(
+      render(<WordDiff parts={parts} />).container.querySelector('.c-proto-word-diff'),
+    ).not.toHaveAttribute('data-family');
     await expectNoA11yViolations(container);
   });
 
   it('keeps a whitespace-only change as plain text', () => {
     const { container } = render(<WordDiff parts={[{ kind: 'added', text: '  ' }]} />);
     expect(container.querySelector('ins')).toBeNull();
-    expect(container.querySelector('.sc-word-diff')!.textContent).toBe('  ');
+    expect(container.querySelector('.c-proto-word-diff')!.textContent).toBe('  ');
   });
 });

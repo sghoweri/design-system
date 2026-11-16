@@ -8,7 +8,7 @@ const storybookStatic = fileURLToPath(new URL('../../../storybook/storybook-stat
 /** @returns {import('astro').AstroIntegration} */
 export function workshop() {
   return {
-    name: 'salemcobalt:workshop',
+    name: 'protokit:workshop',
     hooks: {
       'astro:build:done': ({ dir, logger }) => {
         if (!existsSync(storybookStatic)) {

@@ -1,4 +1,4 @@
-// Concatenates src/styles/*.css (in the order listed in src/styles/index.txt) into dist/styles.css inside @layer sc.
+// Concatenates src/styles/*.css (in the order listed in src/styles/index.txt) into dist/styles.css inside @layer proto.
 // A line naming a package file (`filepond/dist/filepond.css`) is resolved from node_modules, so a dependency's
 // own stylesheet lands inside the layer too, version-locked to the installed package (docs/adr/0004).
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, copyFileSync } from 'node:fs';
@@ -19,11 +19,11 @@ const body = order.map((f) => `/* ---- ${f} ---- */\n${readFileSync(pathOf(f), '
 mkdirSync(join(here, '..', 'dist'), { recursive: true });
 writeFileSync(
   join(here, '..', 'dist', 'styles.css'),
-  `/* @salemcobalt/ui ${version} — requires @salemcobalt/tokens/css. */\n@layer sc {\n${body.replace(/^/gm, '  ')}\n}\n`,
+  `/* @protokit/ui ${version} — requires @protokit/tokens/css. */\n@layer proto {\n${body.replace(/^/gm, '  ')}\n}\n`,
 );
 console.log(`styles.css: ${order.length} files`);
 
-// @salemcobalt/ui/fonts: the committed faces in src/fonts (woff2, their @font-face rules, the licences) go to
+// @protokit/ui/fonts: the committed faces in src/fonts (woff2, their @font-face rules, the licences) go to
 // dist/fonts as they are, and dist/fonts.js imports the stylesheet so the consumer's bundler serves the files from
 // its own origin.
 const fontsSrc = join(here, '..', 'src', 'fonts');
@@ -33,6 +33,6 @@ const faces = readdirSync(fontsSrc).filter((f) => /\.(woff2|css|txt)$/.test(f));
 for (const f of faces) copyFileSync(join(fontsSrc, f), join(fontsOut, f));
 writeFileSync(
   join(here, '..', 'dist', 'fonts.js'),
-  `// IBM Plex Sans, IBM Plex Mono and Unbounded, committed in @salemcobalt/ui (src/fonts). Import once at the app entry.\nimport './fonts/fonts.css';\n`,
+  `// IBM Plex Sans, IBM Plex Mono and Unbounded, committed in @protokit/ui (src/fonts). Import once at the app entry.\nimport './fonts/fonts.css';\n`,
 );
 console.log(`fonts: ${faces.filter((f) => f.endsWith('.woff2')).length} faces`);

@@ -54,6 +54,27 @@ test('TS: class strings, partial prefixes, runtime-built names, token keys', () 
   assert.equal(t("import '@salemcobalt/tokens/css';"), "import '@protokit/tokens/css';");
 });
 
+test('the prefix written on its own, and data attributes', () => {
+  assert.equal(
+    t('Custom properties, `--sc-` prefixed; `$sc-*` variables.'),
+    'Custom properties, `--proto-` prefixed; `$proto-*` variables.',
+  );
+  assert.equal(
+    t("probe.setAttribute('data-sc-safe-area-probe', '')"),
+    "probe.setAttribute('data-proto-safe-area-probe', '')",
+  );
+});
+
+test('leftovers include old names inside hyphenated names and patterns', () => {
+  const s = ["wrap.className = 'cm-sc-removed';", String.raw`.replace(/var\(--(sc-[\w-]+)\)/g, f)`].join(
+    '\n',
+  );
+  assert.deepEqual(
+    leftovers(s).map((l) => l.line),
+    [1, 2],
+  );
+});
+
 test('Sass variables', () => {
   assert.equal(
     t('$sc-color-text-default: #111; $sc-dark: ();'),
@@ -100,7 +121,7 @@ test('names it cannot know are left alone and reported', () => {
   assert.equal(t(s), s);
   assert.deepEqual(
     leftovers(s).map((l) => l.match),
-    ['sc-l'],
+    ['sc-'],
   );
 });
 

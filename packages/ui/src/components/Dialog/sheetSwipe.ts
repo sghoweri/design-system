@@ -89,7 +89,7 @@ export function attachSheetSwipe(handle: HTMLElement): () => void {
     if (handle.getClientRects().length === 0) return false;
     const target = e.target instanceof Element ? e.target : null;
     if (!target || handle.contains(target)) return true;
-    if (target.closest(IGNORE) || target.closest('.sc-dialog__body')) return false;
+    if (target.closest(IGNORE) || target.closest('.c-proto-dialog__body')) return false;
     return e.clientY - popup.getBoundingClientRect().top <= SHEET_SWIPE.zone;
   };
 

@@ -3,47 +3,47 @@
    30 cells are one row at 1280 and rows of 13 inside a Card at 390. Tone is a shape as well as a colour (1.4.1):
    success solid, warning solid with "!", danger solid with "×", neutral hollow, running hollow with a dot. Every
    fill and ring is ≥ 3:1 on every surface in both themes; the glyphs are text.on-status on the solid (≥ 4.5:1). */
-.sc-status-strip {
+.c-proto-status-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sc-spacing-2xs);
+  gap: var(--proto-spacing-2xs);
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.sc-status-strip__item {
+.c-proto-status-strip__item {
   display: flex;
 }
-.sc-status-strip__cell {
-  --_tone: var(--sc-color-text-muted);
+.c-proto-status-strip__cell {
+  --_tone: var(--proto-color-text-muted);
   position: relative;
   display: grid;
   place-items: center;
   box-sizing: border-box;
   inline-size: 20px;
   block-size: 20px;
-  border-radius: var(--sc-radius-sm);
-  color: var(--sc-color-text-on-status);
+  border-radius: var(--proto-radius-sm);
+  color: var(--proto-color-text-on-status);
   text-decoration: none;
 }
-.sc-status-strip__cell[data-tone='success'] {
-  background: var(--sc-color-success-solid);
+.c-proto-status-strip__cell[data-tone='success'] {
+  background: var(--proto-color-success-solid);
 }
-.sc-status-strip__cell[data-tone='warning'] {
-  background: var(--sc-color-warning-solid);
+.c-proto-status-strip__cell[data-tone='warning'] {
+  background: var(--proto-color-warning-solid);
 }
-.sc-status-strip__cell[data-tone='danger'] {
-  background: var(--sc-color-danger-solid);
+.c-proto-status-strip__cell[data-tone='danger'] {
+  background: var(--proto-color-danger-solid);
 }
-.sc-status-strip__cell[data-tone='neutral'] {
-  box-shadow: inset 0 0 0 var(--sc-border-width-focus) var(--_tone);
+.c-proto-status-strip__cell[data-tone='neutral'] {
+  box-shadow: inset 0 0 0 var(--proto-border-width-focus) var(--_tone);
 }
-.sc-status-strip__cell[data-tone='running'] {
-  --_tone: var(--sc-color-accent-default);
-  box-shadow: inset 0 0 0 var(--sc-border-width-focus) var(--_tone);
+.c-proto-status-strip__cell[data-tone='running'] {
+  --_tone: var(--proto-color-accent-default);
+  box-shadow: inset 0 0 0 var(--proto-border-width-focus) var(--_tone);
   color: var(--_tone);
 }
-.sc-status-strip__glyph {
+.c-proto-status-strip__glyph {
   inline-size: 12px;
   block-size: 12px;
   fill: none;
@@ -51,12 +51,12 @@
   stroke-width: 2;
   stroke-linecap: round;
 }
-.sc-status-strip__cell[data-tone='running'] > .sc-status-strip__glyph {
+.c-proto-status-strip__cell[data-tone='running'] > .c-proto-status-strip__glyph {
   fill: currentColor;
   stroke: none;
-  animation: sc-status-strip-pulse 1.2s var(--sc-ease-standard) infinite alternate;
+  animation: proto-status-strip-pulse 1.2s var(--proto-ease-standard) infinite alternate;
 }
-@keyframes sc-status-strip-pulse {
+@keyframes proto-status-strip-pulse {
   from {
     opacity: 1;
   }
@@ -65,19 +65,19 @@
   }
 }
 /* A linked cell: a pointer, a ring outside on hover, the focus ring on keyboard focus. */
-a.sc-status-strip__cell {
+a.c-proto-status-strip__cell {
   cursor: pointer;
 }
-a.sc-status-strip__cell:hover {
-  outline: var(--sc-border-width-focus) solid var(--sc-color-text-muted);
+a.c-proto-status-strip__cell:hover {
+  outline: var(--proto-border-width-focus) solid var(--proto-color-text-muted);
   outline-offset: 1px;
 }
-a.sc-status-strip__cell:focus-visible {
-  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
-  outline-offset: var(--sc-border-width-focus);
+a.c-proto-status-strip__cell:focus-visible {
+  outline: var(--proto-border-width-focus) solid var(--proto-color-border-focus);
+  outline-offset: var(--proto-border-width-focus);
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-status-strip__cell[data-tone='running'] > .sc-status-strip__glyph {
+  .c-proto-status-strip__cell[data-tone='running'] > .c-proto-status-strip__glyph {
     animation: none;
   }
 }

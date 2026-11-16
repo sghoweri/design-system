@@ -181,7 +181,7 @@ export function FileInput({
     };
     const onPreviewClick = (event: Event) => {
       const button = (event.target as Element | null)?.closest?.<HTMLButtonElement>(
-        '.sc-file-input__preview',
+        '.c-proto-file-input__preview',
       );
       const file = button?.dataset.fileId ? pond?.getFile(button.dataset.fileId)?.file : null;
       if (!button || !(file instanceof File)) return;
@@ -255,7 +255,7 @@ export function FileInput({
     const patchPreview = (item: Element, remove: Element | null) => {
       const row = item.querySelector('.filepond--file');
       if (!row) return;
-      let button = row.querySelector<HTMLButtonElement>(':scope > .sc-file-input__preview');
+      let button = row.querySelector<HTMLButtonElement>(':scope > .c-proto-file-input__preview');
       const id = item.id.replace(/^filepond--item-/, '');
       const file = pond?.getFile(id)?.file;
       if (!liveRef.current.preview || !(file instanceof File) || previewKind(file) == null) {
@@ -265,7 +265,7 @@ export function FileInput({
       if (!button) {
         button = document.createElement('button');
         button.type = 'button';
-        button.className = 'sc-file-input__preview';
+        button.className = 'c-proto-file-input__preview';
         row.insertBefore(button, remove ?? row.firstChild);
       }
       // Only write what changed: these writes are seen by the observer that called this.
@@ -416,7 +416,7 @@ export function FileInput({
   const ready = pondVersion > 0;
   return (
     <div
-      className={cx('sc-field', 'sc-file-input-field', className)}
+      className={cx('c-proto-field', 'c-proto-file-input-field', className)}
       data-size={size}
       data-disabled={disabled ? '' : undefined}
       data-invalid={isInvalid ? '' : undefined}
@@ -424,17 +424,17 @@ export function FileInput({
       <label
         id={labelId}
         htmlFor={inputId}
-        className={cx('sc-field__label', hideLabel && 'sc-visually-hidden')}
+        className={cx('c-proto-field__label', hideLabel && 'u-proto-visually-hidden')}
       >
         {label}
         {required ? (
-          <span className="sc-field__required" aria-hidden="true">
+          <span className="c-proto-field__required" aria-hidden="true">
             *
           </span>
         ) : null}
       </label>
       <div
-        className="sc-file-input"
+        className="c-proto-file-input"
         data-ready={ready ? '' : undefined}
         data-disabled={disabled ? '' : undefined}
         data-invalid={isInvalid ? '' : undefined}
@@ -442,22 +442,22 @@ export function FileInput({
       >
         {ready ? null : (
           // Server render and first paint: the same drop zone, inert until FilePond takes over.
-          <div className="sc-file-input__placeholder" aria-hidden="true">
-            {idleText} <span className="sc-file-input__browse">{browseLabel}</span>
+          <div className="c-proto-file-input__placeholder" aria-hidden="true">
+            {idleText} <span className="c-proto-file-input__browse">{browseLabel}</span>
           </div>
         )}
         {/* FilePond's root is appended here; React never renders children into this node. */}
-        <div ref={hostRef} className="sc-file-input__pond" />
+        <div ref={hostRef} className="c-proto-file-input__pond" />
       </div>
       {description != null ? (
-        <p id={descriptionId} className="sc-field__description">
+        <p id={descriptionId} className="c-proto-field__description">
           {description}
         </p>
       ) : null}
       {/* Always present so a rejection that appears after a drop is announced. */}
-      <div id={messagesId} className="sc-file-input__messages" aria-live="polite">
+      <div id={messagesId} className="c-proto-file-input__messages" aria-live="polite">
         {messages.map((message, i) => (
-          <p key={i} className="sc-field__error">
+          <p key={i} className="c-proto-field__error">
             {message}
           </p>
         ))}

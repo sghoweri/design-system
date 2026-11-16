@@ -60,7 +60,7 @@ export const Long: Story = {
         <Popover.Close />
         <Popover.Title>Score 82</Popover.Title>
         <Popover.Description>What counted for and against this posting.</Popover.Description>
-        <Stack gap="xs" style={{ marginBlockStart: 'var(--sc-spacing-sm)' }}>
+        <Stack gap="xs" style={{ marginBlockStart: 'var(--proto-spacing-sm)' }}>
           {Array.from({ length: 16 }, (_, i) => (
             <Text key={i} size="sm">
               Reason {i + 1}. Mentions design systems, tokens and accessibility in the first paragraph.

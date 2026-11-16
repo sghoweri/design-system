@@ -22,7 +22,7 @@ export interface SelectionBarProps {
 }
 
 const defaultCountLabel = (count: number) => `${count} selected`;
-/** Matches `--sc-duration-base` in selection-bar.css: the bar stays mounted this long to fade out. */
+/** Matches `--proto-duration-base` in selection-bar.css: the bar stays mounted this long to fade out. */
 const LEAVE_MS = 200;
 
 /**
@@ -79,29 +79,29 @@ export function SelectionBar({
 
   return (
     <>
-      <span role="status" className="sc-visually-hidden">
+      <span role="status" className="u-proto-visually-hidden">
         {message}
       </span>
       {rendered ? (
         <>
           {open ? (
             <div
-              className="sc-selection-bar__spacer"
-              style={{ '--sc-selection-bar-height': `${height}px` } as CSSProperties}
+              className="c-proto-selection-bar__spacer"
+              style={{ '--proto-selection-bar-height': `${height}px` } as CSSProperties}
               aria-hidden="true"
             />
           ) : null}
           <div
             ref={barRef}
-            className={cx('sc-selection-bar', className)}
+            className={cx('c-proto-selection-bar', className)}
             data-open={open || undefined}
             onFocus={(event) => {
               const from = event.relatedTarget;
               if (from instanceof HTMLElement && !event.currentTarget.contains(from)) returnTo.current = from;
             }}
           >
-            <Toolbar.Root aria-label={ariaLabel} className="sc-selection-bar__toolbar">
-              <span className="sc-selection-bar__count">{countLabel(shownCount)}</span>
+            <Toolbar.Root aria-label={ariaLabel} className="c-proto-selection-bar__toolbar">
+              <span className="c-proto-selection-bar__count">{countLabel(shownCount)}</span>
               <Toolbar.Separator />
               {children}
               <Toolbar.Spacer />

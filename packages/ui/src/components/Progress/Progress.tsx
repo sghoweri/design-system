@@ -93,31 +93,31 @@ export function Progress({
       max={max}
       min={min}
       getAriaValueText={ariaValueText}
-      className={cx('sc-progress', className)}
+      className={cx('c-proto-progress', className)}
       data-variant={variant}
       data-tone={tone}
       data-size={size}
       data-marked={shownMarks.length ? true : undefined}
       {...rest}
     >
-      {variant === 'inline' ? <Spinner size="sm" decorative className="sc-progress__spinner" /> : null}
+      {variant === 'inline' ? <Spinner size="sm" decorative className="c-proto-progress__spinner" /> : null}
       {label != null ? (
-        <BaseProgress.Label className={ring ? 'sc-visually-hidden' : 'sc-progress__label'}>
+        <BaseProgress.Label className={ring ? 'u-proto-visually-hidden' : 'c-proto-progress__label'}>
           {label}
         </BaseProgress.Label>
       ) : null}
       {hasValueText ? (
-        <BaseProgress.Value className="sc-progress__value">
+        <BaseProgress.Value className="c-proto-progress__value">
           {(formatted) => (valueText != null ? valueText : formatted)}
         </BaseProgress.Value>
       ) : null}
       {variant === 'bar' ? (
-        <BaseProgress.Track className="sc-progress__track">
-          <BaseProgress.Indicator className="sc-progress__indicator" />
+        <BaseProgress.Track className="c-proto-progress__track">
+          <BaseProgress.Indicator className="c-proto-progress__indicator" />
           {shownMarks.map((m, i) => (
             <span
               key={i}
-              className="sc-progress__mark"
+              className="c-proto-progress__mark"
               title={m.label}
               aria-hidden="true"
               style={{ '--_at': `${percent(m.value, min, max)}%` } as CSSProperties}
@@ -146,12 +146,12 @@ function Ring({
   const r = (d - RING_STROKE) / 2;
   return (
     <>
-      <svg className="sc-progress__ring" viewBox={`0 0 ${d} ${d}`} aria-hidden="true" focusable="false">
-        <circle className="sc-progress__ring-track" cx={c} cy={c} r={r} pathLength={100} />
+      <svg className="c-proto-progress__ring" viewBox={`0 0 ${d} ${d}`} aria-hidden="true" focusable="false">
+        <circle className="c-proto-progress__ring-track" cx={c} cy={c} r={r} pathLength={100} />
         {/* No arc at 0: a zero-length dash with round caps would still paint a dot. Indeterminate spins a quarter. */}
         {fraction === null || fraction > 0 ? (
           <circle
-            className="sc-progress__ring-arc"
+            className="c-proto-progress__ring-arc"
             cx={c}
             cy={c}
             r={r}
@@ -162,7 +162,7 @@ function Ring({
         ) : null}
       </svg>
       {centre != null ? (
-        <span className="sc-progress__centre" aria-hidden="true">
+        <span className="c-proto-progress__centre" aria-hidden="true">
           {centre}
         </span>
       ) : null}

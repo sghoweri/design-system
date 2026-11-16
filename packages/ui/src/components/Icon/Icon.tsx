@@ -22,7 +22,7 @@ export type IconGlyphProps = Omit<IconProps, 'children'>;
 export function Icon({ size = 'md', title, className, children, ...rest }: IconProps) {
   return (
     <svg
-      className={cx('sc-icon', className)}
+      className={cx('c-proto-icon', className)}
       data-size={size}
       viewBox="0 0 16 16"
       fill="none"

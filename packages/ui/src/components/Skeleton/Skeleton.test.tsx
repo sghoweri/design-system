@@ -6,7 +6,7 @@ describe('Skeleton', () => {
   it('is a hidden text line by default and takes width and height', async () => {
     const { container } = render(<Skeleton width="50%" height={12} />);
     const el = container.firstElementChild as HTMLElement;
-    expect(el).toHaveClass('sc-skeleton');
+    expect(el).toHaveClass('c-proto-skeleton');
     expect(el).toHaveAttribute('aria-hidden', 'true');
     expect(el).toHaveAttribute('data-variant', 'text');
     expect(el.style.inlineSize).toBe('50%');
@@ -21,10 +21,10 @@ describe('Skeleton', () => {
         <Skeleton variant="circle" width={24} still />
       </>,
     );
-    const lines = container.querySelectorAll('.sc-skeleton-lines > .sc-skeleton');
+    const lines = container.querySelectorAll('.c-proto-skeleton-lines > .c-proto-skeleton');
     expect(lines).toHaveLength(3);
     expect(lines[2]).toHaveAttribute('data-last');
-    expect(container.querySelector('.sc-skeleton-lines')).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('.c-proto-skeleton-lines')).toHaveAttribute('aria-hidden', 'true');
     const circle = container.querySelector('[data-variant="circle"]')!;
     expect(circle).toHaveAttribute('data-still');
     expect((circle as HTMLElement).style.inlineSize).toBe('24px');

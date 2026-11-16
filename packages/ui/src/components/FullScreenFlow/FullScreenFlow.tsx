@@ -114,18 +114,18 @@ function Root({
       <Dialog.Content
         ref={popupRef}
         variant="fullscreen"
-        className={cx('sc-flow', className)}
-        initialFocus={() => popupRef.current?.querySelector<HTMLElement>('.sc-flow__step-title') ?? true}
+        className={cx('c-proto-flow', className)}
+        initialFocus={() => popupRef.current?.querySelector<HTMLElement>('.c-proto-flow__step-title') ?? true}
         onKeyDown={handleKeyDown}
       >
         <FlowContext.Provider value={context}>
           {decoration ? (
-            <div className="sc-flow__decoration" aria-hidden="true">
+            <div className="c-proto-flow__decoration" aria-hidden="true">
               {decoration}
             </div>
           ) : null}
           {children}
-          <div className="sc-visually-hidden" aria-live="polite" aria-atomic="true">
+          <div className="u-proto-visually-hidden" aria-live="polite" aria-atomic="true">
             {message}
           </div>
         </FlowContext.Provider>
@@ -161,20 +161,20 @@ function Header({
   ...rest
 }: FullScreenFlowHeaderProps) {
   return (
-    <div className={cx('sc-flow__header', className)} {...rest}>
-      <div className="sc-flow__heading" data-compact={compactTitle ? '' : undefined}>
+    <div className={cx('c-proto-flow__header', className)} {...rest}>
+      <div className="c-proto-flow__heading" data-compact={compactTitle ? '' : undefined}>
         {logo ? (
-          <span className="sc-flow__logo" aria-hidden="true">
+          <span className="c-proto-flow__logo" aria-hidden="true">
             {logo}
           </span>
         ) : null}
-        <Dialog.Title className="sc-flow__title">{title}</Dialog.Title>
-        {compactTitle ? <span className="sc-flow__compact-title">{compactTitle}</span> : null}
+        <Dialog.Title className="c-proto-flow__title">{title}</Dialog.Title>
+        {compactTitle ? <span className="c-proto-flow__compact-title">{compactTitle}</span> : null}
       </div>
       {children}
-      {status ? <div className="sc-flow__status">{status}</div> : null}
+      {status ? <div className="c-proto-flow__status">{status}</div> : null}
       <Dialog.Close
-        className="sc-flow__close"
+        className="c-proto-flow__close"
         render={<IconButton label={closeLabel} aria-keyshortcuts="Escape" />}
       >
         <XIcon size="lg" />
@@ -217,9 +217,9 @@ function Progress({
     [],
   );
   return (
-    <div className={cx('sc-flow__progress', className)} {...rest}>
-      {label ? <div className="sc-flow__progress-label">{label}</div> : null}
-      <ol className="sc-flow__segments" aria-label={listLabel}>
+    <div className={cx('c-proto-flow__progress', className)} {...rest}>
+      {label ? <div className="c-proto-flow__progress-label">{label}</div> : null}
+      <ol className="c-proto-flow__segments" aria-label={listLabel}>
         {chapters.map((chapter, i) => {
           const from = starts[i]!;
           const current = step > from && step <= from + chapter.steps;
@@ -228,12 +228,12 @@ function Progress({
           return (
             <li
               key={chapter.label}
-              className="sc-flow__segment"
+              className="c-proto-flow__segment"
               style={{ flexGrow: chapter.steps }}
               aria-current={current ? 'step' : undefined}
             >
-              <span className="sc-flow__segment-fill" style={{ inlineSize: `${percent}%` }} />
-              <span className="sc-visually-hidden">{chapter.label}</span>
+              <span className="c-proto-flow__segment-fill" style={{ inlineSize: `${percent}%` }} />
+              <span className="u-proto-visually-hidden">{chapter.label}</span>
             </li>
           );
         })}
@@ -246,7 +246,7 @@ export type FullScreenFlowBodyProps = ComponentPropsWithRef<'div'>;
 
 /** Between header and footer: a `Rail` (from 1000px) beside the `Viewport`. */
 function Body({ className, ...rest }: FullScreenFlowBodyProps) {
-  return <div className={cx('sc-flow__body', className)} {...rest} />;
+  return <div className={cx('c-proto-flow__body', className)} {...rest} />;
 }
 
 export interface FullScreenFlowRailProps extends ComponentPropsWithRef<'nav'> {
@@ -263,9 +263,9 @@ function Rail({
   ...rest
 }: FullScreenFlowRailProps) {
   return (
-    <nav className={cx('sc-flow__rail', className)} aria-label={ariaLabel} {...rest}>
+    <nav className={cx('c-proto-flow__rail', className)} aria-label={ariaLabel} {...rest}>
       {children}
-      {footer ? <div className="sc-flow__rail-note">{footer}</div> : null}
+      {footer ? <div className="c-proto-flow__rail-note">{footer}</div> : null}
     </nav>
   );
 }
@@ -279,11 +279,11 @@ export interface FullScreenFlowRailGroupProps extends Omit<ComponentPropsWithRef
 function RailGroup({ label, className, children, ...rest }: FullScreenFlowRailGroupProps) {
   const id = useId();
   return (
-    <div className={cx('sc-flow__rail-group', className)} {...rest}>
-      <span className="sc-flow__rail-label" id={id}>
+    <div className={cx('c-proto-flow__rail-group', className)} {...rest}>
+      <span className="c-proto-flow__rail-label" id={id}>
         {label}
       </span>
-      <ol className="sc-flow__rail-list" aria-labelledby={id}>
+      <ol className="c-proto-flow__rail-list" aria-labelledby={id}>
         {children}
       </ol>
     </div>
@@ -313,22 +313,22 @@ function RailItem({
   ...rest
 }: FullScreenFlowRailItemProps) {
   return (
-    <li className="sc-flow__rail-entry">
+    <li className="c-proto-flow__rail-entry">
       <button
         type={type}
-        className={cx('sc-flow__rail-item', className)}
+        className={cx('c-proto-flow__rail-item', className)}
         aria-current={current ? 'step' : undefined}
         data-done={done || undefined}
         {...rest}
       >
-        <span className="sc-flow__rail-mark" aria-hidden="true">
+        <span className="c-proto-flow__rail-mark" aria-hidden="true">
           {done ? <CheckIcon size="sm" /> : null}
         </span>
-        <span className="sc-flow__rail-text">
+        <span className="c-proto-flow__rail-text">
           {children}
-          {done ? <span className="sc-visually-hidden">, {doneLabel}</span> : null}
+          {done ? <span className="u-proto-visually-hidden">, {doneLabel}</span> : null}
         </span>
-        {adornment ? <span className="sc-flow__rail-adornment">{adornment}</span> : null}
+        {adornment ? <span className="c-proto-flow__rail-adornment">{adornment}</span> : null}
       </button>
     </li>
   );
@@ -388,7 +388,7 @@ function Viewport({ direction = 'forward', className, children, ...rest }: FullS
   });
 
   return (
-    <div ref={ref} className={cx('sc-flow__viewport', className)} {...rest}>
+    <div ref={ref} className={cx('c-proto-flow__viewport', className)} {...rest}>
       {frames.map(({ frame, phase }) => (
         <FrameView
           key={frame.key}
@@ -435,7 +435,7 @@ function FrameView({
   return (
     <div
       ref={ref}
-      className="sc-flow__frame"
+      className="c-proto-flow__frame"
       data-phase={phase}
       data-direction={direction}
       inert={phase === 'exit'}
@@ -483,13 +483,13 @@ function Step({
     if (latest.current.message) latest.current.announce(latest.current.message);
   }, [phase]);
   return (
-    <section className={cx('sc-flow__step', className)} aria-labelledby={id} {...rest}>
-      <div className="sc-flow__step-head">
-        {eyebrow ? <p className="sc-flow__eyebrow">{eyebrow}</p> : null}
-        <h2 className="sc-flow__step-title" id={id} ref={titleRef} tabIndex={-1}>
+    <section className={cx('c-proto-flow__step', className)} aria-labelledby={id} {...rest}>
+      <div className="c-proto-flow__step-head">
+        {eyebrow ? <p className="c-proto-flow__eyebrow">{eyebrow}</p> : null}
+        <h2 className="c-proto-flow__step-title" id={id} ref={titleRef} tabIndex={-1}>
           {title}
         </h2>
-        {description ? <div className="sc-flow__step-description">{description}</div> : null}
+        {description ? <div className="c-proto-flow__step-description">{description}</div> : null}
       </div>
       {children}
     </section>
@@ -508,10 +508,10 @@ export interface FullScreenFlowFooterProps extends ComponentPropsWithRef<'div'> 
 /** The pinned bottom bar. Buttons in it are at least 44px tall and wide, and it clears the home indicator. */
 function Footer({ back, hint, className, children, ...rest }: FullScreenFlowFooterProps) {
   return (
-    <div className={cx('sc-flow__footer', className)} {...rest}>
-      {back ? <div className="sc-flow__footer-back">{back}</div> : null}
-      {hint ? <div className="sc-flow__footer-hint">{hint}</div> : null}
-      <div className="sc-flow__footer-actions">{children}</div>
+    <div className={cx('c-proto-flow__footer', className)} {...rest}>
+      {back ? <div className="c-proto-flow__footer-back">{back}</div> : null}
+      {hint ? <div className="c-proto-flow__footer-hint">{hint}</div> : null}
+      <div className="c-proto-flow__footer-actions">{children}</div>
     </div>
   );
 }

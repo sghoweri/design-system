@@ -11,7 +11,7 @@ describe('Chip', () => {
         Remote
       </Chip>,
     );
-    const chip = screen.getByText('Remote').closest('.sc-chip')!;
+    const chip = screen.getByText('Remote').closest('.c-proto-chip')!;
     expect(chip.tagName).toBe('SPAN');
     expect(chip).toHaveAttribute('data-tone', 'info');
     expect(chip).toHaveAttribute('data-size', 'sm');
@@ -29,7 +29,7 @@ describe('Chip', () => {
       </Chip>,
     );
     const button = screen.getByRole('button', { name: 'Applied', pressed: true });
-    expect(button.closest('.sc-chip')).toHaveAttribute('data-selected');
+    expect(button.closest('.c-proto-chip')).toHaveAttribute('data-selected');
     await user.click(button);
     expect(onClick).toHaveBeenCalledTimes(1);
     await expectNoA11yViolations(container);

@@ -62,10 +62,10 @@ function TooltipBase({
           align={align}
           sideOffset={6}
           collisionPadding={collisionPadding}
-          className="sc-tooltip__positioner"
+          className="c-proto-tooltip__positioner"
         >
-          <BaseTooltip.Popup role="tooltip" className={cx('sc-tooltip', className)}>
-            <BaseTooltip.Arrow className="sc-tooltip__arrow" />
+          <BaseTooltip.Popup role="tooltip" className={cx('c-proto-tooltip', className)}>
+            <BaseTooltip.Arrow className="c-proto-tooltip__arrow" />
             {content}
           </BaseTooltip.Popup>
         </BaseTooltip.Positioner>

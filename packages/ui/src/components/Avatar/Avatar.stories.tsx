@@ -101,7 +101,7 @@ export const OnCanvas: Story = {
   name: 'On the canvas, light and dark',
   render: () => (
     <Stack gap="md">
-      <div style={{ padding: 'var(--sc-spacing-lg)', background: 'var(--sc-color-surface-canvas)' }}>
+      <div style={{ padding: 'var(--proto-spacing-lg)', background: 'var(--proto-color-surface-canvas)' }}>
         <Inline gap="sm" align="center">
           <Avatar name="Robin Test" size="sm" />
           <Avatar name="Robin Test" />

@@ -18,8 +18,8 @@ describe('Tooltip', () => {
     await user.hover(trigger);
     const tip = await screen.findByRole('tooltip');
     expect(tip).toHaveTextContent('Runs every source now');
-    expect(tip).toHaveClass('sc-tooltip');
-    expect(tip.querySelector('.sc-tooltip__arrow')).not.toBeNull();
+    expect(tip).toHaveClass('c-proto-tooltip');
+    expect(tip.querySelector('.c-proto-tooltip__arrow')).not.toBeNull();
     expect(trigger).toHaveAttribute('data-popup-open');
     await expectNoA11yViolations(container);
     await user.unhover(trigger);

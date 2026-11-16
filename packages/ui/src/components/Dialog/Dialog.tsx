@@ -110,9 +110,9 @@ export interface DialogContentProps extends Omit<BaseDialog.Popup.Props, 'classN
 /**
  * Portal, backdrop and the popup. Focus moves inside on open and returns to the trigger on close. A dialog opened
  * from inside another has its own backdrop too, over the first dialog.
- * Menus, selects and tooltips opened from inside render above it (`--sc-z-dropdown` > `--sc-z-dialog`).
+ * Menus, selects and tooltips opened from inside render above it (`--proto-z-dropdown` > `--proto-z-dialog`).
  *
- * In the default `dialog` variant the children render inside `div.sc-dialog__scroll`, the popup's only child, and that
+ * In the default `dialog` variant the children render inside `div.c-proto-dialog__scroll`, the popup's only child, and that
  * is what scrolls (with the × in it, so the × scrolls away with the title as before): its scrollbar sits centred in
  * the popup's side padding instead of against the popup's edge (dialog.css). A `sheet` and a `fullscreen` dialog have
  * no wrapper; their `Dialog.Body` scrolls. Changing `variant` while open between `dialog` and another remounts the
@@ -134,9 +134,9 @@ function Content({
       {/* `forceRender`: Base UI drops the backdrop of a dialog opened inside another, so a sheet over a full-screen
           dialog didn't dim it. The nested one's scrim sits above its parent's popup (dialog.css). */}
       {/* `data-variant`: a sheet's scrim moves on the sheet's duration and curve (dialog.css). */}
-      <BaseDialog.Backdrop className="sc-dialog__backdrop" data-variant={variant} forceRender />
+      <BaseDialog.Backdrop className="c-proto-dialog__backdrop" data-variant={variant} forceRender />
       <BaseDialog.Popup
-        className={cx('sc-dialog__popup', className)}
+        className={cx('c-proto-dialog__popup', className)}
         data-size={size}
         data-variant={variant}
         data-swipe-dismiss={swipe ? '' : undefined}
@@ -144,7 +144,7 @@ function Content({
         {...rest}
       >
         {isSheet && <SheetHandle swipe={swipe} />}
-        {variant === 'dialog' ? <div className="sc-dialog__scroll">{children}</div> : children}
+        {variant === 'dialog' ? <div className="c-proto-dialog__scroll">{children}</div> : children}
       </BaseDialog.Popup>
     </BaseDialog.Portal>
   );
@@ -159,8 +159,8 @@ function SheetHandle({ swipe }: { swipe: boolean }) {
     (node: HTMLButtonElement | null) => (node ? attachSheetSwipe(node) : undefined),
     [],
   );
-  if (!swipe) return <div className="sc-dialog__handle" aria-hidden="true" />;
-  return <BaseDialog.Close ref={attach} className="sc-dialog__handle" aria-label="Dismiss" />;
+  if (!swipe) return <div className="c-proto-dialog__handle" aria-hidden="true" />;
+  return <BaseDialog.Close ref={attach} className="c-proto-dialog__handle" aria-label="Dismiss" />;
 }
 
 export interface DialogTitleProps extends Omit<BaseDialog.Title.Props, 'className'> {
@@ -169,7 +169,7 @@ export interface DialogTitleProps extends Omit<BaseDialog.Title.Props, 'classNam
 
 /** Required. Labels the dialog; a question or a statement. Renders an `<h2>`. */
 function Title({ className, ...rest }: DialogTitleProps) {
-  return <BaseDialog.Title className={cx('sc-dialog__title', className)} {...rest} />;
+  return <BaseDialog.Title className={cx('c-proto-dialog__title', className)} {...rest} />;
 }
 
 export interface DialogDescriptionProps extends Omit<BaseDialog.Description.Props, 'className'> {
@@ -178,21 +178,21 @@ export interface DialogDescriptionProps extends Omit<BaseDialog.Description.Prop
 
 /** Optional, muted. Says what will happen. */
 function Description({ className, ...rest }: DialogDescriptionProps) {
-  return <BaseDialog.Description className={cx('sc-dialog__description', className)} {...rest} />;
+  return <BaseDialog.Description className={cx('c-proto-dialog__description', className)} {...rest} />;
 }
 
 export type DialogBodyProps = ComponentPropsWithRef<'div'>;
 
 /** Free content between the description and the actions. In a `sheet` it is the part that scrolls. */
 function Body({ className, ...rest }: DialogBodyProps) {
-  return <div className={cx('sc-dialog__body', className)} {...rest} />;
+  return <div className={cx('c-proto-dialog__body', className)} {...rest} />;
 }
 
 export type DialogActionsProps = Omit<InlineProps, 'justify'>;
 
 /** Right-aligned row of Buttons. Put the confirming action last. */
 function Actions({ className, ...rest }: DialogActionsProps) {
-  return <Inline justify="end" className={cx('sc-dialog__actions', className)} {...rest} />;
+  return <Inline justify="end" className={cx('c-proto-dialog__actions', className)} {...rest} />;
 }
 
 export interface DialogCloseProps extends Omit<BaseDialog.Close.Props, 'className'> {
@@ -203,7 +203,7 @@ export interface DialogCloseProps extends Omit<BaseDialog.Close.Props, 'classNam
 function Close({ className, children, render, ...rest }: DialogCloseProps) {
   if (children === undefined && render === undefined) {
     return (
-      <BaseDialog.Close className={cx('sc-dialog__close', className)} aria-label="Close" {...rest}>
+      <BaseDialog.Close className={cx('c-proto-dialog__close', className)} aria-label="Close" {...rest}>
         <XIcon />
       </BaseDialog.Close>
     );

@@ -8,7 +8,7 @@ export interface LogoProps extends Omit<ComponentPropsWithRef<'span'>, 'children
   /**
    * The mark's size: the Icon sizes (`xs` 12, `sm` 14, `md` 16, `lg` 20, `xl` 24), or `em` to follow the font
    * size. Default `lg`, the nav size. At `md` and below the mark switches to its 16px drawing (a heavier handle,
-   * no bristle cuts). For a one-off size, set `--sc-logo-size` (any length) on the element.
+   * no bristle cuts). For a one-off size, set `--proto-logo-size` (any length) on the element.
    */
   size?: LogoSize | undefined;
   /**
@@ -36,7 +36,7 @@ const SMALL: ReadonlySet<LogoSize> = new Set<LogoSize>(['xs', 'sm', 'md']);
 
 /**
  * The Job Sweep logo: the "Tile cut-out" mark, a rounded accent square with the broom knocked out, optionally
- * followed by the name. The tile is `--sc-color-accent-default` (light and dark), `CanvasText` in forced colours;
+ * followed by the name. The tile is `--proto-color-accent-default` (light and dark), `CanvasText` in forced colours;
  * the broom is a mask, so whatever is behind the logo shows through it. Inline SVG with a per-instance mask id.
  * See `BroomIcon` for the status broom; the two are different drawings on purpose.
  */
@@ -48,11 +48,11 @@ export function Logo({
   className,
   ...rest
 }: LogoProps) {
-  const mask = `sc-logo-${useId().replace(/[^\w-]/g, '')}`;
+  const mask = `proto-logo-${useId().replace(/[^\w-]/g, '')}`;
   const small = SMALL.has(size);
   return (
     <span
-      className={cx('sc-logo', className)}
+      className={cx('c-proto-logo', className)}
       data-size={size}
       data-wordmark={wordmark || undefined}
       data-sweep={(sweep && !small) || undefined}
@@ -60,11 +60,11 @@ export function Logo({
       aria-label={wordmark ? undefined : label}
       {...rest}
     >
-      <svg className="sc-logo__mark" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+      <svg className="c-proto-logo__mark" viewBox="0 0 24 24" focusable="false" aria-hidden="true">
         <mask id={mask}>
           <path fill="#fff" d="M0 0h24v24H0z" />
           {/* The broom pivots on its handle's top end, (19.2, 4.8) in the tile, when it sweeps. */}
-          <g className="sc-logo__broom">
+          <g className="c-proto-logo__broom">
             <g
               transform="translate(.5 -.5) rotate(45 12 12)"
               stroke="#000"
@@ -86,7 +86,7 @@ export function Logo({
             </g>
           </g>
           {sweep && !small ? (
-            <g className="sc-logo__dust" fill="#000">
+            <g className="c-proto-logo__dust" fill="#000">
               <circle cx="4.3" cy="19.4" r=".95" />
               <circle cx="6.9" cy="21.1" r=".75" />
               <circle cx="3.3" cy="16.6" r=".6" />
@@ -95,7 +95,7 @@ export function Logo({
         </mask>
         <rect width="24" height="24" rx="5.5" fill="currentColor" mask={`url(#${mask})`} />
       </svg>
-      {wordmark ? <span className="sc-logo__wordmark">{NAME}</span> : null}
+      {wordmark ? <span className="c-proto-logo__wordmark">{NAME}</span> : null}
     </span>
   );
 }

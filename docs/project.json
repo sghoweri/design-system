@@ -18,10 +18,7 @@
     "repo": "https://github.com/sghoweri/design-system",
     "live": null,
     "storybook": null,
-    "npm": [
-      "https://www.npmjs.com/package/@salemcobalt/tokens",
-      "https://www.npmjs.com/package/@salemcobalt/ui"
-    ]
+    "npm": ["https://www.npmjs.com/package/@protokit/tokens", "https://www.npmjs.com/package/@protokit/ui"]
   },
   "highlights": [
     "Token pipeline from one Style Dictionary source to CSS custom properties, Sass, typed TypeScript and JSON, with light and dark themes and a density switch.",

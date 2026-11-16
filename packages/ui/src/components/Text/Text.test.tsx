@@ -6,7 +6,7 @@ describe('Text', () => {
     render(<Text>Applied 3 days ago</Text>);
     const p = screen.getByText('Applied 3 days ago');
     expect(p.tagName).toBe('P');
-    expect(p).toHaveClass('sc-text');
+    expect(p).toHaveClass('c-proto-text');
     expect(p).toHaveAttribute('data-size', 'sm');
     expect(p).toHaveAttribute('data-weight', 'regular');
     expect(p).toHaveAttribute('data-tone', 'default');
@@ -35,7 +35,7 @@ describe('Text', () => {
     const dd = screen.getByText('clamped');
     expect(dd.tagName).toBe('DD');
     expect(dd).toHaveAttribute('data-truncate', 'clamp');
-    expect(dd.style.getPropertyValue('--sc-text-lines')).toBe('2');
+    expect(dd.style.getPropertyValue('--proto-text-lines')).toBe('2');
   });
 
   it('sets the mono family only when asked', () => {

@@ -11,7 +11,7 @@ describe('Switch', () => {
     const sw = screen.getByRole('switch', { name: 'Pause my sweeps' });
     expect(sw).toHaveAttribute('aria-checked', 'false');
     expect(sw).toHaveAccessibleDescription('Stops the schedule for you only.');
-    expect(sw).toHaveClass('sc-switch');
+    expect(sw).toHaveClass('c-proto-switch');
     expect(container.querySelector('input[name="pause"]')).not.toBeNull();
     await expectNoA11yViolations(container);
   });
@@ -24,7 +24,7 @@ describe('Switch', () => {
     );
     const sw = screen.getByRole('switch', { name: 'Notifications' });
     expect(sw).toHaveAttribute('aria-checked', 'true');
-    expect(sw.closest('.sc-choice')).toHaveAttribute('data-label-position', 'start');
+    expect(sw.closest('.c-proto-choice')).toHaveAttribute('data-label-position', 'start');
     await user.click(screen.getByText('Notifications'));
     expect(onCheckedChange).toHaveBeenLastCalledWith(false);
     expect(sw).toHaveAttribute('aria-checked', 'false');

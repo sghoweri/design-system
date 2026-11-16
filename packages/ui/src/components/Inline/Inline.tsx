@@ -32,7 +32,7 @@ export function Inline({
   ...rest
 }: InlineProps) {
   return createElement(as, {
-    className: cx('sc-inline', className),
+    className: cx('o-proto-inline', className),
     'data-gap': gap,
     'data-align': align,
     'data-justify': justify,

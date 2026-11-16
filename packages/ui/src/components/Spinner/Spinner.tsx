@@ -21,7 +21,7 @@ export function Spinner({
 }: SpinnerProps) {
   return (
     <span
-      className={cx('sc-spinner', className)}
+      className={cx('c-proto-spinner', className)}
       data-size={size}
       role={decorative ? undefined : 'status'}
       aria-label={decorative ? undefined : label}
@@ -36,8 +36,8 @@ export function Spinner({
         aria-hidden="true"
         focusable="false"
       >
-        <circle className="sc-spinner__track" cx="8" cy="8" r="6.25" />
-        <circle className="sc-spinner__arc" cx="8" cy="8" r="6.25" strokeLinecap="round" />
+        <circle className="c-proto-spinner__track" cx="8" cy="8" r="6.25" />
+        <circle className="c-proto-spinner__arc" cx="8" cy="8" r="6.25" strokeLinecap="round" />
       </svg>
     </span>
   );

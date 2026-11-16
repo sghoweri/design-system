@@ -11,7 +11,7 @@ const Job = ({ title, badge }: { title: string; badge?: React.ReactNode }) => (
       <strong>{title}</strong>
       {badge}
     </Inline>
-    <span style={{ color: 'var(--sc-color-text-muted)' }}>Linear · Remote · applied 3 days ago</span>
+    <span style={{ color: 'var(--proto-color-text-muted)' }}>Linear · Remote · applied 3 days ago</span>
   </Stack>
 );
 
@@ -122,7 +122,9 @@ export const Padding: Story = {
   render: () => (
     <Stack gap="md">
       <Card padding="none">
-        <div style={{ padding: 'var(--sc-spacing-xs)' }}>padding="none" (content supplies its own edges)</div>
+        <div style={{ padding: 'var(--proto-spacing-xs)' }}>
+          padding="none" (content supplies its own edges)
+        </div>
       </Card>
       <Card padding="sm">padding="sm", radius-lg</Card>
       <Card padding="lg">padding="lg"</Card>

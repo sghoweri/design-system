@@ -17,7 +17,7 @@ const listeners = new Set<() => void>();
 /** Reads `env(safe-area-inset-*)`, which script can only see through a computed style. */
 function measure(): void {
   const probe = document.createElement('div');
-  probe.setAttribute('data-sc-safe-area-probe', '');
+  probe.setAttribute('data-proto-safe-area-probe', '');
   probe.style.cssText =
     'position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) ' +
     'env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)';

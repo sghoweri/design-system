@@ -6,7 +6,7 @@ describe('Heading', () => {
   it('renders an h2 at 2xl by default', async () => {
     const { container } = render(<Heading>Inbox</Heading>);
     const h = screen.getByRole('heading', { level: 2, name: 'Inbox' });
-    expect(h).toHaveClass('sc-heading');
+    expect(h).toHaveClass('c-proto-heading');
     expect(h).toHaveAttribute('data-size', '2xl');
     expect(h).toHaveAttribute('data-tone', 'default');
     await expectNoA11yViolations(container);

@@ -42,10 +42,10 @@
 @import './stepper.css';
 @import './callout.css';
 html {
-  background: var(--sc-color-surface-canvas);
-  color: var(--sc-color-text-default);
-  font-family: var(--sc-font-family-sans);
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-ui);
+  background: var(--proto-color-surface-canvas);
+  color: var(--proto-color-text-default);
+  font-family: var(--proto-font-family-sans);
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-ui);
   -webkit-font-smoothing: antialiased;
 }

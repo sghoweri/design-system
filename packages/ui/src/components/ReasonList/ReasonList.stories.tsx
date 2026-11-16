@@ -37,7 +37,7 @@ export const Playground: Story = {
 const columns = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-  gap: 'var(--sc-spacing-md)',
+  gap: 'var(--proto-spacing-md)',
 } as const;
 
 function Reasons() {

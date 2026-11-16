@@ -5,7 +5,7 @@ describe('Inline', () => {
   it('renders with the default gap and wraps', () => {
     render(<Inline data-testid="inline">x</Inline>);
     const el = screen.getByTestId('inline');
-    expect(el).toHaveClass('sc-inline');
+    expect(el).toHaveClass('o-proto-inline');
     expect(el).toHaveAttribute('data-gap', 'xs');
     expect(el).toHaveAttribute('data-align', 'center');
     expect(el).not.toHaveAttribute('data-nowrap');
@@ -30,6 +30,6 @@ describe('Inline', () => {
     );
     const list = screen.getByRole('list');
     expect(list.tagName).toBe('OL');
-    expect(screen.getByRole('listitem')).toHaveClass('sc-inline');
+    expect(screen.getByRole('listitem')).toHaveClass('o-proto-inline');
   });
 });

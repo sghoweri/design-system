@@ -52,7 +52,7 @@ export function Score({
   const fraction = scored && max > 0 ? Math.min(1, Math.max(0, value / max)) : 0;
   return (
     <span
-      className={cx('sc-score', className)}
+      className={cx('c-proto-score', className)}
       data-variant={variant}
       data-size={variant === 'tile' ? size : undefined}
       data-tone={scored ? tone : undefined}
@@ -60,25 +60,27 @@ export function Score({
       data-selected={selected || undefined}
       style={
         variant === 'ring'
-          ? ({ ...style, '--sc-score-fill': (fraction * 100).toFixed(2) } as CSSProperties)
+          ? ({ ...style, '--proto-score-fill': (fraction * 100).toFixed(2) } as CSSProperties)
           : style
       }
       {...rest}
     >
-      <span className="sc-visually-hidden">
+      <span className="u-proto-visually-hidden">
         {valueText ?? (scored ? `${label} ${value} out of ${max}` : `${label}: not scored`)}
       </span>
       {variant === 'ring' ? (
-        <svg className="sc-score__ring" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <svg className="c-proto-score__ring" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
           {/* r = (64 - ring stroke 6) / 2, so the stroke sits inside the 64px box. */}
-          <circle className="sc-score__track" cx="32" cy="32" r="29" pathLength={100} />
+          <circle className="c-proto-score__track" cx="32" cy="32" r="29" pathLength={100} />
           {/* No arc at 0: a zero-length dash with round caps would still paint a dot. */}
-          {fraction > 0 ? <circle className="sc-score__arc" cx="32" cy="32" r="29" pathLength={100} /> : null}
+          {fraction > 0 ? (
+            <circle className="c-proto-score__arc" cx="32" cy="32" r="29" pathLength={100} />
+          ) : null}
         </svg>
       ) : null}
-      <span className="sc-score__body" aria-hidden="true">
-        <span className="sc-score__value">{scored ? value : '–'}</span>
-        {caption != null ? <span className="sc-score__caption">{caption}</span> : null}
+      <span className="c-proto-score__body" aria-hidden="true">
+        <span className="c-proto-score__value">{scored ? value : '–'}</span>
+        {caption != null ? <span className="c-proto-score__caption">{caption}</span> : null}
       </span>
     </span>
   );

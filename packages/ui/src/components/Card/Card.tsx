@@ -35,7 +35,7 @@ export function Card({
     ref,
     defaultTagName: as,
     props: {
-      className: cx('sc-card', className),
+      className: cx('c-proto-card', className),
       'data-variant': variant,
       'data-padding': padding,
       'data-interactive': interactive || undefined,

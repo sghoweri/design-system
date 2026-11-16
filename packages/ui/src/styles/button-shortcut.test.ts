@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const tokens = JSON.parse(
-  readFileSync(createRequire(import.meta.url).resolve('@salemcobalt/tokens/json'), 'utf8'),
+  readFileSync(createRequire(import.meta.url).resolve('@protokit/tokens/json'), 'utf8'),
 ) as Record<'light' | 'dark', Record<string, string>>;
 
 const css = readFileSync(join(__dirname, 'button.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
@@ -48,7 +48,7 @@ function hintRatio(fg: string, bg: string, opacity: number, brightness: number):
   return contrast(key, fill);
 }
 
-const token = (value: string | undefined) => /^var\(--sc-color-([a-z-]+)\)$/.exec(value ?? '')?.[1];
+const token = (value: string | undefined) => /^var\(--proto-color-([a-z-]+)\)$/.exec(value ?? '')?.[1];
 // A transparent button shows the surface under it; a wash token is repointed to its raised twin on raised surfaces.
 const PAGE = ['surface-canvas', 'surface-default', 'surface-raised', 'surface-sunken'];
 const RAISED: Record<string, string> = {
@@ -60,13 +60,15 @@ const backdrops = (background: string) =>
     ? PAGE
     : [token(background)!, ...(RAISED[token(background)!] ? [RAISED[token(background)!]!] : [])];
 
-const DIM = '.sc-button__shortcut .sc-kbd';
-const variants = [...new Set([...css.matchAll(/\.sc-button\[data-variant='(\w+)'\]/g)].map((m) => m[1]!))];
+const DIM = '.c-proto-button__shortcut .c-proto-kbd';
+const variants = [
+  ...new Set([...css.matchAll(/\.c-proto-button\[data-variant='(\w+)'\]/g)].map((m) => m[1]!)),
+];
 
 type Case = { name: string; fg: string; backgrounds: string[]; opacity: number; brightness: number };
 const cases: Case[] = [];
 for (const v of variants) {
-  const base = `.sc-button[data-variant='${v}']`;
+  const base = `.c-proto-button[data-variant='${v}']`;
   const fg = token(decl(base, 'color'))!;
   const opacity = Number(decl(`${base} > ${DIM}`, 'opacity') ?? decl(DIM, 'opacity') ?? 1);
   const rest = decl(base, 'background')!;
@@ -79,13 +81,13 @@ for (const v of variants) {
   for (const [state, selector] of states) {
     const background =
       decl(selector, 'background') ??
-      (state === 'popup open' ? decl('.sc-button[data-popup-open]', 'background') : rest)!;
+      (state === 'popup open' ? decl('.c-proto-button[data-popup-open]', 'background') : rest)!;
     const brightness = Number(/brightness\(([\d.]+)\)/.exec(decl(selector, 'filter') ?? '')?.[1] ?? 1);
     cases.push({ name: `${v} ${state}`, fg, backgrounds: backdrops(background), opacity, brightness });
   }
 }
-// Secondary and ghost on the .sc-on-accent scope's fill (base.css): text.on-accent on accent default, hover, active.
-for (const scope of ['.sc-on-accent', ".sc-toast[data-tone='accent']"]) {
+// Secondary and ghost on the .t-proto-on-accent scope's fill (base.css): text.on-accent on accent default, hover, active.
+for (const scope of ['.t-proto-on-accent', ".c-proto-toast[data-tone='accent']"]) {
   cases.push({
     name: `secondary and ghost in ${scope}`,
     fg: 'text-on-accent',
@@ -106,8 +108,8 @@ describe('button shortcut hint contrast', () => {
 
   describe.each(['light', 'dark'] as const)('%s theme', (theme) => {
     const hex = (name: string) => {
-      const v = tokens[theme][`sc-color-${name}`];
-      expect(v, `token sc-color-${name} exists`).toMatch(/^#[0-9a-f]{6}$/);
+      const v = tokens[theme][`proto-color-${name}`];
+      expect(v, `token proto-color-${name} exists`).toMatch(/^#[0-9a-f]{6}$/);
       return v!;
     };
     for (const c of cases) {

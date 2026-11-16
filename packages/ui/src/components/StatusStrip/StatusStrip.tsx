@@ -43,9 +43,9 @@ const glyphs: Partial<Record<StatusStripTone, ReactNode>> = {
 export function StatusStrip({ items, className, ...rest }: StatusStripProps) {
   return (
     <Tooltip.Provider>
-      <ol className={cx('sc-status-strip', className)} {...rest}>
+      <ol className={cx('c-proto-status-strip', className)} {...rest}>
         {items.map((item, i) => (
-          <li key={item.id ?? i} className="sc-status-strip__item">
+          <li key={item.id ?? i} className="c-proto-status-strip__item">
             <Cell {...item} />
           </li>
         ))}
@@ -57,9 +57,9 @@ export function StatusStrip({ items, className, ...rest }: StatusStripProps) {
 function Cell({ tone, label, href, tooltip }: StatusStripItem) {
   const body = (
     <>
-      <span className="sc-visually-hidden">{label}</span>
+      <span className="u-proto-visually-hidden">{label}</span>
       {glyphs[tone] ? (
-        <svg className="sc-status-strip__glyph" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+        <svg className="c-proto-status-strip__glyph" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
           {glyphs[tone]}
         </svg>
       ) : null}
@@ -67,11 +67,11 @@ function Cell({ tone, label, href, tooltip }: StatusStripItem) {
   );
   const cell: ReactElement =
     href != null ? (
-      <a className="sc-status-strip__cell" data-tone={tone} href={href}>
+      <a className="c-proto-status-strip__cell" data-tone={tone} href={href}>
         {body}
       </a>
     ) : (
-      <span className="sc-status-strip__cell" data-tone={tone}>
+      <span className="c-proto-status-strip__cell" data-tone={tone}>
         {body}
       </span>
     );

@@ -102,7 +102,7 @@ export function Textarea({
             {...rest}
           />
         }
-        className="sc-input sc-textarea"
+        className="c-proto-input c-proto-textarea"
         data-resize={autoSize ? 'none' : resize}
         data-autosize={autoSize ? '' : undefined}
         data-variant={code ? 'code' : undefined}

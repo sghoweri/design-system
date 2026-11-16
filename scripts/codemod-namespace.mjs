@@ -15,7 +15,7 @@
 //
 // In order, it renames:
 //   1. dashed idents: --sc-* → --proto-* (tokens, component knobs, anchor names, names built at runtime)
-//   2. Sass variables: $sc-* → $proto-*
+//   2. Sass variables: $sc-* → $proto-*; data attributes: data-sc-* → data-proto-*
 //   3. keyframes:     sc-spin → proto-spin (the names the stylesheets declare)
 //   4. classes:       sc-<block>[__<element>] → <ns>-proto-<block>[__<element>], for every block in the map,
 //                     including partial names such as 'sc-dialog__' used as prefixes in tests
@@ -51,6 +51,7 @@ const TEXT = new Set([
   '.yml',
   '.yaml',
   '.svg',
+  '.sh',
 ]);
 const SKIP_DIRS = new Set([
   'node_modules',
@@ -89,9 +90,11 @@ export function transform(text, map = defaultMap) {
     });
   };
 
-  // 1–2. Dashed idents and Sass variables: a pure prefix change.
-  sub(new RegExp(`(?<![\\w-])--${from}-(?=[A-Za-z0-9_$])`, 'g'), `--${to}-`);
-  sub(new RegExp(`(?<![\\w$-])\\$${from}-(?=[A-Za-z0-9_])`, 'g'), () => `$${to}-`);
+  // 1–2. Dashed idents and Sass variables: a pure prefix change, also where the prefix is written on its own in prose
+  // (`--sc-` prefixed, `$sc-*` variables). Then data attributes the system owns: data-sc-* → data-proto-*.
+  sub(new RegExp(`(?<![\\w-])--${from}-`, 'g'), `--${to}-`);
+  sub(new RegExp(`(?<![\\w$-])\\$${from}-`, 'g'), () => `$${to}-`);
+  sub(new RegExp(`(?<![\\w-])data-${from}-(?=[a-z0-9])`, 'g'), `data-${to}-`);
 
   // 3–5. Names: keyframes, classes, token names. A name is `sc-` plus [a-z0-9_-]+, not inside a longer word.
   const categories = map.tokenCategories;
@@ -119,7 +122,9 @@ export function transform(text, map = defaultMap) {
 export function leftovers(text, map = defaultMap) {
   const { from } = map;
   const res = [
-    new RegExp(`(?<![\\w$-])(?:--|\\$)?${from}-[A-Za-z0-9_$]`, 'g'),
+    // Any `sc-` that does not continue a word, including inside hyphenated names (`cm-sc-removed`) and patterns
+    // (`(sc-[\w-]+)`), which the rename rules leave for a person to decide.
+    new RegExp(`(?<![A-Za-z0-9_])${from}-`, 'g'),
     new RegExp(`@layer\\s+[^;{\\n]*(?<![\\w-])${from}(?![\\w-])`, 'g'),
     new RegExp(`layer\\(\\s*${from}\\s*\\)`, 'g'),
     ...Object.keys(map.packages ?? {}).map((p) => new RegExp(`${escape(p)}(?![\\w-])`, 'g')),

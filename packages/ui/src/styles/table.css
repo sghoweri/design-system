@@ -1,80 +1,80 @@
 /* ---- Table ----------------------------------------------------------------- */
-.sc-table-wrap {
+.c-proto-table-wrap {
   position: relative;
   inline-size: 100%;
   min-inline-size: 0;
   overflow-x: auto;
   overscroll-behavior-x: contain;
 }
-.sc-table-wrap[data-sticky-header]:not([data-scroll]) {
+.c-proto-table-wrap[data-sticky-header]:not([data-scroll]) {
   overflow: visible;
 }
-.sc-table-wrap[data-scroll] {
+.c-proto-table-wrap[data-scroll] {
   overflow: auto;
 }
-.sc-table {
-  --_py: var(--sc-spacing-xs);
-  --_px: var(--sc-spacing-sm);
-  --_h: var(--sc-size-control-md);
+.c-proto-table {
+  --_py: var(--proto-spacing-xs);
+  --_px: var(--proto-spacing-sm);
+  --_h: var(--proto-size-control-md);
   inline-size: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-family: var(--sc-font-family-sans);
-  font-size: var(--sc-font-size-sm);
-  line-height: var(--sc-font-line-height-ui);
-  color: var(--sc-color-text-default);
+  font-family: var(--proto-font-family-sans);
+  font-size: var(--proto-font-size-sm);
+  line-height: var(--proto-font-line-height-ui);
+  color: var(--proto-color-text-default);
   text-align: start;
 }
-.sc-table[data-layout='fixed'] {
+.c-proto-table[data-layout='fixed'] {
   table-layout: fixed;
 }
-.sc-table[data-density='compact'],
-[data-density='compact'] .sc-table:not([data-density='comfortable']) {
-  --_py: var(--sc-spacing-2xs);
-  --_px: var(--sc-spacing-xs);
-  --_h: var(--sc-size-control-sm);
+.c-proto-table[data-density='compact'],
+[data-density='compact'] .c-proto-table:not([data-density='comfortable']) {
+  --_py: var(--proto-spacing-2xs);
+  --_px: var(--proto-spacing-xs);
+  --_h: var(--proto-size-control-sm);
 }
-.sc-table__caption {
-  padding-block-end: var(--sc-spacing-xs);
-  color: var(--sc-color-text-muted);
-  font-size: var(--sc-font-size-xs);
+.c-proto-table__caption {
+  padding-block-end: var(--proto-spacing-xs);
+  color: var(--proto-color-text-muted);
+  font-size: var(--proto-font-size-xs);
   text-align: start;
   caption-side: top;
   text-wrap-style: pretty;
 }
-.sc-table__header,
-.sc-table__cell {
+.c-proto-table__header,
+.c-proto-table__cell {
   box-sizing: border-box;
   block-size: var(--_h);
   padding: var(--_py) var(--_px);
   vertical-align: middle;
   text-align: start;
 }
-.sc-table__header {
-  color: var(--sc-color-text-muted);
-  font-size: var(--sc-font-size-xs);
-  font-weight: var(--sc-font-weight-medium);
-  letter-spacing: var(--sc-font-tracking-wide);
+.c-proto-table__header {
+  color: var(--proto-color-text-muted);
+  font-size: var(--proto-font-size-xs);
+  font-weight: var(--proto-font-weight-medium);
+  letter-spacing: var(--proto-font-tracking-wide);
   text-transform: uppercase;
   white-space: nowrap;
-  background: var(--sc-color-surface-canvas);
-  border-block-end: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+  background: var(--proto-color-surface-canvas);
+  border-block-end: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
 }
 /* Sortable column headers: the whole label is the button. */
-.sc-table__header[data-sortable] {
+.c-proto-table__header[data-sortable] {
   padding: 0;
 }
-.sc-table__sort {
+.c-proto-table__sort {
   display: inline-flex;
   align-items: center;
-  gap: var(--sc-spacing-2xs);
+  gap: var(--proto-spacing-2xs);
   box-sizing: border-box;
   inline-size: 100%;
   min-block-size: var(--_h);
   margin: 0;
   padding: var(--_py) var(--_px);
   border: 0;
-  border-radius: var(--sc-radius-sm);
+  border-radius: var(--proto-radius-sm);
   background: transparent;
   color: inherit;
   font: inherit;
@@ -85,114 +85,117 @@
   cursor: pointer;
   user-select: none;
 }
-.sc-table__header[data-align='end'] > .sc-table__sort {
+.c-proto-table__header[data-align='end'] > .c-proto-table__sort {
   justify-content: flex-end;
 }
-.sc-table__header[data-align='center'] > .sc-table__sort {
+.c-proto-table__header[data-align='center'] > .c-proto-table__sort {
   justify-content: center;
 }
-.sc-table__sort:hover {
-  background: var(--sc-color-surface-hover);
-  color: var(--sc-color-text-default);
+.c-proto-table__sort:hover {
+  background: var(--proto-color-surface-hover);
+  color: var(--proto-color-text-default);
 }
-.sc-table__sort:focus-visible {
-  outline: var(--sc-border-width-focus) solid var(--sc-color-border-focus);
-  outline-offset: calc(-1 * var(--sc-border-width-focus));
+.c-proto-table__sort:focus-visible {
+  outline: var(--proto-border-width-focus) solid var(--proto-color-border-focus);
+  outline-offset: calc(-1 * var(--proto-border-width-focus));
 }
-.sc-table__sort-icon {
+.c-proto-table__sort-icon {
   display: inline-flex;
   flex: none;
   opacity: 0;
-  transition: opacity var(--sc-duration-fast) var(--sc-ease-standard);
+  transition: opacity var(--proto-duration-fast) var(--proto-ease-standard);
 }
-.sc-table__sort:hover > .sc-table__sort-icon,
-.sc-table__sort:focus-visible > .sc-table__sort-icon {
+.c-proto-table__sort:hover > .c-proto-table__sort-icon,
+.c-proto-table__sort:focus-visible > .c-proto-table__sort-icon {
   opacity: 0.6;
 }
-.sc-table__header[data-sorted] {
-  color: var(--sc-color-text-default);
+.c-proto-table__header[data-sorted] {
+  color: var(--proto-color-text-default);
 }
-.sc-table__header[data-sorted] .sc-table__sort-icon {
+.c-proto-table__header[data-sorted] .c-proto-table__sort-icon {
   opacity: 1;
-  color: var(--sc-color-accent-text);
+  color: var(--proto-color-accent-text);
 }
-.sc-table__body .sc-table__header {
-  color: var(--sc-color-text-default);
+.c-proto-table__body .c-proto-table__header {
+  color: var(--proto-color-text-default);
   font-size: inherit;
-  font-weight: var(--sc-font-weight-medium);
+  font-weight: var(--proto-font-weight-medium);
   letter-spacing: 0;
   text-transform: none;
   background: transparent;
   border-block-end: 0;
 }
-.sc-table-wrap[data-sticky-header] .sc-table__head .sc-table__header {
+.c-proto-table-wrap[data-sticky-header] .c-proto-table__head .c-proto-table__header {
   position: sticky;
   inset-block-start: 0;
-  z-index: var(--sc-z-sticky);
+  z-index: var(--proto-z-sticky);
 }
-.sc-table[data-divided] .sc-table__body .sc-table__row:not(:last-child) > .sc-table__cell,
-.sc-table[data-divided] .sc-table__body .sc-table__row:not(:last-child) > .sc-table__header {
-  border-block-end: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
+.c-proto-table[data-divided] .c-proto-table__body .c-proto-table__row:not(:last-child) > .c-proto-table__cell,
+.c-proto-table[data-divided]
+  .c-proto-table__body
+  .c-proto-table__row:not(:last-child)
+  > .c-proto-table__header {
+  border-block-end: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
 }
-.sc-table__foot .sc-table__cell,
-.sc-table__foot .sc-table__header {
-  border-block-start: var(--sc-border-width-hairline) solid var(--sc-color-border-default);
-  font-weight: var(--sc-font-weight-medium);
+.c-proto-table__foot .c-proto-table__cell,
+.c-proto-table__foot .c-proto-table__header {
+  border-block-start: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
+  font-weight: var(--proto-font-weight-medium);
 }
-.sc-table__row[data-interactive] {
+.c-proto-table__row[data-interactive] {
   cursor: pointer;
 }
-.sc-table__row[data-interactive]:hover > .sc-table__cell,
-.sc-table__row[data-interactive]:hover > .sc-table__header {
-  background: var(--sc-color-surface-hover);
+.c-proto-table__row[data-interactive]:hover > .c-proto-table__cell,
+.c-proto-table__row[data-interactive]:hover > .c-proto-table__header {
+  background: var(--proto-color-surface-hover);
 }
-.sc-table__row[data-selected] > .sc-table__cell,
-.sc-table__row[data-selected] > .sc-table__header {
-  background: var(--sc-color-accent-subtle);
+.c-proto-table__row[data-selected] > .c-proto-table__cell,
+.c-proto-table__row[data-selected] > .c-proto-table__header {
+  background: var(--proto-color-accent-subtle);
 }
 /* A selected row still shows its hover (docs/adr/0003): the selected wash, a step towards the accent. */
-.sc-table__row[data-selected][data-interactive]:hover > .sc-table__cell,
-.sc-table__row[data-selected][data-interactive]:hover > .sc-table__header {
-  background: color-mix(in oklab, var(--sc-color-accent-subtle), var(--sc-color-accent-default) 10%);
+.c-proto-table__row[data-selected][data-interactive]:hover > .c-proto-table__cell,
+.c-proto-table__row[data-selected][data-interactive]:hover > .c-proto-table__header {
+  background: color-mix(in oklab, var(--proto-color-accent-subtle), var(--proto-color-accent-default) 10%);
 }
 /* Selection column: the cell is the hit area, the checkbox the control (the checkbox inherits the cursor). */
-.sc-table__select {
+.c-proto-table__select {
   inline-size: 1px;
-  padding-inline-end: var(--sc-spacing-2xs);
+  padding-inline-end: var(--proto-spacing-2xs);
   text-align: center;
   cursor: pointer;
   user-select: none;
 }
-.sc-table__select > .sc-checkbox {
+.c-proto-table__select > .c-proto-checkbox {
   vertical-align: middle;
 }
-.sc-table__select[data-disabled] {
+.c-proto-table__select[data-disabled] {
   cursor: not-allowed;
 }
-.sc-table__header[data-align='center'],
-.sc-table__cell[data-align='center'] {
+.c-proto-table__header[data-align='center'],
+.c-proto-table__cell[data-align='center'] {
   text-align: center;
 }
-.sc-table__header[data-align='end'],
-.sc-table__cell[data-align='end'] {
+.c-proto-table__header[data-align='end'],
+.c-proto-table__cell[data-align='end'] {
   text-align: end;
 }
-.sc-table__header[data-numeric],
-.sc-table__cell[data-numeric] {
+.c-proto-table__header[data-numeric],
+.c-proto-table__cell[data-numeric] {
   font-variant-numeric: tabular-nums;
 }
-.sc-table__header[data-nowrap],
-.sc-table__cell[data-nowrap] {
+.c-proto-table__header[data-nowrap],
+.c-proto-table__cell[data-nowrap] {
   white-space: nowrap;
 }
-.sc-table__header[data-truncate],
-.sc-table__cell[data-truncate] {
+.c-proto-table__header[data-truncate],
+.c-proto-table__cell[data-truncate] {
   max-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.sc-table__cell > .sc-badge,
-.sc-table__cell > .sc-button {
+.c-proto-table__cell > .c-proto-badge,
+.c-proto-table__cell > .c-proto-button {
   vertical-align: middle;
 }

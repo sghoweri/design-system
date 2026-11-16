@@ -144,7 +144,7 @@ const versions = [
 
 /**
  * Long options wrap instead of widening the popup. The popup is at least as wide as the trigger and at most the
- * text measure (`--sc-font-measure`) or the room the positioner reports, whichever is less; the check sits on the
+ * text measure (`--proto-font-measure`) or the room the positioner reports, whichever is less; the check sits on the
  * first line. The trigger keeps the chosen value on one line with an ellipsis.
  */
 export const LongOptions: Story = {

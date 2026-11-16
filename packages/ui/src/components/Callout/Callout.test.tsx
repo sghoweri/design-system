@@ -20,7 +20,7 @@ describe('Callout', () => {
         From the recruiter&apos;s email on Nov 9: an interview on Nov 14 at 2pm.
       </Callout>,
     );
-    const callout = container.querySelector('.sc-callout')!;
+    const callout = container.querySelector('.c-proto-callout')!;
     expect(callout).toHaveAttribute('data-tone', 'accent');
     expect(callout).toHaveAttribute('data-variant', 'solid');
     expect(callout).not.toHaveAttribute('role');
@@ -37,7 +37,7 @@ describe('Callout', () => {
         A suggestion from email; nothing has changed yet.
       </Callout>,
     );
-    const callout = container.querySelector('.sc-callout')!;
+    const callout = container.querySelector('.c-proto-callout')!;
     expect(callout).toHaveAttribute('data-tone', 'danger');
     expect(callout).toHaveAttribute('data-variant', 'dashed');
     expect(screen.getByRole('heading', { level: 3, name: 'Mark as rejected?' })).toBeInTheDocument();

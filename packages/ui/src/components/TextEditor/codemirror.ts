@@ -44,65 +44,69 @@ const isProse = (language: TextEditorLanguage) => language === 'markdown' || lan
 const TOUCH_BOTTOM_MARGIN = 96;
 const coarse = () => typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 
-// One theme, all tokens: the box and its states match .sc-input.sc-textarea[data-variant='code'].
+// One theme, all tokens: the box and its states match .c-proto-input.c-proto-textarea[data-variant='code'].
 const theme = EditorView.theme({
   '&': {
-    border: 'var(--sc-border-width-hairline) solid var(--sc-color-border-strong)',
-    borderRadius: 'var(--sc-radius-md)',
-    background: 'var(--sc-color-surface-default)',
-    color: 'var(--sc-color-text-default)',
+    border: 'var(--proto-border-width-hairline) solid var(--proto-color-border-strong)',
+    borderRadius: 'var(--proto-radius-md)',
+    background: 'var(--proto-color-surface-default)',
+    color: 'var(--proto-color-text-default)',
     transition:
-      'border-color var(--sc-duration-fast) var(--sc-ease-standard), background-color var(--sc-duration-fast) var(--sc-ease-standard)',
+      'border-color var(--proto-duration-fast) var(--proto-ease-standard), background-color var(--proto-duration-fast) var(--proto-ease-standard)',
   },
-  '&:hover:not([data-disabled])': { borderColor: 'var(--sc-color-text-muted)' },
-  '&[data-invalid]': { borderColor: 'var(--sc-color-danger-solid)' },
+  '&:hover:not([data-disabled])': { borderColor: 'var(--proto-color-text-muted)' },
+  '&[data-invalid]': { borderColor: 'var(--proto-color-danger-solid)' },
   '&.cm-focused': {
-    outline: 'var(--sc-border-width-focus) solid var(--sc-color-border-focus)',
+    outline: 'var(--proto-border-width-focus) solid var(--proto-color-border-focus)',
     outlineOffset: '0',
-    borderColor: 'var(--sc-color-border-focus)',
+    borderColor: 'var(--proto-color-border-focus)',
   },
   '&[data-disabled]': {
-    background: 'var(--sc-color-surface-sunken)',
-    color: 'var(--sc-color-text-subtle)',
+    background: 'var(--proto-color-surface-sunken)',
+    color: 'var(--proto-color-text-subtle)',
     cursor: 'not-allowed',
   },
   '&[data-disabled] .cm-content': { cursor: 'not-allowed' },
   '.cm-scroller': {
-    fontFamily: 'var(--sc-font-family-mono)',
-    lineHeight: 'var(--sc-font-line-height-normal)',
+    fontFamily: 'var(--proto-font-family-mono)',
+    lineHeight: 'var(--proto-font-line-height-normal)',
   },
   '.cm-content': {
-    padding: 'var(--sc-spacing-xs) 0',
-    fontFamily: 'var(--sc-font-family-mono)',
-    fontSize: 'calc(var(--sc-font-size-sm) * 0.95)',
-    lineHeight: 'var(--sc-font-line-height-normal)',
+    padding: 'var(--proto-spacing-xs) 0',
+    fontFamily: 'var(--proto-font-family-mono)',
+    fontSize: 'calc(var(--proto-font-size-sm) * 0.95)',
+    lineHeight: 'var(--proto-font-line-height-normal)',
     minBlockSize: 'calc(var(--_rows, 3) * 1lh)',
-    caretColor: 'var(--sc-color-text-default)',
+    caretColor: 'var(--proto-color-text-default)',
   },
-  '.cm-line, .cm-sc-removed-lines': { paddingInline: 'var(--sc-spacing-sm)' },
+  '.cm-line, .cm-proto-removed-lines': { paddingInline: 'var(--proto-spacing-sm)' },
   // Touch: iOS zooms the page into a focused field under 16px (as in field.css). Room under the last line, so a tap
   // there isn't near Safari's collapsed toolbar, which takes taps at the bottom edge of the screen.
   '@media (pointer: coarse)': {
     '.cm-content': {
-      fontSize: 'max(16px, calc(var(--sc-font-size-sm) * 0.95))',
-      paddingBlockEnd: 'var(--sc-spacing-xl)',
+      fontSize: 'max(16px, calc(var(--proto-font-size-sm) * 0.95))',
+      paddingBlockEnd: 'var(--proto-spacing-xl)',
     },
     '.cm-scroller': { scrollPaddingBlockEnd: `${TOUCH_BOTTOM_MARGIN}px` },
   },
 });
 
 const highlight = HighlightStyle.define([
-  { tag: [t.propertyName, t.definition(t.propertyName)], color: 'var(--sc-color-accent-text)' },
-  { tag: t.heading, color: 'var(--sc-color-accent-text)', fontWeight: 'var(--sc-font-weight-semibold)' },
-  { tag: [t.string, t.special(t.string)], color: 'var(--sc-color-info-text)' },
-  { tag: [t.number, t.bool, t.null, t.atom], color: 'var(--sc-color-warning-text)' },
+  { tag: [t.propertyName, t.definition(t.propertyName)], color: 'var(--proto-color-accent-text)' },
+  {
+    tag: t.heading,
+    color: 'var(--proto-color-accent-text)',
+    fontWeight: 'var(--proto-font-weight-semibold)',
+  },
+  { tag: [t.string, t.special(t.string)], color: 'var(--proto-color-info-text)' },
+  { tag: [t.number, t.bool, t.null, t.atom], color: 'var(--proto-color-warning-text)' },
   {
     tag: [t.comment, t.meta, t.punctuation, t.separator, t.processingInstruction],
-    color: 'var(--sc-color-text-muted)',
+    color: 'var(--proto-color-text-muted)',
   },
-  { tag: [t.link, t.url], color: 'var(--sc-color-text-link)' },
+  { tag: [t.link, t.url], color: 'var(--proto-color-text-link)' },
   { tag: t.emphasis, fontStyle: 'italic' },
-  { tag: t.strong, fontWeight: 'var(--sc-font-weight-semibold)' },
+  { tag: t.strong, fontWeight: 'var(--proto-font-weight-semibold)' },
 ]);
 
 const diffExtension = (o: EditorOptions) => (o.base != null ? wordDiff(o.base, { live: o.liveDiff }) : []);
@@ -166,7 +170,7 @@ export function mountEditor(
         theme,
         syntaxHighlighting(highlight),
         // WordDiff's own classes, so the marks and widgets look like WordDiff family="mono".
-        EditorView.contentAttributes.of({ class: 'sc-word-diff', 'data-family': 'mono' }),
+        EditorView.contentAttributes.of({ class: 'c-proto-word-diff', 'data-family': 'mono' }),
         stateSlot.of(stateExtension(options)),
         languageSlot.of([]),
         diffSlot.of(diffExtension(options)),

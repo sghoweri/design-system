@@ -108,7 +108,7 @@ describe('Button', () => {
     );
     const button = screen.getByRole('button', { name: 'Add a job' });
     expect(button).toHaveAttribute('aria-keyshortcuts', 'n');
-    const hint = button.querySelector('.sc-button__shortcut')!;
+    const hint = button.querySelector('.c-proto-button__shortcut')!;
     expect(hint).toHaveAttribute('aria-hidden', 'true');
     expect(hint.querySelector('kbd')).toHaveTextContent('N');
   });
@@ -135,7 +135,7 @@ describe('Button', () => {
     // jsdom loads no CSS and cannot emulate pointers, so check the rule itself.
     const css = readFileSync(join(__dirname, '../../styles/button.css'), 'utf8');
     expect(css).toMatch(
-      /@media not all and \(any-pointer: fine\) \{\s*\.sc-button__shortcut \{\s*display: none;/,
+      /@media not all and \(any-pointer: fine\) \{\s*\.c-proto-button__shortcut \{\s*display: none;/,
     );
   });
 });

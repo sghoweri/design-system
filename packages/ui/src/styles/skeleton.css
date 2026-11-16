@@ -1,50 +1,50 @@
 /* ---- Skeleton -------------------------------------------------------------- */
-.sc-skeleton {
-  --_base: var(--sc-color-surface-active);
-  --_sheen: var(--sc-color-surface-hover);
+.c-proto-skeleton {
+  --_base: var(--proto-color-surface-active);
+  --_sheen: var(--proto-color-surface-hover);
   display: block;
   box-sizing: border-box;
   inline-size: 100%;
   block-size: 1em;
-  border-radius: var(--sc-radius-sm);
+  border-radius: var(--proto-radius-sm);
   background: var(--_base);
   background-image: linear-gradient(90deg, var(--_base) 0%, var(--_sheen) 50%, var(--_base) 100%);
   background-size: 200% 100%;
-  animation: sc-shimmer 1.6s ease-in-out infinite;
+  animation: proto-shimmer 1.6s ease-in-out infinite;
 }
-.sc-skeleton[data-variant='text'] {
+.c-proto-skeleton[data-variant='text'] {
   display: inline-block;
   vertical-align: middle;
   block-size: 1em;
-  border-radius: var(--sc-radius-sm);
+  border-radius: var(--proto-radius-sm);
 }
-.sc-skeleton[data-variant='rect'] {
+.c-proto-skeleton[data-variant='rect'] {
   block-size: 80px;
-  border-radius: var(--sc-radius-md);
+  border-radius: var(--proto-radius-md);
 }
-.sc-skeleton[data-variant='circle'] {
+.c-proto-skeleton[data-variant='circle'] {
   inline-size: 40px;
   aspect-ratio: 1;
   block-size: auto;
-  border-radius: var(--sc-radius-full);
+  border-radius: var(--proto-radius-full);
 }
-.sc-skeleton[data-still] {
+.c-proto-skeleton[data-still] {
   animation: none;
   background-image: none;
 }
-.sc-skeleton-lines {
+.c-proto-skeleton-lines {
   display: flex;
   flex-direction: column;
   gap: calc(1lh - 1em);
   inline-size: 100%;
 }
-.sc-skeleton-lines > .sc-skeleton {
+.c-proto-skeleton-lines > .c-proto-skeleton {
   display: block;
 }
-.sc-skeleton-lines > .sc-skeleton[data-last] {
+.c-proto-skeleton-lines > .c-proto-skeleton[data-last] {
   inline-size: 60%;
 }
-@keyframes sc-shimmer {
+@keyframes proto-shimmer {
   from {
     background-position: 200% 0;
   }
@@ -53,7 +53,7 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sc-skeleton {
+  .c-proto-skeleton {
     animation: none;
     background-image: none;
   }

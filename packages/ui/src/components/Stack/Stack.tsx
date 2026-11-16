@@ -45,7 +45,7 @@ export function Stack({
   ...rest
 }: StackProps) {
   return createElement(as, {
-    className: cx('sc-stack', className),
+    className: cx('o-proto-stack', className),
     'data-gap': gap,
     'data-align': align,
     'data-justify': justify,

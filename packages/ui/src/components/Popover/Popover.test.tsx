@@ -83,7 +83,7 @@ describe('Popover', () => {
       </Popover.Root>,
     );
     const trigger = screen.getByRole('button', { name: 'Legend' });
-    expect(trigger).toHaveClass('sc-button');
+    expect(trigger).toHaveClass('c-proto-button');
     expect(trigger).toHaveAttribute('data-variant', 'secondary');
     expect(trigger).toHaveAttribute('aria-expanded', 'false');
   });
@@ -93,12 +93,12 @@ describe('Popover', () => {
     const onOpenChange = vi.fn();
     const { baseElement } = render(<Example onOpenChange={onOpenChange} />);
     const trigger = screen.getByRole('button', { name: 'Sweeps: running' });
-    expect(trigger).toHaveClass('sc-icon-button');
+    expect(trigger).toHaveClass('c-proto-icon-button');
     await user.click(trigger);
     const popup = await screen.findByRole('dialog', { name: 'Sweeps' });
-    expect(popup).toHaveClass('sc-popover');
+    expect(popup).toHaveClass('c-proto-popover');
     expect(popup).toHaveAccessibleDescription('Next sweep in 2 hours.');
-    expect(popup.parentElement).toHaveClass('sc-popover__positioner');
+    expect(popup.parentElement).toHaveClass('c-proto-popover__positioner');
     expect(trigger).toHaveAttribute('aria-expanded', 'true');
     expect(onOpenChange).toHaveBeenLastCalledWith(true);
     await expectNoA11yViolations(baseElement);
@@ -108,11 +108,11 @@ describe('Popover', () => {
     const user = userEvent.setup();
     const { unmount } = render(<Example />);
     await user.click(screen.getByRole('button', { name: 'Sweeps: running' }));
-    expect((await screen.findByRole('dialog')).querySelector('.sc-popover__arrow')).toBeNull();
+    expect((await screen.findByRole('dialog')).querySelector('.c-proto-popover__arrow')).toBeNull();
     unmount();
     render(<Example arrow />);
     await user.click(screen.getByRole('button', { name: 'Sweeps: running' }));
-    expect((await screen.findByRole('dialog')).querySelector('.sc-popover__arrow')).not.toBeNull();
+    expect((await screen.findByRole('dialog')).querySelector('.c-proto-popover__arrow')).not.toBeNull();
   });
 
   it('puts the children, in order, in one scroller after the arrow, and the × inside it still closes', async () => {
@@ -123,15 +123,15 @@ describe('Popover', () => {
     const popup = await screen.findByRole('dialog', { name: 'Sweeps' });
     const classes = (el: Element) =>
       [...el.children].map(
-        (c) => [...c.classList].find((n) => n.startsWith('sc-popover__')) ?? c.classList[0],
+        (c) => [...c.classList].find((n) => n.startsWith('c-proto-popover__')) ?? c.classList[0],
       );
-    expect(classes(popup)).toEqual(['sc-popover__arrow', 'sc-popover__scroll']);
+    expect(classes(popup)).toEqual(['c-proto-popover__arrow', 'c-proto-popover__scroll']);
     const scroll = popup.lastElementChild!;
     expect(classes(scroll)).toEqual([
-      'sc-popover__close',
-      'sc-popover__title',
-      'sc-popover__description',
-      'sc-button',
+      'c-proto-popover__close',
+      'c-proto-popover__title',
+      'c-proto-popover__description',
+      'c-proto-button',
     ]);
     expect(scroll.getAttributeNames()).toEqual(['class']);
     expect(popup).toHaveAccessibleDescription('Next sweep in 2 hours.');
@@ -174,7 +174,7 @@ describe('Popover', () => {
     expect(screen.getByTestId('row')).not.toContainElement(popup);
     // The portal container is a direct child of <body>, so nothing around the anchor can clip or shift it.
     const positioner = popup.parentElement;
-    expect(positioner).toHaveClass('sc-popover__positioner');
+    expect(positioner).toHaveClass('c-proto-popover__positioner');
     expect(positioner?.parentElement?.parentElement).toBe(document.body);
     await user.keyboard('{Escape}');
     await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
@@ -207,7 +207,7 @@ describe('Popover', () => {
       stub(document.documentElement, 'clientWidth', { get: () => 1280 });
       stub(document.documentElement, 'clientHeight', { get: () => 600 });
       const isPanel = (el: HTMLElement) =>
-        el.classList.contains('sc-popover__positioner') || el.classList.contains('sc-popover');
+        el.classList.contains('c-proto-popover__positioner') || el.classList.contains('c-proto-popover');
       stub(HTMLElement.prototype, 'offsetWidth', {
         get(this: HTMLElement) {
           return isPanel(this) ? 480 : 0;

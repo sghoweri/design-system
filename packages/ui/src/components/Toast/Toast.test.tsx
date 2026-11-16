@@ -55,7 +55,7 @@ describe('Toast', () => {
     await expectNoA11yViolations(document.body);
     // jsdom has no cascade, so check the stylesheet: the scope repoints every token a Button or the description reads.
     const css = readFileSync(join(__dirname, '..', '..', 'styles', 'base.css'), 'utf8');
-    const scope = /\.sc-toast\[data-tone='accent'\] \{([^}]*)\}/.exec(css)?.[1] ?? '';
+    const scope = /\.c-proto-toast\[data-tone='accent'\] \{([^}]*)\}/.exec(css)?.[1] ?? '';
     for (const [token, value] of [
       ['text-default', 'text-on-accent-strong'],
       ['text-muted', 'text-on-accent-strong'],
@@ -64,7 +64,7 @@ describe('Toast', () => {
       ['surface-hover', 'accent-strong-hover'],
       ['surface-active', 'accent-strong-active'],
     ])
-      expect(scope).toContain(`--sc-color-${token}: var(--sc-color-${value});`);
+      expect(scope).toContain(`--proto-color-${token}: var(--proto-color-${value});`);
     // The main action is the white inverse Button, not an outline.
     expect(screen.getByRole('button', { name: 'Reload' })).toHaveAttribute('data-variant', 'inverse');
   });

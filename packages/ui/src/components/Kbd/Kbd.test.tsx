@@ -6,7 +6,7 @@ describe('Kbd', () => {
     render(<Kbd>Esc</Kbd>);
     const key = screen.getByText('Esc');
     expect(key.tagName).toBe('KBD');
-    expect(key).toHaveClass('sc-kbd');
+    expect(key).toHaveClass('c-proto-kbd');
   });
 
   it('groups keys with a readable label and hidden separators', () => {
@@ -18,7 +18,7 @@ describe('Kbd', () => {
     );
     const group = screen.getByRole('group', { name: 'Command K' });
     expect(group.querySelectorAll('kbd')).toHaveLength(2);
-    const sep = group.querySelector('.sc-kbd-group__sep');
+    const sep = group.querySelector('.c-proto-kbd-group__sep');
     expect(sep).toHaveTextContent('+');
     expect(sep).toHaveAttribute('aria-hidden', 'true');
   });
@@ -30,6 +30,6 @@ describe('Kbd', () => {
         <Kbd>i</Kbd>
       </Kbd.Group>,
     );
-    expect(screen.getByRole('group').querySelector('.sc-kbd-group__sep')).toBeNull();
+    expect(screen.getByRole('group').querySelector('.c-proto-kbd-group__sep')).toBeNull();
   });
 });

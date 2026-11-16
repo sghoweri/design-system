@@ -8,10 +8,10 @@ import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const dist = join(here, 'dist');
-const PREFIX = 'sc';
+const PREFIX = 'proto';
 const version = JSON.parse(readFileSync(join(here, 'package.json'), 'utf8')).version;
 const header = (lang) =>
-  `${lang === 'scss' ? '//' : '/*'} @salemcobalt/tokens ${version} — generated from src/ by Style Dictionary. Do not edit.${lang === 'scss' ? '' : ' */'}\n`;
+  `${lang === 'scss' ? '//' : '/*'} @protokit/tokens ${version} — generated from src/ by Style Dictionary. Do not edit.${lang === 'scss' ? '' : ' */'}\n`;
 
 const isThemed = (token) =>
   (token.path[0] === 'color' &&
