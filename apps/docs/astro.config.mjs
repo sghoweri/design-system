@@ -14,11 +14,11 @@ export default defineConfig({
       description: 'Tokens and React components for Salem Cobalt’s side projects.',
       favicon: '/favicon.svg',
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/sghoweri/design-system' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/sghoweri/protokit' },
         { icon: 'npm', label: 'npm', href: 'https://www.npmjs.com/package/@protokit/ui' },
         { icon: 'storybook', label: 'Workshop (Storybook)', href: '/workshop/' },
       ],
-      editLink: { baseUrl: 'https://github.com/sghoweri/design-system/edit/main/apps/docs/' },
+      editLink: { baseUrl: 'https://github.com/sghoweri/protokit/edit/main/apps/docs/' },
       // Tokens, then the component layer (@layer proto), then the Starlight mapping, which is unlayered and so wins.
       customCss: ['@protokit/tokens/css', '@protokit/ui/styles.css', './src/styles/theme.css'],
       components: { Head: './src/components/Head.astro' },

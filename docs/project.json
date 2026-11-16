@@ -15,7 +15,7 @@
     "GitHub Actions"
   ],
   "links": {
-    "repo": "https://github.com/sghoweri/design-system",
+    "repo": "https://github.com/sghoweri/protokit",
     "live": null,
     "storybook": null,
     "npm": ["https://www.npmjs.com/package/@protokit/tokens", "https://www.npmjs.com/package/@protokit/ui"]
