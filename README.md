@@ -39,7 +39,7 @@ Set `data-theme="light"` or `"dark"` on `<html>`; with no attribute the system f
 
 ## Docs site and Storybook
 
-The site is hosted on Vercel at <https://designsystem.salemcobalt.com>: the docs (Astro + Starlight, `apps/docs`) at `/` and the Storybook at `/workshop/`, in one deploy. `vercel.json` at the repo root builds it with `pnpm build && pnpm build-storybook && pnpm build-docs` on Node 24 and serves `apps/docs/dist`; the docs build copies `apps/storybook/storybook-static` into `dist/workshop/` and validates internal links. Old Storybook links (`/?path=…`, `/iframe.html`) redirect to `/workshop/`. [ADR 0007](docs/adr/0007-docs-site.md) records the decision.
+The site is hosted on Vercel at <https://protokit.design> (the old `designsystem.salemcobalt.com` and `www.protokit.design` redirect there with a 308): the docs (Astro + Starlight, `apps/docs`) at `/` and the Storybook at `/workshop/`, in one deploy. `vercel.json` at the repo root builds it with `pnpm build && pnpm build-storybook && pnpm build-docs` on Node 24 and serves `apps/docs/dist`; the docs build copies `apps/storybook/storybook-static` into `dist/workshop/` and validates internal links. Old Storybook links (`/?path=…`, `/iframe.html`) redirect to `/workshop/`. [ADR 0007](docs/adr/0007-docs-site.md) records the decision.
 
 To preview the whole site locally: `pnpm build && pnpm build-storybook && pnpm build-docs`, then `pnpm --filter docs preview`.
 
