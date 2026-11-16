@@ -164,7 +164,8 @@ jobs:
         if: steps.version.outputs.version != ''
 
       - name: Changelog, tag and GitHub prerelease (rc)
-        if: steps.version.outputs.version != '' && steps.mode.outputs.mode == 'rc'
+        # Skipped on a re-run that retries an rc this commit is already tagged with.
+        if: steps.version.outputs.version != '' && steps.mode.outputs.mode == 'rc' && steps.version.outputs.retry != 'true'
         env:
           VERSION: ${{ steps.version.outputs.version }}
           DRY: ${{ steps.mode.outputs.dry }}
