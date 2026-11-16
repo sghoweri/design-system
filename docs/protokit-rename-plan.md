@@ -21,7 +21,7 @@ listed separately at the end and referenced in the sequence as **S1–S4**. A re
 | Cascade layer             | `@layer sc`; Job Sweep declares `@layer base, sc;`                 | `@layer proto`; `@layer base, proto;`                                                 |
 | Product name              | "Salem Cobalt design system" (READMEs, descriptions, site title)   | "Protokit"                                                                            |
 | Homepage copy             | stack list                                                         | ADR 0008 copy C, with type option A, in ADR 0008's homepage step (not this plan)      |
-| GitHub repository         | `sghoweri/design-system`                                           | unchanged for now ("Later (Salem)" below)                                             |
+| GitHub repository         | `sghoweri/design-system`                                           | `sghoweri/protokit` (renamed 2026-11-16, after PR 2; "Later (Salem)" below)           |
 | Site URL                  | `designsystem.salemcobalt.com`                                     | unchanged for now ("Later (Salem)" below)                                             |
 | Versions                  | `latest` 0.1.1, `next` 0.2.0-rc.52                                 | `@protokit/*` starts at the next 0.2.0 rc; its first stable is 0.2.0                  |
 
@@ -281,10 +281,15 @@ This deprecates every version, including the 0.2.0 rcs on `next`. The website do
 
 ## Later (Salem)
 
-Salem keeps the GitHub repository (`sghoweri/design-system`) and the domain (`designsystem.salemcobalt.com`) through
-the rename, and decides on them later.
+Salem kept the GitHub repository (`sghoweri/design-system`) and the domain (`designsystem.salemcobalt.com`) through
+the rename.
 
-A later rename touches:
+- **Repository: done.** Salem renamed it to `sghoweri/protokit` on 2026-11-16, after PR 2 merged and published
+  `0.2.0-rc.55`. A follow-up PR moved the `repository` fields and links; both Trusted Publishers point at `protokit`.
+- **Domain: registered, not moved.** Salem registered `protokit.design` on 2026-11-16. The site stays at
+  `designsystem.salemcobalt.com` until the move.
+
+A rename touches:
 
 - the Trusted Publisher configuration of both `@protokit` packages;
 - each package's `repository` field (npm matches `repository.url` exactly: "must exactly match your GitHub

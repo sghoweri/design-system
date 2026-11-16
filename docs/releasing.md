@@ -59,7 +59,7 @@ hand-published placeholder (`0.0.0-placeholder`, deprecated) before the first re
 **Settings** → **Trusted Publisher** → **GitHub Actions**:
 
 - Organization or user: `sghoweri`
-- Repository: `design-system`
+- Repository: `protokit` (renamed from `design-system` on 2026-11-16; npm matches the name exactly, so a rename means editing both Trusted Publishers)
 - Workflow filename: `release.yml`
 - Environment name: leave empty
 
@@ -96,7 +96,7 @@ canary runs need none.
    `salemcobalt-release`), any homepage URL, untick _Webhook → Active_. Repository permissions:
    **Contents: Read and write**, **Metadata: Read-only**. _Only on this account._
 2. **Generate a private key** (a `.pem` download) and note the **App ID**.
-3. **Install App** on `sghoweri/design-system` only.
+3. **Install App** on `sghoweri/protokit` only.
 4. In the repository: **Settings → Secrets and variables → Actions**: variable `RELEASE_APP_ID` = the App
    ID, secret `RELEASE_APP_PRIVATE_KEY` = the full contents of the `.pem` file.
 5. **Settings → Rules → Rulesets**: on the `main` ruleset add the App under **Bypass list**
