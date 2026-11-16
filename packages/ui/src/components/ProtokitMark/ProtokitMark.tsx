@@ -17,14 +17,13 @@ export interface ProtokitMarkProps extends Omit<ComponentPropsWithRef<'span'>, '
   /** The accessible name (`role="img"`). Default "Protokit". */
   label?: string | undefined;
   /**
-   * An electron orbits the nucleus while the link or button around the mark is hovered or keyboard-focused: it fades
-   * in where it last stopped, circles clockwise once every 6s (`--proto-protokit-mark-orbit-duration`), and on
-   * leaving stops and fades out, so the resting mark is always the plain P. `inside` circles in the bowl's counter,
+   * The electron, `inside` by default, or `false` for the plain P (a favicon, an avatar, print). It is parked at half past one (45° above 3 o'clock), that circles the nucleus clockwise once every 6s
+   * (`--proto-protokit-mark-orbit-duration`) while the link or button around the mark is hovered or keyboard-focused.
+   * Leaving stops it where it is, and the next hover carries on from there. `inside` circles in the bowl's counter,
    * between the nucleus and the ring; `outside` circles just outside the ring and passes behind the stem. Under
-   * `prefers-reduced-motion` the electron fades in parked at 45° and does not move. Not under 32px. Decorative; it
-   * changes nothing that is read.
+   * `prefers-reduced-motion` it stays parked. Not drawn under 32px. Decorative; it changes nothing that is read.
    */
-  orbit?: ProtokitMarkOrbit | undefined;
+  orbit?: ProtokitMarkOrbit | false | undefined;
 }
 
 /**
@@ -46,7 +45,7 @@ const ELECTRON = {
 export function ProtokitMark({
   size = 'lg',
   label = 'Protokit',
-  orbit,
+  orbit = 'inside',
   className,
   ...rest
 }: ProtokitMarkProps) {
@@ -54,7 +53,7 @@ export function ProtokitMark({
     <span
       className={cx('c-proto-protokit-mark', className)}
       data-size={size}
-      data-orbit={orbit}
+      data-orbit={orbit || undefined}
       role="img"
       aria-label={label}
       {...rest}

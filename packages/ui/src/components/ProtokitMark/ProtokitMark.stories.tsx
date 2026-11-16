@@ -12,13 +12,13 @@ const meta = {
   args: { size: 'xl' },
   argTypes: {
     size: { control: 'radio', options: ['xs', 'sm', 'md', 'lg', 'xl', 'em'] },
-    orbit: { control: 'radio', options: [undefined, 'inside', 'outside'] },
+    orbit: { control: 'radio', options: ['inside', 'outside', false] },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'Protokit\'s mark, "Proton" (brand direction 1, not yet adopted): a monogram P whose bowl is a ring around an accent nucleus. Stem and ring take `currentColor` (`--proto-color-text-default` by default), the nucleus `--proto-color-accent-default`; `CanvasText` in forced colours. Under 24px the ring is a unit heavier. `orbit` adds an electron that circles the nucleus while the surrounding link or button is hovered or focused. For a size outside the Icon scale, set `--proto-protokit-mark-size`.',
+          'Protokit\'s mark, "Proton" (brand direction 1, not yet adopted): a monogram P whose bowl is a ring around an accent nucleus. Stem and ring take `currentColor` (`--proto-color-text-default` by default), the nucleus `--proto-color-accent-default`; `CanvasText` in forced colours. Under 24px the ring is a unit heavier. An electron, parked at half past one, circles the nucleus while the surrounding link or button is hovered or focused: `orbit` is `inside` by default, `outside` around the ring, or `false` for the plain P. Not drawn under 32px. For a size outside the Icon scale, set `--proto-protokit-mark-size`.',
       },
     },
   },
@@ -38,7 +38,7 @@ export const Playground: Story = {
       <ProtokitMark {...args} />
     </a>
   ),
-  args: { orbit: 'inside', style: px(48) },
+  args: { style: px(48) },
 };
 
 /** The brand's proof sizes (96, 32, 16) and the Icon steps in between. */
@@ -101,9 +101,9 @@ export const Orbit: Story = {
   render: () => (
     <Stack gap="md">
       <Text size="sm" tone="muted">
-        Hover or Tab to a mark: the electron fades in where it last stopped and circles the nucleus once every
-        6s; leaving stops it and fades it out, so the resting mark is the plain P. Under reduced motion it
-        fades in parked at 45° and does not move. Not drawn under 32px.
+        The electron rests at half past one. Hover or Tab to a mark and it circles the nucleus once every 6s;
+        leaving stops it where it is, and the next hover carries on from there. Under reduced motion it stays
+        parked. Not drawn under 32px.
       </Text>
       <Orbits />
     </Stack>
@@ -133,7 +133,7 @@ export const AlwaysOn: Story = {
 
   render: () => (
     <Stack gap="md">
-      <style>{`.story-always .c-proto-protokit-mark__orbit { opacity: 1; animation-play-state: running; }`}</style>
+      <style>{`.story-always :is(.c-proto-protokit-mark__orbit, .c-proto-protokit-mark__orbit > svg) { animation-play-state: running; }`}</style>
       <Text size="sm" tone="muted">
         For comparison only: the same orbit, running without hover. Not an option of the component (WCAG
         2.2.2).

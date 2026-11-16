@@ -6,12 +6,12 @@ import { ProtokitMark } from './ProtokitMark';
 const css = readFileSync(join(__dirname, '../../styles/protokit-mark.css'), 'utf8');
 
 describe('ProtokitMark', () => {
-  it('is an image named "Protokit", at the nav size, drawn as the Proton P with no electron', () => {
+  it('is an image named "Protokit", at the nav size, drawn as the Proton P with the electron inside by default', () => {
     const { container } = render(<ProtokitMark />);
     const mark = screen.getByRole('img', { name: 'Protokit' });
     expect(mark).toHaveClass('c-proto-protokit-mark');
     expect(mark).toHaveAttribute('data-size', 'lg');
-    expect(mark).not.toHaveAttribute('data-orbit');
+    expect(mark).toHaveAttribute('data-orbit', 'inside');
     const svg = container.querySelector('.c-proto-protokit-mark__drawing')!;
     expect(svg).toHaveAttribute('viewBox', '0 0 64 64');
     expect(svg).toHaveAttribute('aria-hidden', 'true');
@@ -21,7 +21,14 @@ describe('ProtokitMark', () => {
     expect(ring).toHaveAttribute('r', '16');
     expect(ring).toHaveAttribute('stroke-width', '7');
     expect(svg.querySelector('.c-proto-protokit-mark__nucleus')).toHaveAttribute('r', '5.5');
+    expect(container.querySelector('.c-proto-protokit-mark__electron')).toHaveAttribute('cx', '44');
+  });
+
+  it('with orbit={false}, is the plain P: no electron layer and no data-orbit', () => {
+    const { container } = render(<ProtokitMark orbit={false} />);
+    expect(screen.getByRole('img', { name: 'Protokit' })).not.toHaveAttribute('data-orbit');
     expect(container.querySelector('.c-proto-protokit-mark__orbit')).toBeNull();
+    expect(container.querySelector('.c-proto-protokit-mark__drawing')).not.toBeNull();
   });
 
   it('takes another accessible name with label, and passes className and other props to the root', () => {
@@ -80,16 +87,13 @@ describe('ProtokitMark', () => {
     );
   });
 
-  it('orbits only on hover or keyboard focus of its link or button, paused and hidden at rest, never for reduced motion', () => {
-    // At rest: invisible, parked at 45° above 3 o'clock, the loop paused.
+  it('parks the electron at half past one, shown and paused, and turns it only on hover or keyboard focus, never for reduced motion', () => {
+    // At rest: drawn, parked at 45° above 3 o'clock, the loop paused; no fade, so the electron is part of the mark.
     expect(css).toMatch(
-      /\.c-proto-protokit-mark__orbit \{[^}]*opacity: 0;[^}]*transform-origin: 54\.6875% 42\.1875%;[^}]*rotate: -45deg;[^}]*animation: proto-protokit-mark-orbit var\(--proto-protokit-mark-orbit-duration, 6s\) linear infinite paused;/,
+      /\.c-proto-protokit-mark__orbit \{[^}]*transform-origin: 54\.6875% 42\.1875%;[^}]*rotate: -45deg;[^}]*animation: proto-protokit-mark-orbit var\(--proto-protokit-mark-orbit-duration, 6s\) linear infinite paused;/,
     );
-    // Fades with motion tokens, in on hover and focus whatever the motion preference.
-    expect(css).toMatch(/transition: opacity var\(--proto-duration-base\) var\(--proto-ease-exit\);/);
-    expect(css).toMatch(
-      /:is\(a, button\):is\(:hover, :focus-visible\) \.c-proto-protokit-mark__orbit \{\s*opacity: 1;\s*transition: opacity var\(--proto-duration-slow\) var\(--proto-ease-enter\);/,
-    );
+    expect(css).not.toMatch(/opacity: 0;\s*\/\* The nucleus/);
+    expect(css).not.toMatch(/\.c-proto-protokit-mark__orbit \{[^}]*opacity/);
     // The turn runs only with no motion preference.
     expect(css).toMatch(
       /@media \(prefers-reduced-motion: no-preference\) \{\s*:is\(a, button\):is\(:hover, :focus-visible\)\s*:is\(\.c-proto-protokit-mark__orbit, \.c-proto-protokit-mark__orbit > svg\) \{\s*animation-play-state: running;/,

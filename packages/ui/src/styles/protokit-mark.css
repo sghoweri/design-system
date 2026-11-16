@@ -58,21 +58,18 @@
   }
 }
 
-/* orbit: an electron circles the nucleus while the link or button around the mark is hovered or keyboard-focused.
-   It is its own layer (a span over the whole box, turning about the nucleus at 35/64, 27/64), so the motion is a
-   composited rotate and opacity: no layout, and the P is never repainted. The turn loops paused at rest, parked at
-   45° above 3 o'clock; hovering fades the electron in and runs the turn, leaving pauses it where it is and fades it
-   out, so the resting mark is the plain P and nothing snaps back. Under reduced motion the fade still happens and the
-   turn never runs: a parked electron. Under 32px the electron is not drawn at all. One turn takes 6s, or
-   `--proto-protokit-mark-orbit-duration`. */
+/* orbit: an electron sits in the mark, parked at 45° above 3 o'clock (half past one), and circles the nucleus while
+   the link or button around the mark is hovered or keyboard-focused. It is its own layer (a span over the whole box,
+   turning about the nucleus at 35/64, 27/64), so the motion is a composited rotate: no layout, and the P is never
+   repainted. The turn loops paused at rest; hovering runs it and leaving pauses it where it is, so nothing snaps
+   back and the next hover carries on from there. Under reduced motion the turn never runs: a parked electron. Under
+   32px the electron is not drawn at all. One turn takes 6s, or `--proto-protokit-mark-orbit-duration`. */
 .c-proto-protokit-mark__orbit {
   position: absolute;
   inset: 0;
-  opacity: 0;
   /* The nucleus, (35, 27) of 64. */
   transform-origin: 54.6875% 42.1875%;
   rotate: -45deg;
-  transition: opacity var(--proto-duration-base) var(--proto-ease-exit);
   animation: proto-protokit-mark-orbit var(--proto-protokit-mark-orbit-duration, 6s) linear infinite paused;
 }
 .c-proto-protokit-mark__orbit > svg {
@@ -90,10 +87,6 @@
   animation-duration: var(--proto-protokit-mark-orbit-duration, 6s);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-}
-:is(a, button):is(:hover, :focus-visible) .c-proto-protokit-mark__orbit {
-  opacity: 1;
-  transition: opacity var(--proto-duration-slow) var(--proto-ease-enter);
 }
 @media (prefers-reduced-motion: no-preference) {
   :is(a, button):is(:hover, :focus-visible)
