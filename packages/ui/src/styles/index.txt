@@ -15,6 +15,7 @@ priority-nav.css
 popover.css
 broom-icon.css
 logo.css
+protokit-mark.css
 toolbar.css
 banner.css
 progress.css

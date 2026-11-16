@@ -219,6 +219,12 @@ export {
 export { BroomIcon, type BroomIconProps } from './components/BroomIcon/BroomIcon';
 export { Logo, type LogoProps, type LogoSize } from './components/Logo/Logo';
 export {
+  ProtokitMark,
+  type ProtokitMarkOrbit,
+  type ProtokitMarkProps,
+  type ProtokitMarkSize,
+} from './components/ProtokitMark/ProtokitMark';
+export {
   FullScreenFlow,
   type FlowChapter,
   type FlowCloseRequestReason,
