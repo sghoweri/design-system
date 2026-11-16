@@ -5,6 +5,7 @@
 #   version   the new version, or empty when there is nothing to release
 #   dist-tag  npm dist-tag for the publish (canary | next | latest)
 #   last-stable  latest stable tag reachable from HEAD (stable only; changelog --from)
+#   retry     true when the commit already carries an rc tag and that rc is retried (rc only)
 set -euo pipefail
 
 out() { echo "$1=$2" >> "${GITHUB_OUTPUT:-/dev/stdout}"; }
@@ -27,6 +28,18 @@ case "$MODE" in
     ;;
 
   rc)
+    # A re-run of a run that already tagged this commit (say the publish failed) retries that
+    # rc instead of cutting the next one; publish-if-new.sh then uploads only what is missing.
+    retry_tag="$(git tag --points-at "${SHA:-HEAD}" --list 'v*-rc.*' | sort -V | tail -n1)"
+    if [ -n "$retry_tag" ]; then
+      version="${retry_tag#v}"
+      echo "${SHA:-HEAD} is already tagged $retry_tag; retrying $version instead of cutting a new rc"
+      pnpm exec nx release version "$version"
+      out version "$version"
+      out dist-tag next
+      out retry true
+      exit 0
+    fi
     current="${current_tag#v}"
     # Release intent comes from the merged PR's label, Auto style: exactly one of
     # major | minor | patch | skip-release (release-label.yml gates merges on it).
