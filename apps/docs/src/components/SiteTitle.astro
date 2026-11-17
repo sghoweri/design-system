@@ -1,0 +1,27 @@
+---
+// The header's site title: the Protokit logo (the Proton P, then "rotokit") in place of Starlight's text, with the
+// electron circling all the time. Starlight's own link and layout; the logo's role="img" gives the link its name, and
+// Protokit's focus ring replaces the browser's. The ring (2px out, 2px wide) fits the 0.25rem Starlight's title wrapper
+// pads and clips at; any padding here would push it past that and clip it.
+import { ProtokitLogo } from '@protokit/ui';
+const { siteTitleHref } = Astro.locals.starlightRoute;
+---
+
+<a href={siteTitleHref} class="site-title sl-flex u-proto-focus-ring">
+  <ProtokitLogo />
+</a>
+
+<style>
+  @layer starlight.core {
+    .site-title {
+      align-items: center;
+      /* Starlight's logo height: the nav bar less its padding. */
+      --proto-protokit-logo-size: calc(var(--sl-nav-height) - 2 * var(--sl-nav-pad-y));
+      color: var(--sl-color-white);
+      text-decoration: none;
+      white-space: nowrap;
+      min-width: 0;
+      border-radius: var(--proto-radius-sm);
+    }
+  }
+</style>

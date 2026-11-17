@@ -31,6 +31,20 @@ describe('ProtokitMark', () => {
     expect(container.querySelector('.c-proto-protokit-mark__drawing')).not.toBeNull();
   });
 
+  it('with motion="always", marks the orbit to run all the time; not by default, and not for the plain P', () => {
+    const { container } = render(
+      <>
+        <ProtokitMark />
+        <ProtokitMark motion="always" />
+        <ProtokitMark motion="always" orbit={false} />
+      </>,
+    );
+    const [hover, always, plain] = container.querySelectorAll('.c-proto-protokit-mark');
+    expect(hover).not.toHaveAttribute('data-motion');
+    expect(always).toHaveAttribute('data-motion', 'always');
+    expect(plain).not.toHaveAttribute('data-motion');
+  });
+
   it('takes another accessible name with label, and passes className and other props to the root', () => {
     render(<ProtokitMark label="Protokit home" className="brand" data-testid="mark" size="em" />);
     const mark = screen.getByRole('img', { name: 'Protokit home' });
@@ -66,8 +80,9 @@ describe('ProtokitMark', () => {
     expect(electron(outside!)).toHaveAttribute('cy', '27');
   });
 
-  it('colours stem and ring from the text colour and nucleus and electron from the accent, CanvasText in forced colours', () => {
-    expect(css).toMatch(/\.c-proto-protokit-mark \{[^}]*color: var\(--proto-color-text-default\);/);
+  it('takes stem and ring from the inherited colour and nucleus and electron from the accent, CanvasText in forced colours', () => {
+    // No colour of its own outside forced colours, so a link's hover and pressed colours reach the P.
+    expect(/\.c-proto-protokit-mark \{[^}]*\}/.exec(css)![0]).not.toMatch(/\bcolor:/);
     expect(css).toMatch(
       /\.c-proto-protokit-mark__nucleus,\s*\.c-proto-protokit-mark__electron \{\s*fill: var\(--proto-color-accent-default\);/,
     );
@@ -96,7 +111,7 @@ describe('ProtokitMark', () => {
     expect(css).not.toMatch(/\.c-proto-protokit-mark__orbit \{[^}]*opacity/);
     // The turn runs only with no motion preference.
     expect(css).toMatch(
-      /@media \(prefers-reduced-motion: no-preference\) \{\s*:is\(a, button\):is\(:hover, :focus-visible\)\s*:is\(\.c-proto-protokit-mark__orbit, \.c-proto-protokit-mark__orbit > svg\) \{\s*animation-play-state: running;/,
+      /@media \(prefers-reduced-motion: no-preference\) \{\s*:is\(a, button\):is\(:hover, :focus-visible\)\s*:is\(\.c-proto-protokit-mark__orbit, \.c-proto-protokit-mark__orbit > svg\),\s*\.c-proto-protokit-mark\[data-motion='always'\]\s*:is\(\.c-proto-protokit-mark__orbit, \.c-proto-protokit-mark__orbit > svg\) \{\s*animation-play-state: running;/,
     );
     expect(css.match(/animation-play-state: running/g)).toHaveLength(1);
     expect(css).toMatch(

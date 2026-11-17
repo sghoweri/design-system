@@ -7,6 +7,9 @@ export type ProtokitMarkSize = IconSize;
 /** Where the electron orbits: in the bowl's counter around the nucleus, or around the outside of the ring. */
 export type ProtokitMarkOrbit = 'inside' | 'outside';
 
+/** When the electron circles: while the link or button around the mark is hovered or focused, or all the time. */
+export type ProtokitMarkMotion = 'hover' | 'always';
+
 export interface ProtokitMarkProps extends Omit<ComponentPropsWithRef<'span'>, 'children'> {
   /**
    * The mark's size: the Icon sizes (`xs` 12, `sm` 14, `md` 16, `lg` 20, `xl` 24), or `em` to follow the font size.
@@ -24,6 +27,12 @@ export interface ProtokitMarkProps extends Omit<ComponentPropsWithRef<'span'>, '
    * `prefers-reduced-motion` it stays parked. Not drawn under 32px. Decorative; it changes nothing that is read.
    */
   orbit?: ProtokitMarkOrbit | false | undefined;
+  /**
+   * `hover` (default): the electron circles only while the link or button around the mark is hovered or focused.
+   * `always`: it circles all the time, as in the header's `ProtokitLogo`. A loop that runs on its own for more than
+   * 5s needs a way to pause it (WCAG 2.2.2); this one stops only under `prefers-reduced-motion`.
+   */
+  motion?: ProtokitMarkMotion | undefined;
 }
 
 /**
@@ -38,14 +47,15 @@ const ELECTRON = {
 
 /**
  * Protokit's mark, "Proton": a monogram P whose bowl is a ring around an accent nucleus, so it reads as a letter
- * first and an atom second. The stem and ring are `currentColor` (`--proto-color-text-default` unless the context
- * sets a colour), the nucleus and electron `--proto-color-accent-default`; all `CanvasText` in forced colours. Not
- * the Job Sweep `Logo`, which is that product's mark.
+ * first and an atom second. The stem and ring are `currentColor`, inherited from the context (so a link's hover or
+ * pressed colour reaches them), the nucleus and electron `--proto-color-accent-default`; all `CanvasText` in forced
+ * colours. Not the Job Sweep `Logo`, which is that product's mark.
  */
 export function ProtokitMark({
   size = 'lg',
   label = 'Protokit',
   orbit = 'inside',
+  motion = 'hover',
   className,
   ...rest
 }: ProtokitMarkProps) {
@@ -54,6 +64,7 @@ export function ProtokitMark({
       className={cx('c-proto-protokit-mark', className)}
       data-size={size}
       data-orbit={orbit || undefined}
+      data-motion={orbit && motion === 'always' ? 'always' : undefined}
       role="img"
       aria-label={label}
       {...rest}

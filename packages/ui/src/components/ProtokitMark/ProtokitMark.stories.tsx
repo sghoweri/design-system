@@ -13,12 +13,13 @@ const meta = {
   argTypes: {
     size: { control: 'radio', options: ['xs', 'sm', 'md', 'lg', 'xl', 'em'] },
     orbit: { control: 'radio', options: ['inside', 'outside', false] },
+    motion: { control: 'radio', options: ['hover', 'always'] },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'Protokit\'s mark, "Proton" (brand direction 1, not yet adopted): a monogram P whose bowl is a ring around an accent nucleus. Stem and ring take `currentColor` (`--proto-color-text-default` by default), the nucleus `--proto-color-accent-default`; `CanvasText` in forced colours. Under 24px the ring is a unit heavier. An electron, parked at half past one, circles the nucleus while the surrounding link or button is hovered or focused: `orbit` is `inside` by default, `outside` around the ring, or `false` for the plain P. Not drawn under 32px. For a size outside the Icon scale, set `--proto-protokit-mark-size`.',
+          'Protokit\'s mark, "Proton" (brand direction 1, not yet adopted): a monogram P whose bowl is a ring around an accent nucleus. Stem and ring take the inherited `currentColor`, so a link\'s hover and pressed colours reach them; the nucleus `--proto-color-accent-default`; `CanvasText` in forced colours. Under 24px the ring is a unit heavier. An electron, parked at half past one, circles the nucleus while the surrounding link or button is hovered or focused: `orbit` is `inside` by default, `outside` around the ring, or `false` for the plain P; `motion="always"` circles all the time (the header logo). Not drawn under 32px. For a size outside the Icon scale, set `--proto-protokit-mark-size`.',
       },
     },
   },
@@ -120,29 +121,23 @@ export const OrbitDark: Story = {
 };
 
 /**
- * Not shipped: the orbit running all the time, for comparison. A logo that moves on its own for more than 5s needs a
- * way to pause it (WCAG 2.2.2), and a nav mark that never rests pulls the eye from the page, so the component only
- * orbits on hover and focus.
+ * `motion="always"`: the orbit runs without hover, as in the header's ProtokitLogo. A logo that moves on its own for
+ * more than 5s needs a way to pause it (WCAG 2.2.2); this one stops only under reduced motion.
  */
 export const AlwaysOn: Story = {
-  args: {
-    orbit: 'outside',
-  },
-
-  name: 'Alternative: always on (not shipped)',
+  name: 'Always on',
 
   render: () => (
     <Stack gap="md">
-      <style>{`.story-always :is(.c-proto-protokit-mark__orbit, .c-proto-protokit-mark__orbit > svg) { animation-play-state: running; }`}</style>
       <Text size="sm" tone="muted">
-        For comparison only: the same orbit, running without hover. Not an option of the component (WCAG
-        2.2.2).
+        motion="always": the electron circles all the time, not only on hover and focus. It stays parked under
+        reduced motion. WCAG 2.2.2 asks for a way to pause a loop longer than 5s; this has none of its own.
       </Text>
-      <Inline gap="lg" align="end" className="story-always">
-        <ProtokitMark orbit="inside" style={px(96)} />
-        <ProtokitMark orbit="outside" style={px(96)} />
-        <ProtokitMark orbit="inside" style={px(32)} />
-        <ProtokitMark orbit="outside" style={px(32)} />
+      <Inline gap="lg" align="end">
+        <ProtokitMark orbit="inside" motion="always" style={px(96)} />
+        <ProtokitMark orbit="outside" motion="always" style={px(96)} />
+        <ProtokitMark orbit="inside" motion="always" style={px(32)} />
+        <ProtokitMark orbit="outside" motion="always" style={px(32)} />
       </Inline>
     </Stack>
   ),

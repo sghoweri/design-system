@@ -1,6 +1,6 @@
 /* ---- ProtokitMark ---------------------------------------------------------- */
-/* Protokit's "Proton" mark (brand direction 1, not yet adopted): a monogram P, stem and ring in currentColor around
-   an accent nucleus, on a 64-unit drawing. Sized like an icon. The box is a size container so the drawing can tell
+/* Protokit's "Proton" mark (brand direction 1, not yet adopted): a monogram P, stem and ring in the inherited
+   currentColor (no colour of its own, so a link's hover and pressed colours reach it) around an accent nucleus, on a 64-unit drawing. Sized like an icon. The box is a size container so the drawing can tell
    how big it is drawn, whatever set the size (a token, `em`, the hook). */
 .c-proto-protokit-mark {
   --_s: var(--proto-protokit-mark-size, var(--proto-size-icon-lg));
@@ -10,7 +10,6 @@
   inline-size: var(--_s);
   block-size: var(--_s);
   vertical-align: middle;
-  color: var(--proto-color-text-default);
   container: proto-protokit-mark / inline-size;
 }
 .c-proto-protokit-mark[data-size='xs'] {
@@ -62,8 +61,9 @@
    the link or button around the mark is hovered or keyboard-focused. It is its own layer (a span over the whole box,
    turning about the nucleus at 35/64, 27/64), so the motion is a composited rotate: no layout, and the P is never
    repainted. The turn loops paused at rest; hovering runs it and leaving pauses it where it is, so nothing snaps
-   back and the next hover carries on from there. Under reduced motion the turn never runs: a parked electron. Under
-   32px the electron is not drawn at all. One turn takes 6s, or `--proto-protokit-mark-orbit-duration`. */
+   back and the next hover carries on from there. `data-motion="always"` runs it all the time instead. Under reduced
+   motion the turn never runs: a parked electron. Under 32px the electron is not drawn at all. One turn takes 6s, or
+   `--proto-protokit-mark-orbit-duration`. */
 .c-proto-protokit-mark__orbit {
   position: absolute;
   inset: 0;
@@ -90,6 +90,8 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   :is(a, button):is(:hover, :focus-visible)
+    :is(.c-proto-protokit-mark__orbit, .c-proto-protokit-mark__orbit > svg),
+  .c-proto-protokit-mark[data-motion='always']
     :is(.c-proto-protokit-mark__orbit, .c-proto-protokit-mark__orbit > svg) {
     animation-play-state: running;
   }

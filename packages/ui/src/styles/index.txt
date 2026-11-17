@@ -16,6 +16,7 @@ popover.css
 broom-icon.css
 logo.css
 protokit-mark.css
+protokit-logo.css
 toolbar.css
 banner.css
 progress.css

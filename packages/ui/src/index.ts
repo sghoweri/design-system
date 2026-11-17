@@ -220,10 +220,12 @@ export { BroomIcon, type BroomIconProps } from './components/BroomIcon/BroomIcon
 export { Logo, type LogoProps, type LogoSize } from './components/Logo/Logo';
 export {
   ProtokitMark,
+  type ProtokitMarkMotion,
   type ProtokitMarkOrbit,
   type ProtokitMarkProps,
   type ProtokitMarkSize,
 } from './components/ProtokitMark/ProtokitMark';
+export { ProtokitLogo, type ProtokitLogoProps } from './components/ProtokitLogo/ProtokitLogo';
 export {
   FullScreenFlow,
   type FlowChapter,
