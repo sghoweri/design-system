@@ -48,6 +48,10 @@ feature branch ──PR──▶ main ──PR──▶ release
   `nx.json` (`adjustSemverBumpsForZeroMajorVersion: false`) because the intent is explicit.
 - A version that is already on the registry is skipped, so re-running a job after a partial failure
   publishes only what is missing. Prereleases never become `latest`.
+- An rc re-run retries the same rc. When the commit already carries an `vX.Y.Z-rc.N` tag (the first
+  attempt tagged it, then the publish failed), the run reuses that version, skips the changelog and tag
+  step, and publishes what is missing. Before this, a re-run cut the next rc and left the tagged one
+  unpublished (`0.2.0-rc.56` was skipped that way on 2026-11-16).
 
 ## One-time setup (Salem)
 

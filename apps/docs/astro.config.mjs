@@ -7,7 +7,7 @@ import starlightLinksValidator from 'starlight-links-validator';
 import { workshop } from './src/integrations/workshop.mjs';
 
 export default defineConfig({
-  site: 'https://designsystem.salemcobalt.com',
+  site: 'https://protokit.design',
   integrations: [
     starlight({
       title: 'Protokit',

@@ -22,7 +22,7 @@ listed separately at the end and referenced in the sequence as **S1–S4**. A re
 | Product name              | "Salem Cobalt design system" (READMEs, descriptions, site title)   | "Protokit"                                                                            |
 | Homepage copy             | stack list                                                         | ADR 0008 copy C, with type option A, in ADR 0008's homepage step (not this plan)      |
 | GitHub repository         | `sghoweri/design-system`                                           | `sghoweri/protokit` (renamed 2026-11-16, after PR 2; "Later (Salem)" below)           |
-| Site URL                  | `designsystem.salemcobalt.com`                                     | unchanged for now ("Later (Salem)" below)                                             |
+| Site URL                  | `designsystem.salemcobalt.com`                                     | `protokit.design` (moved 2026-11-16, after PR 2; "Later (Salem)" below)               |
 | Versions                  | `latest` 0.1.1, `next` 0.2.0-rc.52                                 | `@protokit/*` starts at the next 0.2.0 rc; its first stable is 0.2.0                  |
 
 **Why the first `@protokit` version is a 0.2.0 rc.** While an rc line is open, the release label is ignored and only
@@ -286,8 +286,10 @@ the rename.
 
 - **Repository: done.** Salem renamed it to `sghoweri/protokit` on 2026-11-16, after PR 2 merged and published
   `0.2.0-rc.55`. A follow-up PR moved the `repository` fields and links; both Trusted Publishers point at `protokit`.
-- **Domain: registered, not moved.** Salem registered `protokit.design` on 2026-11-16. The site stays at
-  `designsystem.salemcobalt.com` until the move.
+- **Domain: done.** Salem registered `protokit.design` on 2026-11-16 and the site moved there the same day: the
+  apex is the production domain in Vercel (Namecheap DNS: `A @` to Vercel's IP, `CNAME www` to the project's
+  Vercel DNS target), and `www.protokit.design` and `designsystem.salemcobalt.com` redirect to it with a 308,
+  keeping the path. A follow-up PR moved the docs site's `site` and the README.
 
 A rename touches:
 
