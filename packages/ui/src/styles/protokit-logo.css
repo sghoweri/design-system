@@ -1,38 +1,36 @@
 /* ---- ProtokitLogo ---------------------------------------------------------- */
-/* The Proton mark as the P of "Protokit". On the mark's 64-unit drawing (u = 1/64 of its size) the stem runs from 8u
-   to 56u and the ring's top is 7.5u, so the P's cap height is 48u and its baseline 8u above the box's foot. The logo's
-   box is that cap band, so a header that centres it centres what is drawn. The name is set at that cap height
-   (font-size-adjust, so any face lines up) on that baseline: the row aligns last baselines, and both boxes are the
-   cap band. The P is an empty box 45u wide (stem to the name at about a letter's spacing) and 48u tall, so its
-   baseline is its foot; the mark hangs in it, absolutely, 12u left and 8u up. The name is trimmed to its cap band
-   (text-box), so its descent stays out; without text-box its descent lifts the row a little, both parts together.
-   No margins: a host's `* { margin: 0 }` reset (Starlight has one) would undo them. */
+/* The Proton mark as a lowercase p in "protokit". On the mark's 64-unit drawing (u = 1/64 of its size) the ring runs
+   from 7.5u to 46.5u and the stem from 8u to 56u. The ring is set as the name's round letters: the name's x-height is
+   0.583 of the mark (font-size-adjust), which in Plex Sans semibold makes an "o" 39u tall, the ring's height, and the
+   ring's foot sits where the o's does, 12/1000 em under the baseline. So the baseline is 45.64u down the mark, the
+   bowl is the x-height, and the stem's last 10.36u is the p's descender.
+   The p is an empty inline-block 45u wide (the stem to the name at about a letter's spacing) whose foot is the
+   stem's foot, lowered 10.36u under the baseline; the mark hangs in it, absolutely, 12u left. Its top is 52.86u over
+   the baseline, the height of the name's ascenders (a k), so the logo's box is the ink from the k's top to the p's
+   foot and a header that centres the box centres the word. The name's line-height of 0 keeps its own line box inside
+   the p's. No margins: a host's `* { margin: 0 }` reset (Starlight has one) would undo them. */
 .c-proto-protokit-logo {
   --_s: var(--proto-protokit-logo-size, 2rem);
   --_u: calc(var(--_s) / 64);
   /* Set here, not on the mark: the mark's own --_s reads this, and setting it there from --_s would be a cycle. */
   --proto-protokit-mark-size: var(--_s);
-  display: inline-flex;
-  align-items: last baseline;
-  block-size: calc(var(--_u) * 48);
+  display: inline-block;
   vertical-align: middle;
+  font-size: var(--_s);
+  font-size-adjust: ex-height 0.583;
+  font-weight: var(--proto-font-weight-semibold);
+  line-height: 0;
   white-space: nowrap;
 }
 .c-proto-protokit-logo__p {
   position: relative;
-  flex: none;
+  display: inline-block;
   inline-size: calc(var(--_u) * 45);
-  block-size: calc(var(--_u) * 48);
+  block-size: calc(var(--_u) * 63.22);
+  vertical-align: calc(var(--_u) * -10.36);
 }
 .c-proto-protokit-logo__mark {
   position: absolute;
-  inset-block-start: calc(var(--_u) * -8);
+  inset-block-start: calc(var(--_u) * 7.22);
   inset-inline-start: calc(var(--_u) * -12);
-}
-.c-proto-protokit-logo__name {
-  font-size: var(--_s);
-  font-size-adjust: cap-height 0.75;
-  font-weight: var(--proto-font-weight-semibold);
-  /* Trimmed to its cap band (cap top to baseline), so its descent doesn't lift the row's baseline off the foot. */
-  text-box: trim-both cap alphabetic;
 }

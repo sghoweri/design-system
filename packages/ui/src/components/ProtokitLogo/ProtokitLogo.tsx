@@ -10,10 +10,11 @@ export interface ProtokitLogoProps extends Omit<ComponentPropsWithRef<'span'>, '
 }
 
 /**
- * Protokit's logo for a header: the Proton mark as the P of the name, then "rotokit". The name's cap height is the
- * P's (48 of the mark's 64 units) and it sits on the stem's foot, so the two read as one word. 32px tall by default,
- * or `--proto-protokit-logo-size`; the electron is not drawn under 32px. Stem, ring and name take the inherited
- * colour, the nucleus and electron the accent.
+ * Protokit's logo for a header: the Proton mark as the lowercase p of "protokit". The ring is the name's x-height and
+ * sits on its baseline like an o; the stem runs down as the p's descender. The box is the word's ink, from the k's
+ * top to the p's foot, so a header that centres it centres the word. 32px by default (the mark's size), or
+ * `--proto-protokit-logo-size`; the electron is not drawn under 32px. Stem, ring and name take the inherited colour,
+ * the nucleus and electron the accent.
  */
 export function ProtokitLogo({
   label = 'Protokit',

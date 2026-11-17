@@ -14,7 +14,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Protokit\'s header logo: the Proton mark as the P, then "rotokit", set at the P\'s cap height on the stem\'s foot. The electron circles all the time by default (`motion="hover"` for hover and focus only), and parks under reduced motion. 32px tall, or `--proto-protokit-logo-size`; no electron under 32px. Stem, ring and name take the inherited colour.',
+          'Protokit\'s header logo: the Proton mark as the lowercase p of "protokit": the ring is the x-height on the baseline, like an o, and the stem runs down as the descender. The electron circles all the time by default (`motion="hover"` for hover and focus only), and parks under reduced motion. 32px tall, or `--proto-protokit-logo-size`; no electron under 32px. Stem, ring and name take the inherited colour.',
       },
     },
   },

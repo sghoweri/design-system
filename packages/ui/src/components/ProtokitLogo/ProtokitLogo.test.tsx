@@ -36,22 +36,21 @@ describe('ProtokitLogo', () => {
     expect(screen.getByRole('img', { name: 'Protokit home' })).toHaveClass('c-proto-protokit-logo', 'brand');
   });
 
-  it("is the P's cap band tall (48u), the name at that cap height on the stem's foot, with no margins", () => {
+  it("sets the ring as the name's x-height on its baseline, the stem as the p's descender, with no margins", () => {
     expect(css).toMatch(
       /\.c-proto-protokit-logo \{[^}]*--_s: var\(--proto-protokit-logo-size, 2rem\);[^}]*--_u: calc\(var\(--_s\) \/ 64\);/,
     );
     expect(css).toMatch(/\.c-proto-protokit-logo \{[^}]*--proto-protokit-mark-size: var\(--_s\);/);
+    // The x-height that makes Plex Sans semibold's o as tall as the ring (39 of 64).
     expect(css).toMatch(
-      /\.c-proto-protokit-logo \{[^}]*align-items: last baseline;[^}]*block-size: calc\(var\(--_u\) \* 48\);/,
+      /\.c-proto-protokit-logo \{[^}]*font-size: var\(--_s\);[^}]*font-size-adjust: ex-height 0\.583;[^}]*line-height: 0;/,
+    );
+    // The p: its foot is the stem's, 10.36u under the baseline; its top the k's, 52.86u over it.
+    expect(css).toMatch(
+      /\.c-proto-protokit-logo__p \{[^}]*display: inline-block;[^}]*inline-size: calc\(var\(--_u\) \* 45\);[^}]*block-size: calc\(var\(--_u\) \* 63\.22\);[^}]*vertical-align: calc\(var\(--_u\) \* -10\.36\);/,
     );
     expect(css).toMatch(
-      /\.c-proto-protokit-logo__p \{[^}]*position: relative;[^}]*inline-size: calc\(var\(--_u\) \* 45\);[^}]*block-size: calc\(var\(--_u\) \* 48\);/,
-    );
-    expect(css).toMatch(
-      /\.c-proto-protokit-logo__mark \{[^}]*position: absolute;[^}]*inset-block-start: calc\(var\(--_u\) \* -8\);[^}]*inset-inline-start: calc\(var\(--_u\) \* -12\);/,
-    );
-    expect(css).toMatch(
-      /\.c-proto-protokit-logo__name \{[^}]*font-size: var\(--_s\);[^}]*font-size-adjust: cap-height 0\.75;[^}]*text-box: trim-both cap alphabetic;/,
+      /\.c-proto-protokit-logo__mark \{[^}]*position: absolute;[^}]*inset-block-start: calc\(var\(--_u\) \* 7\.22\);[^}]*inset-inline-start: calc\(var\(--_u\) \* -12\);/,
     );
     expect(css.replace(/\/\*[\s\S]*?\*\//g, '')).not.toMatch(/\bmargin/);
   });
