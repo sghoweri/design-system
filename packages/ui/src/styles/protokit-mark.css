@@ -1,0 +1,123 @@
+/* ---- ProtokitMark ---------------------------------------------------------- */
+/* Protokit's "Proton" mark (brand direction 1, not yet adopted): a monogram P, stem and ring in the inherited
+   currentColor (no colour of its own, so a link's hover and pressed colours reach it) around an accent nucleus, on a 64-unit drawing. Sized like an icon. The box is a size container so the drawing can tell
+   how big it is drawn, whatever set the size (a token, `em`, the hook). */
+.c-proto-protokit-mark {
+  --_s: var(--proto-protokit-mark-size, var(--proto-size-icon-lg));
+  position: relative;
+  display: inline-block;
+  flex: none;
+  inline-size: var(--_s);
+  block-size: var(--_s);
+  vertical-align: middle;
+  container: proto-protokit-mark / inline-size;
+}
+.c-proto-protokit-mark[data-size='xs'] {
+  --_s: var(--proto-protokit-mark-size, var(--proto-size-icon-xs));
+}
+.c-proto-protokit-mark[data-size='sm'] {
+  --_s: var(--proto-protokit-mark-size, var(--proto-size-icon-sm));
+}
+.c-proto-protokit-mark[data-size='md'] {
+  --_s: var(--proto-protokit-mark-size, var(--proto-size-icon-md));
+}
+.c-proto-protokit-mark[data-size='xl'] {
+  --_s: var(--proto-protokit-mark-size, var(--proto-size-icon-xl));
+}
+.c-proto-protokit-mark[data-size='em'] {
+  --_s: var(--proto-protokit-mark-size, 1em);
+}
+/* Positioned, so it paints over the orbit layer before it: the stem hides an `outside` electron passing behind. */
+.c-proto-protokit-mark__drawing {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+.c-proto-protokit-mark__nucleus,
+.c-proto-protokit-mark__electron {
+  fill: var(--proto-color-accent-default);
+}
+/* The brand's small cut: under 24px the ring is a unit heavier, so the counter does not fill in. */
+@container proto-protokit-mark (inline-size < 24px) {
+  .c-proto-protokit-mark__ring {
+    stroke-width: 8;
+  }
+}
+@media (forced-colors: active) {
+  .c-proto-protokit-mark {
+    color: CanvasText;
+  }
+  .c-proto-protokit-mark :is(.c-proto-protokit-mark__drawing, .c-proto-protokit-mark__orbit) {
+    forced-color-adjust: none;
+  }
+  .c-proto-protokit-mark__nucleus,
+  .c-proto-protokit-mark__electron {
+    fill: CanvasText;
+  }
+}
+
+/* orbit: an electron sits in the mark, parked at 45° above 3 o'clock (half past one), and circles the nucleus while
+   the link or button around the mark is hovered or keyboard-focused. It is its own layer (a span over the whole box,
+   turning about the nucleus at 35/64, 27/64), so the motion is a composited rotate: no layout, and the P is never
+   repainted. The turn loops paused at rest; hovering runs it and leaving pauses it where it is, so nothing snaps
+   back and the next hover carries on from there. `data-motion="always"` runs it all the time instead. Under reduced
+   motion the turn never runs: a parked electron. Under 32px the electron is not drawn at all. One turn takes 6s, or
+   `--proto-protokit-mark-orbit-duration`. */
+.c-proto-protokit-mark__orbit {
+  position: absolute;
+  inset: 0;
+  /* The nucleus, (35, 27) of 64. */
+  transform-origin: 54.6875% 42.1875%;
+  rotate: -45deg;
+  animation: proto-protokit-mark-orbit var(--proto-protokit-mark-orbit-duration, 6s) linear infinite paused;
+}
+.c-proto-protokit-mark__orbit > svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  animation-play-state: paused;
+}
+/* outside: the orbit's left arc crosses the stem, where the electron would show as a sliver bitten by the stem. It
+   goes behind the letter instead: a second loop, the same length and paused and run with the turn, fades it out
+   from 110° to 130° (clockwise from 3 o'clock) and back in from 230° to 250°, clear of the stem both ways. Longhands,
+   not the shorthand: the shorthand would reset the play state here, more specifically than the hover rule runs it. */
+.c-proto-protokit-mark[data-orbit='outside'] .c-proto-protokit-mark__orbit > svg {
+  animation-name: proto-protokit-mark-occult;
+  animation-duration: var(--proto-protokit-mark-orbit-duration, 6s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is(a, button):is(:hover, :focus-visible)
+    :is(.c-proto-protokit-mark__orbit, .c-proto-protokit-mark__orbit > svg),
+  .c-proto-protokit-mark[data-motion='always']
+    :is(.c-proto-protokit-mark__orbit, .c-proto-protokit-mark__orbit > svg) {
+    animation-play-state: running;
+  }
+}
+/* Under 32px the electron is under 2px across and under a pixel from the nucleus: a smudge, not a particle. */
+@container proto-protokit-mark (inline-size < 32px) {
+  .c-proto-protokit-mark__orbit {
+    display: none;
+  }
+}
+@keyframes proto-protokit-mark-orbit {
+  from {
+    rotate: -45deg;
+  }
+  to {
+    rotate: 315deg;
+  }
+}
+/* The turn starts at -45°, so angle θ is at (θ + 45) / 360 of the loop. */
+@keyframes proto-protokit-mark-occult {
+  43.06%,
+  81.94% {
+    opacity: 1;
+  }
+  48.61%,
+  76.39% {
+    opacity: 0;
+  }
+}

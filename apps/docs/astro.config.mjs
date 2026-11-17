@@ -21,7 +21,7 @@ export default defineConfig({
       editLink: { baseUrl: 'https://github.com/sghoweri/protokit/edit/main/apps/docs/' },
       // Tokens, then the component layer (@layer proto), then the Starlight mapping, which is unlayered and so wins.
       customCss: ['@protokit/tokens/css', '@protokit/ui/styles.css', './src/styles/theme.css'],
-      components: { Head: './src/components/Head.astro' },
+      components: { Head: './src/components/Head.astro', SiteTitle: './src/components/SiteTitle.astro' },
       sidebar: [
         { label: 'Getting started', slug: 'getting-started' },
         { label: 'Foundations', items: [{ slug: 'foundations/color' }] },
