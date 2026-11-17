@@ -1,4 +1,9 @@
 /* Shared: focus ring, reduced motion. Component files follow. */
+/* No grey or blue flash on tap (Safari on iOS, Chrome on Android). The property is inherited, so the root's value
+   reaches every element; the controls show their own hover, pressed and focus states instead. */
+:root {
+  -webkit-tap-highlight-color: transparent;
+}
 .u-proto-focus-ring:focus-visible,
 .c-proto-button:focus-visible,
 .c-proto-avatar-button:focus-visible,
