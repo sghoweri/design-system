@@ -33,6 +33,8 @@ export interface ScoreProps extends Omit<ComponentPropsWithRef<'span'>, 'childre
  * A score as a number on a tinted tile or inside a ring. The number and caption are visual; assistive tech reads one
  * visually hidden sentence ("Fit score 94 out of 100"), so the score is named without `aria-label` on a non-interactive
  * element and reads whole inside a row button. A `null` value is "not scored": a dash, no tone, no arc.
+ *
+ * @since 0.2.0
  */
 export function Score({
   value,

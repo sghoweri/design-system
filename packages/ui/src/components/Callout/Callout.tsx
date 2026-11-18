@@ -21,6 +21,8 @@ export interface CalloutProps extends Omit<ComponentPropsWithRef<'div'>, 'title'
  * A block that asks for attention without interrupting: a proposal to accept, a suggestion to review. Unlike Banner
  * it has no live-region role, so nothing is announced on render; pass `role` yourself if it must be. A danger
  * Callout is still just a block: a pending suggestion that something failed has not happened yet.
+ *
+ * @since 0.2.0
  */
 export function Callout({
   tone = 'accent',

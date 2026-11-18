@@ -16,7 +16,11 @@ export interface CheckboxProps extends Omit<
   className?: string | undefined;
 }
 
-/** A labelled checkbox. `indeterminate` shows a dash for "some of these". Built on Base UI's Checkbox. */
+/**
+ * A labelled checkbox. `indeterminate` shows a dash for "some of these". Built on Base UI's Checkbox.
+ *
+ * @since 0.2.0
+ */
 export function Checkbox({
   label,
   description,

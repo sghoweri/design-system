@@ -19,6 +19,8 @@ export interface InputProps
  * attribute passes through: `type="date" | "time" | "number" | "url" | …` keep the same height and
  * `iconStart` slot; `list="id"` with a `<datalist>` beside it gives native suggestions. Date and time
  * fields show the browser's picker at the end edge, so leave `iconEnd` off those.
+ *
+ * @since 0.2.0
  */
 export function Input({
   label,

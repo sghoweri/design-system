@@ -48,6 +48,8 @@ function Letters({ name, initials }: Pick<AvatarLookProps, 'name' | 'initials'>)
 /**
  * A person: their picture, else their initials on a brand tint inside a 1px ring (the ring is what keeps the circle
  * visible on every surface). Decorative unless `label` is given. For a clickable avatar use `AvatarButton`.
+ *
+ * @since 0.2.0
  */
 export function Avatar({ name, initials, src, size = 'md', label, className, ...rest }: AvatarProps) {
   return (
@@ -78,6 +80,8 @@ export interface AvatarButtonProps
  * popup is open; the focus ring is the system's; on touch the hit area is at least 44px. Compose it as a trigger:
  * `<Menu.Trigger render={<AvatarButton label="Account: Robin Test" name="Robin Test" size="sm" />} />`, or make it a
  * link with `render={<a href="/profile" />}`.
+ *
+ * @since 0.2.0
  */
 export function AvatarButton({
   label,

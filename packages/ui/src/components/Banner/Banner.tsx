@@ -41,7 +41,11 @@ const toneIcons: Record<BannerTone, ReactNode> = {
   neutral: null,
 };
 
-/** A single-line status strip across the top of a view: paused, offline, "3 new since you looked". */
+/**
+ * A single-line status strip across the top of a view: paused, offline, "3 new since you looked".
+ *
+ * @since 0.2.0
+ */
 export function Banner({
   tone = 'info',
   placement = 'inline',

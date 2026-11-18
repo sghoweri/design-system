@@ -409,5 +409,9 @@ function Cell({
   );
 }
 
-/** Rows of records with column headers. Native table elements, so screen readers get rows and columns. */
+/**
+ * Rows of records with column headers. Native table elements, so screen readers get rows and columns.
+ *
+ * @since 0.2.0
+ */
 export const Table = { Root, Caption, Head, Body, Foot, Row, Header, Cell, SelectionHeader, SelectionCell };

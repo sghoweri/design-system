@@ -21,7 +21,11 @@ export interface InlineProps extends ComponentPropsWithRef<'div'> {
   children?: ReactNode | undefined;
 }
 
-/** Horizontal flex layout that wraps. For rows of buttons, badges, metadata and key combinations. */
+/**
+ * Horizontal flex layout that wraps. For rows of buttons, badges, metadata and key combinations.
+ *
+ * @since 0.1.0
+ */
 export function Inline({
   gap = 'xs',
   align = 'center',

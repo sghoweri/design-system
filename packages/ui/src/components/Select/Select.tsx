@@ -59,6 +59,8 @@ function Option<V extends string>({ option }: { option: SelectOption<V> }) {
 /**
  * A labelled single-choice dropdown. Built on Base UI's Select so the list is styled and keyboard
  * complete; submits like a native select through `name`.
+ *
+ * @since 0.2.0
  */
 export function Select<Value extends string = string>({
   label,

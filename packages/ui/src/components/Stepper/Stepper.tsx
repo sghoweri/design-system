@@ -167,5 +167,9 @@ function DateMeta({
   );
 }
 
-/** `Stepper` › `Stepper.Step`, with `Stepper.Date` for a date that needs more room than a column has. */
+/**
+ * `Stepper` › `Stepper.Step`, with `Stepper.Date` for a date that needs more room than a column has.
+ *
+ * @since 0.2.0
+ */
 export const Stepper = Object.assign(Root, { Step, Date: DateMeta });

@@ -20,6 +20,8 @@ export interface SkeletonProps extends ComponentPropsWithRef<'span'> {
  * A placeholder shape shown while real content loads. It is hidden from assistive tech: put
  * `aria-busy="true"` on the region being filled, or a `Spinner` with a label beside it, so the loading
  * state is announced once instead of per block.
+ *
+ * @since 0.2.0
  */
 export function Skeleton({
   variant = 'text',

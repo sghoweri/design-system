@@ -3,7 +3,12 @@ title: Button
 description: The primary action control, in four variants and three sizes.
 ---
 
+import { Code } from '@astrojs/starlight/components';
 import { Badge, Button } from '@protokit/ui';
+import { PropsTable } from '../../../components/PropsTable';
+import { importStatement } from '../../../data/manifest';
+
+<Code code={importStatement('Button')} lang="tsx" />
 
 These examples are the published `@protokit/ui` package rendered on the server by Astro, with no client
 JavaScript: a Button is plain HTML and CSS until it needs behaviour.
@@ -36,6 +41,13 @@ Every size keeps a 44px touch target on coarse pointers. <Badge tone="info">md</
   <Button disabled>Disabled</Button>
   <Button loading>Sending</Button>
 </div>
+
+## API
+
+Generated from the component's TypeScript types and JSDoc through `custom-elements.json`, the manifest
+`@protokit/ui` ships. Only Button's own props are listed: it also takes every `<button>` attribute.
+
+<PropsTable of="Button" />
 
 ## In the workshop
 

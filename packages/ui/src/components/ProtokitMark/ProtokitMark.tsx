@@ -50,6 +50,10 @@ const ELECTRON = {
  * first and an atom second. The stem and ring are `currentColor`, inherited from the context (so a link's hover or
  * pressed colour reaches them), the nucleus and electron `--proto-color-accent-default`; all `CanvasText` in forced
  * colours. Not the Job Sweep `Logo`, which is that product's mark.
+ *
+ * @since 0.2.0
+ * @cssprop [--proto-protokit-mark-size=var(--proto-size-icon-lg)] - The mark's size when no `size` fits.
+ * @cssprop [--proto-protokit-mark-orbit-duration=6s] - How long one turn of the electron takes.
  */
 export function ProtokitMark({
   size = 'lg',

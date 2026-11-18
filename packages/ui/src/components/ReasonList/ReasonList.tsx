@@ -47,6 +47,8 @@ function hasItems(children: ReactNode): boolean {
 /**
  * A list of reasons with a marker shape per tone, so the meaning is never colour alone. Name the list with a
  * heading ("Why it fits", "Watch for") and point `aria-labelledby` at it: the heading says what the marker means.
+ *
+ * @since 0.2.0
  */
 function ReasonListRoot({
   tone,

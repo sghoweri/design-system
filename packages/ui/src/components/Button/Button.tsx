@@ -28,7 +28,11 @@ export interface ButtonProps extends ComponentPropsWithRef<'button'> {
   iconOnly?: boolean | undefined;
 }
 
-/** The one way to trigger an action. Renders a native `<button>`; `type` defaults to `button`. */
+/**
+ * The one way to trigger an action. Renders a native `<button>`; `type` defaults to `button`.
+ *
+ * @since 0.1.0
+ */
 export function Button({
   variant = 'primary',
   size = 'md',

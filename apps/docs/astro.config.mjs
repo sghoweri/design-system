@@ -25,7 +25,10 @@ export default defineConfig({
       sidebar: [
         { label: 'Getting started', slug: 'getting-started' },
         { label: 'Foundations', items: [{ slug: 'foundations/color' }] },
-        { label: 'Components', items: [{ slug: 'components/button' }] },
+        {
+          label: 'Components',
+          items: [{ slug: 'components/button' }, { slug: 'components/dialog' }, { slug: 'components/table' }],
+        },
         { label: 'Guides', items: [{ slug: 'guides/astro' }] },
         { label: 'Workshop (Storybook)', link: '/workshop/' },
       ],

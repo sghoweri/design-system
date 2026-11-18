@@ -58,6 +58,8 @@ const sameFiles = (a: readonly File[], b: readonly File[]) =>
  * input so a `<form>` (or a Server Action) submits them. Type, size and count are checked before a file
  * joins the list; a rejected file never joins it, and the reason shows in the field's error slot and is
  * announced. FilePond loads on mount, so the server renders a static drop zone and nothing of FilePond.
+ *
+ * @since 0.2.0
  */
 export function FileInput({
   label,

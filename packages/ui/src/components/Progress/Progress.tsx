@@ -59,6 +59,8 @@ const percent = (v: number, min: number, max: number) =>
 /**
  * Says that something is processing and, when known, how far along it is. Built on Base UI's Progress:
  * `role="progressbar"` with the aria value attributes, or none while indeterminate.
+ *
+ * @since 0.2.0
  */
 export function Progress({
   value,

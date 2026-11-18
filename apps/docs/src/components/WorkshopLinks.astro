@@ -1,0 +1,33 @@
+---
+// Links to a component's workshop stories, from the `demos` the manifest lists (one per story). The manifest
+// stores the chrome-free `iframe.html?id=…` URL on protokit.design; this links the same story inside the workshop's
+// UI, relative, so a preview deployment links its own workshop.
+import { component } from '../data/manifest';
+
+interface Props {
+  /** The exported component name, as in custom-elements.json. */
+  of: string;
+}
+const { of } = Astro.props;
+const demos = (component(of).declaration.demos ?? []).map((demo) => {
+  const id = new URL(demo.url).searchParams.get('id');
+  return { id, label: demo.description?.split(': ').slice(1).join(': ') || id };
+});
+---
+
+<ul class="workshop-links">
+  {
+    demos.map((d) => (
+      <li>
+        <a href={`/workshop/?path=/story/${d.id}`}>{d.label}</a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .workshop-links {
+    columns: 14rem auto;
+    column-gap: var(--proto-spacing-xl);
+  }
+</style>

@@ -80,5 +80,9 @@ function Spacer({ className }: ToolbarSpacerProps) {
   return <div className={cx('c-proto-toolbar__spacer', className)} aria-hidden="true" />;
 }
 
-/** A horizontal container of controls. Built on Base UI's Toolbar. */
+/**
+ * A horizontal container of controls. Built on Base UI's Toolbar.
+ *
+ * @since 0.2.0
+ */
 export const Toolbar = { Root, Group, Separator, Button, Link, Spacer };

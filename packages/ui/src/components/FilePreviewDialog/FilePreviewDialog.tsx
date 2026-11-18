@@ -25,6 +25,8 @@ const NARROW = '(max-width: 48rem)';
  * text, an image as an image. Any other type gets a short note and nothing else, because a blob URL runs
  * with the page's origin: only a PDF is ever framed, and it is re-typed `application/pdf` first, so an HTML
  * file named `.pdf` cannot run. The object URL exists only while the dialog is open.
+ *
+ * @since 0.2.0
  */
 export function FilePreviewDialog({ file, open, onOpenChange, finalFocus }: FilePreviewDialogProps) {
   const kind = file ? previewKind(file) : null;

@@ -92,5 +92,9 @@ function Panel({ className, ...rest }: TabsPanelProps) {
   return <BaseTabs.Panel className={cx('c-proto-tabs__panel', className)} {...rest} />;
 }
 
-/** Switches between sections of one view. Built on Base UI's Tabs. */
+/**
+ * Switches between sections of one view. Built on Base UI's Tabs.
+ *
+ * @since 0.2.0
+ */
 export const Tabs = { Root, List, Tab, Panel };

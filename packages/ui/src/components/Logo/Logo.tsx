@@ -39,6 +39,9 @@ const SMALL: ReadonlySet<LogoSize> = new Set<LogoSize>(['xs', 'sm', 'md']);
  * followed by the name. The tile is `--proto-color-accent-default` (light and dark), `CanvasText` in forced colours;
  * the broom is a mask, so whatever is behind the logo shows through it. Inline SVG with a per-instance mask id.
  * See `BroomIcon` for the status broom; the two are different drawings on purpose.
+ *
+ * @since 0.2.0
+ * @cssprop [--proto-logo-size=var(--proto-size-icon-lg)] - The mark's size when no `size` fits; the wordmark takes the surrounding font.
  */
 export function Logo({
   size = 'lg',

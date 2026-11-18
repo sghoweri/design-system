@@ -424,7 +424,11 @@ function Separator({ className, ...rest }: MenuSeparatorProps) {
   return <BaseMenu.Separator className={cx('c-proto-menu__separator', className)} {...rest} />;
 }
 
-/** A dropdown of actions on a trigger, with full keyboard support. Built on Base UI's Menu. */
+/**
+ * A dropdown of actions on a trigger, with full keyboard support. Built on Base UI's Menu.
+ *
+ * @since 0.2.0
+ */
 export const Menu = {
   Root,
   Trigger,

@@ -29,7 +29,11 @@ export interface TextareaProps
 const supportsFieldSizing = () =>
   typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('field-sizing', 'content');
 
-/** A labelled multi-line text field. Renders a native `<textarea>` inside Base UI's Field. */
+/**
+ * A labelled multi-line text field. Renders a native `<textarea>` inside Base UI's Field.
+ *
+ * @since 0.2.0
+ */
 export function Textarea({
   label,
   hideLabel,

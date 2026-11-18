@@ -45,6 +45,9 @@ const percent = (v: number, max: number) => (max > 0 ? Math.min(100, Math.max(0,
  * A static amount on a bar: a count, a share, a funnel step. Not progress: it is `role="meter"` (Base UI Meter)
  * with `aria-valuenow`/`min`/`max`/`valuetext`, never a progressbar. The value text is always visible, so the bar
  * is never the only carrier of the number.
+ *
+ * @since 0.2.0
+ * @cssprop [--proto-meter-value-width=4ch] - Width of the value column in the `inline` layout, so the bars in a table column start at the same x. Set it on the table for longer numbers.
  */
 export function Meter({
   label,

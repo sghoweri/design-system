@@ -1,0 +1,57 @@
+---
+title: Table
+description: A semantic table in a horizontally scrolling wrapper, with sorting, sticky headers and row selection.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import { Badge, Table } from '@protokit/ui';
+import { PropsTable } from '../../../components/PropsTable';
+import WorkshopLinks from '../../../components/WorkshopLinks.astro';
+import { importStatement } from '../../../data/manifest';
+
+<Code code={importStatement('Table')} lang="tsx" />
+
+Rendered here by Astro with no client JavaScript. Sorting and row selection need it: see the workshop.
+
+<div className="demo not-content" data-block>
+  <Table.Root>
+    <Table.Caption>Applications this week</Table.Caption>
+    <Table.Head>
+      <Table.Row>
+        <Table.Header>Role</Table.Header>
+        <Table.Header>Status</Table.Header>
+        <Table.Header numeric>Score</Table.Header>
+      </Table.Row>
+    </Table.Head>
+    <Table.Body>
+      <Table.Row>
+        <Table.Cell>Staff Frontend Engineer</Table.Cell>
+        <Table.Cell>
+          <Badge tone="success" size="sm">
+            Interview
+          </Badge>
+        </Table.Cell>
+        <Table.Cell numeric>94</Table.Cell>
+      </Table.Row>
+      <Table.Row>
+        <Table.Cell>Principal Engineer, Web Platform</Table.Cell>
+        <Table.Cell>
+          <Badge tone="info" size="sm">
+            Applied
+          </Badge>
+        </Table.Cell>
+        <Table.Cell numeric>88</Table.Cell>
+      </Table.Row>
+    </Table.Body>
+  </Table.Root>
+</div>
+
+## In the workshop
+
+<WorkshopLinks of="Table" />
+
+## API
+
+Generated from the components' TypeScript types and JSDoc through `custom-elements.json`.
+
+<PropsTable of="Table" />

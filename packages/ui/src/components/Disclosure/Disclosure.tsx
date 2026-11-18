@@ -35,6 +35,8 @@ export interface DisclosureProps extends Omit<ComponentPropsWithRef<'details'>, 
 /**
  * A native `<details>` collapse with a styled summary. Works without JavaScript, is announced as a
  * disclosure, and shares `name` with siblings for an exclusive group.
+ *
+ * @since 0.2.0
  */
 export function Disclosure({
   summary,
