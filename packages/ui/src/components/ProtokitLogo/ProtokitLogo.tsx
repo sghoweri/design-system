@@ -15,6 +15,9 @@ export interface ProtokitLogoProps extends Omit<ComponentPropsWithRef<'span'>, '
  * top to the p's foot, so a header that centres it centres the word. 32px by default (the mark's size), or
  * `--proto-protokit-logo-size`; the electron is not drawn under 32px. Stem, ring and name take the inherited colour,
  * the nucleus and electron the accent.
+ *
+ * @since 0.2.0
+ * @cssprop [--proto-protokit-logo-size=2rem] - The logo's size; the electron is not drawn under 32px.
  */
 export function ProtokitLogo({
   label = 'Protokit',

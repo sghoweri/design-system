@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build": "pnpm -r --filter './packages/*' build",
-    "test": "pnpm -r --filter './packages/*' test && node --test 'scripts/*.test.mjs' && pnpm check:vars",
+    "test": "pnpm -r --filter './packages/*' test && node --test 'scripts/*.test.mjs' && pnpm check:vars && pnpm check:manifest",
+    "check:manifest": "pnpm --filter @protokit/ui manifest:check",
     "check:vars": "node scripts/check-vars.mjs packages/ui/src apps/docs/src",
     "check:names": "node scripts/codemod-namespace.mjs --check .",
     "lint:css": "stylelint 'packages/ui/src/styles/*.css' 'apps/docs/src/**/*.css'",

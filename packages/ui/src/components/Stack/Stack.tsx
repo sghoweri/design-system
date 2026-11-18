@@ -34,7 +34,11 @@ export interface StackProps extends ComponentPropsWithRef<'div'> {
   children?: ReactNode | undefined;
 }
 
-/** Vertical flex layout with a token gap. The only way children should be spaced vertically. */
+/**
+ * Vertical flex layout with a token gap. The only way children should be spaced vertically.
+ *
+ * @since 0.1.0
+ */
 export function Stack({
   gap = 'sm',
   align = 'stretch',

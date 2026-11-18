@@ -215,5 +215,9 @@ function Close({ className, children, render, ...rest }: DialogCloseProps) {
   );
 }
 
-/** A modal that interrupts for a decision or a short form. Built on Base UI's Dialog. */
+/**
+ * A modal that interrupts for a decision or a short form. Built on Base UI's Dialog.
+ *
+ * @since 0.1.0
+ */
 export const Dialog = { Root, Trigger, Content, Title, Description, Body, Actions, Close };

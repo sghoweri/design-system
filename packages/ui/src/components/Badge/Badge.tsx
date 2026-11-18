@@ -22,7 +22,11 @@ export interface BadgeProps extends ComponentPropsWithRef<'span'> {
   rounded?: boolean | undefined;
 }
 
-/** One or two words of status beside a thing. Text only; never clickable. */
+/**
+ * One or two words of status beside a thing. Text only; never clickable.
+ *
+ * @since 0.1.0
+ */
 export function Badge({
   tone = 'neutral',
   variant = 'soft',

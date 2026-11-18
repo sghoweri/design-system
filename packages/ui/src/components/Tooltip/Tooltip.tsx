@@ -33,6 +33,8 @@ export interface TooltipProps {
 /**
  * A hint that opens on hover and keyboard focus. Supplementary only: touch devices never see it and
  * screen readers hear the trigger's own name, so the trigger must already be labelled.
+ *
+ * @since 0.2.0
  */
 function TooltipBase({
   content,

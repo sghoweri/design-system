@@ -38,7 +38,11 @@ export interface TextProps extends ComponentPropsWithRef<'p'> {
   family?: TextFamily | undefined;
 }
 
-/** Running text and labels from the type scale. Parents own spacing: Text has no margins. */
+/**
+ * Running text and labels from the type scale. Parents own spacing: Text has no margins.
+ *
+ * @since 0.2.0
+ */
 export function Text({
   as = 'p',
   size = 'sm',

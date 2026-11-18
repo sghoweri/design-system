@@ -31,6 +31,8 @@ const LEAVE_MS = 200;
  * changes. Put it after the table, at the end of the scrolling content: while it shows, it leaves a spacer as
  * tall as itself there, so the last rows can scroll clear of it. When it leaves while holding focus (an action
  * cleared the selection), focus goes back to where it came from, usually the last row checkbox.
+ *
+ * @since 0.2.0
  */
 export function SelectionBar({
   count,

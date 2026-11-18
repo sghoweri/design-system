@@ -15,6 +15,8 @@ export interface BroomIconProps extends Omit<ComponentPropsWithRef<'svg'>, 'chil
  * An animated broom on a 24×24 grid, for "a sweep is running". Inline SVG, because CSS cannot animate
  * inside a `<use>` clone. Strokes keep a fixed screen width at every size (`vector-effect: non-scaling-stroke`).
  * Decorative by default: say what is happening in the surrounding control's label ("Sweeps: running").
+ *
+ * @since 0.2.0
  */
 export function BroomIcon({ sweeping = false, size = 'lg', title, className, ...rest }: BroomIconProps) {
   return (

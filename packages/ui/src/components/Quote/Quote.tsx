@@ -12,6 +12,8 @@ export interface QuoteProps extends ComponentPropsWithRef<'figure'> {
  * Someone's own words echoed back on the accent wash, with who said them: the instruction you gave above the
  * rewrite it produced. A `<figure>` whose `<figcaption>` is the label and whose `<blockquote>` is the text, so the
  * attribution is part of the semantics, not just the styling.
+ *
+ * @since 0.2.0
  */
 export function Quote({ label, className, children, ...rest }: QuoteProps) {
   return (

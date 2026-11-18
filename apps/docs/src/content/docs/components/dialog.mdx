@@ -1,0 +1,41 @@
+---
+title: Dialog
+description: A modal that interrupts for a decision or a short form, built on Base UI's Dialog.
+---
+
+import { Code } from '@astrojs/starlight/components';
+import { PropsTable } from '../../../components/PropsTable';
+import WorkshopLinks from '../../../components/WorkshopLinks.astro';
+import { importStatement } from '../../../data/manifest';
+
+<Code code={importStatement('Dialog')} lang="tsx" />
+
+A compound component: `Dialog.Root` owns the open state, `Dialog.Trigger` opens it and `Dialog.Content` is the
+portal, backdrop and popup. Every part is listed under [API](#api).
+
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger render={<Button variant="danger" />}>Delete</Dialog.Trigger>
+  <Dialog.Content size="sm">
+    <Dialog.Title>Delete this application?</Dialog.Title>
+    <Dialog.Description>Its notes and files go too. This can't be undone.</Dialog.Description>
+    <Dialog.Actions>
+      <Dialog.Close render={<Button variant="secondary" />}>Cancel</Dialog.Close>
+      <Button variant="danger">Delete</Button>
+    </Dialog.Actions>
+  </Dialog.Content>
+</Dialog.Root>
+```
+
+## In the workshop
+
+Every story, live in both themes and densities:
+
+<WorkshopLinks of="Dialog" />
+
+## API
+
+Generated from the components' TypeScript types and JSDoc through `custom-elements.json`. Props a part takes
+from its Base UI primitive are folded under each part.
+
+<PropsTable of="Dialog" />

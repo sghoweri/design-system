@@ -18,6 +18,8 @@ export type IconGlyphProps = Omit<IconProps, 'children'>;
 /**
  * The frame every icon renders in: a 16×16 outline in `currentColor`, sized by `size`, decorative unless
  * `title` is given. Use the shipped `<Name>Icon` components, or wrap your own paths.
+ *
+ * @since 0.2.0
  */
 export function Icon({ size = 'md', title, className, children, ...rest }: IconProps) {
   return (

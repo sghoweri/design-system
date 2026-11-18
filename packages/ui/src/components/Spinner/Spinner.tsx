@@ -11,7 +11,11 @@ export interface SpinnerProps extends ComponentPropsWithRef<'span'> {
   decorative?: boolean | undefined;
 }
 
-/** An indeterminate activity indicator in `currentColor`. Slows down, never stops, under reduced motion. */
+/**
+ * An indeterminate activity indicator in `currentColor`. Slows down, never stops, under reduced motion.
+ *
+ * @since 0.2.0
+ */
 export function Spinner({
   size = 'md',
   label = 'Loading',

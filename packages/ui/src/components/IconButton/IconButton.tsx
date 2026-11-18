@@ -32,6 +32,9 @@ export interface IconButtonProps extends Omit<useRender.ComponentProps<'button'>
  * A square Button for one icon. Always named by `label`; use `tooltip` to show that name on hover.
  * Renders a `<button>` unless `render` gives another element: `render={<a href="/settings" />}` or a
  * Next.js `<Link href="/settings" />` makes it a link with the same look and name.
+ *
+ * @since 0.2.0
+ * @cssprop [--proto-icon-button-dot-ring=var(--proto-color-surface-default)] - The ring around the `dot`, so it reads against the surface the button sits on.
  */
 export function IconButton({
   label,

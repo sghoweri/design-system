@@ -18,7 +18,11 @@ export interface CardProps extends useRender.ComponentProps<'div'> {
   as?: CardElement | undefined;
 }
 
-/** A bordered surface that groups related content. Compose the inside with Stack and Inline. */
+/**
+ * A bordered surface that groups related content. Compose the inside with Stack and Inline.
+ *
+ * @since 0.1.0
+ */
 export function Card({
   variant = 'outlined',
   padding = 'md',

@@ -3,7 +3,11 @@ import { cx } from '../../utils/cx';
 
 export type KbdProps = ComponentPropsWithRef<'kbd'>;
 
-/** A single key, rendered like a keycap. One Kbd per key; group keys with `Kbd.Group`. */
+/**
+ * A single key, rendered like a keycap. One Kbd per key; group keys with `Kbd.Group`.
+ *
+ * @since 0.1.0
+ */
 function KbdBase({ className, ...rest }: KbdProps) {
   return <kbd className={cx('c-proto-kbd', className)} {...rest} />;
 }

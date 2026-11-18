@@ -52,6 +52,8 @@ function Change({ kind, text, label }: { kind: 'added' | 'removed'; text: string
  * A word-level diff as prose: removed text struck through and added text underlined, each on a tint, inside real
  * `<del>` and `<ins>` with "[removed: …]" / "[added: …]" for screen readers. The line, not the colour, carries the
  * meaning. Whitespace is preserved exactly (`white-space: pre-wrap`).
+ *
+ * @since 0.2.0
  */
 export function WordDiff({
   parts,

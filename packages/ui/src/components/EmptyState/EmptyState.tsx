@@ -28,6 +28,8 @@ export interface EmptyStateProps extends Omit<ComponentPropsWithRef<'div'>, 'tit
 /**
  * Centred placeholder for a view with nothing in it: an icon, a title, a sentence and the action that
  * fills it. Say what is missing and the next step; never apologise.
+ *
+ * @since 0.2.0
  */
 export function EmptyState({
   title,

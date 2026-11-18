@@ -520,6 +520,8 @@ function Footer({ back, hint, className, children, ...rest }: FullScreenFlowFoot
  * A full-screen, multi-step flow (onboarding, setup) on `Dialog variant="fullscreen"`:
  * `Root` › `Header` (with `Progress`) · `Body` (`Rail` › `RailGroup` › `RailItem`, and `Viewport` › `Step`) · `Footer`.
  * The app owns the state (which step, which direction); this owns the surface, motion, focus and announcements.
+ *
+ * @since 0.2.0
  */
 export const FullScreenFlow = {
   Root,

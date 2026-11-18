@@ -172,5 +172,8 @@ export function useToast(): ToastApi {
 /**
  * Short-lived status messages: "Closed 5 applications · Undo". Built on Base UI's Toast: announced through a
  * polite region (`priority: 'high'` for errors), paused while hovered or focused, F6 moves focus to them.
+ *
+ * @since 0.2.0
+ * @cssprop [--proto-toast-offset-block-end=0px] - Extra room below the toasts. Set it (on `:root`, for example) while a sticky bottom bar shows; a fixed bar that sets `anchor-name: --proto-bottom-bar` is cleared without it.
  */
 export const Toast = { Provider };

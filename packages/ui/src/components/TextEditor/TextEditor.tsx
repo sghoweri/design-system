@@ -77,6 +77,8 @@ function lineRange(text: string, line: number): [number, number] {
  * A code and text editor on CodeMirror 6, with inline word diffs against `base`. Client-only: the server and the
  * first client render show a code `<textarea>` in the same field chrome, and CodeMirror replaces it once its chunk
  * has loaded, keeping focus and the selection.
+ *
+ * @since 0.2.0
  */
 export function TextEditor({
   label,

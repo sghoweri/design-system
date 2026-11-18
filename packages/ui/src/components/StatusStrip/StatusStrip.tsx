@@ -39,6 +39,8 @@ const glyphs: Partial<Record<StatusStripTone, ReactNode>> = {
  * when it has an `href`, otherwise a non-interactive item, and its label is always in the accessibility tree.
  * Tone is never colour alone: each tone has its own shape (WCAG 1.4.1). Cells are 20px on a 24px pitch, so a
  * linked cell meets the 24px target-size spacing (WCAG 2.5.8), and the row wraps on narrow screens.
+ *
+ * @since 0.2.0
  */
 export function StatusStrip({ items, className, ...rest }: StatusStripProps) {
   return (

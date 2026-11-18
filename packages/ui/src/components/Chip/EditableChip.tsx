@@ -50,6 +50,8 @@ const tidy = (text: string) => text.replace(/\s+/g, ' ').trim();
  * touch screen the text is 16px while editing, so the browser doesn't zoom. A refused save (`validate`) marks the
  * chip invalid and announces the message under it. Key the chip by something stable, not its text, so it keeps
  * its focus across a save.
+ *
+ * @since 0.2.0
  */
 export function EditableChip({
   value,

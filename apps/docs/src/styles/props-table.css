@@ -1,0 +1,123 @@
+/* PropsTable (src/components/PropsTable.tsx): the API reference read from custom-elements.json. The tables are the
+   system's Table; this file only lays them out on the page. Each table scrolls inside its own region (the region is
+   focusable, so a keyboard can scroll it); the page itself never scrolls sideways. */
+.props {
+  display: grid;
+  gap: var(--proto-spacing-lg);
+  margin-block: var(--proto-spacing-lg);
+  color: var(--proto-color-text-default);
+}
+
+/* Grid items default to `min-inline-size: auto`, which let a 40rem table widen the part's column and scroll the
+   whole page sideways on a phone. Zero lets the region inside take the column's width and scroll itself. */
+.props > *,
+.props-part > *,
+.props-inherited {
+  min-inline-size: 0;
+}
+
+/* The region scrolls, not the Table's own wrapper, so the element that scrolls is the one that takes focus. */
+.props-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border: var(--proto-border-width-hairline) solid var(--proto-color-border-default);
+  border-radius: var(--proto-radius-lg);
+  background: var(--proto-color-surface-default);
+}
+.props-scroll > .c-proto-table-wrap {
+  overflow: visible;
+}
+.props-scroll:focus-visible {
+  outline: var(--proto-border-width-focus) solid var(--proto-color-border-focus);
+  outline-offset: 2px;
+}
+
+/* Wide enough that a type and a description stay readable side by side; narrower screens scroll the region. */
+.props-table {
+  min-inline-size: 40rem;
+}
+.props-table caption {
+  padding: var(--proto-spacing-sm) var(--proto-spacing-md) 0;
+  text-align: start;
+}
+.props-table th:first-child,
+.props-table td:first-child {
+  padding-inline-start: var(--proto-spacing-md);
+}
+.props-table td {
+  vertical-align: top;
+}
+.props-table td:first-child {
+  inline-size: 1%;
+  white-space: nowrap;
+}
+/* Type and default columns: long function types wrap rather than widening the table. */
+.props-table td:nth-child(2):not(:last-child) {
+  max-inline-size: 16rem;
+}
+.props-table tr[data-deprecated] td {
+  color: var(--proto-color-text-muted);
+}
+
+.props-name {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--proto-spacing-2xs) var(--proto-spacing-xs);
+  align-items: center;
+}
+/* `break-word`, not `anywhere`: `anywhere` lets a column shrink to one character, which split `"primary"` in two. */
+.props-code {
+  font-family: var(--proto-font-family-mono);
+  font-size: var(--proto-font-size-xs);
+  overflow-wrap: break-word;
+}
+.props-options {
+  /* Room for three or four options a row, so a union reads across rather than down. */
+  min-inline-size: 11rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--proto-spacing-2xs) var(--proto-spacing-xs);
+}
+.props-none {
+  color: var(--proto-color-text-subtle);
+}
+.props-table code:not(.props-code),
+.props-description code {
+  font-family: var(--proto-font-family-mono);
+  font-size: 0.9em;
+}
+.props-table a,
+.props-description a {
+  color: var(--proto-color-text-link);
+}
+
+.props-part h3 .props-code {
+  font-size: inherit;
+}
+.props-part {
+  display: grid;
+  gap: var(--proto-spacing-sm);
+  margin-block-start: var(--proto-spacing-md);
+}
+.props-description,
+.props-empty {
+  margin: 0;
+  max-inline-size: 72ch;
+}
+
+.props-inherited > summary {
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding-block: var(--proto-spacing-2xs);
+  color: var(--proto-color-text-muted);
+  font-size: var(--proto-font-size-sm);
+  cursor: pointer;
+}
+.props-inherited > summary:focus-visible {
+  border-radius: var(--proto-radius-sm);
+  outline: var(--proto-border-width-focus) solid var(--proto-color-border-focus);
+  outline-offset: 2px;
+}
+.props-inherited[open] > summary {
+  margin-block-end: var(--proto-spacing-sm);
+}

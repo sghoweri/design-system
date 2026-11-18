@@ -17,7 +17,11 @@ export interface SwitchProps extends Omit<
   className?: string | undefined;
 }
 
-/** A labelled on/off switch for settings that apply at once. Built on Base UI's Switch. */
+/**
+ * A labelled on/off switch for settings that apply at once. Built on Base UI's Switch.
+ *
+ * @since 0.2.0
+ */
 export function Switch({
   label,
   description,

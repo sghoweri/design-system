@@ -150,6 +150,8 @@ interface Measured {
  * WAI-ARIA APG disclosure navigation pattern (links in a list, a real button with `aria-expanded`), not
  * `role="menu"`. Server-renders every link inline, so it works before hydration and without JavaScript;
  * see docs/adr/0005-priority-nav.md.
+ *
+ * @since 0.2.0
  */
 export function PriorityNav({
   items,

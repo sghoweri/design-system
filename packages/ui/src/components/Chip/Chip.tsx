@@ -31,6 +31,8 @@ export interface ChipProps extends Omit<ComponentPropsWithRef<'span'>, 'onClick'
 /**
  * A small pill: an applied filter, a tag, a selectable option in a row of a few. `onClick` makes it a
  * toggle button, `onRemove` adds the ×, and the two combine. Plain text otherwise.
+ *
+ * @since 0.2.0
  */
 export function Chip({
   children,

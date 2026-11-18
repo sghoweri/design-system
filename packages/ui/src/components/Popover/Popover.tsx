@@ -161,5 +161,9 @@ function Close({ className, children, render, ...rest }: PopoverCloseProps) {
   );
 }
 
-/** A panel anchored to a trigger (modal by default: the page doesn't scroll while it's open), for a small form, a status summary or a legend. Built on Base UI's Popover. */
+/**
+ * A panel anchored to a trigger (modal by default: the page doesn't scroll while it's open), for a small form, a status summary or a legend. Built on Base UI's Popover.
+ *
+ * @since 0.2.0
+ */
 export const Popover = { Root, Trigger, Content, Title, Description, Close };

@@ -37,7 +37,11 @@ const trendIcons: Record<StatTrend, ReactNode> = {
   flat: <ArrowRightIcon size="xs" />,
 };
 
-/** One number with its label: a KPI tile. The value is text, so it reads as "Applications, 1,204, up 12". */
+/**
+ * One number with its label: a KPI tile. The value is text, so it reads as "Applications, 1,204, up 12".
+ *
+ * @since 0.2.0
+ */
 export function Stat({
   label,
   value,
